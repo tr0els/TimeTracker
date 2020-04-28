@@ -56,7 +56,7 @@ public class TaskModel {
     }
     
         /**
-     * opretter og starter en ny task og sender task object retur
+     * opretter og starter en ny task og modtager task object
      * @param task_name
      * @param billable
      * @param project_id
