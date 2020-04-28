@@ -26,6 +26,7 @@ public class App extends Application {
 
         //main.createProject();
         //main.deleteProject();
+        //main.editProject();
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
 
