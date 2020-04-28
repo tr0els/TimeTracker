@@ -14,22 +14,44 @@ import timetracker.DAL.DALManager;
  * @author Draik
  */
 public class BLLManager {
-    
-    private DALManager dal;
-    
-    public BLLManager() throws DALException{
-        dal = new DALManager();
+
+    /**
+     * Singleton opsætning af vores BLLManager. singleton gør at vores bllmanager ikke vil
+     * blive instansieret mere end en gang.
+     */
+    private static DALManager dal;
+    private static BLLManager bll = null;
+
+    private BLLManager() throws DALException {
+        dal = DALManager.getInstance();
     }
 
-    public void createProjekt(int clientID, String projectName, int hourlyPay) throws DALException {
-        DALManager dal = new DALManager();
-        
-        dal.createProjekt(clientID, projectName, hourlyPay);
+    public static BLLManager getInstance() throws DALException {
+        if (bll == null) {
+            bll = new BLLManager();
+        }
+        return bll;
     }
 
+    /**
+     * Sender det info fra TaskModel "createProject" videre til DAL laget
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @throws DALException 
+     */
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
+        dal.createProject(clientID, projectName, hourlyPay);
+    }
+
+    /**
+     * Sender det info fra TaskModel "deleteProject" videre til DAL laget
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @throws DALException 
+     */
     public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
-        DALManager dal = new DALManager();
-        
         dal.deleteProject(clientID, projectName, hourlyPay);
     }
     
@@ -62,4 +84,5 @@ public class BLLManager {
         dal.pauseTask(task_id);
         
     }
+
 }
