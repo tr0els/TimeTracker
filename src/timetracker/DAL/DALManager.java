@@ -80,4 +80,30 @@ public class DALManager {
         }
     }
 
+    /**
+     * tager imod infoen fra BLLManagerens "editProject" og sætter det ind i 
+     * en prepared statement så infoen kan updateres i databasen.
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @param projectID 
+     */
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+        try (Connection con = dbCon.getConnection()) {
+            
+            String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?";
+            
+            PreparedStatement st = con.prepareStatement(sql);
+            
+            st.setString(1, projectName);
+            st.setInt(2, hourlyPay);
+            st.setInt(3, clientID);
+            st.setInt(4, projectID);
+            
+            st.executeQuery();
+            
+        } catch (Exception e) {
+        }
+    }
+
 }

@@ -54,4 +54,15 @@ public class BLLManager {
         dal.deleteProject(clientID, projectName, hourlyPay);
     }
 
+    /**
+     * Sender det info fra TaskModel "editProject" videre til DAL laget
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @param projectID 
+     */
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+        dal.editProject(clientID, projectName, hourlyPay, projectID);
+    }
+
 }

@@ -21,17 +21,20 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        MainController main = new MainController();
-
-        main.createProject();
-        //main.deleteProject();
-
         Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
 
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.show();
+
+        MainController main;
+        main = MainController.getInstance();
+
+        main.createProject();
+        //main.deleteProject();
+        //main.editProject();
+
     }
 
     /**

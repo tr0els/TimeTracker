@@ -53,4 +53,16 @@ public class TaskModel {
     public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
         bll.deleteProject(clientID, projectName, hourlyPay);
     }
+
+    /**
+     * Sender det info fra MainControllerens "editProject" videre til DAL laget
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @param projectID 
+     */
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+        bll.editProject(clientID, projectName, hourlyPay, projectID);
+    }
+
 }
