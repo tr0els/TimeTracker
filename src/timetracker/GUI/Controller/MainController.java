@@ -5,6 +5,7 @@
  */
 package timetracker.GUI.Controller;
 
+import BLL.BLLManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -31,5 +32,15 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    public void createProject(){
+        String client = "firmanavn";
+        String projectName = "projekt 1";
+        int hourlyPay = 200;
+        
+        BLLManager bll = new BLLManager();
+        
+        bll.createProjekt(client, projectName, hourlyPay);   
+    }
     
 }
