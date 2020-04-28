@@ -5,8 +5,8 @@
  */
 package timetracker.GUI.Controller;
 
-import BLL.BLLManager;
-import DAL.DALException;
+import timetracker.BLL.BLLManager;
+import timetracker.DAL.DALException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;

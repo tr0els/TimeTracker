@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package BLL;
+package timetracker.BLL;
 
-import DAL.DALException;
-import DAL.DALManager;
+import timetracker.DAL.DALException;
+import timetracker.DAL.DALManager;
 
 /**
  *
