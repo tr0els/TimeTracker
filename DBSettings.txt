@@ -1,0 +1,4 @@
+user=CSe19A_4
+password=CSe19A_4
+database=Timetracker_2020
+server=10.176.111.31
