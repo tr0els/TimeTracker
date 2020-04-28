@@ -23,7 +23,7 @@ public class App extends Application {
 
         MainController main = new MainController();
 
-        main.createProject();
+        //main.createProject();
         //main.deleteProject();
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
