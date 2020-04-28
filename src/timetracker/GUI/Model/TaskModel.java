@@ -11,4 +11,14 @@ package timetracker.GUI.Model;
  */
 public class TaskModel {
     
+    private static TaskModel model = null;
+    
+    private TaskModel(){}
+    
+    public static TaskModel getInstance(){
+        if (model == null){
+            model = new TaskModel();
+        }
+        return model;
+    }
 }

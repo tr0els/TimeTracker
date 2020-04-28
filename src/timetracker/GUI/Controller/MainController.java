@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import timetracker.GUI.Model.TaskModel;
 
 /**
  *
@@ -23,6 +24,8 @@ public class MainController implements Initializable {
     @FXML
     private Label label;
     
+    private TaskModel model;
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
@@ -31,7 +34,7 @@ public class MainController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        model = TaskModel.getInstance();
     }    
     
     public void createProject() throws DALException{

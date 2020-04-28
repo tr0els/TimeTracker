@@ -14,10 +14,17 @@ import timetracker.DAL.DALManager;
  */
 public class BLLManager {
     
-    private DALManager dal;
+    private static DALManager bll = null;
     
-    public BLLManager() throws DALException{
+    private BLLManager() throws DALException{
         dal = new DALManager();
+    }
+    
+        public static BLLManager getInstance(){
+        if (bll == null){
+            bll = new BLLManager;
+        }
+        return bll;
     }
 
     public void createProjekt(int clientID, String projectName, int hourlyPay) throws DALException {
