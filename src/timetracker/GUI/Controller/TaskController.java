@@ -37,4 +37,15 @@ public class TaskController implements Initializable {
     private void handleButtonAction(ActionEvent event) {
     }
     
+    /**
+     * Håndtere start task knappen action
+     * @param event 
+     */
+    @FXML
+    private void handleStartTask(ActionEvent event)
+    {
+        
+        
+    }
+
 }
