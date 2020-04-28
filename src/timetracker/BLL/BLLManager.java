@@ -56,7 +56,7 @@ public class BLLManager {
     }
     
     /**
-     * opretter og starter en ny task
+     * opretter og starter en ny task og sender task object retur
      * @param task_name
      * @param billable
      * @param project_id

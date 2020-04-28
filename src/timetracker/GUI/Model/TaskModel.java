@@ -5,6 +5,7 @@
  */
 package timetracker.GUI.Model;
 
+import timetracker.BE.Task;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
@@ -53,4 +54,35 @@ public class TaskModel {
     public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
         bll.deleteProject(clientID, projectName, hourlyPay);
     }
+    
+        /**
+     * opretter og starter en ny task og sender task object retur
+     * @param task_name
+     * @param billable
+     * @param project_id
+     * @param person_id
+     * @return 
+     */
+    public void createTask(String task_name, boolean billable, int project_id, int person_id)
+    {
+         bll.createTask(task_name, billable, project_id, person_id);
+    }
+    
+    /**
+     * starter ny tidstagning på eksisterende task
+     * @param task_id 
+     */
+    public void startTask(int task_id){
+        bll.startTask(task_id);
+    }
+    
+    /**
+     * pauser/stopper en aktiv task
+     * @param task_id 
+     */
+    public void pauseTask(int task_id){
+        bll.pauseTask(task_id);
+        
+    }
+    
 }
