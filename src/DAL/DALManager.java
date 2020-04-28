@@ -5,14 +5,34 @@
  */
 package DAL;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 /**
  *
  * @author Draik
  */
 public class DALManager {
+    
+    private DatabaseConnector dbCon;
 
     public void createProjekt(String client, String projectName, int hourlyPay) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                try ( Connection con = dbCon.getConnection())
+        {
+
+            String sql = "UPDATE PERSON SET salt = ?, password = ? WHERE person_id = ? ";
+
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, client);
+            st.setString(2, projectName);
+            st.setInt(3, hourlyPay);
+
+            st.executeQuery();
+
+        } catch (Exception e)
+        {
+        }
     }
     
 }
