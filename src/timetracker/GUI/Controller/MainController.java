@@ -44,4 +44,14 @@ public class MainController implements Initializable {
         bll.createProjekt(clientID, projectName, hourlyPay);   
     }
     
+    public void deleteProject() throws DALException{
+        int clientID = 1;
+        String projectName = "projekt 2";
+        int hourlyPay = 200;
+        
+        BLLManager bll = new BLLManager();
+        
+        bll.deleteProject(clientID, projectName, hourlyPay);
+    }
+    
 }

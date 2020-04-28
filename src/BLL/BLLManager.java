@@ -25,5 +25,11 @@ public class BLLManager {
         
         dal.createProjekt(clientID, projectName, hourlyPay);
     }
+
+    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
+        DALManager dal = new DALManager();
+        
+        dal.deleteProject(clientID, projectName, hourlyPay);
+    }
     
 }
