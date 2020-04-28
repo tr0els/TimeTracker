@@ -14,13 +14,32 @@ import java.sql.PreparedStatement;
  */
 public class DALManager {
 
+    /**
+     * Singleton opsætning af vores DALManager. singleton gør at vores dalmanager ikke vil
+     * blive instansieret mere end en gang.
+     */
     private DatabaseConnector dbCon;
+    private static DALManager dal = null;
 
-    public DALManager() throws DALException {
+    private DALManager() throws DALException {
         dbCon = new DatabaseConnector();
     }
 
-    public void createProjekt(int clientID, String projectName, int hourlyPay) {
+    public static DALManager getInstance() throws DALException {
+        if (dal == null) {
+            dal = new DALManager();
+        }
+        return dal;
+    }
+
+    /**
+     * Tager imod infoen fra BLLManagerens "createProject" og sætter det ind i 
+     * en prepared statement så det vil blive gemt på databasen.
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay 
+     */
+    public void createProject(int clientID, String projectName, int hourlyPay) {
         try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Project (project_name, project_rate, client_id) VALUES (?,?,?)";
@@ -37,8 +56,15 @@ public class DALManager {
         }
     }
 
+    /**
+     * tager imod infoen fra BLLManagerens "deleteProject" og sætter det ind i 
+     * en prepared statement så det vil blive slettet fra databasen.
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay 
+     */
     public void deleteProject(int clientID, String projectName, int hourlyPay) {
-                try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "DELETE FROM Project WHERE Project_name = ? AND project_rate = ? AND client_id = ?";
 
