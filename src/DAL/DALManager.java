@@ -16,17 +16,21 @@ public class DALManager {
     
     private DatabaseConnector dbCon;
 
-    public void createProjekt(String client, String projectName, int hourlyPay) {
+    public DALManager() throws DALException {
+        dbCon = new DatabaseConnector();
+    }
+
+    public void createProjekt(int clientID, String projectName, int hourlyPay) {
                 try ( Connection con = dbCon.getConnection())
         {
 
-            String sql = "UPDATE PERSON SET salt = ?, password = ? WHERE person_id = ? ";
+            String sql = "INSERT INTO Project (project_name, project_rate, client_id) VALUES (?,?,?)";
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, client);
-            st.setString(2, projectName);
-            st.setInt(3, hourlyPay);
+            st.setString(1, projectName);
+            st.setInt(2, hourlyPay);
+            st.setInt(3, clientID);
 
             st.executeQuery();
 

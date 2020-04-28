@@ -6,6 +6,7 @@
 package timetracker.GUI.Controller;
 
 import BLL.BLLManager;
+import DAL.DALException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -33,14 +34,14 @@ public class MainController implements Initializable {
         // TODO
     }    
     
-    public void createProject(){
-        String client = "firmanavn";
+    public void createProject() throws DALException{
+        int clientID = 1;
         String projectName = "projekt 1";
         int hourlyPay = 200;
         
         BLLManager bll = new BLLManager();
         
-        bll.createProjekt(client, projectName, hourlyPay);   
+        bll.createProjekt(clientID, projectName, hourlyPay);   
     }
     
 }

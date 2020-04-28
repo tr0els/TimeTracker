@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import DAL.DALException;
 import DAL.DALManager;
 
 /**
@@ -12,11 +13,17 @@ import DAL.DALManager;
  * @author Draik
  */
 public class BLLManager {
+    
+    private DALManager dal;
+    
+    public BLLManager() throws DALException{
+        dal = new DALManager();
+    }
 
-    public void createProjekt(String client, String projectName, int hourlyPay) {
+    public void createProjekt(int clientID, String projectName, int hourlyPay) throws DALException {
         DALManager dal = new DALManager();
         
-        dal.createProjekt(client, projectName, hourlyPay);
+        dal.createProjekt(clientID, projectName, hourlyPay);
     }
     
 }

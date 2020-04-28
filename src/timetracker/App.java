@@ -10,19 +10,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import timetracker.GUI.Controller.MainController;
 
 /**
  *
  * @author Troels Klein
  */
 public class App extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
+
+        MainController main = new MainController();
+
+        main.createProject();
+
         Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
-        
+
         Scene scene = new Scene(root);
-        
+
         stage.setScene(scene);
         stage.show();
     }
@@ -33,5 +39,5 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
