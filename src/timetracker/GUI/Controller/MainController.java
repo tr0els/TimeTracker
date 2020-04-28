@@ -31,7 +31,7 @@ public class MainController implements Initializable {
     private static TaskModel model;
     private static MainController main = null;
 
-    private MainController() throws DALException {
+    public MainController() throws DALException {
         model = TaskModel.getInstance();
     }
 
@@ -61,7 +61,7 @@ public class MainController implements Initializable {
      */
     public void createProject() throws DALException {
         int clientID = 1;
-        String projectName = "projekt 8";
+        String projectName = "projekt 9";
         int hourlyPay = 200;
 
         model.createProject(clientID, projectName, hourlyPay);
