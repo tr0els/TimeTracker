@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Task;
@@ -22,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.TaskLog;
 
 /**
  *
@@ -270,12 +270,46 @@ public class DALManager {
         }
     }
 
-    public void getLogs() {
+    public List<TaskLog> getLogs() {
+        
+         ArrayList<TaskLog> allLogs = new ArrayList<>();
+        
         try ( Connection con = dbCon.getConnection()) {
-
+  
+            String sql = "SELECT * FROM Task_log JOIN Task on Task.task_id = Task_log.task_id;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                boolean billable;
+                
+                if(rs.getInt("billable") == 1)
+                {
+                    billable = true;
+                }
+                else{
+                    billable = false;
+                }
+                
+                TaskLog tl = new TaskLog();
+                tl.setTask_name(rs.getString("task_name"));
+                tl.setTask_id(rs.getInt("task_id"));
+                tl.setProject_id(rs.getInt("project_id"));
+                tl.setPerson_id(rs.getInt("person_id"));
+                
+                tl.setBillable(billable);
+                
+                tl.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+                tl.setEnd_time(rs.getTimestamp("task_end").toLocalDateTime());
+                
+         
+                allLogs.add(tl);
+            }
+            return allLogs;
+            
+            
         } catch (Exception e) {
         }
-
+        return null;
     }
 
     /**

@@ -12,16 +12,21 @@ import java.time.LocalDateTime;
  * @author BBran
  */
 public class TaskLog extends Task {
+
     private LocalDateTime start_time;
     private LocalDateTime end_time;
-    
-        public TaskLog(int task_id, String task_name, boolean billable, int project_id, int person_id, LocalDateTime start_time, LocalDateTime end_time)
-    {
+
+    public TaskLog(int task_id, String task_name, boolean billable, int project_id, int person_id, LocalDateTime start_time, LocalDateTime end_time) {
         super(task_id, task_name, billable, project_id, person_id);
         this.start_time = start_time;
         this.end_time = end_time;
     }
 
+    public TaskLog()
+    {
+        
+    }
+    
     public LocalDateTime getStart_time() {
         return start_time;
     }
@@ -37,6 +42,5 @@ public class TaskLog extends Task {
     public void setEnd_time(LocalDateTime end_time) {
         this.end_time = end_time;
     }
-        
-        
+
 }

@@ -111,6 +111,7 @@ public class TaskModel {
 
     public void getLogs() {
         allLogs.addAll(bll.getLogs());
+        System.out.println(allLogs);
     }
 
     /**
