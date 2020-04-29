@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28. apr. 2020, 15.51.27
+    Author     : Charlotte
+*/
+
+*{
+    -fx-grumsen : #435a9a; 
+    
+    
+}
+
+
+.AnchorPane {
+	-fx-background-color: -fx-grumsen;
+	
+	-fx-pref-width: 170px;
+	-fx-max-width: 170px;
+	-fx-min-width: 170px;
+	-fx-pref-height: 500px;
+	-fx-border-color: transparent #E8E8E8 transparent transparent;
+}
+
+.glyph-icon{
+    -fx-fill: -fx-grumsen;
+    
+}
+
+.button{
+        -fx-text-fill: -fx-grumsen;
+	-fx-font-size: 16;
+	-fx-background-color: white;
+	-fx-pref-height: 35px;
+	-fx-pref-width: 150px;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: transparent transparent #435a9a transparent;
+	-fx-border-width: 3px;
+	-fx-transition-duration: 0.4s;
+	-fx-text-align: center;
+         
+
+}
+
+.button:hover{
+	-fx-background-color: -fx-grumsen;
+	
+	-fx-text-fill: white;
+}
+
+.button:hover .glyph-icon{
+    
+    -fx-fill: white;
+    
+}
+
+.button:pressed{
+	
+	-fx-background-color: black;
+	
+}
+

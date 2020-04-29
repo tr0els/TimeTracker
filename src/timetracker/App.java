@@ -10,7 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import timetracker.GUI.Controller.MainController;
+
 
 /**
  *
@@ -19,23 +19,31 @@ import timetracker.GUI.Controller.MainController;
  */
 public class App extends Application {
 
-    @Override
+      @Override
     public void start(Stage stage) throws Exception {
 
-        MainController main;
-        main = MainController.getInstance();
+        
+        
+        Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+        
+
+
+        //MainController main;
+        //main = MainController.getInstance();
 
         //main.createProject();
         //main.deleteProject();
         //main.editProject();
 
-        Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
+
 
         Scene scene = new Scene(root);
-
+        
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * @param args the command line arguments

@@ -5,6 +5,8 @@
  */
 package timetracker.GUI.Controller;
 
+import com.jfoenix.controls.JFXDrawer;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -12,11 +14,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import javafx.scene.layout.AnchorPane;
+
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.TaskModel;
+
 
 /**
  * FXML Controller class
@@ -27,9 +34,7 @@ import timetracker.GUI.Model.TaskModel;
 public class TaskController implements Initializable {
 
     @FXML
-    private Button button;
-    @FXML
-    private Label label;
+    private AnchorPane root;
 
     private TaskModel model;
     /**
@@ -37,6 +42,8 @@ public class TaskController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+
         try {
             model = TaskModel.getInstance();
         } catch (DALException | SQLException ex) {
@@ -94,8 +101,9 @@ public class TaskController implements Initializable {
         int person_id = 1;
         
         model.createTask(task_name, billable, project_id, person_id);
+	}
         
-    }
+   
 
     /**
      * Start task via task_id

@@ -5,15 +5,21 @@
  */
 package timetracker.GUI.Controller;
 
+
+import com.jfoenix.controls.JFXDrawer;
+import java.io.IOException;
+
 import timetracker.DAL.DALException;
+
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import timetracker.GUI.Model.TaskModel;
+import javafx.scene.layout.AnchorPane;
+   import timetracker.GUI.Model.TaskModel;
+
 
 /**
  *
@@ -22,8 +28,13 @@ import timetracker.GUI.Model.TaskModel;
  */
 public class MainController implements Initializable {
 
+   
+
     @FXML
-    private Label label;
+    private AnchorPane root;
+	@FXML
+    private JFXDrawer drawer;
+    private TaskModel model;
 
     
      /**
@@ -44,16 +55,22 @@ public class MainController implements Initializable {
         return main;
     }
 
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+
+
+ 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+ 
+ 
 
     }
+    
+
+    
+    
+    
+
 
     /**
      * Tager det info som admin har puttet ind i "Projekt Manager" menuen og
@@ -99,3 +116,4 @@ public class MainController implements Initializable {
         model.editProject(clientID, projectName, hourlyPay, projectID);
     }
 }
+
