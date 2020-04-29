@@ -7,6 +7,7 @@ package timetracker.GUI.Controller;
 
 import timetracker.DAL.DALException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +17,8 @@ import timetracker.GUI.Model.TaskModel;
 
 /**
  *
- * @author Troels Klein
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class MainController implements Initializable {
 
@@ -31,11 +33,11 @@ public class MainController implements Initializable {
     private static TaskModel model;
     private static MainController main = null;
 
-    public MainController() throws DALException {
+    public MainController() throws DALException, SQLException {
         model = TaskModel.getInstance();
     }
 
-    public static MainController getInstance() throws DALException {
+    public static MainController getInstance() throws DALException, SQLException {
         if (main == null) {
             main = new MainController();
         }
