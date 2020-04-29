@@ -146,8 +146,8 @@ public class DALManager {
         } catch (Exception e) {
             return null;
         }
-
-     * tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
+    }
+     /** tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
      * prepared statement så infoen kan updateres i databasen.
      *
      * @param clientID
@@ -155,6 +155,7 @@ public class DALManager {
      * @param hourlyPay
      * @param projectID
      */
+     
     public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
         try ( Connection con = dbCon.getConnection()) {
 
@@ -257,8 +258,8 @@ public class DALManager {
 
         } catch (Exception e) {
         }
-
-     * Ændrer client med de ændringer der bliver sendt ned igennem lagene.
+    }
+     /** Ændrer client med de ændringer der bliver sendt ned igennem lagene.
      *
      * @param client
      */
