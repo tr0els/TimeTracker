@@ -16,7 +16,8 @@ import javafx.scene.control.Label;
 /**
  * FXML Controller class
  *
- * @author Troels Klein
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class TaskController implements Initializable {
 

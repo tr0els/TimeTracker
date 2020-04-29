@@ -14,17 +14,20 @@ import timetracker.GUI.Controller.MainController;
 
 /**
  *
- * @author Troels Klein
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
 
-        MainController main = new MainController();
+        MainController main;
+        main = MainController.getInstance();
 
         //main.createProject();
         //main.deleteProject();
+        //main.editProject();
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
 
