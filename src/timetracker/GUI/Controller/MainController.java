@@ -34,7 +34,7 @@ public class MainController implements Initializable {
     private AnchorPane root;
 	@FXML
     private JFXDrawer drawer;
-    private TaskModel model;
+    //private TaskModel model;
 
     
      /**
@@ -46,7 +46,7 @@ public class MainController implements Initializable {
 
     public MainController() throws DALException, SQLException {
         model = TaskModel.getInstance();
-    }
+    } 
 
     public static MainController getInstance() throws DALException, SQLException {
         if (main == null) {
