@@ -7,13 +7,19 @@ package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import timetracker.GUI.Controller.FxmlLoader;
 
 /**
@@ -38,6 +44,14 @@ public class MenubarController implements Initializable {
     private AnchorPane viewpane;
     @FXML
     private JFXDrawer drawer;
+    @FXML
+    private JFXButton overblikbtb;
+    @FXML
+    private JFXButton projektbtb;
+    @FXML
+    private JFXButton brugermanagerbtb;
+    @FXML
+    private JFXButton klientmanagerbtb;
     
 
     /**
@@ -61,16 +75,55 @@ public class MenubarController implements Initializable {
 
     @FXML
     private void loadProjekterView(ActionEvent event) {
-         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektView.fxml"), viewpane);   
+        FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektView.fxml"), viewpane);   
     }
 
     @FXML
-    private void handelLogout(ActionEvent event) {
-        //  todo
+    private void handelLogout(ActionEvent event) throws IOException {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/timetracker/GUI/View/MainView.fxml"));
+            loader.load();
+            Parent root = loader.getRoot();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Time Tracker");
+            Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Currentstage.close();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+    }
+
+    @FXML
+    private void loadoverblik(ActionEvent event) {
+    }
+
+    @FXML
+    private void loadprojektview(ActionEvent event) {
+    }
+
+    @FXML
+    private void loadbrugermanager(ActionEvent event) {
+    }
+
+    @FXML
+    private void loadburgermanager(ActionEvent event) {
+    }
+
+    public JFXButton getProjektbtb() {
+        return projektbtb;
+    }
+
+    public JFXButton getKlientmanagerbtb() {
+        return klientmanagerbtb;
+    }
+
+    public JFXButton getBrugermanagerbtb() {
+        return brugermanagerbtb;
     }
 
  
-
+    
     
     
 

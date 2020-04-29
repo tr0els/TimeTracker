@@ -6,23 +6,22 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MenubarController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="746.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MenubarController">
    <children>
-      <BorderPane prefHeight="500.0" prefWidth="750.0">
-         <center>
-            <AnchorPane fx:id="viewpane" prefHeight="500.0" prefWidth="750.0" BorderPane.alignment="CENTER" />
-         </center>
-         <top>
-            <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="150.0" stylesheets="@StyleforMenu.css" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="viewpane" layoutX="162.0" prefHeight="500.0" prefWidth="600.0" />
+      <JFXDrawer fx:id="drawer" prefHeight="500.0" prefWidth="155.0">
+         <children>
+            <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@StyleforMenu.css">
                <children>
-                  <JFXDrawer fx:id="drawer" />
-                  <JFXButton fx:id="projekterbtb" layoutY="164.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter " />
-                  <JFXButton fx:id="opgaverbtb" layoutY="207.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
-                  <JFXButton fx:id="minTidbtb" layoutY="250.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
-                  <JFXButton fx:id="logudbtb" layoutY="436.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
-                  <Label layoutX="21.0" layoutY="119.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
+                  <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="138.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter " />
+                  <JFXButton fx:id="opgaverbtb" layoutX="-3.0" layoutY="181.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
+                  <JFXButton fx:id="minTidbtb" layoutX="-3.0" layoutY="224.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
+                  <JFXButton id="logout" fx:id="logudbtb" layoutX="41.0" layoutY="449.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
+                  <JFXButton fx:id="overblikbtb" layoutX="-3.0" layoutY="267.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
+                  <JFXButton fx:id="projektbtb" layoutX="-3.0" layoutY="310.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
+                  <JFXButton fx:id="brugermanagerbtb" layoutX="-3.0" layoutY="353.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
+                  <Label layoutX="22.0" layoutY="91.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
                      <graphic>
                         <ImageView fitHeight="29.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -31,9 +30,10 @@
                         </ImageView>
                      </graphic>
                   </Label>
+                  <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="396.0" onAction="#loadburgermanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
                </children>
             </AnchorPane>
-         </top>
-      </BorderPane>
+         </children>
+      </JFXDrawer>
    </children>
 </AnchorPane>
