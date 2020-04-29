@@ -12,10 +12,12 @@ package timetracker.BE;
  */
 public class User
 {
+
     private int person_id;
     private String name;
     private String surname;
     private String email;
+    private String password;
     private int role_id;
     private int profession_id;
 
@@ -25,6 +27,7 @@ public class User
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.password = password;
         this.role_id = role_id;
         this.profession_id = profession_id;
     }
@@ -73,6 +76,16 @@ public class User
         this.email = email;
     }
 
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
     public int getRole_id()
     {
         return role_id;
@@ -92,15 +105,16 @@ public class User
     {
         this.profession_id = profession_id;
     }
-    
+
     public boolean isAdmin(User user)
     {
         if (role_id == 1)
         {
             return true;
+        } else
+        {
+            return false;
         }
-        else
-        return false;
     }
-    
+
 }

@@ -10,11 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import timetracker.BE.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +17,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.User;
 
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class DALManager {
+public class DALManager
+{
 
     /**
      * Singleton opsætning af vores DALManager. singleton gør at vores
@@ -37,12 +34,15 @@ public class DALManager {
     private DatabaseConnector dbCon;
     private static DALManager dal = null;
 
-    private DALManager() throws DALException {
+    private DALManager() throws DALException
+    {
         dbCon = new DatabaseConnector();
     }
 
-    public static DALManager getInstance() throws DALException {
-        if (dal == null) {
+    public static DALManager getInstance() throws DALException
+    {
+        if (dal == null)
+        {
             dal = new DALManager();
         }
         return dal;
@@ -56,8 +56,10 @@ public class DALManager {
      * @param projectName
      * @param hourlyPay
      */
-    public void createProject(int clientID, String projectName, int hourlyPay) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void createProject(int clientID, String projectName, int hourlyPay)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             String sql = "INSERT INTO Project (project_name, project_rate, client_id) VALUES (?,?,?)";
 
@@ -69,7 +71,8 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
 
@@ -81,8 +84,10 @@ public class DALManager {
      * @param projectName
      * @param hourlyPay
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void deleteProject(int clientID, String projectName, int hourlyPay)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             String sql = "DELETE FROM Project WHERE Project_name = ? AND project_rate = ? AND client_id = ?";
 
@@ -94,7 +99,8 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
 
@@ -107,13 +113,16 @@ public class DALManager {
      * @param person_id
      * @return
      */
-    public Task createTask(String task_name, boolean billable, int project_id, int person_id) {
-        try ( Connection con = dbCon.getConnection()) {
+    public Task createTask(String task_name, boolean billable, int project_id, int person_id)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             Task task = null;
 
             int int_billable = 0;//konvertere boolean til 0 el. 1
-            if (billable == true) {
+            if (billable == true)
+            {
                 int_billable = 1;
             }
 
@@ -128,9 +137,11 @@ public class DALManager {
 
             int affectedRows = ps.executeUpdate();
 
-            if (affectedRows == 1) {
+            if (affectedRows == 1)
+            {
                 ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
+                if (rs.next())
+                {
                     int task_id = rs.getInt(1);
 
                     startTask(task_id);
@@ -143,11 +154,14 @@ public class DALManager {
 
             return task;
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return null;
         }
     }
-     /** tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
+
+    /**
+     * tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
      * prepared statement så infoen kan updateres i databasen.
      *
      * @param clientID
@@ -155,9 +169,10 @@ public class DALManager {
      * @param hourlyPay
      * @param projectID
      */
-     
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?";
 
@@ -170,25 +185,30 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
 
     /**
-     * Henter alt projekt data som ligger gemt på serveren og putter det ind i 
+     * Henter alt projekt data som ligger gemt på serveren og putter det ind i
      * en ArrayList.
+     *
      * @return
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public List<Project> getProjects() throws DALException, SQLException {
+    public List<Project> getProjects() throws DALException, SQLException
+    {
         ArrayList<Project> allProjects = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT * FROM Project;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
+            while (rs.next())
+            {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
@@ -197,7 +217,8 @@ public class DALManager {
                 allProjects.add(projects);
             }
             return allProjects;
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
             Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -209,8 +230,10 @@ public class DALManager {
      *
      * @param client
      */
-    public void createClient(Client client) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void createClient(Client client)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "INSERT INTO Client (client_name, default_rate) VALUES (?,?)";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -220,16 +243,20 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {}
+        } catch (Exception e)
+        {
         }
+    }
 
     /**
      * opretter starttidspunkt for ny task
      *
      * @param task_id
      */
-    public void startTask(int task_id) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void startTask(int task_id)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             String sql = "INSERT INTO Task_log (task_id, task_start) VALUES (?, CURRENT_TIMESTAMP)";
 
@@ -237,35 +264,44 @@ public class DALManager {
 
             ps.setInt(1, task_id);
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
 
         }
 
     }
 
     /**
-     * indsætter pause/stop tidspunkt task på task_id hvor task_end ikke er sat endnu.
+     * indsætter pause/stop tidspunkt task på task_id hvor task_end ikke er sat
+     * endnu.
      *
      * @param task_id
      */
-    public void pauseTask(int task_id) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void pauseTask(int task_id)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
 
             String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP WHERE task_id = task_id AND task_end = null";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
-     /** Ændrer client med de ændringer der bliver sendt ned igennem lagene.
+
+    /**
+     * Ændrer client med de ændringer der bliver sendt ned igennem lagene.
      *
      * @param client
      */
-    public void editClient(Client client) {
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "UPDATE Client SET client_name = ?, default_rate = ? WHERE client_id = ?";
+    public void editClient(Client client)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
+            int cl_id = client.getClient_id();
+            String sql = "UPDATE Client SET client_name = ?, default_rate = ? WHERE client_id = " + cl_id + ";";
 
             PreparedStatement st = con.prepareStatement(sql);
 
@@ -274,7 +310,8 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
 
@@ -284,8 +321,10 @@ public class DALManager {
      *
      * @param client
      */
-    public void deleteClient(Client client) {
-        try ( Connection con = dbCon.getConnection()) {
+    public void deleteClient(Client client)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "DELETE FROM Client WHERE client_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -294,25 +333,29 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
     }
 
     /**
      * Returnerer en liste med alle Clients i databasen.
      *
-     * @return 
+     * @return
      * @throws DALException
      * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException {
+    public List<Client> getClients() throws DALException, SQLException
+    {
         ArrayList<Client> allClients = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT * FROM Client;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
+            while (rs.next())
+            {
                 Client clients = new Client();
                 clients.setClient_id(rs.getInt("client_id"));
                 clients.setClient_name(rs.getString("client_name"));
@@ -321,7 +364,122 @@ public class DALManager {
                 allClients.add(clients);
             }
             return allClients;
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
+        }
+        return null;
+    }
+
+    /**
+     * Opretter en User med det user objekt der bliver sendt ned igennem lagene.
+     *
+     * @param client
+     */
+    public void createUser(User user)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "INSERT INTO Person (name, surname, email, password, role_id, profession_id) VALUES (?,?,?,?,?,?)";
+
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, user.getName());
+            st.setString(2, user.getSurname());
+            st.setString(3, user.getEmail());
+            st.setString(4, user.getPassword());
+            st.setInt(5, user.getRole_id());
+            st.setInt(6, user.getProfession_id());
+
+            st.executeQuery();
+
+        } catch (Exception e)
+        {
+        }
+    }
+
+    /**
+     * Ændrer User med de ændringer der bliver sendt ned igennem lagene.
+     *
+     * @param client
+     */
+    public void editUser(User user)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
+            int person_id = user.getPerson_id();
+            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, password = ?, role_id = ?, profession_id = ? WHERE person_id = " + person_id + ";";
+
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, user.getName());
+            st.setString(2, user.getSurname());
+            st.setString(3, user.getEmail());
+            st.setString(4, user.getPassword());
+            st.setInt(5, user.getRole_id());
+            st.setInt(6, user.getProfession_id());
+
+            st.executeQuery();
+
+        } catch (Exception e)
+        {
+        }
+    }
+
+    /**
+     * Sletter User ud fra det User objekt der bliver sendt ned igennem
+     * lagene.
+     *
+     * @param client
+     */
+    public void deleteUser(User user)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "DELETE FROM Person WHERE person_id = ?";
+
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, user.getPerson_id());
+
+            st.executeQuery();
+
+        } catch (Exception e)
+        {
+        }
+    }
+
+    /**
+     * Returnerer en liste med alle User i databasen.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public List<User> getUsers() throws DALException, SQLException
+    {
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT * FROM Person;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next())
+            {
+                User user = new User();
+                user.setPerson_id(rs.getInt("person_id"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole_id(rs.getInt("role_id"));
+                user.setProfession_id(rs.getInt("profession_id"));
+
+                allUsers.add(user);
+            }
+            return allUsers;
+        } catch (DALException | SQLException ex)
+        {
         }
         return null;
     }
