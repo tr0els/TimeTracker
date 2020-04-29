@@ -5,6 +5,9 @@
  */
 package timetracker.BLL;
 
+import java.sql.SQLException;
+import java.util.List;
+import timetracker.BE.Client;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
 
@@ -12,21 +15,25 @@ import timetracker.DAL.DALManager;
  *
  * @author Draik
  */
-public class BLLManager {
+public class BLLManager
+{
 
     /**
-     * Singleton opsætning af vores BLLManager. singleton gør at vores bllmanager ikke vil
-     * blive instansieret mere end en gang.
+     * Singleton opsætning af vores BLLManager. singleton gør at vores
+     * bllmanager ikke vil blive instansieret mere end en gang.
      */
     private static DALManager dal;
     private static BLLManager bll = null;
 
-    private BLLManager() throws DALException {
+    private BLLManager() throws DALException
+    {
         dal = DALManager.getInstance();
     }
 
-    public static BLLManager getInstance() throws DALException {
-        if (bll == null) {
+    public static BLLManager getInstance() throws DALException
+    {
+        if (bll == null)
+        {
             bll = new BLLManager();
         }
         return bll;
@@ -34,35 +41,76 @@ public class BLLManager {
 
     /**
      * Sender det info fra TaskModel "createProject" videre til DAL laget
+     *
      * @param clientID
      * @param projectName
      * @param hourlyPay
-     * @throws DALException 
+     * @throws DALException
      */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
+    {
         dal.createProject(clientID, projectName, hourlyPay);
     }
 
     /**
      * Sender det info fra TaskModel "deleteProject" videre til DAL laget
+     *
      * @param clientID
      * @param projectName
      * @param hourlyPay
-     * @throws DALException 
+     * @throws DALException
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
+    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException
+    {
         dal.deleteProject(clientID, projectName, hourlyPay);
     }
 
     /**
      * Sender det info fra TaskModel "editProject" videre til DAL laget
+     *
      * @param clientID
      * @param projectName
      * @param hourlyPay
-     * @param projectID 
+     * @param projectID
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
+    {
         dal.editProject(clientID, projectName, hourlyPay, projectID);
+    }
+
+    /**
+     * Sender Client objekt ned til DAL laget som skal oprettes.
+     *
+     * @param client
+     */
+    public void createClient(Client client)
+    {
+        dal.createClient(client);
+    }
+
+    /**
+     * Sender Client objekt ned til DAL laget som skal ændres.
+     *
+     * @param client
+     */
+    public void editClient(Client client)
+    {
+        dal.editClient(client);
+    }
+
+    /**
+     * Sender Client objekt ned til DAL laget som skal slettes.
+     *
+     * @param client
+     */
+    public void deleteClient(Client client)
+    {
+        dal.deleteClient(client);
+    }
+    
+    public List<Client> getClients() throws DALException, SQLException
+    {
+        return dal.getClients();
     }
 
 }
