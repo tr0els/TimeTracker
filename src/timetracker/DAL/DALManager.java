@@ -147,7 +147,9 @@ public class DALManager {
             return null;
         }
     }
-     /** tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
+
+    /**
+     * tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
      * prepared statement så infoen kan updateres i databasen.
      *
      * @param clientID
@@ -155,7 +157,7 @@ public class DALManager {
      * @param hourlyPay
      * @param projectID
      */
-     
+
     public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
         try ( Connection con = dbCon.getConnection()) {
 
@@ -175,11 +177,12 @@ public class DALManager {
     }
 
     /**
-     * Henter alt projekt data som ligger gemt på serveren og putter det ind i 
+     * Henter alt projekt data som ligger gemt på serveren og putter det ind i
      * en ArrayList.
+     *
      * @return
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public List<Project> getProjects() throws DALException, SQLException {
         ArrayList<Project> allProjects = new ArrayList<>();
@@ -220,8 +223,9 @@ public class DALManager {
 
             st.executeQuery();
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
         }
+    }
 
     /**
      * opretter starttidspunkt for ny task
@@ -236,7 +240,7 @@ public class DALManager {
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
-            
+
             ps.execute();
 
         } catch (Exception e) {
@@ -246,7 +250,8 @@ public class DALManager {
     }
 
     /**
-     * indsætter pause/stop tidspunkt task på task_id hvor task_end ikke er sat endnu.
+     * indsætter pause/stop tidspunkt task på task_id hvor task_end ikke er sat
+     * endnu.
      *
      * @param task_id
      */
@@ -256,16 +261,25 @@ public class DALManager {
             String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP WHERE task_id = ? AND task_end is null";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            
-            ps.setInt(1, task_id);
-            
-            ps.execute();
 
+            ps.setInt(1, task_id);
+
+            ps.execute();
 
         } catch (Exception e) {
         }
     }
-     /** Ændrer client med de ændringer der bliver sendt ned igennem lagene.
+
+    public void getLogs() {
+        try ( Connection con = dbCon.getConnection()) {
+
+        } catch (Exception e) {
+        }
+
+    }
+
+    /**
+     * Ændrer client med de ændringer der bliver sendt ned igennem lagene.
      *
      * @param client
      */
@@ -307,7 +321,7 @@ public class DALManager {
     /**
      * Returnerer en liste med alle Clients i databasen.
      *
-     * @return 
+     * @return
      * @throws DALException
      * @throws SQLException
      */

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.TaskLog;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
 
@@ -90,6 +91,11 @@ public class BLLManager {
     public void pauseTask(int task_id){
         dal.pauseTask(task_id);
         
+    }
+    
+    public List<TaskLog> getLogs()
+    {
+        return dal.getLogs();
     }
 
     /**

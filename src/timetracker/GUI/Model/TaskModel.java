@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.TaskLog;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
@@ -31,6 +32,7 @@ public class TaskModel {
     private static TaskModel model = null;
     private ObservableList<Client> allClients;
     private ObservableList<Project> allProjects;
+    private ObservableList<TaskLog> allLogs;
 
     private TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
@@ -38,6 +40,8 @@ public class TaskModel {
         allProjects.addAll(bll.getProject());
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
+        allLogs = FXCollections.observableArrayList();
+
     }
 
     public static TaskModel getInstance() throws DALException, SQLException {
@@ -72,37 +76,42 @@ public class TaskModel {
     public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
         bll.deleteProject(clientID, projectName, hourlyPay);
     }
-    
-        /**
+
+    /**
      * opretter og starter en ny task og modtager task object
+     *
      * @param task_name
      * @param billable
      * @param project_id
      * @param person_id
-     * @return 
+     * @return
      */
-    public void createTask(String task_name, boolean billable, int project_id, int person_id)
-    {
-         bll.createTask(task_name, billable, project_id, person_id);
+    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+        bll.createTask(task_name, billable, project_id, person_id);
     }
-    
+
     /**
      * starter ny tidstagning på eksisterende task
-     * @param task_id 
+     *
+     * @param task_id
      */
-    public void startTask(int task_id){
+    public void startTask(int task_id) {
         bll.startTask(task_id);
     }
-    
+
     /**
      * pauser/stopper en aktiv task
-     * @param task_id 
+     *
+     * @param task_id
      */
-    public void pauseTask(int task_id){
+    public void pauseTask(int task_id) {
         bll.pauseTask(task_id);
-        
+
     }
-    
+
+    public void getLogs() {
+        allLogs.addAll(bll.getLogs());
+    }
 
     /**
      * Sender det info fra MainControllerens "editProject" videre til DAL laget
@@ -118,9 +127,10 @@ public class TaskModel {
 
     /**
      * retunere en liste af alle projekter.
+     *
      * @return
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public List<Project> getProjects() throws DALException, SQLException {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
