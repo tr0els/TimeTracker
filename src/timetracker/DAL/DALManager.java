@@ -263,6 +263,8 @@ public class DALManager
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
+            
+            ps.execute();
 
         } catch (Exception e)
         {
@@ -282,9 +284,13 @@ public class DALManager
         try ( Connection con = dbCon.getConnection())
         {
 
-            String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP WHERE task_id = task_id AND task_end = null";
+            String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP WHERE task_id = ? AND task_end is null";
 
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            ps.setInt(1, task_id);
+            
+            ps.execute();
 
         } catch (Exception e)
         {
