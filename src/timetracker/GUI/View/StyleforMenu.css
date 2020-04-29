@@ -10,19 +10,22 @@ and open the template in the editor.
 
 *{
     -fx-grumsen : #435a9a; 
+    -fx-grumsen-lysere: #768bc6;
     
     
 }
 
 
-.AnchorPane {
-	-fx-background-color: -fx-grumsen;
-	
-	-fx-pref-width: 170px;
-	-fx-max-width: 170px;
-	-fx-min-width: 170px;
+.anchorpane {
+    
+	-fx-pref-width: 150px;
+	-fx-max-width: 150px;
+	-fx-min-width: 150px;
 	-fx-pref-height: 500px;
-	-fx-border-color: transparent #E8E8E8 transparent transparent;
+        -fx-background-color: white;
+        -fx-background-repeat: no-repeat;
+	
+        
 }
 
 .glyph-icon{
@@ -33,11 +36,12 @@ and open the template in the editor.
 .button{
         -fx-text-fill: -fx-grumsen;
 	-fx-font-size: 16;
+        -fx-font-weight: bold;
 	-fx-background-color: white;
 	-fx-pref-height: 35px;
 	-fx-pref-width: 150px;
 	-fx-background-repeat: no-repeat;
-	-fx-border-color: transparent transparent #435a9a transparent;
+	-fx-border-color: transparent transparent -fx-grumsen transparent;
 	-fx-border-width: 3px;
 	-fx-transition-duration: 0.4s;
 	-fx-text-align: center;
@@ -59,7 +63,14 @@ and open the template in the editor.
 
 .button:pressed{
 	
-	-fx-background-color: black;
+	-fx-background-color: -fx-grumsen-lysere;
 	
+}
+
+.label{
+    
+    -fx-font-size: 16;
+    -fx-text-fill: -fx-grumsen;
+    -fx-font-weight: bold;
 }
 

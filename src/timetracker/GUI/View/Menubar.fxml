@@ -2,6 +2,9 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDrawer?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
@@ -11,17 +14,26 @@
          <center>
             <AnchorPane fx:id="viewpane" prefHeight="500.0" prefWidth="750.0" BorderPane.alignment="CENTER" />
          </center>
-         <left>
-            <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="153.0" stylesheets="@StyleforMenu.css" BorderPane.alignment="CENTER">
+         <top>
+            <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="150.0" stylesheets="@StyleforMenu.css" BorderPane.alignment="CENTER">
                <children>
                   <JFXDrawer fx:id="drawer" />
-                  <JFXButton fx:id="projekterbtb" layoutY="121.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter " />
-                  <JFXButton fx:id="opgaverbtb" layoutY="164.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
-                  <JFXButton fx:id="minTidbtb" layoutY="207.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
-                  <JFXButton fx:id="logudbtb" layoutY="422.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
+                  <JFXButton fx:id="projekterbtb" layoutY="164.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter " />
+                  <JFXButton fx:id="opgaverbtb" layoutY="207.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
+                  <JFXButton fx:id="minTidbtb" layoutY="250.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
+                  <JFXButton fx:id="logudbtb" layoutY="436.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
+                  <Label layoutX="21.0" layoutY="119.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
+                     <graphic>
+                        <ImageView fitHeight="29.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Icons/grumsen.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
                </children>
             </AnchorPane>
-         </left>
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>
