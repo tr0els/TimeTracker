@@ -7,7 +7,8 @@ package timetracker.BE;
 
 /**
  *
- * @author René Jørgensen
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class Client
 {
