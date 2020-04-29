@@ -8,6 +8,7 @@ package timetracker.GUI.Controller;
 import com.jfoenix.controls.JFXDrawer;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +49,9 @@ public class TaskController implements Initializable {
         } catch (DALException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+       catch (SQLException ex) {    
+            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+        }}
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
