@@ -5,15 +5,16 @@
  */
 package timetracker.GUI.Controller;
 
-import timetracker.BLL.BLLManager;
-import timetracker.DAL.DALException;
+import com.jfoenix.controls.JFXDrawer;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import timetracker.GUI.Model.TaskModel;
+import javafx.scene.layout.AnchorPane;
+   import timetracker.GUI.Model.TaskModel;
+
 
 /**
  *
@@ -21,48 +22,66 @@ import timetracker.GUI.Model.TaskModel;
  */
 public class MainController implements Initializable {
 
-    @FXML
-    private Label label;
+   
 
     private TaskModel model;
-
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+    private AnchorPane root;
+    private JFXDrawer drawer;
+
+ 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    setMenu();
 
     }
+    
+    public void setMenu(){
+       try {
+                
+           AnchorPane pane = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+           
+           drawer.setSidePane(pane);
+           drawer.open();
+           
+            
+        } catch (IOException ex) {
+            
+        }
+    
+    } 
+    
+ }    
+    
+    
 
-    /**
-     * Tager det info som admin har puttet ind i "Projekt Manager" menuen
-     * og sender det ned for at blive gemt på serveren
-     * @throws DALException 
-     */
-    public void createProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 5";
-        int hourlyPay = 200;
+//    /**
+//     * Tager det info som admin har puttet ind i "Projekt Manager" menuen
+//     * og sender det ned for at blive gemt på serveren
+//     * @throws DALException 
+//     */
+//    public void createProject() throws DALException {
+//        int clientID = 1;
+//        String projectName = "projekt 5";
+//        int hourlyPay = 200;
+//
+//        model = TaskModel.getInstance();
+//        model.createProject(clientID, projectName, hourlyPay);
+//    }
+//
+//    /**
+//     * Tager det projekt som Admin har valgt i "projekt Manager" menuen
+//     * og sender det ned til DAL så det kan fjernes fra serveren.
+//     * @throws DALException 
+//     */
+//    public void deleteProject() throws DALException {
+//        int clientID = 1;
+//        String projectName = "projekt 2";
+//        int hourlyPay = 200;
+//
+//        model = TaskModel.getInstance();
+//        model.deleteProject(clientID, projectName, hourlyPay);
+//    }
 
-        model = TaskModel.getInstance();
-        model.createProject(clientID, projectName, hourlyPay);
-    }
 
-    /**
-     * Tager det projekt som Admin har valgt i "projekt Manager" menuen
-     * og sender det ned til DAL så det kan fjernes fra serveren.
-     * @throws DALException 
-     */
-    public void deleteProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 200;
-
-        model = TaskModel.getInstance();
-        model.deleteProject(clientID, projectName, hourlyPay);
-    }
-
-}

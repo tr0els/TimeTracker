@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="750.0" stylesheets="@StyleforMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MenubarController">
+   <children>
+      <BorderPane prefHeight="500.0" prefWidth="750.0">
+         <center>
+            <AnchorPane fx:id="viewpane" prefHeight="500.0" prefWidth="750.0" BorderPane.alignment="CENTER" />
+         </center>
+         <left>
+            <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="153.0" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXDrawer fx:id="drawer" />
+                  <JFXButton fx:id="projekterbtb" layoutY="121.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter " />
+                  <JFXButton fx:id="opgaverbtb" layoutY="164.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
+                  <JFXButton fx:id="minTidbtb" layoutY="207.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
+                  <JFXButton fx:id="logudbtb" layoutY="422.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
