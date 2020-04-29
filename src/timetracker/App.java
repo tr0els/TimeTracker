@@ -14,16 +14,30 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Troels Klein
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class App extends Application {
 
       @Override
     public void start(Stage stage) throws Exception {
+
         
         
         Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
         
+
+
+        //MainController main;
+        //main = MainController.getInstance();
+
+        //main.createProject();
+        //main.deleteProject();
+        //main.editProject();
+
+        //Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
+
+
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
