@@ -10,19 +10,22 @@ and open the template in the editor.
 
 *{
     -fx-grumsen : #435a9a; 
+    -fx-grumsen-lysere: #768bc6;
     
     
 }
 
 
-.AnchorPane {
-	-fx-background-color: -fx-grumsen;
-	
-	-fx-pref-width: 170px;
-	-fx-max-width: 170px;
-	-fx-min-width: 170px;
+.anchorpane {
+    
+	-fx-pref-width: 150px;
+	-fx-max-width: 150px;
+	-fx-min-width: 150px;
 	-fx-pref-height: 500px;
-	-fx-border-color: transparent #E8E8E8 transparent transparent;
+        -fx-background-color: tranparent;
+        -fx-background-repeat: no-repeat;
+	
+        
 }
 
 .glyph-icon{
@@ -33,22 +36,24 @@ and open the template in the editor.
 .button{
         -fx-text-fill: -fx-grumsen;
 	-fx-font-size: 16;
+        
+        -fx-font-weight: bold;
 	-fx-background-color: white;
 	-fx-pref-height: 35px;
-	-fx-pref-width: 150px;
+	-fx-pref-width: 160px;
 	-fx-background-repeat: no-repeat;
-	-fx-border-color: transparent transparent #435a9a transparent;
+	-fx-border-color: transparent transparent -fx-grumsen transparent;
 	-fx-border-width: 3px;
 	-fx-transition-duration: 0.4s;
 	-fx-text-align: center;
-         
+      
 
 }
 
-.button:hover{
+.button:hover {
 	-fx-background-color: -fx-grumsen;
-	
 	-fx-text-fill: white;
+        -fx-font-style: italic;
 }
 
 .button:hover .glyph-icon{
@@ -57,9 +62,45 @@ and open the template in the editor.
     
 }
 
-.button:pressed{
+.button:pressed {
 	
-	-fx-background-color: black;
+	-fx-background-color: -fx-grumsen-lysere;
 	
 }
 
+.label{
+    
+    -fx-font-size: 16;
+    -fx-text-fill: -fx-grumsen;
+    -fx-font-weight: bold;
+}
+
+
+
+#logout{
+     -fx-border-width: 3px;
+     -fx-border-radius: 10px, 50px; 
+        
+    -fx-background-radius: 10px 50px; 
+    -fx-background-color: -fx-grumsen;
+    -fx-pref-height: 25px;
+    -fx-pref-width: 65px;
+    -fx-font-size: 13;
+    -fx-text-fill: white;
+    -fx-font-style: italic;
+    -fx-border-color: transparent transparent transparent transparent;
+    -fx-border-width: 3px;
+}
+
+#logout:hover{
+        -fx-border-radius: 10px 50px; 
+        -fx-border-color: -fx-grumsen;
+	-fx-background-color: transparent;
+	-fx-text-fill: -fx-grumsen;
+        -fx-font-style: italic;
+    
+}
+#logout:pressed{
+    
+    -fx-background-color: -fx-grumsen-lysere;
+}

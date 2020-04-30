@@ -46,12 +46,12 @@ public class TaskController implements Initializable {
 
         try {
             model = TaskModel.getInstance();
-        } catch (DALException ex) {
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       catch (SQLException ex) {    
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }}
+    }    
+    
+    
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
@@ -105,16 +105,29 @@ public class TaskController implements Initializable {
         
    
 
+    /**
+     * Start task via task_id
+     */
     public void startTask()
     {
         int task_id = 4;
         model.startTask(task_id);
     }
     
+    /**
+     * pauser task via task_id
+     */
     public void pauseTask()
     {
         int task_id = 4;
         model.pauseTask(task_id);
     }
+    
+    
+    public void taskLogList()
+    {
+       
+    }
+    
     
 }

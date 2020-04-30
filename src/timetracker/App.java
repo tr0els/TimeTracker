@@ -24,7 +24,7 @@ public class App extends Application {
 
         
         
-        Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/MainView.fxml"));
         
 
 

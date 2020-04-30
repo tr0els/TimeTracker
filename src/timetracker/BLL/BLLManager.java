@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
 
@@ -18,7 +19,8 @@ import timetracker.DAL.DALManager;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class BLLManager {
+public class BLLManager
+{
 
     /**
      * Singleton opsætning af vores BLLManager. singleton gør at vores
@@ -27,12 +29,15 @@ public class BLLManager {
     private static DALManager dal;
     private static BLLManager bll = null;
 
-    private BLLManager() throws DALException {
+    private BLLManager() throws DALException
+    {
         dal = DALManager.getInstance();
     }
 
-    public static BLLManager getInstance() throws DALException {
-        if (bll == null) {
+    public static BLLManager getInstance() throws DALException
+    {
+        if (bll == null)
+        {
             bll = new BLLManager();
         }
         return bll;
@@ -46,7 +51,8 @@ public class BLLManager {
      * @param hourlyPay
      * @throws DALException
      */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
+    {
         dal.createProject(clientID, projectName, hourlyPay);
     }
 
@@ -58,38 +64,49 @@ public class BLLManager {
      * @param hourlyPay
      * @throws DALException
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
+    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException
+    {
         dal.deleteProject(clientID, projectName, hourlyPay);
     }
-    
+
     /**
      * opretter og starter en ny task og sender task object retur
+     *
      * @param task_name
      * @param billable
      * @param project_id
      * @param person_id
-     * @return 
+     * @return
      */
     public Task createTask(String task_name, boolean billable, int project_id, int person_id)
     {
         return dal.createTask(task_name, billable, project_id, person_id);
     }
-    
+
     /**
      * starter ny tidstagning på eksisterende task
-     * @param task_id 
+     *
+     * @param task_id
      */
-    public void startTask(int task_id){
+    public void startTask(int task_id)
+    {
         dal.startTask(task_id);
     }
-    
+
     /**
      * pauser/stopper en aktiv task
-     * @param task_id 
+     *
+     * @param task_id
      */
-    public void pauseTask(int task_id){
+    public void pauseTask(int task_id)
+    {
         dal.pauseTask(task_id);
-        
+
+    }
+    
+    public void getLogs()
+    {
+       
     }
 
     /**
@@ -100,17 +117,20 @@ public class BLLManager {
      * @param hourlyPay
      * @param projectID
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
+    {
         dal.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
     /**
      * Henter listen af projekter nede fra dal laget.
+     *
      * @return
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public List<Project> getProject() throws DALException, SQLException {
+    public List<Project> getProject() throws DALException, SQLException
+    {
         return dal.getProjects();
     }
 
@@ -119,7 +139,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void createClient(Client client) {
+    public void createClient(Client client)
+    {
         dal.createClient(client);
     }
 
@@ -128,7 +149,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void editClient(Client client) {
+    public void editClient(Client client)
+    {
         dal.editClient(client);
     }
 
@@ -137,18 +159,63 @@ public class BLLManager {
      *
      * @param client
      */
-    public void deleteClient(Client client) {
+    public void deleteClient(Client client)
+    {
         dal.deleteClient(client);
     }
 
     /**
-     * Henter listen af klienter nede fra dal laget
+     * Henter listen af klienter nede fra DAL laget
+     *
      * @return
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException {
+    public List<Client> getClients() throws DALException, SQLException
+    {
         return dal.getClients();
+    }
+
+    /**
+     * Sender User objekt ned til DAL laget som skal oprettes.
+     *
+     * @param client
+     */
+    public void createUser(User user)
+    {
+        dal.createUser(user);
+    }
+
+    /**
+     * Sender User objekt ned til DAL laget som skal ændres.
+     *
+     * @param client
+     */
+    public void editUser(User user)
+    {
+        dal.editUser(user);
+    }
+
+    /**
+     * Sender Client objekt ned til DAL laget som skal slettes.
+     *
+     * @param client
+     */
+    public void deleteUser(User user)
+    {
+        dal.deleteUser(user);
+    }
+
+    /**
+     * Henter listen af Users nede fra DAL laget
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public List<User> getUsers() throws DALException, SQLException
+    {
+        return dal.getUsers();
     }
 
 }
