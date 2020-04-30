@@ -13,7 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
-import timetracker.BE.TaskLog;
+import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
@@ -32,7 +32,7 @@ public class TaskModel {
     private static TaskModel model = null;
     private ObservableList<Client> allClients;
     private ObservableList<Project> allProjects;
-    private ObservableList<TaskLog> allLogs;
+    private ObservableList<User> allUsers;
 
     private TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
@@ -40,8 +40,8 @@ public class TaskModel {
         allProjects.addAll(bll.getProject());
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
-        allLogs = FXCollections.observableArrayList();
-
+        allUsers = FXCollections.observableArrayList();
+        allUsers.addAll(bll.getUsers());
     }
 
     public static TaskModel getInstance() throws DALException, SQLException {
@@ -177,5 +177,49 @@ public class TaskModel {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;
+    }
+    
+    /**
+     * Sender User objekt ned til DAL laget som skal oprettes.
+     *
+     * @param client
+     */
+    public void createUser(User user)
+    {
+        bll.createUser(user);
+    }
+
+    /**
+     * Sender User objekt ned til DAL laget som skal ændres.
+     *
+     * @param client
+     */
+    public void editUser(User user)
+    {
+        bll.editUser(user);
+    }
+
+    /**
+     * Sender Client objekt ned til DAL laget som skal slettes.
+     *
+     * @param client
+     */
+    public void deleteUser(User user)
+    {
+        bll.deleteUser(user);
+    }
+
+    /**
+     * Henter listen af Users nede fra DAL laget
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public List<User> getUsers() throws DALException, SQLException
+    {
+        Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
+        allUsers.sort(byName);
+        return allUsers;
     }
 }

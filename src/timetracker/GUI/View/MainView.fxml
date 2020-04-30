@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MainController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" stylesheets="@buttonsForLogin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MainController">
    <children>
-      <AnchorPane fx:id="viewholder" layoutX="150.0" prefHeight="500.0" prefWidth="600.0" />
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="150.0" miniDrawerSize="150.0" overLayVisible="false" prefHeight="500.0" prefWidth="150.0" />
+      <ImageView fitHeight="193.0" fitWidth="591.0" layoutX="80.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Icons/grumsen-development.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="adminbtb" layoutX="168.0" layoutY="282.0" onAction="#handeladminlogin" text="Admin " />
+      <JFXButton fx:id="user" layoutX="402.0" layoutY="282.0" onAction="#handeluserlogin" text="Alm. User" />
    </children>
 </AnchorPane>
