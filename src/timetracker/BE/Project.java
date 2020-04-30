@@ -5,15 +5,18 @@
  */
 package timetracker.BE;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.StringProperty;
+
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class Project
+public class Project extends RecursiveTreeObject<Project>
 {
     private int project_id; 
-    private String project_name; 
+    public String project_name; 
     private int project_rate;
     private int client_id;
 
