@@ -126,7 +126,7 @@ public class TaskController implements Initializable {
     
     public void taskLogList()
     {
-        model.getLogs();
+       
     }
     
     

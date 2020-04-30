@@ -109,10 +109,6 @@ public class TaskModel {
 
     }
 
-    public void getLogs() {
-        allLogs.addAll(bll.getLogs());
-        System.out.println(allLogs);
-    }
 
     /**
      * Sender det info fra MainControllerens "editProject" videre til DAL laget
