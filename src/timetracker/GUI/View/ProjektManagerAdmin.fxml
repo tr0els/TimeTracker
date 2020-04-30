@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MainController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerController">
    <children>
-      <AnchorPane fx:id="viewholder" layoutX="150.0" prefHeight="500.0" prefWidth="600.0" />
+      <AnchorPane fx:id="viewholder" layoutX="150.0" prefHeight="500.0" prefWidth="600.0">
+         <children>
+            <JFXComboBox layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="127.0" />
+            <JFXTextField layoutX="151.0" layoutY="14.0" promptText="timepris" />
+            <JFXTextField layoutX="14.0" layoutY="51.0" prefHeight="25.0" prefWidth="273.0" promptText="Projekt navn" />
+            <JFXButton layoutX="459.0" layoutY="14.0" prefHeight="71.0" prefWidth="127.0" text="Opret">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+            <JFXTreeTableView fx:id="treeView" layoutX="13.0" layoutY="94.0" prefHeight="399.0" prefWidth="577.0" />
+         </children></AnchorPane>
       <JFXDrawer fx:id="drawer" defaultDrawerSize="150.0" miniDrawerSize="150.0" overLayVisible="false" prefHeight="500.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
