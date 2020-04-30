@@ -20,6 +20,7 @@
                   <JFXButton id="logout" fx:id="logudbtb" layoutX="41.0" layoutY="449.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
                   <JFXButton fx:id="overblikbtb" layoutX="-3.0" layoutY="267.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
                   <JFXButton fx:id="projektbtb" layoutX="-3.0" layoutY="310.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
+                  <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="396.0" onAction="#loadklientmanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
                   <JFXButton fx:id="brugermanagerbtb" layoutX="-3.0" layoutY="353.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
                   <Label layoutX="22.0" layoutY="91.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
                      <graphic>
@@ -30,7 +31,6 @@
                         </ImageView>
                      </graphic>
                   </Label>
-                  <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="396.0" onAction="#loadburgermanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
                </children>
             </AnchorPane>
          </children>

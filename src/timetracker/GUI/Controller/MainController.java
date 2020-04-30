@@ -6,11 +6,8 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDrawer;
 import java.io.IOException;
-
 import timetracker.DAL.DALException;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -55,23 +52,94 @@ public class MainController implements Initializable {
 
     }
 
-    public void handeladminlogin(ActionEvent event) throws IOException {
+    /**
+     * 
+     * @param event
+     * @throws IOException
+     * Håndtere login af en admin
+     */
+    
+   @FXML
+    private void handeladminlogin(ActionEvent event) throws IOException {
+        
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+            loader.load();
+            Parent root = loader.getRoot();
+            
+            //MenubarController controller = loader.getController();
+            
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Time Tracker");
+            Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Currentstage.close();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        
+    }
+    
+    /**
+     * 
+     * @param event
+     * @throws IOException 
+     * Håndtere log in af en alm. user, og fjerne adminknapperne. 
+     */
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
-        loader.load();
-        Parent root = loader.getRoot();
+    @FXML
+    private void handeluserlogin(ActionEvent event) throws IOException {
+        
+         
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+            loader.load();
+            Parent root = loader.getRoot();
+            
+            MenubarController controller = loader.getController();
+            controller.getBrugermanagerbtb().setVisible(false);
+            controller.getKlientmanagerbtb().setVisible(false);
+            controller.getProjektbtb().setVisible(false);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Time Tracker");
+            Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Currentstage.close();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        
+        
+    }
 
-        //MenubarController controller = loader.getController();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Time Tracker");
-        Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Currentstage.close();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
 
+
+    /**
+     * Tager det info som admin har puttet ind i "Projekt Manager" menuen og
+     * sender det ned for at blive gemt på serveren
+     *
+     * @throws DALException
+     */
+    public void createProject() throws DALException {
+        int clientID = 1;
+        String projectName = "projekt 9";
+        int hourlyPay = 200;
+
+        model.createProject(clientID, projectName, hourlyPay);
+    }
+
+    /**
+     * Tager det projekt som Admin har valgt i "projekt Manager" menuen og
+     * sender det ned til DAL så det kan fjernes fra serveren.
+     *
+     * @throws DALException
+     */
+    public void deleteProject() throws DALException {
+        int clientID = 1;
+        String projectName = "projekt 2";
+        int hourlyPay = 200;
+
+        model.deleteProject(clientID, projectName, hourlyPay);
     }
 
     public void handeluserlogin(ActionEvent event) throws IOException {
