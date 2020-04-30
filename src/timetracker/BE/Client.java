@@ -12,6 +12,8 @@ package timetracker.BE;
  */
 public class Client
 {
+
+   
     private int client_id;
     private String client_name; 
     private int default_rate;
@@ -56,6 +58,9 @@ public class Client
     {
         this.default_rate = default_rate;
     }
-    
+     @Override
+    public String toString() {
+        return  client_name  ;
+    }
     
 }

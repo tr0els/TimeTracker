@@ -220,7 +220,7 @@ public class TaskModel {
     }
 
     public Client getClientDetails(Client selectedClient) {
-        Client newclient = new Client ();
+        Client newclient = new Client();
         newclient = bll.getClientDetails(selectedClient);
         return newclient; 
         
