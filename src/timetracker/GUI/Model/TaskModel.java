@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.Task.Log;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -33,6 +34,8 @@ public class TaskModel {
     private ObservableList<Client> allClients;
     private ObservableList<Project> allProjects;
     private ObservableList<User> allUsers;
+    private ObservableList<Task> taskById;
+    private ObservableList<Log> tasklogById;
 
     private TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
@@ -42,6 +45,8 @@ public class TaskModel {
         allClients.addAll(bll.getClients());
         allUsers = FXCollections.observableArrayList();
         allUsers.addAll(bll.getUsers());
+        taskById = FXCollections.observableArrayList();
+        tasklogById = FXCollections.observableArrayList();
     }
 
     public static TaskModel getInstance() throws DALException, SQLException {
@@ -109,6 +114,29 @@ public class TaskModel {
 
     }
 
+    /**
+     * Bygger observable liste af task udfra et project_id som kan bruges i vores view
+     * @param project_id
+     * @return 
+     */
+    public ObservableList<Task> getTaskById(int project_id) {
+        taskById.clear();
+        taskById.addAll(bll.getTaskById(project_id));
+        return taskById;
+    }
+
+    /**
+     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores view
+     * @param task_id
+     * @return 
+     */
+    public ObservableList<Log> getTaskLogById(int task_id) {
+        tasklogById.clear();
+        tasklogById.addAll(bll.getTaskLogById(task_id));
+        return tasklogById;
+        
+
+    }
 
     /**
      * Sender det info fra MainControllerens "editProject" videre til DAL laget
@@ -129,7 +157,7 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Project> getProjects() throws DALException, SQLException {
+    public ObservableList<Project> getProjects() throws DALException, SQLException {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
         return allProjects;
@@ -169,19 +197,18 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException {
+    public ObservableList<Client> getClients() throws DALException, SQLException {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;
     }
-    
+
     /**
      * Sender User objekt ned til DAL laget som skal oprettes.
      *
      * @param client
      */
-    public void createUser(User user)
-    {
+    public void createUser(User user) {
         bll.createUser(user);
     }
 
@@ -190,8 +217,7 @@ public class TaskModel {
      *
      * @param client
      */
-    public void editUser(User user)
-    {
+    public void editUser(User user) {
         bll.editUser(user);
     }
 
@@ -200,8 +226,7 @@ public class TaskModel {
      *
      * @param client
      */
-    public void deleteUser(User user)
-    {
+    public void deleteUser(User user) {
         bll.deleteUser(user);
     }
 
@@ -212,10 +237,10 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public List<User> getUsers() throws DALException, SQLException
-    {
+    public ObservableList<User> getUsers() throws DALException, SQLException {
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
         allUsers.sort(byName);
         return allUsers;
     }
+
 }
