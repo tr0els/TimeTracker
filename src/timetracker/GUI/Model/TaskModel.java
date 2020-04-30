@@ -169,7 +169,7 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException {
+    public ObservableList<Client> getClients() throws DALException, SQLException {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;

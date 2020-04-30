@@ -5,7 +5,6 @@
  */
 package timetracker.GUI.Controller;
 
-
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import timetracker.DAL.DALException;
@@ -24,7 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.GUI.Model.TaskModel;
 
-
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
@@ -32,24 +30,16 @@ import timetracker.GUI.Model.TaskModel;
  */
 public class MainController implements Initializable {
 
-    @FXML
-    private JFXButton adminbtb;
-    @FXML
-    private JFXButton user;
-    @FXML
-    private AnchorPane root;
-
-    
-     /**
-     * Singleton opsætning af vores MainController. singleton gør at vores maincontroller ikke vil
-     * blive instansieret mere end en gang.
+    /**
+     * Singleton opsætning af vores MainController. singleton gør at vores
+     * maincontroller ikke vil blive instansieret mere end en gang.
      */
     private static TaskModel model;
     private static MainController main = null;
 
     public MainController() throws DALException, SQLException {
         model = TaskModel.getInstance();
-    } 
+    }
 
     public static MainController getInstance() throws DALException, SQLException {
         if (main == null) {
@@ -57,11 +47,9 @@ public class MainController implements Initializable {
         }
         return main;
     }
- 
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
- 
- 
 
     }
 
@@ -157,22 +145,4 @@ public class MainController implements Initializable {
         model.deleteProject(clientID, projectName, hourlyPay);
     }
 
-    /**
-     * Henter projectID fra det projekt som admin har valgt. Tager så det
-     * updateret data som er inputet og sender det ned til DAL så infoen på
-     * databasen kan updateres
-     *
-     * @throws DALException
-     */
-    public void editProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 300;
-        int projectID = 6;
-
-        model.editProject(clientID, projectName, hourlyPay, projectID);
-    }
-
-  
 }
-
