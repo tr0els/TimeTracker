@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.GUI.Model.TaskModel;
@@ -83,7 +84,8 @@ public class MainController implements Initializable {
             
             Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setTitle("Time Tracker");
+            stage.setTitle("Time Tracker Admin");
+             stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
             Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Currentstage.close();
             stage.setScene(scene);
@@ -114,7 +116,8 @@ public class MainController implements Initializable {
             controller.getProjektbtb().setVisible(false);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setTitle("Time Tracker");
+            stage.setTitle("Time Tracker alm. bruger");
+            stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
             Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Currentstage.close();
             stage.setScene(scene);
