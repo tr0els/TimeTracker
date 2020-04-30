@@ -71,6 +71,11 @@ public class Project extends RecursiveTreeObject<Project>
     {
         this.client_id = client_id;
     }
+
+    @Override
+    public String toString() {
+        return project_name;
+    }
     
     
 }

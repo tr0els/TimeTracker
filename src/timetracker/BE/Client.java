@@ -58,9 +58,10 @@ public class Client
     {
         this.default_rate = default_rate;
     }
+
      @Override
     public String toString() {
-        return  client_name  ;
-    }
+        return  client_name;
+
     
 }

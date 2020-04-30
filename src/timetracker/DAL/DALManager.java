@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Task;
@@ -21,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.Task.Log;
 import timetracker.BE.User;
 
 /**
@@ -269,6 +271,77 @@ public class DALManager {
         }
     }
 
+    /**
+     * henter en liste af Tasks fra DB via et project_id og returnere listen
+     * @param project_id
+     * @return 
+     */
+    public List<Task> getTaskbyProjectID(int project_id) {
+        ArrayList<Task> taskbyID = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT * FROM Task WHERE project_id = "+project_id+";";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                Task task = new Task();
+                
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
+
+                task.setTask_id(rs.getInt("task_id"));
+                task.setTask_name(rs.getString("task_name"));
+                task.setProject_id(rs.getInt("project_id"));
+                task.setPerson_id(rs.getInt("person_id"));
+                task.setBillable(billable);
+                
+                taskbyID.add(task);
+            }
+            return taskbyID;
+            
+
+        } catch (Exception e) {
+        }
+        return null;
+    }
+    
+    /**
+     * henter en liste af Logs fra DB via et task_id og returnere listen
+     * @param task_id
+     * @return 
+     */
+    public List<Log> getTaskLogbyTaskID(int task_id) {
+        ArrayList<Log> tasklogbyID = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT * FROM Task_log WHERE task_id = ?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, task_id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Log log = new Log();
+                
+                log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+                log.setEnd_time(rs.getTimestamp("task_end").toLocalDateTime());
+                
+                tasklogbyID.add(log);
+            }
+
+        } catch (Exception e) {
+        }
+
+        
+        return tasklogbyID;
+    }
+    
     /**
      * Ændrer client med de ændringer der bliver sendt ned igennem lagene.
      *
