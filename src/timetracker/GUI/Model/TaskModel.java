@@ -218,4 +218,11 @@ public class TaskModel {
         allUsers.sort(byName);
         return allUsers;
     }
+
+    public Client getClientDetails(Client selectedClient) {
+        Client newclient = new Client ();
+        newclient = bll.getClientDetails(selectedClient);
+        return newclient; 
+        
+    }
 }
