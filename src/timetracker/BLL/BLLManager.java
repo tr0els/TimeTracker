@@ -104,9 +104,9 @@ public class BLLManager
 
     }
     
-    public List<TaskLog> getLogs()
+    public void getLogs()
     {
-        return dal.getLogs();
+       
     }
 
     /**
