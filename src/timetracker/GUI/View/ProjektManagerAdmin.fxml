@@ -6,19 +6,15 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerAdminController">
    <children>
       <AnchorPane fx:id="viewholder" layoutX="150.0" prefHeight="500.0" prefWidth="600.0">
          <children>
-            <JFXComboBox layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="127.0" />
-            <JFXTextField layoutX="151.0" layoutY="14.0" promptText="timepris" />
-            <JFXTextField layoutX="14.0" layoutY="51.0" prefHeight="25.0" prefWidth="273.0" promptText="Projekt navn" />
-            <JFXButton layoutX="459.0" layoutY="14.0" prefHeight="71.0" prefWidth="127.0" text="Opret">
-               <font>
-                  <Font size="18.0" />
-               </font>
+            <JFXComboBox fx:id="combobox" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="127.0" />
+            <JFXTextField fx:id="timepris" layoutX="151.0" layoutY="14.0" promptText="timepris" />
+            <JFXTextField fx:id="projektnavn" layoutX="14.0" layoutY="51.0" prefHeight="25.0" prefWidth="273.0" promptText="Projekt navn" />
+            <JFXButton layoutX="459.0" layoutY="14.0" onAction="#handleProjektAction" prefHeight="71.0" prefWidth="127.0" text="Opret">
             </JFXButton>
             <JFXTreeTableView fx:id="treeView" layoutX="13.0" layoutY="94.0" prefHeight="399.0" prefWidth="577.0" />
          </children></AnchorPane>
