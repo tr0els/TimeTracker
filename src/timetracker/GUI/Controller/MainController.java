@@ -7,11 +7,8 @@ package timetracker.GUI.Controller;
 
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDrawer;
 import java.io.IOException;
-
 import timetracker.DAL.DALException;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -24,7 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-   import timetracker.GUI.Model.TaskModel;
+import timetracker.GUI.Model.TaskModel;
 
 
 /**
@@ -67,19 +64,22 @@ public class MainController implements Initializable {
 
     }
 
-
+    /**
+     * 
+     * @param event
+     * @throws IOException
+     * Håndtere login af en admin
+     */
+    
    @FXML
     private void handeladminlogin(ActionEvent event) throws IOException {
         
-            
-            
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
             loader.load();
             Parent root = loader.getRoot();
             
             //MenubarController controller = loader.getController();
-            
             
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -91,6 +91,13 @@ public class MainController implements Initializable {
             stage.show();
         
     }
+    
+    /**
+     * 
+     * @param event
+     * @throws IOException 
+     * Håndtere log in af en alm. user, og fjerne adminknapperne. 
+     */
 
     @FXML
     private void handeluserlogin(ActionEvent event) throws IOException {
@@ -117,10 +124,6 @@ public class MainController implements Initializable {
         
     }
 
-
-    
-    
-    
 
 
     /**

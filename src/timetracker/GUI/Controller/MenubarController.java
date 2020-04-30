@@ -77,6 +77,9 @@ public class MenubarController implements Initializable {
     private void loadProjekterView(ActionEvent event) {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektView.fxml"), viewpane);   
     }
+    
+    
+    
 
     @FXML
     private void handelLogout(ActionEvent event) throws IOException {
@@ -96,18 +99,23 @@ public class MenubarController implements Initializable {
 
     @FXML
     private void loadoverblik(ActionEvent event) {
+         //FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/.fxml"), viewpane);   
     }
 
     @FXML
     private void loadprojektview(ActionEvent event) {
+        
+         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektManagerAdmin.fxml"), viewpane);   
     }
 
     @FXML
     private void loadbrugermanager(ActionEvent event) {
+             FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/UserManagerAdmin.fxml"), viewpane);   
     }
 
     @FXML
-    private void loadburgermanager(ActionEvent event) {
+    private void loadklientmanager(ActionEvent event) {
+        FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/KlientManagerAdmin.fxml"), viewpane);   
     }
 
     public JFXButton getProjektbtb() {
@@ -121,11 +129,6 @@ public class MenubarController implements Initializable {
     public JFXButton getBrugermanagerbtb() {
         return brugermanagerbtb;
     }
-
- 
-    
-    
-    
 
   
 }
