@@ -142,26 +142,4 @@ public class MainController implements Initializable {
         model.deleteProject(clientID, projectName, hourlyPay);
     }
 
-    public void handeluserlogin(ActionEvent event) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
-        loader.load();
-        Parent root = loader.getRoot();
-
-        MenubarController controller = loader.getController();
-        controller.getBrugermanagerbtb().setVisible(false);
-        controller.getKlientmanagerbtb().setVisible(false);
-        controller.getProjektbtb().setVisible(false);
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Time Tracker");
-        Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Currentstage.close();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-
-    }
-
 }
