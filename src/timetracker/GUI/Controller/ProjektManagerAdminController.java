@@ -74,6 +74,7 @@ public class ProjektManagerAdminController implements Initializable {
     }
     
     ObservableList<Client> clients;
+    TreeItem<Project> project;
 
     /**
      * Initializes the controller class.
@@ -93,7 +94,7 @@ public class ProjektManagerAdminController implements Initializable {
     }
     
         @FXML
-    void handleProjektAction(ActionEvent event) throws DALException {
+    void handleCreateAction(ActionEvent event) throws DALException {
         createProject();
     }
     
@@ -102,25 +103,30 @@ public class ProjektManagerAdminController implements Initializable {
         deleteProject();
     }
     
+        @FXML
+    private void handleEditAction(ActionEvent event) throws DALException {
+        editProject();
+    }
     
+    /**
+     * sætter data på textfields når man klikker på et projekt. 
+     * @param event
+     * @throws DALException 
+     */
     @FXML
     private void handleEditSetup(MouseEvent event) throws DALException {
-        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
+        project = treeView.getSelectionModel().getSelectedItem();
         int clientID = project.getValue().getClient_id();
         
         for (int i = 0; i < clients.size(); i++) {
             int cli = clients.get(i).getClient_id();
-            
             if(clientID == cli)
             {
                 combobox.getSelectionModel().select(clients.get(i));
             }
         }
-
-
         projektnavn.setText(project.getValue().getProject_name());
         timepris.setText(project.getValue().getProject_rate() + "");
-        
     }
 
     /**
@@ -144,7 +150,6 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void deleteProject() throws DALException {
-        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
         int projectID = project.getValue().getProject_id();
 
         model.deleteProject(projectID);
@@ -158,7 +163,6 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void editProject() throws DALException {
-        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
         
         int clientID = combobox.getSelectionModel().getSelectedItem().getClient_id();
         String projectName = projektnavn.getText();
@@ -168,7 +172,12 @@ public class ProjektManagerAdminController implements Initializable {
         model.editProject(clientID, projectName, hourlyPay, projectID);
     }
     
+    /**
+     * oprette coloner i treetableview og sætter listen af projekter fra databasen
+     * ind.
+     */
     private void populateTreeTable(){
+        //opretter colonerne
         JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
         projectName.setPrefWidth(150);
         JFXTreeTableColumn<Project, String> totalTidBrugt = new JFXTreeTableColumn<>("Total Tid Brugt");
@@ -176,6 +185,7 @@ public class ProjektManagerAdminController implements Initializable {
         JFXTreeTableColumn<Project, String> sidstArbejdetPå = new JFXTreeTableColumn<>("Sidst Arbejdet På");
         sidstArbejdetPå.setPrefWidth(150);
 
+        //vælger hvilket data der skal vises (i dette tilfælde projekt navnet) og hvilken colone det skal vises i
         projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
@@ -183,8 +193,10 @@ public class ProjektManagerAdminController implements Initializable {
             }
         });
 
+        //laver listen som skal indenholde projekterne
         ObservableList<Project> projects = FXCollections.observableArrayList();
         
+        //henter det data der skal ind i listen fra databasen
         try {
             projects.addAll(model.getProjects());
         } catch (DALException ex) {
@@ -193,12 +205,15 @@ public class ProjektManagerAdminController implements Initializable {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //sætter dataen ind i selve treetableviewet
         final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
 
         treeView.getColumns().setAll(projectName, totalTidBrugt, sidstArbejdetPå);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
+
+
 
 
 

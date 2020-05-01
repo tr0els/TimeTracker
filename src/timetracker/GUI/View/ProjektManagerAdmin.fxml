@@ -8,12 +8,13 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerAdminController">
    <children>
-      <JFXComboBox fx:id="combobox" layoutX="14.0" layoutY="13.0" prefHeight="25.0" prefWidth="127.0" />
+      <JFXComboBox fx:id="combobox" layoutX="14.0" layoutY="13.0" prefHeight="25.0" prefWidth="127.0" promptText="Klient" />
       <JFXTextField fx:id="timepris" layoutX="150.0" layoutY="13.0" promptText="timepris" />
       <JFXTextField fx:id="projektnavn" layoutX="12.0" layoutY="49.0" prefHeight="25.0" prefWidth="273.0" promptText="Projekt navn" />
-      <JFXButton layoutX="459.0" layoutY="13.0" onAction="#handleProjektAction" prefHeight="71.0" prefWidth="127.0" text="Opret">
+      <JFXButton layoutX="496.0" layoutY="13.0" onAction="#handleCreateAction" prefHeight="71.0" prefWidth="90.0" text="Opret">
             </JFXButton>
       <JFXTreeTableView fx:id="treeView" layoutX="12.0" layoutY="87.0" onMouseClicked="#handleEditSetup" prefHeight="399.0" prefWidth="577.0" />
-      <JFXButton layoutX="332.0" layoutY="13.0" onAction="#handleDeleteAction" prefHeight="71.0" prefWidth="127.0" text="Slet" />
+      <JFXButton layoutX="406.0" layoutY="13.0" onAction="#handleEditAction" prefHeight="71.0" prefWidth="90.0" text="Ret" />
+      <JFXButton layoutX="316.0" layoutY="14.0" onAction="#handleDeleteAction" prefHeight="71.0" prefWidth="90.0" text="Slet" />
    </children>
 </AnchorPane>
