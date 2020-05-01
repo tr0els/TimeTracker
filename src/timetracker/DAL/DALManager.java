@@ -538,4 +538,27 @@ public class DALManager {
        return null; 
         
     }
+
+    public List<Project> getProjectsbyClientID(Client client) {
+              ArrayList<Project> allProjectswithClientID = new ArrayList<>();
+              int client_ID = client.getClient_id(); 
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT * FROM Project WHERE client_id =  "+client_ID+ ";";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                Project projects = new Project();
+                projects.setProject_id(rs.getInt("project_id"));
+                projects.setProject_name(rs.getString("project_name"));
+                projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setClient_id(rs.getInt("client_id"));
+
+                allProjectswithClientID.add(projects);
+            }
+            return allProjectswithClientID;
+        } catch (DALException | SQLException ex) {
+            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

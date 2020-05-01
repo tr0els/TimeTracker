@@ -160,6 +160,7 @@ public class TaskModel {
     public ObservableList<Project> getProjects() throws DALException, SQLException {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
+        
         return allProjects;
     }
 

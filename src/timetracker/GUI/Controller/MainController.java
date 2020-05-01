@@ -38,7 +38,7 @@ public class MainController implements Initializable {
     private static MainController main = null;
 
     public MainController() throws DALException, SQLException {
-        model = TaskModel.getInstance();
+//        model = TaskModel.getInstance();
     }
 
     public static MainController getInstance() throws DALException, SQLException {

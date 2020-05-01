@@ -221,4 +221,8 @@ public class BLLManager {
         return newClient; 
     }
 
+    public  List<Project> getProjekctsbyClientID(Client client) {
+        return dal.getProjectsbyClientID(client);
+    }
+
 }
