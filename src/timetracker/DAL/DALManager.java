@@ -572,34 +572,7 @@ public class DALManager
         return null;
     }
 
-    public Client getClientDetails(Client selectedClient)
-    {
 
-        Client clientDetails = new Client();
-        try ( Connection con = dbCon.getConnection())
-        {
-            int clientID = selectedClient.getClient_id();
-            String sql = "SELECT * FROM Client WHERE client_id = " + clientID + ";";
-            Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
-                Client client = new Client();
-                client.setClient_id(rs.getInt("client_id"));
-                client.setClient_name(rs.getString("client_name"));
-                client.setDefault_rate(rs.getInt("default_rate"));
-
-                clientDetails = client;
-            }
-            return clientDetails;
-        } catch (SQLException | DALException ex)
-        {
-
-        }
-
-        return null;
-
-    }
 
     public List<Project> getProjectsbyClientID(Client client) {
               ArrayList<Project> allProjectswithClientID = new ArrayList<>();

@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MainController" />
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@Styleformanagerviews.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.KlientManagerAdminController">
+   <children>
+      <JFXListView fx:id="listviewfx" focusTraversable="false" layoutX="36.0" layoutY="190.0" onMouseClicked="#getSelectedClient" prefHeight="283.0" prefWidth="193.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXListView>
+      <JFXListView fx:id="listviewprojekts" focusTraversable="false" layoutX="255.0" layoutY="227.0" onMouseClicked="#getSelectedProjekt" onMouseEntered="#tooltip" prefHeight="246.0" prefWidth="295.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXListView>
+      <GridPane layoutX="14.0" layoutY="22.0" prefHeight="69.0" prefWidth="288.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label id="inputlbl" fx:id="klientNavnlbl" GridPane.columnIndex="1" />
+            <Label id="inputlbl" fx:id="timeprislbl" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label id="fixedlabel" text="Default Timepris:" GridPane.rowIndex="1" />
+            <Label id="fixedlabel" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="87.0" text="Klient:" textAlignment="RIGHT" />
+         </children>
+      </GridPane>
+      <Label id="fixedlabel" layoutX="36.0" layoutY="164.0" text="Klienter" />
+      <Label layoutX="265.0" layoutY="199.0" text="Projekter " />
+      <JFXDrawer fx:id="skuffe" defaultDrawerSize="228.0" direction="TOP" layoutX="337.0" overLayVisible="false" prefHeight="127.0" prefWidth="249.0" />
+      <JFXButton fx:id="btbnyklient" layoutX="48.0" layoutY="103.0" onAction="#showpanewithnewklient" prefHeight="52.0" prefWidth="74.0" text="Opret ny&#10;Klient" textAlignment="CENTER" />
+      <AnchorPane fx:id="opretnyklientpane" layoutX="66.0" layoutY="-185.0" prefHeight="121.0" prefWidth="228.0">
+         <children>
+            <Label layoutX="15.0" layoutY="14.0" text="Opret ny Klient" />
+            <JFXTextField fx:id="Nyklientnavn" focusTraversable="false" labelFloat="true" layoutX="5.0" layoutY="52.0" promptText="Ny klients navn" />
+            <JFXTextField fx:id="nydefaulttimepris" alignment="BOTTOM_LEFT" focusTraversable="false" labelFloat="true" layoutX="5.0" layoutY="95.0" promptText="Default timepris" />
+            <JFXButton fx:id="btbopretklient" layoutX="154.0" layoutY="60.0" onAction="#handleopretklient" prefHeight="33.0" prefWidth="60.0" text="Opret" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="retklientpane" layoutX="539.0" layoutY="-185.0" prefHeight="121.0" prefWidth="228.0">
+         <children>
+            <Label text="Hvad vil De rette?" />
+            <JFXTextField fx:id="txtretnavn" layoutY="30.0" />
+            <JFXTextField fx:id="txtrettimepris" layoutX="-1.0" layoutY="61.0" />
+            <JFXButton fx:id="retklientbtb" layoutX="149.0" layoutY="48.0" onAction="#handleretklient" prefHeight="44.0" prefWidth="60.0" text="Ret" />
+         </children>
+      </AnchorPane>
+      <JFXButton fx:id="retvalgteklientnbtb" alignment="CENTER" layoutX="142.0" layoutY="103.0" onAction="#openskuffemenretklient" prefHeight="52.0" prefWidth="100.0" text="Ret den &#10;  valgte Klient" textAlignment="CENTER" />
+      <Label fx:id="lblprojektnavn" layoutX="365.0" layoutY="201.0" prefHeight="22.0" prefWidth="87.0" />
+      <Label fx:id="lblprojekttimepris" layoutX="476.0" layoutY="201.0" prefHeight="22.0" prefWidth="87.0" />
+   </children>
+</AnchorPane>

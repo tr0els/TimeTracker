@@ -8,7 +8,6 @@ package timetracker.GUI.Model;
 import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
@@ -245,11 +244,6 @@ public class TaskModel {
     }
 
 
-    public Client getClientDetails(Client selectedClient) {
-        Client newclient = new Client();
-        newclient = bll.getClientDetails(selectedClient);
-        return newclient; 
-        
-    }
+
 
 }
