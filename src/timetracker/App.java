@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
@@ -39,7 +40,8 @@ public class App extends Application {
 
 
         Scene scene = new Scene(root);
-        
+        stage.setTitle("Time Tracker login");
+        stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
         stage.setScene(scene);
         stage.show();
     }
