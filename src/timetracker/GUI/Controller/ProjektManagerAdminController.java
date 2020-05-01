@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
@@ -46,9 +47,6 @@ public class ProjektManagerAdminController implements Initializable {
     private AnchorPane root;
 
     @FXML
-    private AnchorPane viewholder;
-
-    @FXML
     private JFXComboBox<Client> combobox;
 
     @FXML
@@ -60,8 +58,6 @@ public class ProjektManagerAdminController implements Initializable {
     @FXML
     private JFXTreeTableView<Project> treeView;
 
-    @FXML
-    private JFXDrawer drawer;
 
     private static TaskModel model;
     private static ProjektManagerAdminController projektController = null;
@@ -76,56 +72,61 @@ public class ProjektManagerAdminController implements Initializable {
         }
         return projektController;
     }
-
-    @FXML
-    void handleProjektAction(ActionEvent event) throws DALException {
-        createProject();
-    }
+    
+    ObservableList<Client> clients;
+    TreeItem<Project> project;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         try {
-            combobox.setItems(model.getClients());
+            clients = model.getClients();
+            combobox.setItems(clients);
         } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
-        projectName.setPrefWidth(150);
-        JFXTreeTableColumn<Project, String> totalTidBrugt = new JFXTreeTableColumn<>("Total Tid Brugt");
-        totalTidBrugt.setPrefWidth(150);
-        JFXTreeTableColumn<Project, String> sidstArbejdetPå = new JFXTreeTableColumn<>("Sidst Arbejdet På");
-        sidstArbejdetPå.setPrefWidth(150);
-
-        projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
-                return new SimpleStringProperty(param.getValue().getValue().project_name);
+        populateTreeTable();
+    }
+    
+        @FXML
+    void handleCreateAction(ActionEvent event) throws DALException {
+        createProject();
+    }
+    
+        @FXML
+    private void handleDeleteAction(ActionEvent event) throws DALException {
+        deleteProject();
+    }
+    
+        @FXML
+    private void handleEditAction(ActionEvent event) throws DALException {
+        editProject();
+    }
+    
+    /**
+     * sætter data på textfields når man klikker på et projekt. 
+     * @param event
+     * @throws DALException 
+     */
+    @FXML
+    private void handleEditSetup(MouseEvent event) throws DALException {
+        project = treeView.getSelectionModel().getSelectedItem();
+        int clientID = project.getValue().getClient_id();
+        
+        for (int i = 0; i < clients.size(); i++) {
+            int cli = clients.get(i).getClient_id();
+            if(clientID == cli)
+            {
+                combobox.getSelectionModel().select(clients.get(i));
             }
-        });
-
-        ObservableList<Project> projects = FXCollections.observableArrayList();
-        
-        try {
-            projects.addAll(model.getProjects());
-        } catch (DALException ex) {
-            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
-
-        treeView.getColumns().setAll(projectName, totalTidBrugt, sidstArbejdetPå);
-        treeView.setRoot(root);
-        treeView.setShowRoot(false);
-
+        projektnavn.setText(project.getValue().getProject_name());
+        timepris.setText(project.getValue().getProject_rate() + "");
     }
 
     /**
@@ -149,11 +150,9 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void deleteProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 200;
+        int projectID = project.getValue().getProject_id();
 
-        model.deleteProject(clientID, projectName, hourlyPay);
+        model.deleteProject(projectID);
     }
 
     /**
@@ -164,12 +163,59 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void editProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 300;
-        int projectID = 6;
-
+        
+        int clientID = combobox.getSelectionModel().getSelectedItem().getClient_id();
+        String projectName = projektnavn.getText();
+        int hourlyPay = Integer.parseInt(timepris.getText());
+        int projectID = project.getValue().getProject_id();
+        
         model.editProject(clientID, projectName, hourlyPay, projectID);
     }
+    
+    /**
+     * oprette coloner i treetableview og sætter listen af projekter fra databasen
+     * ind.
+     */
+    private void populateTreeTable(){
+        //opretter colonerne
+        JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
+        projectName.setPrefWidth(150);
+        JFXTreeTableColumn<Project, String> totalTidBrugt = new JFXTreeTableColumn<>("Total Tid Brugt");
+        totalTidBrugt.setPrefWidth(150);
+        JFXTreeTableColumn<Project, String> sidstArbejdetPå = new JFXTreeTableColumn<>("Sidst Arbejdet På");
+        sidstArbejdetPå.setPrefWidth(150);
+
+        //vælger hvilket data der skal vises (i dette tilfælde projekt navnet) og hvilken colone det skal vises i
+        projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
+                return new SimpleStringProperty(param.getValue().getValue().project_name);
+            }
+        });
+
+        //laver listen som skal indenholde projekterne
+        ObservableList<Project> projects = FXCollections.observableArrayList();
+        
+        //henter det data der skal ind i listen fra databasen
+        try {
+            projects.addAll(model.getProjects());
+        } catch (DALException ex) {
+            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //sætter dataen ind i selve treetableviewet
+        final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
+
+        treeView.getColumns().setAll(projectName, totalTidBrugt, sidstArbejdetPå);
+        treeView.setRoot(root);
+        treeView.setShowRoot(false);
+    }
+
+
+
+
+
 
 }

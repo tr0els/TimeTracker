@@ -60,8 +60,8 @@ public class BLLManager {
      * @param hourlyPay
      * @throws DALException
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
-        dal.deleteProject(clientID, projectName, hourlyPay);
+    public void deleteProject(int projectID) throws DALException {
+        dal.deleteProject(projectID);
     }
 
     /**
