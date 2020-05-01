@@ -238,7 +238,7 @@ public class TaskModel {
      * @throws SQLException
      */
     public ObservableList<User> getUsers() throws DALException, SQLException {
-        Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
+        Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName()); // consider using order by name in db instead?
         allUsers.sort(byName);
         return allUsers;
     }
