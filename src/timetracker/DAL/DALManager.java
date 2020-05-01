@@ -145,6 +145,7 @@ public class DALManager {
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
                 projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setClient_id(rs.getInt("client_id"));
 
                 allProjects.add(projects);
             }
