@@ -115,34 +115,4 @@ public class MainController implements Initializable {
         
     }
 
-
-
-    /**
-     * Tager det info som admin har puttet ind i "Projekt Manager" menuen og
-     * sender det ned for at blive gemt på serveren
-     *
-     * @throws DALException
-     */
-    public void createProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 9";
-        int hourlyPay = 200;
-
-        model.createProject(clientID, projectName, hourlyPay);
-    }
-
-    /**
-     * Tager det projekt som Admin har valgt i "projekt Manager" menuen og
-     * sender det ned til DAL så det kan fjernes fra serveren.
-     *
-     * @throws DALException
-     */
-    public void deleteProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 200;
-
-        model.deleteProject(clientID, projectName, hourlyPay);
-    }
-
 }

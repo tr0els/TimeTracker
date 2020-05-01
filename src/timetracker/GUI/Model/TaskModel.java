@@ -78,8 +78,8 @@ public class TaskModel {
      * @param hourlyPay
      * @throws DALException
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) throws DALException {
-        bll.deleteProject(clientID, projectName, hourlyPay);
+    public void deleteProject(int projectID) throws DALException {
+        bll.deleteProject(projectID);
     }
 
     /**

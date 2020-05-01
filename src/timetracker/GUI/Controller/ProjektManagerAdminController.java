@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
@@ -46,9 +47,6 @@ public class ProjektManagerAdminController implements Initializable {
     private AnchorPane root;
 
     @FXML
-    private AnchorPane viewholder;
-
-    @FXML
     private JFXComboBox<Client> combobox;
 
     @FXML
@@ -60,8 +58,6 @@ public class ProjektManagerAdminController implements Initializable {
     @FXML
     private JFXTreeTableView<Project> treeView;
 
-    @FXML
-    private JFXDrawer drawer;
 
     private static TaskModel model;
     private static ProjektManagerAdminController projektController = null;
@@ -76,26 +72,103 @@ public class ProjektManagerAdminController implements Initializable {
         }
         return projektController;
     }
-
-    @FXML
-    void handleProjektAction(ActionEvent event) throws DALException {
-        createProject();
-    }
+    
+    ObservableList<Client> clients;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         try {
-            combobox.setItems(model.getClients());
+            clients = model.getClients();
+            combobox.setItems(clients);
         } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        populateTreeTable();
+    }
+    
+        @FXML
+    void handleProjektAction(ActionEvent event) throws DALException {
+        createProject();
+    }
+    
+        @FXML
+    private void handleDeleteAction(ActionEvent event) throws DALException {
+        deleteProject();
+    }
+    
+    
+    @FXML
+    private void handleEditSetup(MouseEvent event) throws DALException {
+        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
+        int clientID = project.getValue().getClient_id();
+        
+        for (int i = 0; i < clients.size(); i++) {
+            int cli = clients.get(i).getClient_id();
+            
+            if(clientID == cli)
+            {
+                combobox.getSelectionModel().select(clients.get(i));
+            }
+        }
+
+
+        projektnavn.setText(project.getValue().getProject_name());
+        timepris.setText(project.getValue().getProject_rate() + "");
+        
+    }
+
+    /**
+     * Tager det info som admin har puttet ind i "Projekt Manager" menuen og
+     * sender det ned for at blive gemt på serveren
+     *
+     * @throws DALException
+     */
+    public void createProject() throws DALException {
+        int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClient_id();
+        String projectName = projektnavn.getText();
+        int hourlyPay = Integer.parseInt(timepris.getText());
+
+        model.createProject(clientID, projectName, hourlyPay);
+    }
+
+    /**
+     * Tager det projekt som Admin har valgt i "projekt Manager" menuen og
+     * sender det ned til DAL så det kan fjernes fra serveren.
+     *
+     * @throws DALException
+     */
+    public void deleteProject() throws DALException {
+        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
+        int projectID = project.getValue().getProject_id();
+
+        model.deleteProject(projectID);
+    }
+
+    /**
+     * Henter projectID fra det projekt som admin har valgt. Tager så det
+     * updateret data som er inputet og sender det ned til DAL så infoen på
+     * databasen kan updateres
+     *
+     * @throws DALException
+     */
+    public void editProject() throws DALException {
+        TreeItem<Project> project = treeView.getSelectionModel().getSelectedItem();
+        
+        int clientID = combobox.getSelectionModel().getSelectedItem().getClient_id();
+        String projectName = projektnavn.getText();
+        int hourlyPay = Integer.parseInt(timepris.getText());
+        int projectID = project.getValue().getProject_id();
+        
+        model.editProject(clientID, projectName, hourlyPay, projectID);
+    }
+    
+    private void populateTreeTable(){
         JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
         projectName.setPrefWidth(150);
         JFXTreeTableColumn<Project, String> totalTidBrugt = new JFXTreeTableColumn<>("Total Tid Brugt");
@@ -125,51 +198,9 @@ public class ProjektManagerAdminController implements Initializable {
         treeView.getColumns().setAll(projectName, totalTidBrugt, sidstArbejdetPå);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
-
     }
 
-    /**
-     * Tager det info som admin har puttet ind i "Projekt Manager" menuen og
-     * sender det ned for at blive gemt på serveren
-     *
-     * @throws DALException
-     */
-    public void createProject() throws DALException {
-        int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClient_id();
-        String projectName = projektnavn.getText();
-        int hourlyPay = Integer.parseInt(timepris.getText());
 
-        model.createProject(clientID, projectName, hourlyPay);
-    }
 
-    /**
-     * Tager det projekt som Admin har valgt i "projekt Manager" menuen og
-     * sender det ned til DAL så det kan fjernes fra serveren.
-     *
-     * @throws DALException
-     */
-    public void deleteProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 200;
-
-        model.deleteProject(clientID, projectName, hourlyPay);
-    }
-
-    /**
-     * Henter projectID fra det projekt som admin har valgt. Tager så det
-     * updateret data som er inputet og sender det ned til DAL så infoen på
-     * databasen kan updateres
-     *
-     * @throws DALException
-     */
-    public void editProject() throws DALException {
-        int clientID = 1;
-        String projectName = "projekt 2";
-        int hourlyPay = 300;
-        int projectID = 6;
-
-        model.editProject(clientID, projectName, hourlyPay, projectID);
-    }
 
 }

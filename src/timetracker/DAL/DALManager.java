@@ -83,73 +83,21 @@ public class DALManager {
      * @param projectName
      * @param hourlyPay
      */
-    public void deleteProject(int clientID, String projectName, int hourlyPay) {
+    public void deleteProject(int projectID) {
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "DELETE FROM Project WHERE Project_name = ? AND project_rate = ? AND client_id = ?";
+            String sql = "DELETE FROM Project WHERE Project_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, projectName);
-            st.setInt(2, hourlyPay);
-            st.setInt(3, clientID);
+            st.setInt(1, projectID);
 
             st.executeQuery();
 
         } catch (Exception e) {
         }
     }
-
-    /**
-     * opretter ny task og returnere task
-     *
-     * @param task_name
-     * @param billable
-     * @param project_id
-     * @param person_id
-     * @return
-     */
-    public Task createTask(String task_name, boolean billable, int project_id, int person_id) {
-        try ( Connection con = dbCon.getConnection()) {
-
-            Task task = null;
-
-            int int_billable = 0;//konvertere boolean til 0 el. 1
-            if (billable == true) {
-                int_billable = 1;
-            }
-
-            String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
-
-            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
-            ps.setString(1, task_name);
-            ps.setInt(2, int_billable);
-            ps.setInt(3, project_id);
-            ps.setInt(4, person_id);
-
-            int affectedRows = ps.executeUpdate();
-
-            if (affectedRows == 1) {
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    int task_id = rs.getInt(1);
-
-                    startTask(task_id);
-
-                    task = new Task(task_id, task_name, billable, project_id, person_id);
-
-                }
-
-            }
-
-            return task;
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
+    
     /**
      * tager imod infoen fra BLLManagerens "editProject" og sætter det ind i en
      * prepared statement så infoen kan updateres i databasen.
@@ -206,6 +154,58 @@ public class DALManager {
         }
         return null;
     }
+
+    /**
+     * opretter ny task og returnere task
+     *
+     * @param task_name
+     * @param billable
+     * @param project_id
+     * @param person_id
+     * @return
+     */
+    public Task createTask(String task_name, boolean billable, int project_id, int person_id) {
+        try ( Connection con = dbCon.getConnection()) {
+
+            Task task = null;
+
+            int int_billable = 0;//konvertere boolean til 0 el. 1
+            if (billable == true) {
+                int_billable = 1;
+            }
+
+            String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            ps.setString(1, task_name);
+            ps.setInt(2, int_billable);
+            ps.setInt(3, project_id);
+            ps.setInt(4, person_id);
+
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 1) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int task_id = rs.getInt(1);
+
+                    startTask(task_id);
+
+                    task = new Task(task_id, task_name, billable, project_id, person_id);
+
+                }
+
+            }
+
+            return task;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    
 
     /**
      * Opretter en client med det client objekt der bliver sendt ned igennem
