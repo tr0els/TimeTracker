@@ -5,14 +5,15 @@
  */
 package timetracker.BE;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class User
+public class User extends RecursiveTreeObject<User>
 {
-
     private int person_id;
     private String name;
     private String surname;
@@ -20,6 +21,8 @@ public class User
     private String password;
     private int role_id;
     private int profession_id;
+    private String role;
+    private String profession;
 
     public User(int person_id, String name, String surname, String email, int role_id, int profession_id)
     {
@@ -27,9 +30,19 @@ public class User
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.password = password;
         this.role_id = role_id;
         this.profession_id = profession_id;
+        
+    }
+
+    public User(int person_id, String name, String surname, String email, String role, String profession)
+    {
+        this.person_id = person_id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.role = role;
+        this.profession = profession;
     }
 
     public User()
@@ -106,6 +119,27 @@ public class User
         this.profession_id = profession_id;
     }
 
+    public String getRole()
+    {
+        return role;
+    }
+
+    public void setRole(String role)
+    {
+        this.role = role;
+    }
+
+    public String getProfession()
+    {
+        return profession;
+    }
+
+    public void setProfession(String profession)
+    {
+        this.profession = profession;
+    }
+
+    
     public boolean isAdmin(User user)
     {
         if (role_id == 1)
@@ -116,5 +150,13 @@ public class User
             return false;
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return "" + name + " " + surname;
+    }
+    
+    
 
 }

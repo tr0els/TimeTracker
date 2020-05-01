@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.UserManagerAdminController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.UserManagerAdminController">
    <children>
-      <AnchorPane fx:id="viewholder" layoutX="150.0" prefHeight="500.0" prefWidth="600.0" />
+      <JFXTreeTableView fx:id="listUsers" layoutX="14.0" layoutY="145.0" prefHeight="341.0" prefWidth="573.0" />
+      <JFXListView fx:id="testView" layoutX="34.0" layoutY="24.0" prefHeight="109.0" prefWidth="433.0" />
    </children>
 </AnchorPane>
