@@ -40,7 +40,7 @@ public class TaskModel {
     private TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
-        allProjects.addAll(bll.getProject());
+        allProjects.addAll(bll.getProjects());
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
         allUsers = FXCollections.observableArrayList();
@@ -179,15 +179,19 @@ public class TaskModel {
         
         return allProjects;
     }
-
-    /**
-     * Sender Client objekt ned til DAL laget som skal oprettes.
-     *
-     * @param client
-     */
-    public void createClient(Client client) {
-        bll.createClient(client);
+    
+    public Project getProject(String projectName, int project_rate, int client_id){
+        return bll.getProject(projectName, project_rate, client_id);
     }
+
+//    /**DENNE METODE LIGGER INDE I CLIENTMODEL
+//     * Sender Client objekt ned til DAL laget som skal oprettes.
+//     *
+//     * @param client
+//     */
+//    public void createClient(Client client) {
+//        bll.createClient(client);
+//    }
 
     /**
      * Sender Client objekt ned til DAL laget som skal ændres.

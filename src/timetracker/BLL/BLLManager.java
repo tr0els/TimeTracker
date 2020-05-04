@@ -150,8 +150,12 @@ public class BLLManager {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Project> getProject() throws DALException, SQLException {
+    public List<Project> getProjects() throws DALException, SQLException {
         return dal.getProjects();
+    }
+    
+    public Project getProject(String projectName, int project_rate, int client_id){
+        return dal.getProject(projectName, project_rate, client_id);
     }
 
     /**
@@ -159,8 +163,9 @@ public class BLLManager {
      *
      * @param client
      */
-    public void createClient(Client client) {
-        dal.createClient(client);
+    public Client createClient(String navn, int timepris) {
+        return  dal.createClient(navn, timepris);
+        
     }
 
     /**

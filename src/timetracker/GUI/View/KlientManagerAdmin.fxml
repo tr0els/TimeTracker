@@ -17,7 +17,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXListView>
-      <JFXListView fx:id="listviewprojekts" focusTraversable="false" layoutX="255.0" layoutY="227.0" onMouseClicked="#getSelectedProjekt" onMouseEntered="#tooltip" prefHeight="246.0" prefWidth="295.0">
+      <JFXListView fx:id="listviewprojekts" focusTraversable="false" layoutX="255.0" layoutY="227.0" onMouseClicked="#getSelectedProjekt" onMouseEntered="#tooltip" prefHeight="246.0" prefWidth="217.0">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXListView>
@@ -38,7 +38,7 @@
          </children>
       </GridPane>
       <Label id="fixedlabel" layoutX="36.0" layoutY="164.0" text="Klienter" />
-      <Label layoutX="265.0" layoutY="199.0" text="Projekter " />
+      <Label layoutX="255.0" layoutY="201.0" text="Projekter " />
       <JFXDrawer fx:id="skuffe" defaultDrawerSize="228.0" direction="TOP" layoutX="337.0" overLayVisible="false" prefHeight="127.0" prefWidth="249.0" />
       <JFXButton fx:id="btbnyklient" layoutX="48.0" layoutY="103.0" onAction="#showpanewithnewklient" prefHeight="52.0" prefWidth="74.0" text="Opret ny&#10;Klient" textAlignment="CENTER" />
       <AnchorPane fx:id="opretnyklientpane" layoutX="66.0" layoutY="-185.0" prefHeight="121.0" prefWidth="228.0">
@@ -58,7 +58,8 @@
          </children>
       </AnchorPane>
       <JFXButton fx:id="retvalgteklientnbtb" alignment="CENTER" layoutX="142.0" layoutY="103.0" onAction="#openskuffemenretklient" prefHeight="52.0" prefWidth="100.0" text="Ret den &#10;  valgte Klient" textAlignment="CENTER" />
-      <Label fx:id="lblprojektnavn" layoutX="365.0" layoutY="201.0" prefHeight="22.0" prefWidth="87.0" />
-      <Label fx:id="lblprojekttimepris" layoutX="476.0" layoutY="201.0" prefHeight="22.0" prefWidth="87.0" />
+      <Label fx:id="lblprojektnavn" layoutX="482.0" layoutY="227.0" prefHeight="121.0" prefWidth="115.0" wrapText="true" />
+      <Label fx:id="lblprojekttimepris" layoutX="482.0" layoutY="360.0" prefHeight="22.0" prefWidth="87.0" />
+      <JFXButton fx:id="btbGåtilprojekter" layoutX="482.0" layoutY="429.0" onAction="#handelgåtilprojektview" prefHeight="44.0" prefWidth="108.0" text="Gå til &#10;projekter" textAlignment="CENTER" />
    </children>
 </AnchorPane>
