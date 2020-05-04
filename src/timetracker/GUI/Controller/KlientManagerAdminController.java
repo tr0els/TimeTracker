@@ -144,10 +144,7 @@ public class KlientManagerAdminController implements Initializable {
     }
 
     private Tooltip tooltipforprojektlist() {
-        // Tooltip tipnoClientselected = new Tooltip("Vælg en klient for at få vist deres projekter");
-        //  Tooltip tipclientselected = new Tooltip("Klienten har ingen projekter");
-
-        Tooltip tip = new Tooltip();
+            Tooltip tip = new Tooltip();
 
         if (istheresomthinginprojectview()== 1) {
             tip.setText("Vælg en klient for at få vist deres projekter");
@@ -166,7 +163,7 @@ public class KlientManagerAdminController implements Initializable {
             return 1;}
         if(Bindings.isEmpty(listviewprojekts.getItems()).get() && selectedClient != null )
         {return 2;}
-       listviewprojekts.disableProperty().bind(Bindings.isEmpty(listviewprojekts.getItems()));
+      
        return 0; 
     }
 
