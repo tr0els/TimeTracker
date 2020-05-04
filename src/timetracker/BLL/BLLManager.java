@@ -73,8 +73,8 @@ public class BLLManager {
      * @param person_id
      * @return
      */
-    public Task createTask(String task_name, boolean billable, int project_id, int person_id) {
-        return dal.createTask(task_name, billable, project_id, person_id);
+    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+        dal.createTask(task_name, billable, project_id, person_id);
     }
 
     /**
@@ -96,6 +96,11 @@ public class BLLManager {
 
     }
 
+    public Task getTask(int task_id)
+    {
+        return dal.getTaskbyTaskID(task_id);
+    }
+    
     /**
      * returnere en liste af Tasks udfra et project_id
      * @param project_id
@@ -110,9 +115,19 @@ public class BLLManager {
      * @param task_id
      * @return 
      */
-    public List<Log> getTaskLogById(int task_id) {
+    public List<Log> getTaskLogListById(int task_id) {
         
-        return dal.getTaskLogbyTaskID(task_id);
+        return dal.getTaskLogListbyTaskID(task_id);
+    }
+    
+    /**
+     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår osv.)
+     * @param task_id
+     * @return 
+     */
+    public List<Log> getTaskLogListByDay(int person_id, int dag) {
+        
+        return dal.getTaskLogListbyDay(person_id, dag);
     }
 
 

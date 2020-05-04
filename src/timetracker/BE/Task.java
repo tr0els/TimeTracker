@@ -5,6 +5,7 @@
  */
 package timetracker.BE;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import javafx.collections.ObservableList;
 import timetracker.DAL.DALException;
@@ -17,15 +18,14 @@ import timetracker.DAL.DALManager;
  */
 public class Task {
 
-
     private int task_id;
     private String task_name;
     private boolean billable;
     private int project_id;
     private int person_id;
-  
+
     public Task(int task_id, String task_name, boolean billable, int project_id, int person_id) {
-        
+
         this.task_id = task_id;
         this.task_name = task_name;
         this.billable = billable;
@@ -34,7 +34,7 @@ public class Task {
 
     }
 
-    public Task(){
+    public Task() {
 
     }
 
@@ -85,14 +85,34 @@ public class Task {
 
         LocalDateTime start_time;
         LocalDateTime end_time;
+        Time total_tid;
+        int task_id;
 
-        public Log(LocalDateTime start_time, LocalDateTime end_time) {
+        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, Time total_tid) {
             this.start_time = start_time;
             this.end_time = end_time;
+            this.task_id = task_id;
+            this.total_tid = total_tid;
         }
 
         public Log() {
 
+        }
+
+        public Time getTotal_tid() {
+            return total_tid;
+        }
+
+        public void setTotal_tid(Time total_tid) {
+            this.total_tid = total_tid;
+        }
+
+        public int getTask_id() {
+            return task_id;
+        }
+
+        public void setTask_id(int task_id) {
+            this.task_id = task_id;
         }
 
         public LocalDateTime getStart_time() {
@@ -113,7 +133,7 @@ public class Task {
 
         @Override
         public String toString() {
-            return "Log{" + "start_time=" + start_time + ", end_time=" + end_time + '}';
+            return "Log{" + "Task_id" + task_id + "start_time=" + start_time + ", end_time=" + end_time + '}';
         }
 
     }
