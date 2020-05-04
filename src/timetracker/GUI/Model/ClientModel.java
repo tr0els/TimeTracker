@@ -63,8 +63,8 @@ public class ClientModel {
      *
      * @param client
      */
-    public void createClient(Client client) {
-        bll.createClient(client);
+    public Client createClient(String navn, int timepris) {
+        return bll.createClient(navn, timepris);
     }
 
     /**
