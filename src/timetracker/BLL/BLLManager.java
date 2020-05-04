@@ -144,8 +144,9 @@ public class BLLManager {
      *
      * @param client
      */
-    public void createClient(Client client) {
-        dal.createClient(client);
+    public Client createClient(String navn, int timepris) {
+        return  dal.createClient(navn, timepris);
+        
     }
 
     /**

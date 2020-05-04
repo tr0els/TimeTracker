@@ -163,14 +163,14 @@ public class TaskModel {
         return allProjects;
     }
 
-    /**
-     * Sender Client objekt ned til DAL laget som skal oprettes.
-     *
-     * @param client
-     */
-    public void createClient(Client client) {
-        bll.createClient(client);
-    }
+//    /**DENNE METODE LIGGER INDE I CLIENTMODEL
+//     * Sender Client objekt ned til DAL laget som skal oprettes.
+//     *
+//     * @param client
+//     */
+//    public void createClient(Client client) {
+//        bll.createClient(client);
+//    }
 
     /**
      * Sender Client objekt ned til DAL laget som skal ændres.

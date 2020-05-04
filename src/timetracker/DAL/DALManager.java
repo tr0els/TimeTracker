@@ -228,24 +228,41 @@ public class DALManager
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.
      *
+     * @param name
+     * @param timepris
      * @param client
+     * @return 
      */
-    public void createClient(Client client)
+    public Client createClient(String name, int timepris)
     {
         try ( Connection con = dbCon.getConnection())
         {
+            
             String sql = "INSERT INTO Client (client_name, default_rate) VALUES (?,?)";
 
-            PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 
-            st.setString(1, client.getClient_name());
-            st.setInt(2, client.getDefault_rate());
-
-            st.executeQuery();
-
+            st.setString(1, name);
+            st.setInt(2, timepris);
+            int affectedRows = st.executeUpdate();
+            if(affectedRows == 1)
+            {
+            ResultSet rs = st.getGeneratedKeys();
+            if(rs.next())
+            {
+                int id = rs.getInt(1);
+                Client client = new Client(id,name, timepris );
+                return client;
+            }
+          
+            
+            }
+       
         } catch (Exception e)
         {
+           
         }
+          return null;
     }
 
     /**
