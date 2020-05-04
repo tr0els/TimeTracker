@@ -14,28 +14,15 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.util.Callback;
-import javafx.util.Duration;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
 import timetracker.DAL.DALException;
@@ -67,11 +54,6 @@ public class KlientManagerAdminController implements Initializable {
     private JFXDrawer skuffe;
     @FXML
     private JFXButton btbnyklient;
-
-    private Client selectedClient;
-    private Client newclient = new Client();
-    private static ClientModel model;
-    private static TaskModel taskmodel;
     @FXML
     private AnchorPane opretnyklientpane;
     @FXML
@@ -90,6 +72,11 @@ public class KlientManagerAdminController implements Initializable {
     private Label lblprojektnavn;
     @FXML
     private Label lblprojekttimepris;
+    
+    private Client selectedClient;
+    private Client newclient = new Client();
+    private static ClientModel model;
+    private static TaskModel taskmodel;
 
     public KlientManagerAdminController() throws DALException, SQLException {
         model = ClientModel.getInstance();
