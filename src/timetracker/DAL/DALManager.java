@@ -85,15 +85,16 @@ public class DALManager {
     public void deleteProject(int projectID) {
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "DELETE FROM Project WHERE Project_id = ?";
+            String sql = "DELETE FROM Project WHERE project_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, projectID);
 
-            st.executeQuery();
+            st.execute();
 
         } catch (Exception e) {
+            System.out.println("fail lol");
         }
     }
 
