@@ -82,7 +82,7 @@ public class MenubarController implements Initializable {
     
     @FXML
     private void loadoverblik(ActionEvent event) {
-         //FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/.fxml"), viewpane);   
+         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"), viewpane);   
     }
 
     @FXML
@@ -141,5 +141,8 @@ public class MenubarController implements Initializable {
         return brugermanagerbtb;
     }
 
+    public JFXButton getOverblikforAdmin(){
+    return overblikbtb;
+    }
   
 }

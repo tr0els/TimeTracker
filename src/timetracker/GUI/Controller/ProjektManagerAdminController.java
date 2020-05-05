@@ -60,6 +60,18 @@ public class ProjektManagerAdminController implements Initializable {
 
     private static TaskModel model;
     private static ProjektManagerAdminController projektController = null;
+    @FXML
+    private AnchorPane editProjectPane;
+    @FXML
+    private JFXComboBox<Client> combobox1;
+    @FXML
+    private JFXTextField timepris1;
+    @FXML
+    private JFXTextField projektnavn1;
+    @FXML
+    private AnchorPane createProjectPane;
+    @FXML
+    private JFXDrawer drawer;
 
     public ProjektManagerAdminController() throws DALException, SQLException {
         model = TaskModel.getInstance();
@@ -81,8 +93,9 @@ public class ProjektManagerAdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            drawer.close();
             clients = model.getClients();
-            combobox.setItems(clients);
+            
         } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -92,6 +105,14 @@ public class ProjektManagerAdminController implements Initializable {
         populateTreeTable();
     }
 
+        @FXML
+    private void handleGetCreateAction(ActionEvent event) {
+        combobox.setItems(clients);
+        drawer.setSidePane(createProjectPane);
+        drawer.open();
+        drawer.toFront();
+    }
+    
     @FXML
     void handleCreateAction(ActionEvent event) throws DALException {
         createProject();
@@ -220,5 +241,7 @@ public class ProjektManagerAdminController implements Initializable {
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
+
+
 
 }
