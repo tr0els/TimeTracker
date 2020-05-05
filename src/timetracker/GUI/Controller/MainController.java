@@ -102,6 +102,7 @@ public class MainController implements Initializable {
             controller.getBrugermanagerbtb().setVisible(false);
             controller.getKlientmanagerbtb().setVisible(false);
             controller.getProjektbtb().setVisible(false);
+            controller.getOverblikforAdmin().setVisible(false);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Time Tracker alm. bruger");
