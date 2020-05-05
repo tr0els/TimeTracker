@@ -167,9 +167,8 @@ public class ProjektManagerAdminController implements Initializable {
         int hourlyPay = Integer.parseInt(timepris.getText());
 
         model.createProject(clientID, projectName, hourlyPay);
-
+        
         populateTreeTable();
-
     }
 
     /**

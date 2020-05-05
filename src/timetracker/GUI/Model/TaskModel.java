@@ -174,6 +174,8 @@ public class TaskModel {
      * @throws SQLException
      */
     public ObservableList<Project> getProjects() throws DALException, SQLException {
+        allProjects.clear();
+        allProjects.addAll(bll.getProjects());
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
         
