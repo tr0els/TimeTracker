@@ -66,10 +66,12 @@ and open the template in the editor.
 }
 
 .list-cell:filled:selected{
+    -fx-border-width: 3px; 
+    -fx-border-color: -fx-grumsen;
+     -fx-font-weight: bold;
+    -fx-background: white ;
+    -fx-text-fill: -fx-Grumsen;
     
-    
-    -fx-background:-fx-grumsen-lysere;
-    -fx-text-fill: white;
  
     
 }

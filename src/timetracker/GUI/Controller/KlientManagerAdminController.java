@@ -79,6 +79,11 @@ public class KlientManagerAdminController implements Initializable {
     private static TaskModel taskmodel;
     @FXML
     private JFXButton btbGåtilprojekter;
+    @FXML
+    private JFXButton btbcancelnyklient;
+    @FXML
+    private JFXButton btbcloseret;
+   
 
     public KlientManagerAdminController() throws DALException, SQLException {
         model = ClientModel.getInstance();
@@ -285,6 +290,20 @@ public class KlientManagerAdminController implements Initializable {
     @FXML
     private void handelgåtilprojektview(ActionEvent event) {
         //todo skal tage relevant info med til projekt view
+    }
+
+    @FXML
+    private void handleCancelRetklient(ActionEvent event) {
+        
+     
+        skuffe.close();
+    }
+
+    @FXML
+    private void handleCancelnyklient(ActionEvent event) {
+        nydefaulttimepris.clear();
+        Nyklientnavn.clear();
+        skuffe.close();
     }
 
 }
