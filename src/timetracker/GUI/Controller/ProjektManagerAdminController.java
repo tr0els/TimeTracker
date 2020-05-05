@@ -45,33 +45,29 @@ public class ProjektManagerAdminController implements Initializable {
 
     @FXML
     private AnchorPane root;
-
     @FXML
     private JFXComboBox<Client> combobox;
-
     @FXML
     private JFXTextField timepris;
-
     @FXML
     private JFXTextField projektnavn;
-
     @FXML
     private JFXTreeTableView<Project> treeView;
-
-    private static TaskModel model;
-    private static ProjektManagerAdminController projektController = null;
     @FXML
     private AnchorPane editProjectPane;
-    @FXML
-    private JFXComboBox<Client> combobox1;
-    @FXML
-    private JFXTextField timepris1;
-    @FXML
-    private JFXTextField projektnavn1;
     @FXML
     private AnchorPane createProjectPane;
     @FXML
     private JFXDrawer drawer;
+    @FXML
+    private JFXComboBox<Client> comboboxEdit;
+    @FXML
+    private JFXTextField timeprisEdit;
+    @FXML
+    private JFXTextField projektnavnEdit;
+
+    private static TaskModel model;
+    private static ProjektManagerAdminController projektController = null;
 
     public ProjektManagerAdminController() throws DALException, SQLException {
         model = TaskModel.getInstance();
@@ -94,8 +90,11 @@ public class ProjektManagerAdminController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             drawer.close();
+
             clients = model.getClients();
-            
+            combobox.setItems(clients);
+            comboboxEdit.setItems(clients);
+
         } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -105,27 +104,29 @@ public class ProjektManagerAdminController implements Initializable {
         populateTreeTable();
     }
 
-        @FXML
+    @FXML
     private void handleGetCreateAction(ActionEvent event) {
-        combobox.setItems(clients);
         drawer.setSidePane(createProjectPane);
         drawer.open();
         drawer.toFront();
     }
-    
+
     @FXML
     void handleCreateAction(ActionEvent event) throws DALException {
         createProject();
+        drawer.close();
     }
 
     @FXML
     private void handleDeleteAction(ActionEvent event) throws DALException {
         deleteProject();
+        drawer.close();
     }
 
     @FXML
     private void handleEditAction(ActionEvent event) throws DALException {
         editProject();
+        drawer.close();
     }
 
     /**
@@ -136,17 +137,22 @@ public class ProjektManagerAdminController implements Initializable {
      */
     @FXML
     private void handleEditSetup(MouseEvent event) throws DALException {
+        drawer.setSidePane(editProjectPane);
+
         project = treeView.getSelectionModel().getSelectedItem();
         int clientID = project.getValue().getClient_id();
 
         for (int i = 0; i < clients.size(); i++) {
             int cli = clients.get(i).getClient_id();
             if (clientID == cli) {
-                combobox.getSelectionModel().select(clients.get(i));
+                comboboxEdit.getSelectionModel().select(clients.get(i));
             }
         }
-        projektnavn.setText(project.getValue().getProject_name());
-        timepris.setText(project.getValue().getProject_rate() + "");
+        projektnavnEdit.setText(project.getValue().getProject_name());
+        timeprisEdit.setText(project.getValue().getProject_rate() + "");
+
+        drawer.open();
+        drawer.toFront();
     }
 
     /**
@@ -176,8 +182,7 @@ public class ProjektManagerAdminController implements Initializable {
         project = treeView.getSelectionModel().getSelectedItem();
         project.getParent().getChildren().remove(project);
 
-        int projectID = project.getValue().getProject_id();
-        model.deleteProject(projectID);
+        model.deleteProject(project.getValue().getProject_id());
     }
 
     /**
@@ -188,9 +193,9 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void editProject() throws DALException {
-        int clientID = combobox.getSelectionModel().getSelectedItem().getClient_id();
-        String projectName = projektnavn.getText();
-        int hourlyPay = Integer.parseInt(timepris.getText());
+        int clientID = comboboxEdit.getSelectionModel().getSelectedItem().getClient_id();
+        String projectName = projektnavnEdit.getText();
+        int hourlyPay = Integer.parseInt(timeprisEdit.getText());
         int projectID = project.getValue().getProject_id();
 
         model.editProject(clientID, projectName, hourlyPay, projectID);
@@ -198,7 +203,6 @@ public class ProjektManagerAdminController implements Initializable {
         treeView.getSelectionModel().getSelectedItem().getValue().setProject_name(projectName);
 
         populateTreeTable();
-
     }
 
     /**
@@ -206,6 +210,7 @@ public class ProjektManagerAdminController implements Initializable {
      * databasen ind.
      */
     private void populateTreeTable() {
+
         //opretter colonerne
         JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
         projectName.setPrefWidth(150);
@@ -222,9 +227,9 @@ public class ProjektManagerAdminController implements Initializable {
             }
         });
 
-        //laver listen som skal indenholde projekterne
+        //opretter listen som skal indenholde alle de projekter som skal vises
         ObservableList<Project> projects = FXCollections.observableArrayList();
-
+        
         //henter det data der skal ind i listen fra databasen
         try {
             projects.addAll(model.getProjects());
@@ -233,7 +238,9 @@ public class ProjektManagerAdminController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        
+        
         //sætter dataen ind i selve treetableviewet
         final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
 
@@ -241,7 +248,5 @@ public class ProjektManagerAdminController implements Initializable {
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
-
-
 
 }
