@@ -87,7 +87,7 @@ public class Task {
         LocalDateTime end_time;
         Time total_tid;
         int task_id;
-
+        
         public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, Time total_tid) {
             this.start_time = start_time;
             this.end_time = end_time;
@@ -98,6 +98,7 @@ public class Task {
         public Log() {
 
         }
+
 
         public Time getTotal_tid() {
             return total_tid;

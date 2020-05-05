@@ -51,21 +51,25 @@ public class TaskController implements Initializable {
 
     private TaskModel model;
     @FXML
-    private Label label;
-    @FXML
     private JFXTextField textTaskname;
     @FXML
     private JFXCheckBox checkBillable;
     @FXML
     private JFXComboBox<Project> comboListprojects;
     @FXML
-    private Button btnStartTask;
+    private JFXButton btnCreateTask;
     @FXML
-    private Button btnPauseTask;
+    private AnchorPane paneToday;
     @FXML
-    private Button btnCreateTask;
-    @FXML
-    private AnchorPane scrollpaneToday;
+    private AnchorPane paneYesterday;
+
+    private Image imgPlay;
+    private Image imgPause;
+    private Image imgBillable;
+    private Image imgNotBillable;
+    private Image imgEdit;
+    
+    private int person_id;
 
 
     /**
@@ -74,14 +78,18 @@ public class TaskController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        person_id = 1; //midlertidigt, skal hentes fra login
         try {
             model = TaskModel.getInstance();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        loadImages();
         showProjects();
-        taskLogsbyToday();
+        taskLogsbyDay(paneToday, 0);
+        taskLogsbyDay(paneYesterday, 1);
+//        taskLogsbyYesterday();
     }
 
     /**
@@ -100,7 +108,6 @@ public class TaskController implements Initializable {
      *
      * @param event
      */
-    @FXML
     private void handleStartTask(ActionEvent event) {
         startTask();
 
@@ -111,10 +118,20 @@ public class TaskController implements Initializable {
      *
      * @param event
      */
-    @FXML
     private void handlePauseTask(ActionEvent event) {
         pauseTask();
 
+    }
+
+    /**
+     * sætter image variabler op
+     */
+    public void loadImages() {
+        imgPlay = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/play.png"));
+        imgPause = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/pause.png"));
+        imgBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
+        imgNotBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
+        imgEdit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
     }
 
     /**
@@ -127,7 +144,7 @@ public class TaskController implements Initializable {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Tager de relevante informationer fra GUI og sender videre.
      */
@@ -138,6 +155,10 @@ public class TaskController implements Initializable {
         int person_id = 1;
 
         model.createTask(task_name, billable, project_id, person_id);
+        textTaskname.clear();
+        checkBillable.setSelected(true);
+        comboListprojects.getSelectionModel().clearSelection();
+        taskLogsbyDay(paneToday, 0);
     }
 
     /**
@@ -156,23 +177,26 @@ public class TaskController implements Initializable {
         model.pauseTask(task_id);
     }
 
-    public void taskLogsbyToday() {
+    /**
+     * opbygger view med task for den valgte dag
+     * idag = 0, igår = 1
+     * 
+     */
+    public void taskLogsbyDay(AnchorPane currentPane, int dag) {
 
-        Image imgPlay = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/play.png"));
-        Image imgPause = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/pause.png"));
-        Image imgBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
-        Image imgNotBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
-        Image imgEdit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
-
+        AnchorPane pane = currentPane;
+        
         List<Log> logList = new ArrayList<>();
 
-        logList = model.getTaskLogListByDay(1, 0);
+        logList = model.getTaskLogListByDay(person_id, dag);
 
+        pane.getChildren().clear();
+        
         int Y = 10; //padding
         int taskLineHeight = 22;
         int scrollpaneHeight = logList.size() * taskLineHeight + (2 * Y);
 
-        scrollpaneToday.setPrefHeight(scrollpaneHeight);
+        pane.setPrefHeight(scrollpaneHeight);
         for (Log log : logList) {
 
             Label lblTaskname = new Label(model.getTask(log.getTask_id()).getTask_name());
@@ -207,14 +231,15 @@ public class TaskController implements Initializable {
             lblstarttid.setTranslateY(Y);
             lblstarttid.setTranslateX(340);
 
-            
-            
             JFXButton btnStart = new JFXButton();
             btnStart.setGraphic(new ImageView(imgPause));
-            btnStart.setOnAction(event -> {model.pauseTask(log.getTask_id());});
+            btnStart.setOnAction(event -> {
+                model.pauseTask(log.getTask_id());
+                taskLogsbyDay(paneToday, dag);
+            });
             btnStart.setTranslateY(Y - 4);
             btnStart.setTranslateX(490);
-            
+
             String slutTid = "";
             if (log.getEnd_time() != null) {
                 slutTid = log.getEnd_time().format(DateTimeFormatter.ofPattern("HH:mm"));
@@ -231,15 +256,14 @@ public class TaskController implements Initializable {
 
             Y = Y + taskLineHeight; //Sørger for at tasks flyttes ned til næste linje
 
-            scrollpaneToday.getChildren().add(lblProject);
-            scrollpaneToday.getChildren().add(btnBillable);
-            scrollpaneToday.getChildren().add(lblTotaltid);
-            scrollpaneToday.getChildren().add(lblstarttid);
-            scrollpaneToday.getChildren().add(lblSluttid);
-            scrollpaneToday.getChildren().add(btnStart);
-            scrollpaneToday.getChildren().add(btnEdit);
-            scrollpaneToday.getChildren().add(lblTaskname);
+            pane.getChildren().add(lblProject);
+            pane.getChildren().add(btnBillable);
+            pane.getChildren().add(lblTotaltid);
+            pane.getChildren().add(lblstarttid);
+            pane.getChildren().add(lblSluttid);
+            pane.getChildren().add(btnStart);
+            pane.getChildren().add(btnEdit);
+            pane.getChildren().add(lblTaskname);
         }
     }
-
 }
