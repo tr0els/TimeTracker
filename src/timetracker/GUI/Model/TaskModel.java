@@ -8,6 +8,7 @@ package timetracker.GUI.Model;
 import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
@@ -140,27 +141,31 @@ public class TaskModel
     }
 
     /**
-     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår osv.)
+     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår
+     * osv.)
+     *
      * @param task_id
-     * @return 
+     * @return
      */
-    public List<Log> getTaskLogListByDay(int person_id, int dag) {
-        
+    public List<Log> getTaskLogListByDay(int person_id, int dag)
+    {
         return bll.getTaskLogListByDay(person_id, dag);
     }
-    
-    
+
     public Task getTask(int task_id)
     {
         return bll.getTask(task_id);
     }
-    
+
     /**
-     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores view
+     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores
+     * view
+     *
      * @param task_id
      * @return
      */
-    public ObservableList<Log> getTaskLogListById(int task_id) {
+    public ObservableList<Log> getTaskLogListById(int task_id)
+    {
         tasklogById.clear();
         tasklogById.addAll(bll.getTaskLogListById(task_id));
         return tasklogById;
@@ -191,11 +196,12 @@ public class TaskModel
     {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
-        
+
         return allProjects;
     }
-    
-    public Project getProject(String projectName, int project_rate, int client_id){
+
+    public Project getProject(String projectName, int project_rate, int client_id)
+    {
         return bll.getProject(projectName, project_rate, client_id);
     }
 
@@ -207,7 +213,6 @@ public class TaskModel
 //    public void createClient(Client client) {
 //        bll.createClient(client);
 //    }
-
     /**
      * Sender Client objekt ned til DAL laget som skal ændres.
      *
@@ -286,14 +291,6 @@ public class TaskModel
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
         allUsers.sort(byName);
         return allUsers;
-    }
-
-    public Client getClientDetails(Client selectedClient)
-    {
-        Client newclient = new Client();
-        newclient = bll.getClientDetails(selectedClient);
-        return newclient;
-
     }
 
     public ObservableList<String> getProfessions() throws DALException, SQLException

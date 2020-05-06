@@ -253,13 +253,6 @@ public class BLLManager
         return dal.getUsers();
     }
 
-    public Client getClientDetails(Client selectedClient)
-    {
-        Client newClient = new Client();
-        newClient = dal.getClientDetails(selectedClient);
-        return newClient;
-    }
-
     public List<String> getProfessions() throws DALException, SQLException
     {
         return dal.getProfessions();
