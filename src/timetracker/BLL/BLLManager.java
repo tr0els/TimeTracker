@@ -89,9 +89,9 @@ public class BLLManager
      *
      * @param task_id
      */
-    public void startTask(int task_id)
+    public void startTask(int task_id, int person_id)
     {
-        dal.startTask(task_id);
+        dal.startTask(task_id, person_id);
     }
 
     /**
@@ -99,9 +99,9 @@ public class BLLManager
      *
      * @param task_id
      */
-    public void pauseTask(int task_id)
+    public void pauseTask(int person_id)
     {
-        dal.pauseTask(task_id);
+        dal.pauseTask(person_id);
 
     }
 
