@@ -27,6 +27,7 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import javax.swing.JOptionPane;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.TaskModel;
@@ -153,21 +154,23 @@ public class UserManagerAdminController implements Initializable
     }
 
     @FXML
-    private void handleCreateUser(ActionEvent event)
+    private void handleCreateUser(ActionEvent event) throws DALException, SQLException
     {
         User user = new User();
-        user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
         user.setName(textfieldName.getText());
         user.setSurname(textfieldSurname.getText());
         user.setEmail(textfieldEmail.getText());
-//        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
+        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
         if (!checkboxAdminRole.isSelected()){
             user.setRole_id(2);
         }
         else {
             user.setRole_id(1);
         }
-        
+        String inputPassword = JOptionPane.showInputDialog("Ønkset password");
+        user.setPassword(inputPassword);
+        model.createUser(user);
+        populateTreeTable();
     }
 
     @FXML

@@ -293,6 +293,13 @@ public class TaskModel
         return allUsers;
     }
 
+    /**
+     * Returnerer en liste med de forskellige Professions.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
     public ObservableList<String> getProfessions() throws DALException, SQLException
     {
         allProfessions.addAll(bll.getProfessions());

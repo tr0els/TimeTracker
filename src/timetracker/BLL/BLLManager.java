@@ -253,6 +253,12 @@ public class BLLManager
         return dal.getUsers();
     }
 
+    /**
+     * Returnerer en liste med Professions fra DAL laget.
+     * @return
+     * @throws DALException
+     * @throws SQLException 
+     */
     public List<String> getProfessions() throws DALException, SQLException
     {
         return dal.getProfessions();

@@ -669,6 +669,12 @@ public class DALManager {
         return null;
     }
     
+    /**
+     * Returnerer en liste med Professions fra databasen.
+     * @return
+     * @throws DALException
+     * @throws SQLException 
+     */
     public List<String> getProfessions() throws DALException, SQLException
     {
         ArrayList<String> allProfessions = new ArrayList<>();
