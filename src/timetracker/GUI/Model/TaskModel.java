@@ -23,7 +23,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel {
+public class TaskModel{
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
