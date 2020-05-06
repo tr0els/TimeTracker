@@ -5,11 +5,13 @@
  */
 package timetracker.GUI.Controller;
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import com.sun.javafx.tools.packager.bundlers.BundleParams;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -17,11 +19,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import timetracker.BE.User;
@@ -36,12 +39,22 @@ import timetracker.GUI.Model.TaskModel;
 public class UserManagerAdminController implements Initializable
 {
 
+    private static TaskModel model;
+
     @FXML
     private AnchorPane root;
     @FXML
     private JFXTreeTableView<User> listUsers;
-
-    private static TaskModel model;
+    @FXML
+    private JFXTextField textfieldName;
+    @FXML
+    private JFXTextField textfieldSurname;
+    @FXML
+    private JFXTextField textfieldEmail;
+    @FXML
+    private JFXComboBox<String> listProfessions;
+    @FXML
+    private JFXCheckBox checkboxAdminRole;
 
     public UserManagerAdminController() throws DALException, SQLException
     {
@@ -54,9 +67,12 @@ public class UserManagerAdminController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        
         try
         {
             populateTreeTable();
+            listProfessions.setItems(model.getProfessions());
+            
         } catch (DALException | SQLException ex)
         {
             Logger.getLogger(UserManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
@@ -75,7 +91,7 @@ public class UserManagerAdminController implements Initializable
                 return new SimpleStringProperty(param.getValue().getValue().getName());
             }
         });
-        
+
         JFXTreeTableColumn<User, String> userSurName = new JFXTreeTableColumn<>("Efternavn");
         userSurName.setPrefWidth(100);
         userSurName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
@@ -86,7 +102,7 @@ public class UserManagerAdminController implements Initializable
                 return new SimpleStringProperty(param.getValue().getValue().getSurname());
             }
         });
-        
+
         JFXTreeTableColumn<User, String> userEmail = new JFXTreeTableColumn<>("Email");
         userEmail.setPrefWidth(150);
         userEmail.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
@@ -97,7 +113,7 @@ public class UserManagerAdminController implements Initializable
                 return new SimpleStringProperty(param.getValue().getValue().getEmail());
             }
         });
-        
+
         JFXTreeTableColumn<User, String> userProfession = new JFXTreeTableColumn<>("Profession");
         userProfession.setPrefWidth(150);
         userProfession.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
@@ -113,5 +129,56 @@ public class UserManagerAdminController implements Initializable
         listUsers.getColumns().setAll(userName, userSurName, userEmail, userProfession);
         listUsers.setRoot(root);
         listUsers.setShowRoot(false);
+    }
+
+    @FXML
+    private void handleUpdateUser(ActionEvent event) throws DALException, SQLException
+    {
+        User user = new User();
+        user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
+        user.setName(textfieldName.getText());
+        user.setSurname(textfieldSurname.getText());
+        user.setEmail(textfieldEmail.getText());
+//        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
+        if (!checkboxAdminRole.isSelected()){
+            user.setRole_id(2);
+        }
+        else {
+            user.setRole_id(1);
+        }
+        System.out.println("Så langt så godt.");
+        model.editUser(user);
+        
+        populateTreeTable();
+    }
+
+    @FXML
+    private void handleCreateUser(ActionEvent event)
+    {
+        User user = new User();
+        user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
+        user.setName(textfieldName.getText());
+        user.setSurname(textfieldSurname.getText());
+        user.setEmail(textfieldEmail.getText());
+//        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
+        if (!checkboxAdminRole.isSelected()){
+            user.setRole_id(2);
+        }
+        else {
+            user.setRole_id(1);
+        }
+        
+    }
+
+    @FXML
+    private void handleSelectionTreeTable(MouseEvent event)
+    {
+        TreeItem<User> chosenUser;
+        chosenUser = listUsers.getSelectionModel().getSelectedItem();
+        textfieldName.setText(chosenUser.getValue().getName());
+        textfieldSurname.setText(chosenUser.getValue().getSurname());
+        textfieldEmail.setText(chosenUser.getValue().getEmail());
+        listProfessions.setValue(chosenUser.getValue().getProfession());
+        checkboxAdminRole.setSelected(chosenUser.getValue().isAdminCheck(chosenUser));
     }
 }

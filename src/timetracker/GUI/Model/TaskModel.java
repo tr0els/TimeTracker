@@ -8,7 +8,6 @@ package timetracker.GUI.Model;
 import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
@@ -23,7 +22,8 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel {
+public class TaskModel
+{
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -36,8 +36,10 @@ public class TaskModel {
     private ObservableList<User> allUsers;
     private ObservableList<Task> taskById;
     private ObservableList<Log> tasklogById;
+    private ObservableList<String> allProfessions;
 
-    private TaskModel() throws DALException, SQLException {
+    private TaskModel() throws DALException, SQLException
+    {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
         allProjects.addAll(bll.getProject());
@@ -47,10 +49,14 @@ public class TaskModel {
         allUsers.addAll(bll.getUsers());
         taskById = FXCollections.observableArrayList();
         tasklogById = FXCollections.observableArrayList();
+        allProfessions = FXCollections.observableArrayList();
+
     }
 
-    public static TaskModel getInstance() throws DALException, SQLException {
-        if (model == null) {
+    public static TaskModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
             model = new TaskModel();
         }
         return model;
@@ -65,7 +71,8 @@ public class TaskModel {
      * @param hourlyPay
      * @throws DALException
      */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
+    {
         bll.createProject(clientID, projectName, hourlyPay);
     }
 
@@ -78,7 +85,8 @@ public class TaskModel {
      * @param hourlyPay
      * @throws DALException
      */
-    public void deleteProject(int projectID) throws DALException {
+    public void deleteProject(int projectID) throws DALException
+    {
         bll.deleteProject(projectID);
     }
 
@@ -91,7 +99,8 @@ public class TaskModel {
      * @param person_id
      * @return
      */
-    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+    public void createTask(String task_name, boolean billable, int project_id, int person_id)
+    {
         bll.createTask(task_name, billable, project_id, person_id);
     }
 
@@ -100,7 +109,8 @@ public class TaskModel {
      *
      * @param task_id
      */
-    public void startTask(int task_id) {
+    public void startTask(int task_id)
+    {
         bll.startTask(task_id);
     }
 
@@ -109,32 +119,38 @@ public class TaskModel {
      *
      * @param task_id
      */
-    public void pauseTask(int task_id) {
+    public void pauseTask(int task_id)
+    {
         bll.pauseTask(task_id);
 
     }
 
     /**
-     * Bygger observable liste af task udfra et project_id som kan bruges i vores view
+     * Bygger observable liste af task udfra et project_id som kan bruges i
+     * vores view
+     *
      * @param project_id
-     * @return 
+     * @return
      */
-    public ObservableList<Task> getTaskById(int project_id) {
+    public ObservableList<Task> getTaskById(int project_id)
+    {
         taskById.clear();
         taskById.addAll(bll.getTaskById(project_id));
         return taskById;
     }
 
     /**
-     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores view
+     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores
+     * view
+     *
      * @param task_id
-     * @return 
+     * @return
      */
-    public ObservableList<Log> getTaskLogById(int task_id) {
+    public ObservableList<Log> getTaskLogById(int task_id)
+    {
         tasklogById.clear();
         tasklogById.addAll(bll.getTaskLogById(task_id));
         return tasklogById;
-        
 
     }
 
@@ -146,7 +162,8 @@ public class TaskModel {
      * @param hourlyPay
      * @param projectID
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
+    {
         bll.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
@@ -157,7 +174,8 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Project> getProjects() throws DALException, SQLException {
+    public ObservableList<Project> getProjects() throws DALException, SQLException
+    {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
         return allProjects;
@@ -168,7 +186,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void createClient(Client client) {
+    public void createClient(Client client)
+    {
         bll.createClient(client);
     }
 
@@ -177,7 +196,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void editClient(Client client) {
+    public void editClient(Client client)
+    {
         bll.deleteClient(client);
     }
 
@@ -186,7 +206,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void deleteClient(Client client) {
+    public void deleteClient(Client client)
+    {
         bll.deleteClient(client);
     }
 
@@ -197,7 +218,8 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Client> getClients() throws DALException, SQLException {
+    public ObservableList<Client> getClients() throws DALException, SQLException
+    {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;
@@ -208,7 +230,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void createUser(User user) {
+    public void createUser(User user)
+    {
         bll.createUser(user);
     }
 
@@ -217,7 +240,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void editUser(User user) {
+    public void editUser(User user)
+    {
         bll.editUser(user);
     }
 
@@ -226,7 +250,8 @@ public class TaskModel {
      *
      * @param client
      */
-    public void deleteUser(User user) {
+    public void deleteUser(User user)
+    {
         bll.deleteUser(user);
     }
 
@@ -237,18 +262,27 @@ public class TaskModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<User> getUsers() throws DALException, SQLException {
+    public ObservableList<User> getUsers() throws DALException, SQLException
+    {
+        allUsers.clear();
+        allUsers.addAll(bll.getUsers());
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
         allUsers.sort(byName);
         return allUsers;
     }
 
-
-    public Client getClientDetails(Client selectedClient) {
+    public Client getClientDetails(Client selectedClient)
+    {
         Client newclient = new Client();
         newclient = bll.getClientDetails(selectedClient);
-        return newclient; 
-        
+        return newclient;
+
+    }
+
+    public ObservableList<String> getProfessions() throws DALException, SQLException
+    {
+        allProfessions.addAll(bll.getProfessions());
+        return allProfessions;
     }
 
 }
