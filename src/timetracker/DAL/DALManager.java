@@ -6,13 +6,11 @@
 package timetracker.DAL;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import timetracker.BE.Task;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import timetracker.BE.Client;
+import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 import timetracker.BE.User;
@@ -382,7 +381,7 @@ public class DALManager {
 
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT * FROM Task_log WHERE task_id = ?;";
+            String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
@@ -399,6 +398,7 @@ public class DALManager {
                     end_time = null;
                 }
 
+                log.setTotal_tid(rs.getTime("total_time"));
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
 
@@ -544,7 +544,7 @@ public class DALManager {
      */
     public void createUser(User user) {
         try ( Connection con = dbCon.getConnection()) {
-            String sql = "INSERT INTO Person (name, surname, email, password, role_id, profession_id) VALUES (?,?,?,?,?,?)";
+            String sql = "INSERT INTO Person (name, surname, email, password, active, role_id, profession_id) VALUES (?,?,?,?,?,?,?);";
 
             PreparedStatement st = con.prepareStatement(sql);
 
@@ -552,8 +552,9 @@ public class DALManager {
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
             st.setString(4, user.getPassword());
-            st.setInt(5, user.getRole_id());
-            st.setInt(6, user.getProfession_id());
+            st.setInt(5, 1);
+            st.setInt(6, user.getRole_id());
+            st.setInt(7, user.getProfession_id());
 
             st.executeQuery();
 
@@ -664,9 +665,15 @@ public class DALManager {
         return null;
     }
     
-    public List<String> getProfessions() throws DALException, SQLException
+    /**
+     * Returnerer en liste med Professions fra databasen.
+     * @return
+     * @throws DALException
+     * @throws SQLException 
+     */
+    public List<Profession> getProfessions() throws DALException, SQLException
     {
-        ArrayList<String> allProfessions = new ArrayList<>();
+        ArrayList<Profession> allProfessions = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
         {
@@ -675,7 +682,11 @@ public class DALManager {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next())
             {
-                allProfessions.add(rs.getString("profession_name"));
+                Profession profession = new Profession();
+                profession.setProfession_id(rs.getInt("profession_id"));
+                profession.setProfession_name(rs.getString("Profession_name"));
+                
+                allProfessions.add(profession);
             }
             return allProfessions;
         } catch (DALException | SQLException ex)

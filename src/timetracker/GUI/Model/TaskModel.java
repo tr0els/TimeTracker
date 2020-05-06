@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
+import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 import timetracker.BE.User;
@@ -38,7 +39,7 @@ public class TaskModel implements Runnable{
     private ObservableList<User> allUsers;
     private ObservableList<Task> taskById;
     private ObservableList<Log> tasklogById;
-    private ObservableList<String> allProfessions;
+    private ObservableList<Profession> allProfessions;
 
     public TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
@@ -308,7 +309,14 @@ public class TaskModel implements Runnable{
         return allUsers;
     }
 
-    public ObservableList<String> getProfessions() throws DALException, SQLException
+    /**
+     * Returnerer en liste med de forskellige Professions.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public ObservableList<Profession> getProfessions() throws DALException, SQLException
     {
         allProfessions.addAll(bll.getProfessions());
         return allProfessions;

@@ -113,7 +113,7 @@ public class ProjektViewController implements Initializable {
     public void projectListener() {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             if (newValue != null) {
-                
+                listTasklogbyId.getItems().clear();
                 showTaskbyId(newValue.getProject_id());
                 
             }
