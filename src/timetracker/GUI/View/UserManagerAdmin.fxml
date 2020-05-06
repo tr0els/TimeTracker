@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.UserManagerAdminController">
    <children>
-      <JFXTreeTableView fx:id="listUsers" layoutX="14.0" layoutY="145.0" prefHeight="341.0" prefWidth="573.0" />
-      <JFXListView fx:id="testView" layoutX="34.0" layoutY="24.0" prefHeight="109.0" prefWidth="433.0" />
+      <JFXTreeTableView fx:id="listUsers" layoutX="14.0" layoutY="145.0" onMouseClicked="#handleSelectionTreeTable" prefHeight="341.0" prefWidth="573.0" />
+      <Label layoutX="27.0" layoutY="27.0" text="Fornavn:" />
+      <Label layoutX="27.0" layoutY="55.0" text="Efternavn:" />
+      <Label layoutX="27.0" layoutY="84.0" text="Email:" />
+      <Label layoutX="27.0" layoutY="113.0" text="Stilling:" />
+      <JFXTextField fx:id="textfieldName" layoutX="92.0" layoutY="23.0" prefHeight="25.0" prefWidth="222.0" />
+      <JFXTextField fx:id="textfieldSurname" layoutX="92.0" layoutY="51.0" prefHeight="25.0" prefWidth="222.0" />
+      <JFXTextField fx:id="textfieldEmail" layoutX="92.0" layoutY="80.0" prefHeight="25.0" prefWidth="222.0" />
+      <JFXComboBox fx:id="listProfessions" layoutX="92.0" layoutY="109.0" prefHeight="25.0" prefWidth="222.0" />
+      <JFXButton layoutX="414.0" layoutY="72.0" onAction="#handleUpdateUser" prefHeight="25.0" prefWidth="115.0" text="Opdater bruger" />
+      <JFXButton layoutX="414.0" layoutY="32.0" onAction="#handleCreateUser" prefHeight="25.0" prefWidth="115.0" text="Opret bruger" />
+      <JFXCheckBox fx:id="checkboxAdminRole" layoutX="347.0" layoutY="113.0" text="Admin" />
    </children>
 </AnchorPane>

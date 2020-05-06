@@ -158,7 +158,7 @@ public class DALManager {
 
     public Project getProject(String projectName, int project_rate, int client_id) {
         try ( Connection con = dbCon.getConnection()) {
-            
+
             String sql = "SELECT * FROM Project WHERE project_name = ? AND project_rate = ? AND client_id = ?;";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -202,7 +202,6 @@ public class DALManager {
                 int_billable = 1;
             }
 
-            
             String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -213,7 +212,6 @@ public class DALManager {
             ps.setInt(4, person_id);
 
             int affectedRows = ps.executeUpdate();
-            
 
             if (affectedRows == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
@@ -233,41 +231,32 @@ public class DALManager {
      * @param name
      * @param timepris
      * @param client
-     * @return 
+     * @return
      */
-
-    public Client createClient(String name, int timepris)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public Client createClient(String name, int timepris) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Client (client_name, default_rate) VALUES (?,?)";
 
-            PreparedStatement st = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-
+            PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, name);
             st.setInt(2, timepris);
             int affectedRows = st.executeUpdate();
-            if(affectedRows == 1)
-            {
-            ResultSet rs = st.getGeneratedKeys();
-            if(rs.next())
-            {
-                int id = rs.getInt(1);
-                Client client = new Client(id,name, timepris );
-                return client;
+            if (affectedRows == 1) {
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    Client client = new Client(id, name, timepris);
+                    return client;
+                }
+
             }
-          
-            
-            }
-       
-        } catch (Exception e)
-        {
-           
+
+        } catch (Exception e) {
 
         }
-          return null;
+        return null;
     }
 
     /**
@@ -404,13 +393,12 @@ public class DALManager {
                 Log log = new Log();
 
                 LocalDateTime end_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                }else{
+                } else {
                     end_time = null;
                 }
-                
+
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
 
@@ -433,32 +421,39 @@ public class DALManager {
 
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT Task_log.*, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
+            String sql = "SELECT Task_log.*, Task.task_name, Task.billable, Project.project_name, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
                     + "JOIN Task ON Task.task_id = Task_log.task_id\n"
+                    + "JOIN Project ON Project.project_id = Task.project_id\n"
                     + "WHERE CAST(task_start AS DATE) = DATEADD(day, -"+dag+", CONVERT(date, GETDATE()))\n"
                     + "AND person_id = ? ORDER BY task_start DESC";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, person_id);
-            
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
                 Log log = new Log();
-                
+
                 LocalDateTime end_time;
                 Time total_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
                     total_time = rs.getTime("total_time");
-                }else{
+                } else {
                     end_time = null;
                     total_time = null;
                 }
 
+                log.setBillable(billable);
+                log.setProject_name(rs.getString("project_name"));
+                log.setTask_name(rs.getString("task_name"));
                 log.setTotal_tid(total_time);
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
@@ -469,7 +464,7 @@ public class DALManager {
 
         } catch (Exception e) {
         }
-        
+
         return tasklogbyDay;
     }
 
@@ -574,16 +569,15 @@ public class DALManager {
     public void editUser(User user) {
         try ( Connection con = dbCon.getConnection()) {
             int person_id = user.getPerson_id();
-            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, password = ?, role_id = ?, profession_id = ? WHERE person_id = " + person_id + ";";
+            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ? WHERE person_id = " + person_id + ";";
 
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
-            st.setString(4, user.getPassword());
-            st.setInt(5, user.getRole_id());
-            st.setInt(6, user.getProfession_id());
+            st.setInt(4, user.getRole_id());
+//            st.setInt(5, user.getProfession_id());
 
             st.executeQuery();
 
@@ -620,8 +614,9 @@ public class DALManager {
     public List<User> getUsers() throws DALException, SQLException {
         ArrayList<User> allUsers = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, profession_name\n"
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, Person.profession_id ,profession_name\n"
                     + "FROM Person, Profession, Role\n"
                     + "WHERE Person.role_id = Role.role_id\n"
                     + "AND Person.profession_id = Profession.profession_id;";
@@ -635,6 +630,7 @@ public class DALManager {
                 user.setEmail(rs.getString("email"));
                 user.setRole_id(rs.getInt("role_id"));
                 user.setRole(rs.getString("role_name"));
+                user.setProfession_id(rs.getInt("profession_id"));
                 user.setProfession(rs.getString("profession_name"));
 
                 allUsers.add(user);
@@ -664,6 +660,26 @@ public class DALManager {
             return allProjectswithClientID;
         } catch (DALException | SQLException ex) {
             Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public List<String> getProfessions() throws DALException, SQLException
+    {
+        ArrayList<String> allProfessions = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT * FROM Profession;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next())
+            {
+                allProfessions.add(rs.getString("profession_name"));
+            }
+            return allProfessions;
+        } catch (DALException | SQLException ex)
+        {
         }
         return null;
     }
