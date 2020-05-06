@@ -569,16 +569,15 @@ public class DALManager {
     public void editUser(User user) {
         try ( Connection con = dbCon.getConnection()) {
             int person_id = user.getPerson_id();
-            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, password = ?, role_id = ?, profession_id = ? WHERE person_id = " + person_id + ";";
+            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ? WHERE person_id = " + person_id + ";";
 
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
-            st.setString(4, user.getPassword());
-            st.setInt(5, user.getRole_id());
-            st.setInt(6, user.getProfession_id());
+            st.setInt(4, user.getRole_id());
+//            st.setInt(5, user.getProfession_id());
 
             st.executeQuery();
 
@@ -615,8 +614,9 @@ public class DALManager {
     public List<User> getUsers() throws DALException, SQLException {
         ArrayList<User> allUsers = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, profession_name\n"
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, Person.profession_id ,profession_name\n"
                     + "FROM Person, Profession, Role\n"
                     + "WHERE Person.role_id = Role.role_id\n"
                     + "AND Person.profession_id = Profession.profession_id;";
@@ -630,6 +630,7 @@ public class DALManager {
                 user.setEmail(rs.getString("email"));
                 user.setRole_id(rs.getInt("role_id"));
                 user.setRole(rs.getString("role_name"));
+                user.setProfession_id(rs.getInt("profession_id"));
                 user.setProfession(rs.getString("profession_name"));
 
                 allUsers.add(user);
@@ -659,6 +660,26 @@ public class DALManager {
             return allProjectswithClientID;
         } catch (DALException | SQLException ex) {
             Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public List<String> getProfessions() throws DALException, SQLException
+    {
+        ArrayList<String> allProfessions = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT * FROM Profession;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next())
+            {
+                allProfessions.add(rs.getString("profession_name"));
+            }
+            return allProfessions;
+        } catch (DALException | SQLException ex)
+        {
         }
         return null;
     }

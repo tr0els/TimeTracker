@@ -6,6 +6,7 @@
 package timetracker.BE;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.scene.control.TreeItem;
 
 /**
  *
@@ -150,13 +151,23 @@ public class User extends RecursiveTreeObject<User>
             return false;
         }
     }
+    
+    public boolean isAdminCheck(TreeItem<User> chosenUser)
+    {
+        if (role_id == 1)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
     @Override
     public String toString()
     {
         return "" + name + " " + surname;
     }
-    
-    
 
+    
 }
