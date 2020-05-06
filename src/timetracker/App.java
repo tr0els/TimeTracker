@@ -5,12 +5,15 @@
  */
 package timetracker;
 
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import timetracker.DAL.DALException;
+import timetracker.GUI.Model.TaskModel;
 
 
 /**
@@ -50,7 +53,9 @@ public class App extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DALException, SQLException {
+        Thread t1 = new Thread(new TaskModel());
+        t1.start();
         launch(args);
     }
 

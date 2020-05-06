@@ -39,7 +39,8 @@ import timetracker.GUI.Model.TaskModel;
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class ProjektManagerAdminController implements Initializable {
 
@@ -104,6 +105,11 @@ public class ProjektManagerAdminController implements Initializable {
         populateTreeTable();
     }
 
+    /**
+     * sætter det rigtige panel til drawer og åbner den for brugeren.
+     *
+     * @param event
+     */
     @FXML
     private void handleGetCreateAction(ActionEvent event) {
         drawer.setSidePane(createProjectPane);
@@ -111,18 +117,39 @@ public class ProjektManagerAdminController implements Initializable {
         drawer.toFront();
     }
 
+    /**
+     * kalder createprojekt når brugeren er klar til at oprette et projekt også
+     * lukker den draweren.
+     *
+     * @param event
+     * @throws DALException
+     */
     @FXML
     void handleCreateAction(ActionEvent event) throws DALException {
         createProject();
         drawer.close();
     }
 
+    /**
+     * kalder deleteprojekt når brugeren trykker på slet knappen og lukker
+     * draweren
+     *
+     * @param event
+     * @throws DALException
+     */
     @FXML
     private void handleDeleteAction(ActionEvent event) throws DALException {
         deleteProject();
         drawer.close();
     }
 
+    /**
+     * kalder editproject når brugeren trykker på edit knappen og lukker
+     * draweren
+     *
+     * @param event
+     * @throws DALException
+     */
     @FXML
     private void handleEditAction(ActionEvent event) throws DALException {
         editProject();
@@ -167,13 +194,15 @@ public class ProjektManagerAdminController implements Initializable {
         int hourlyPay = Integer.parseInt(timepris.getText());
 
         model.createProject(clientID, projectName, hourlyPay);
-        
+
         populateTreeTable();
     }
 
     /**
      * Tager det projekt som Admin har valgt i "projekt Manager" menuen og
      * sender det ned til DAL så det kan fjernes fra serveren.
+     *
+     * projekter kan ikke slettes hvis projekter har tasks tilføjet til sig.
      *
      * @throws DALException
      */
@@ -228,7 +257,7 @@ public class ProjektManagerAdminController implements Initializable {
 
         //opretter listen som skal indenholde alle de projekter som skal vises
         ObservableList<Project> projects = FXCollections.observableArrayList();
-        
+
         //henter det data der skal ind i listen fra databasen
         try {
             projects.addAll(model.getProjects());
@@ -237,9 +266,7 @@ public class ProjektManagerAdminController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
         //sætter dataen ind i selve treetableviewet
         final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
 
