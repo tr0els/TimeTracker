@@ -7,6 +7,7 @@ package timetracker.BE;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.collections.ObservableList;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
@@ -78,6 +79,13 @@ public class Task {
         this.person_id = person_id;
     }
 
+    @Override
+    public String toString() {
+        return task_name;
+    }
+
+    
+    
     /**
      * nested class med Log data
      */
@@ -164,7 +172,18 @@ public class Task {
 
         @Override
         public String toString() {
-            return "Log{" + "Task_id" + task_id + "start_time=" + start_time + ", end_time=" + end_time + '}';
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yy-mm-dd HH:mm");
+            String start = start_time.format(format);
+            
+            String slut = "ikke afsluttet";
+            if (end_time != null)
+            {slut = end_time.format(format);
+            }
+            String total = "-";
+            if (total_tid != null){
+                total = total_tid+"";
+            }
+            return ""+total+" | ["+start+" - "+slut+"]";
         }
 
     }

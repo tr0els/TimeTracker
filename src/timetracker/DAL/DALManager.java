@@ -382,7 +382,7 @@ public class DALManager {
 
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT * FROM Task_log WHERE task_id = ?;";
+            String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
@@ -399,6 +399,7 @@ public class DALManager {
                     end_time = null;
                 }
 
+                log.setTotal_tid(rs.getTime("total_time"));
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
 
