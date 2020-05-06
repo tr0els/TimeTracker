@@ -31,8 +31,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
@@ -270,5 +272,13 @@ public class TaskController implements Initializable {
             pane.getChildren().add(btnEdit);
             pane.getChildren().add(lblTaskname);
         }
+    }
+
+    @FXML
+    private void HandleTooltipForBillable(MouseEvent event) {
+          Tooltip tip = new Tooltip();
+         
+         tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
+         checkBillable.setTooltip(tip);
     }
 }
