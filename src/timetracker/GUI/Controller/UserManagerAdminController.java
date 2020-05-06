@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
+import timetracker.BE.Profession;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.TaskModel;
@@ -41,6 +44,7 @@ public class UserManagerAdminController implements Initializable
 {
 
     private static TaskModel model;
+    private ObservableList<Profession> allProf;
 
     @FXML
     private AnchorPane root;
@@ -53,7 +57,7 @@ public class UserManagerAdminController implements Initializable
     @FXML
     private JFXTextField textfieldEmail;
     @FXML
-    private JFXComboBox<String> listProfessions;
+    private JFXComboBox<Profession> listProfessions;
     @FXML
     private JFXCheckBox checkboxAdminRole;
 
@@ -68,12 +72,12 @@ public class UserManagerAdminController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        
         try
         {
             populateTreeTable();
-            listProfessions.setItems(model.getProfessions());
-            
+            allProf = model.getProfessions();
+            listProfessions.setItems(allProf);
+
         } catch (DALException | SQLException ex)
         {
             Logger.getLogger(UserManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,16 +144,17 @@ public class UserManagerAdminController implements Initializable
         user.setName(textfieldName.getText());
         user.setSurname(textfieldSurname.getText());
         user.setEmail(textfieldEmail.getText());
-//        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
-        if (!checkboxAdminRole.isSelected()){
+        user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+        if (!checkboxAdminRole.isSelected())
+        {
             user.setRole_id(2);
-        }
-        else {
+        } else
+        {
             user.setRole_id(1);
         }
         System.out.println("Så langt så godt.");
         model.editUser(user);
-        
+
         populateTreeTable();
     }
 
@@ -160,28 +165,40 @@ public class UserManagerAdminController implements Initializable
         user.setName(textfieldName.getText());
         user.setSurname(textfieldSurname.getText());
         user.setEmail(textfieldEmail.getText());
-        user.setProfession(listProfessions.getSelectionModel().getSelectedItem());
-        if (!checkboxAdminRole.isSelected()){
+        user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+        if (!checkboxAdminRole.isSelected())
+        {
             user.setRole_id(2);
-        }
-        else {
+        } else
+        {
             user.setRole_id(1);
         }
         String inputPassword = JOptionPane.showInputDialog("Ønkset password");
         user.setPassword(inputPassword);
         model.createUser(user);
+        System.out.println("Controller");
         populateTreeTable();
     }
 
     @FXML
-    private void handleSelectionTreeTable(MouseEvent event)
+    private void handleSelectionTreeTable(MouseEvent event) throws DALException, SQLException
     {
         TreeItem<User> chosenUser;
         chosenUser = listUsers.getSelectionModel().getSelectedItem();
         textfieldName.setText(chosenUser.getValue().getName());
         textfieldSurname.setText(chosenUser.getValue().getSurname());
         textfieldEmail.setText(chosenUser.getValue().getEmail());
-        listProfessions.setValue(chosenUser.getValue().getProfession());
+
+        int profession_id = listUsers.getSelectionModel().getSelectedItem().getValue().getProfession_id();
+
+        for (int i = 0; i < allProf.size(); i++)
+        {
+            int prof = allProf.get(i).getProfession_id();
+            if (profession_id == prof)
+            {
+                listProfessions.getSelectionModel().select(allProf.get(i));
+            }
+        }
         checkboxAdminRole.setSelected(chosenUser.getValue().isAdminCheck(chosenUser));
     }
 }

@@ -9,6 +9,7 @@ import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.List;
 import timetracker.BE.Client;
+import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 import timetracker.BE.User;
@@ -259,7 +260,7 @@ public class BLLManager
      * @throws DALException
      * @throws SQLException 
      */
-    public List<String> getProfessions() throws DALException, SQLException
+    public List<Profession> getProfessions() throws DALException, SQLException
     {
         return dal.getProfessions();
     }
