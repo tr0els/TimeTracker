@@ -106,6 +106,7 @@ public class KlientManagerAdminController implements Initializable {
             retvalgteklientnbtb.setVisible(false);
             btbGåtilprojekter.setVisible(false);
             listviewprojekts.setTooltip(tooltipforprojektlist());
+            btbGåtilprojekter.setVisible(false);
           
 
         
