@@ -125,9 +125,9 @@ public class TaskModel implements Runnable{
      *
      * @param task_id
      */
-    public void startTask(int task_id)
+    public void startTask(int task_id, int person_id)
     {
-        bll.startTask(task_id);
+        bll.startTask(task_id, person_id);
     }
 
     /**
@@ -135,9 +135,9 @@ public class TaskModel implements Runnable{
      *
      * @param task_id
      */
-    public void pauseTask(int task_id)
+    public void pauseTask(int person_id)
     {
-        bll.pauseTask(task_id);
+        bll.pauseTask(person_id);
 
     }
 

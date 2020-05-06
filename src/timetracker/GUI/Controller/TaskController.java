@@ -70,12 +70,10 @@ public class TaskController implements Initializable {
     private Image imgBillable;
     private Image imgNotBillable;
     private Image imgEdit;
-    
+
     private int idag = 0;
     private int igår = 1;
     private int person_id;
-
-    
 
     /**
      * Initializes the controller class.
@@ -110,26 +108,6 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * Håndtere start eksisterende task knappen action
-     *
-     * @param event
-     */
-    private void handleStartTask(ActionEvent event) {
-        startTask();
-
-    }
-
-    /**
-     * Håndtere pause igangværende task knappen action
-     *
-     * @param event
-     */
-    private void handlePauseTask(ActionEvent event) {
-        pauseTask();
-
-    }
-
-    /**
      * sætter image variabler op
      */
     public void loadImages() {
@@ -158,7 +136,7 @@ public class TaskController implements Initializable {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
-        int person_id = 1;
+       
 
         model.createTask(task_name, billable, project_id, person_id);
         textTaskname.clear();
@@ -170,34 +148,33 @@ public class TaskController implements Initializable {
     /**
      * Start task via task_id
      */
-    public void startTask() {
-        int task_id = 4;
-        model.startTask(task_id);
+    public void startTask(int task_id) {
+
+        model.startTask(task_id, person_id);
     }
 
     /**
      * pauser task via task_id
      */
     public void pauseTask() {
-        int task_id = 4;
-        model.pauseTask(task_id);
+
+        model.pauseTask(person_id);
     }
 
     /**
-     * opbygger view med task for den valgte dag
-     * idag = 0, igår = 1
-     * 
+     * opbygger view med task for den valgte dag idag = 0, igår = 1
+     *
      */
     public void taskLogsbyDay(AnchorPane currentPane, int dag) {
 
         AnchorPane pane = currentPane;
-        
+
         List<Log> logList = new ArrayList<>();
 
         logList = model.getTaskLogListByDay(person_id, dag);
 
         pane.getChildren().clear();
-        
+
         int Y = 10; //padding
         int taskLineHeight = 22;
         int scrollpaneHeight = logList.size() * taskLineHeight + (2 * Y);
@@ -213,7 +190,6 @@ public class TaskController implements Initializable {
             lblProject.setTranslateY(Y);
             lblProject.setTranslateX(140);
 
-            
             Label btnBillable = new Label();
             if (log.isBillable() == true) {
                 btnBillable.setGraphic(new ImageView(imgBillable));
@@ -241,7 +217,7 @@ public class TaskController implements Initializable {
             JFXButton btnStart = new JFXButton();
             btnStart.setGraphic(new ImageView(imgPause));
             btnStart.setOnAction(event -> {
-                model.pauseTask(log.getTask_id());
+                pauseTask();
                 taskLogsbyDay(paneToday, dag);
             });
             btnStart.setTranslateY(Y - 4);
@@ -251,6 +227,10 @@ public class TaskController implements Initializable {
             if (log.getEnd_time() != null) {
                 slutTid = log.getEnd_time().format(DateTimeFormatter.ofPattern("HH:mm"));
                 btnStart.setGraphic(new ImageView(imgPlay));
+                btnStart.setOnAction(event -> {
+                    startTask(log.getTask_id());
+                    taskLogsbyDay(paneToday, dag);
+                });
             }
             Label lblSluttid = new Label(slutTid);
             lblSluttid.setTranslateY(Y);
