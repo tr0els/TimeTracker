@@ -79,9 +79,8 @@ public class BLLManager
      * @param person_id
      * @return
      */
-    public Task createTask(String task_name, boolean billable, int project_id, int person_id)
-    {
-        return dal.createTask(task_name, billable, project_id, person_id);
+    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+        dal.createTask(task_name, billable, project_id, person_id);
     }
 
     /**
@@ -105,6 +104,11 @@ public class BLLManager
 
     }
 
+    public Task getTask(int task_id)
+    {
+        return dal.getTaskbyTaskID(task_id);
+    }
+    
     /**
      * returnere en liste af Tasks udfra et project_id
      *
@@ -122,10 +126,19 @@ public class BLLManager
      * @param task_id
      * @return
      */
-    public List<Log> getTaskLogById(int task_id)
-    {
-
-        return dal.getTaskLogbyTaskID(task_id);
+    public List<Log> getTaskLogListById(int task_id) {
+        
+        return dal.getTaskLogListbyTaskID(task_id);
+    }
+    
+    /**
+     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår osv.)
+     * @param task_id
+     * @return 
+     */
+    public List<Log> getTaskLogListByDay(int person_id, int dag) {
+        
+        return dal.getTaskLogListbyDay(person_id, dag);
     }
 
     /**
@@ -148,9 +161,12 @@ public class BLLManager
      * @throws DALException
      * @throws SQLException
      */
-    public List<Project> getProject() throws DALException, SQLException
-    {
+    public List<Project> getProjects() throws DALException, SQLException {
         return dal.getProjects();
+    }
+    
+    public Project getProject(String projectName, int project_rate, int client_id){
+        return dal.getProject(projectName, project_rate, client_id);
     }
 
     /**
@@ -158,9 +174,9 @@ public class BLLManager
      *
      * @param client
      */
-    public void createClient(Client client)
-    {
-        dal.createClient(client);
+    public Client createClient(String navn, int timepris) {
+        return  dal.createClient(navn, timepris);
+        
     }
 
     /**
@@ -247,6 +263,10 @@ public class BLLManager
     public List<String> getProfessions() throws DALException, SQLException
     {
         return dal.getProfessions();
+    }
+
+    public  List<Project> getProjekctsbyClientID(Client client) {
+        return dal.getProjectsbyClientID(client);
     }
 
 }

@@ -5,6 +5,8 @@
  */
 package timetracker.BE;
 
+
+
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
@@ -43,6 +45,7 @@ public class Client
     {
         return client_name;
     }
+ 
 
     public void setClient_name(String client_name)
     {
@@ -59,10 +62,10 @@ public class Client
         this.default_rate = default_rate;
     }
 
-     @Override
+    @Override
     public String toString() {
-        return  client_name;
+        return client_name ;
+    }
 
-    
-}
+
 }

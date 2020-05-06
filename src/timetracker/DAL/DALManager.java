@@ -6,10 +6,14 @@
 package timetracker.DAL;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import timetracker.BE.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +29,7 @@ import timetracker.BE.User;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class DALManager
-{
+public class DALManager {
 
     /**
      * Singleton opsætning af vores DALManager. singleton gør at vores
@@ -35,15 +38,12 @@ public class DALManager
     private DatabaseConnector dbCon;
     private static DALManager dal = null;
 
-    private DALManager() throws DALException
-    {
+    private DALManager() throws DALException {
         dbCon = new DatabaseConnector();
     }
 
-    public static DALManager getInstance() throws DALException
-    {
-        if (dal == null)
-        {
+    public static DALManager getInstance() throws DALException {
+        if (dal == null) {
             dal = new DALManager();
         }
         return dal;
@@ -57,10 +57,8 @@ public class DALManager
      * @param projectName
      * @param hourlyPay
      */
-    public void createProject(int clientID, String projectName, int hourlyPay)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void createProject(int clientID, String projectName, int hourlyPay) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Project (project_name, project_rate, client_id) VALUES (?,?,?)";
 
@@ -72,8 +70,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -85,10 +82,8 @@ public class DALManager
      * @param projectName
      * @param hourlyPay
      */
-    public void deleteProject(int projectID)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void deleteProject(int projectID) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "DELETE FROM Project WHERE project_id = ?";
 
@@ -96,10 +91,10 @@ public class DALManager
 
             st.setInt(1, projectID);
 
-            st.executeQuery();
+            st.execute();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
+            System.out.println("fail lol");
         }
     }
 
@@ -112,10 +107,8 @@ public class DALManager
      * @param hourlyPay
      * @param projectID
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?";
 
@@ -128,8 +121,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -141,17 +133,14 @@ public class DALManager
      * @throws DALException
      * @throws SQLException
      */
-    public List<Project> getProjects() throws DALException, SQLException
-    {
+    public List<Project> getProjects() throws DALException, SQLException {
         ArrayList<Project> allProjects = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Project;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
@@ -161,10 +150,38 @@ public class DALManager
                 allProjects.add(projects);
             }
             return allProjects;
-        } catch (DALException | SQLException ex)
-        {
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+
+    public Project getProject(String projectName, int project_rate, int client_id) {
+        try ( Connection con = dbCon.getConnection()) {
+            
+            String sql = "SELECT * FROM Project WHERE project_name = ? AND project_rate = ? AND client_id = ?;";
+
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setString(1, projectName);
+            st.setInt(2, project_rate);
+            st.setInt(3, client_id);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setProject_id(rs.getInt("project_id"));
+                project.setProject_name(rs.getString("project_name"));
+                project.setProject_rate(rs.getInt("project_rate"));
+                project.setClient_id(rs.getInt("client_id"));
+                return project;
+            }
+
+        } catch (DALException | SQLException ex) {
+            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return null;
     }
 
@@ -177,19 +194,15 @@ public class DALManager
      * @param person_id
      * @return
      */
-    public Task createTask(String task_name, boolean billable, int project_id, int person_id)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
-
-            Task task = null;
+    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+        try ( Connection con = dbCon.getConnection()) {
 
             int int_billable = 0;//konvertere boolean til 0 el. 1
-            if (billable == true)
-            {
+            if (billable == true) {
                 int_billable = 1;
             }
 
+            
             String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -200,27 +213,16 @@ public class DALManager
             ps.setInt(4, person_id);
 
             int affectedRows = ps.executeUpdate();
+            
 
-            if (affectedRows == 1)
-            {
+            if (affectedRows == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next())
-                {
+                if (rs.next()) {
                     int task_id = rs.getInt(1);
-
                     startTask(task_id);
-
-                    task = new Task(task_id, task_name, billable, project_id, person_id);
-
                 }
-
             }
-
-            return task;
-
-        } catch (Exception e)
-        {
-            return null;
+        } catch (Exception e) {
         }
     }
 
@@ -228,24 +230,44 @@ public class DALManager
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.
      *
+     * @param name
+     * @param timepris
      * @param client
+     * @return 
      */
-    public void createClient(Client client)
+
+    public Client createClient(String name, int timepris)
     {
         try ( Connection con = dbCon.getConnection())
         {
+
             String sql = "INSERT INTO Client (client_name, default_rate) VALUES (?,?)";
 
-            PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 
-            st.setString(1, client.getClient_name());
-            st.setInt(2, client.getDefault_rate());
 
-            st.executeQuery();
-
+            st.setString(1, name);
+            st.setInt(2, timepris);
+            int affectedRows = st.executeUpdate();
+            if(affectedRows == 1)
+            {
+            ResultSet rs = st.getGeneratedKeys();
+            if(rs.next())
+            {
+                int id = rs.getInt(1);
+                Client client = new Client(id,name, timepris );
+                return client;
+            }
+          
+            
+            }
+       
         } catch (Exception e)
         {
+           
+
         }
+          return null;
     }
 
     /**
@@ -253,10 +275,8 @@ public class DALManager
      *
      * @param task_id
      */
-    public void startTask(int task_id)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void startTask(int task_id) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Task_log (task_id, task_start) VALUES (?, CURRENT_TIMESTAMP)";
 
@@ -266,8 +286,7 @@ public class DALManager
 
             ps.execute();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
 
@@ -279,10 +298,8 @@ public class DALManager
      *
      * @param task_id
      */
-    public void pauseTask(int task_id)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void pauseTask(int task_id) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP WHERE task_id = ? AND task_end is null";
 
@@ -292,9 +309,39 @@ public class DALManager
 
             ps.execute();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
+    }
+
+    /**
+     * returnere en specifik task udfra task_id
+     *
+     * @param task_id
+     * @return
+     */
+    public Task getTaskbyTaskID(int task_id) {
+        Task task = new Task();
+
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT * FROM Task WHERE task_id = " + task_id + ";";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
+                task.setTask_id(rs.getInt("task_id"));
+                task.setTask_name(rs.getString("task_name"));
+                task.setBillable(billable);
+                task.setPerson_id(rs.getInt("person_id"));
+                task.setProject_id(rs.getInt("project_id"));
+            }
+
+        } catch (Exception e) {
+        }
+        return task;
     }
 
     /**
@@ -303,24 +350,20 @@ public class DALManager
      * @param project_id
      * @return
      */
-    public List<Task> getTaskbyProjectID(int project_id)
-    {
+    public List<Task> getTaskbyProjectID(int project_id) {
         ArrayList<Task> taskbyID = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT * FROM Task WHERE project_id = " + project_id + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Task task = new Task();
 
                 boolean billable = false; //konvertere billable til boolean fra int. 
-                if (rs.getInt("billable") == 1)
-                {
+                if (rs.getInt("billable") == 1) {
                     billable = true;
                 }
 
@@ -334,8 +377,7 @@ public class DALManager
             }
             return taskbyID;
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
         return null;
     }
@@ -346,12 +388,10 @@ public class DALManager
      * @param task_id
      * @return
      */
-    public List<Log> getTaskLogbyTaskID(int task_id)
-    {
+    public List<Log> getTaskLogListbyTaskID(int task_id) {
         ArrayList<Log> tasklogbyID = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT * FROM Task_log WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -360,21 +400,77 @@ public class DALManager
 
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Log log = new Log();
 
+                LocalDateTime end_time;
+                if (rs.getTimestamp("task_end") != null)
+                {
+                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
+                }else{
+                    end_time = null;
+                }
+                
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                log.setEnd_time(rs.getTimestamp("task_end").toLocalDateTime());
+                log.setEnd_time(end_time);
 
                 tasklogbyID.add(log);
             }
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
 
         return tasklogbyID;
+    }
+
+    /**
+     * henter en liste af task ud fra person_id og dag (0 = idag, 1 = igår osv.)
+     *
+     * @return
+     */
+    public List<Log> getTaskLogListbyDay(int person_id, int dag) {
+        ArrayList<Log> tasklogbyDay = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT Task_log.*, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
+                    + "JOIN Task ON Task.task_id = Task_log.task_id\n"
+                    + "WHERE CAST(task_start AS DATE) = DATEADD(day, -"+dag+", CONVERT(date, GETDATE()))\n"
+                    + "AND person_id = ? ORDER BY task_start DESC";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, person_id);
+            
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Log log = new Log();
+                
+                LocalDateTime end_time;
+                Time total_time;
+                if (rs.getTimestamp("task_end") != null)
+                {
+                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
+                    total_time = rs.getTime("total_time");
+                }else{
+                    end_time = null;
+                    total_time = null;
+                }
+
+                log.setTotal_tid(total_time);
+                log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+                log.setEnd_time(end_time);
+                log.setTask_id(rs.getInt("task_id"));
+
+                tasklogbyDay.add(log);
+            }
+
+        } catch (Exception e) {
+        }
+        
+        return tasklogbyDay;
     }
 
     /**
@@ -382,10 +478,8 @@ public class DALManager
      *
      * @param client
      */
-    public void editClient(Client client)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void editClient(Client client) {
+        try ( Connection con = dbCon.getConnection()) {
             int cl_id = client.getClient_id();
             String sql = "UPDATE Client SET client_name = ?, default_rate = ? WHERE client_id = " + cl_id + ";";
 
@@ -396,8 +490,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -407,10 +500,8 @@ public class DALManager
      *
      * @param client
      */
-    public void deleteClient(Client client)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void deleteClient(Client client) {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "DELETE FROM Client WHERE client_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -419,8 +510,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -431,17 +521,14 @@ public class DALManager
      * @throws DALException
      * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException
-    {
+    public List<Client> getClients() throws DALException, SQLException {
         ArrayList<Client> allClients = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Client;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Client clients = new Client();
                 clients.setClient_id(rs.getInt("client_id"));
                 clients.setClient_name(rs.getString("client_name"));
@@ -450,8 +537,7 @@ public class DALManager
                 allClients.add(clients);
             }
             return allClients;
-        } catch (DALException | SQLException ex)
-        {
+        } catch (DALException | SQLException ex) {
         }
         return null;
     }
@@ -461,10 +547,8 @@ public class DALManager
      *
      * @param client
      */
-    public void createUser(User user)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void createUser(User user) {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "INSERT INTO Person (name, surname, email, password, role_id, profession_id) VALUES (?,?,?,?,?,?)";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -478,8 +562,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -488,10 +571,8 @@ public class DALManager
      *
      * @param client
      */
-    public void editUser(User user)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void editUser(User user) {
+        try ( Connection con = dbCon.getConnection()) {
             int person_id = user.getPerson_id();
             String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ? WHERE person_id = " + person_id + ";";
 
@@ -504,9 +585,8 @@ public class DALManager
 //            st.setInt(5, user.getProfession_id());
 
             st.executeQuery();
-            
-        } catch (Exception e)
-        {
+
+        } catch (Exception e) {
         }
     }
 
@@ -515,10 +595,8 @@ public class DALManager
      *
      * @param client
      */
-    public void deleteUser(User user)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void deleteUser(User user) {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "DELETE FROM Person WHERE person_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -527,8 +605,7 @@ public class DALManager
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -539,8 +616,7 @@ public class DALManager
      * @throws DALException
      * @throws SQLException
      */
-    public List<User> getUsers() throws DALException, SQLException
-    {
+    public List<User> getUsers() throws DALException, SQLException {
         ArrayList<User> allUsers = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
@@ -551,8 +627,7 @@ public class DALManager
                     + "AND Person.profession_id = Profession.profession_id;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 User user = new User();
                 user.setPerson_id(rs.getInt("person_id"));
                 user.setName(rs.getString("name"));
@@ -566,39 +641,32 @@ public class DALManager
                 allUsers.add(user);
             }
             return allUsers;
-        } catch (DALException | SQLException ex)
-        {
+        } catch (DALException | SQLException ex) {
         }
         return null;
     }
 
-    public Client getClientDetails(Client selectedClient)
-    {
-
-        Client clientDetails = new Client();
-        try ( Connection con = dbCon.getConnection())
-        {
-            int clientID = selectedClient.getClient_id();
-            String sql = "SELECT * FROM Client WHERE client_id = " + clientID + ";";
+    public List<Project> getProjectsbyClientID(Client client) {
+        ArrayList<Project> allProjectswithClientID = new ArrayList<>();
+        int client_ID = client.getClient_id();
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT * FROM Project WHERE client_id =  " + client_ID + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
-                Client client = new Client();
-                client.setClient_id(rs.getInt("client_id"));
-                client.setClient_name(rs.getString("client_name"));
-                client.setDefault_rate(rs.getInt("default_rate"));
+            while (rs.next()) {
+                Project projects = new Project();
+                projects.setProject_id(rs.getInt("project_id"));
+                projects.setProject_name(rs.getString("project_name"));
+                projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setClient_id(rs.getInt("client_id"));
 
-                clientDetails = client;
+                allProjectswithClientID.add(projects);
             }
-            return clientDetails;
-        } catch (SQLException | DALException ex)
-        {
-
+            return allProjectswithClientID;
+        } catch (DALException | SQLException ex) {
+            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return null;
-
     }
     
     public List<String> getProfessions() throws DALException, SQLException

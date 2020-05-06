@@ -38,7 +38,7 @@ public class MainController implements Initializable {
     private static MainController main = null;
 
     public MainController() throws DALException, SQLException {
-        model = TaskModel.getInstance();
+//        model = TaskModel.getInstance();
     }
 
     public static MainController getInstance() throws DALException, SQLException {
@@ -102,6 +102,7 @@ public class MainController implements Initializable {
             controller.getBrugermanagerbtb().setVisible(false);
             controller.getKlientmanagerbtb().setVisible(false);
             controller.getProjektbtb().setVisible(false);
+            controller.getOverblikforAdmin().setVisible(false);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Time Tracker alm. bruger");
