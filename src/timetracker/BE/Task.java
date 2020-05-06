@@ -7,6 +7,7 @@ package timetracker.BE;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javafx.collections.ObservableList;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
@@ -78,27 +79,64 @@ public class Task {
         this.person_id = person_id;
     }
 
+    @Override
+    public String toString() {
+        return task_name;
+    }
+
+    
+    
     /**
      * nested class med Log data
      */
     public static class Log {
 
-        LocalDateTime start_time;
-        LocalDateTime end_time;
-        Time total_tid;
-        int task_id;
-        
-        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, Time total_tid) {
+        private LocalDateTime start_time;
+        private LocalDateTime end_time;
+        private Time total_tid;
+        private int task_id;
+        private boolean billable;
+        private String task_name;
+        private String project_name;
+
+        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, boolean billable, Time total_tid, String task_name, String project_name) {
             this.start_time = start_time;
             this.end_time = end_time;
             this.task_id = task_id;
             this.total_tid = total_tid;
+            this.task_name = task_name;
+            this.task_id = task_id;
+            this.project_name = project_name;
+            this.billable = billable;
         }
 
         public Log() {
 
         }
 
+        public boolean isBillable() {
+            return billable;
+        }
+
+        public void setBillable(boolean billable) {
+            this.billable = billable;
+        }
+
+        public String getTask_name() {
+            return task_name;
+        }
+
+        public void setTask_name(String task_name) {
+            this.task_name = task_name;
+        }
+
+        public String getProject_name() {
+            return project_name;
+        }
+
+        public void setProject_name(String project_name) {
+            this.project_name = project_name;
+        }
 
         public Time getTotal_tid() {
             return total_tid;
@@ -134,7 +172,18 @@ public class Task {
 
         @Override
         public String toString() {
-            return "Log{" + "Task_id" + task_id + "start_time=" + start_time + ", end_time=" + end_time + '}';
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("yy-mm-dd HH:mm");
+            String start = start_time.format(format);
+            
+            String slut = "ikke afsluttet";
+            if (end_time != null)
+            {slut = end_time.format(format);
+            }
+            String total = "-";
+            if (total_tid != null){
+                total = total_tid+"";
+            }
+            return ""+total+" | ["+start+" - "+slut+"]";
         }
 
     }

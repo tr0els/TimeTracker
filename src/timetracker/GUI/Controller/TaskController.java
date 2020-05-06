@@ -69,8 +69,11 @@ public class TaskController implements Initializable {
     private Image imgNotBillable;
     private Image imgEdit;
     
+    private int idag = 0;
+    private int igår = 1;
     private int person_id;
 
+    
 
     /**
      * Initializes the controller class.
@@ -79,6 +82,7 @@ public class TaskController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         person_id = 1; //midlertidigt, skal hentes fra login
+
         try {
             model = TaskModel.getInstance();
 
@@ -87,9 +91,9 @@ public class TaskController implements Initializable {
         }
         loadImages();
         showProjects();
-        taskLogsbyDay(paneToday, 0);
-        taskLogsbyDay(paneYesterday, 1);
-//        taskLogsbyYesterday();
+        taskLogsbyDay(paneToday, idag);
+        taskLogsbyDay(paneYesterday, igår);
+
     }
 
     /**
@@ -199,16 +203,17 @@ public class TaskController implements Initializable {
         pane.setPrefHeight(scrollpaneHeight);
         for (Log log : logList) {
 
-            Label lblTaskname = new Label(model.getTask(log.getTask_id()).getTask_name());
+            Label lblTaskname = new Label(log.getTask_name());
             lblTaskname.setTranslateY(Y);
             lblTaskname.setTranslateX(10);
 
-            Label lblProject = new Label("Project-name");
+            Label lblProject = new Label(log.getProject_name());
             lblProject.setTranslateY(Y);
             lblProject.setTranslateX(140);
 
+            
             Label btnBillable = new Label();
-            if (model.getTask(log.getTask_id()).isBillable() == true) {
+            if (log.isBillable() == true) {
                 btnBillable.setGraphic(new ImageView(imgBillable));
             } else {
                 btnBillable.setGraphic(new ImageView(imgNotBillable));

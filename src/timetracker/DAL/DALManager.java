@@ -158,7 +158,7 @@ public class DALManager {
 
     public Project getProject(String projectName, int project_rate, int client_id) {
         try ( Connection con = dbCon.getConnection()) {
-            
+
             String sql = "SELECT * FROM Project WHERE project_name = ? AND project_rate = ? AND client_id = ?;";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -202,7 +202,6 @@ public class DALManager {
                 int_billable = 1;
             }
 
-            
             String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
 
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -213,7 +212,6 @@ public class DALManager {
             ps.setInt(4, person_id);
 
             int affectedRows = ps.executeUpdate();
-            
 
             if (affectedRows == 1) {
                 ResultSet rs = ps.getGeneratedKeys();
@@ -233,41 +231,32 @@ public class DALManager {
      * @param name
      * @param timepris
      * @param client
-     * @return 
+     * @return
      */
-
-    public Client createClient(String name, int timepris)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public Client createClient(String name, int timepris) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Client (client_name, default_rate) VALUES (?,?)";
 
-            PreparedStatement st = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-
+            PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             st.setString(1, name);
             st.setInt(2, timepris);
             int affectedRows = st.executeUpdate();
-            if(affectedRows == 1)
-            {
-            ResultSet rs = st.getGeneratedKeys();
-            if(rs.next())
-            {
-                int id = rs.getInt(1);
-                Client client = new Client(id,name, timepris );
-                return client;
+            if (affectedRows == 1) {
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    Client client = new Client(id, name, timepris);
+                    return client;
+                }
+
             }
-          
-            
-            }
-       
-        } catch (Exception e)
-        {
-           
+
+        } catch (Exception e) {
 
         }
-          return null;
+        return null;
     }
 
     /**
@@ -393,7 +382,7 @@ public class DALManager {
 
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT * FROM Task_log WHERE task_id = ?;";
+            String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
@@ -404,13 +393,13 @@ public class DALManager {
                 Log log = new Log();
 
                 LocalDateTime end_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                }else{
+                } else {
                     end_time = null;
                 }
-                
+
+                log.setTotal_tid(rs.getTime("total_time"));
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
 
@@ -433,32 +422,39 @@ public class DALManager {
 
         try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT Task_log.*, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
+            String sql = "SELECT Task_log.*, Task.task_name, Task.billable, Project.project_name, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
                     + "JOIN Task ON Task.task_id = Task_log.task_id\n"
+                    + "JOIN Project ON Project.project_id = Task.project_id\n"
                     + "WHERE CAST(task_start AS DATE) = DATEADD(day, -"+dag+", CONVERT(date, GETDATE()))\n"
                     + "AND person_id = ? ORDER BY task_start DESC";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, person_id);
-            
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
                 Log log = new Log();
-                
+
                 LocalDateTime end_time;
                 Time total_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
                     total_time = rs.getTime("total_time");
-                }else{
+                } else {
                     end_time = null;
                     total_time = null;
                 }
 
+                log.setBillable(billable);
+                log.setProject_name(rs.getString("project_name"));
+                log.setTask_name(rs.getString("task_name"));
                 log.setTotal_tid(total_time);
                 log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                 log.setEnd_time(end_time);
@@ -469,7 +465,7 @@ public class DALManager {
 
         } catch (Exception e) {
         }
-        
+
         return tasklogbyDay;
     }
 

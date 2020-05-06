@@ -7,9 +7,13 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
-      <Label layoutX="49.0" layoutY="23.0" text="Vælg Projekt:" />
-      <JFXComboBox fx:id="projectMenubox" layoutX="123.0" layoutY="19.0" />
-      <JFXListView fx:id="listTaskbyId" layoutX="23.0" layoutY="66.0" prefHeight="283.0" prefWidth="200.0" />
-      <JFXListView fx:id="listTasklogbyId" layoutX="290.0" layoutY="66.0" prefHeight="283.0" prefWidth="200.0" />
+      <Label layoutX="32.0" layoutY="23.0" text="Vælg Projekt:" />
+      <JFXComboBox fx:id="projectMenubox" layoutX="112.0" layoutY="19.0" prefHeight="25.0" prefWidth="188.0" />
+      <JFXListView fx:id="listTaskbyId" layoutX="25.0" layoutY="84.0" prefHeight="121.0" prefWidth="550.0" />
+      <JFXListView fx:id="listTasklogbyId" layoutX="25.0" layoutY="243.0" prefHeight="121.0" prefWidth="550.0" />
+      <Label layoutX="25.0" layoutY="67.0" text="Opgaver" />
+      <Label layoutX="25.0" layoutY="226.0" text="Logs [tid | tidsinterval]" />
+      <Label layoutX="422.0" layoutY="226.0" text="Opgave total tid:" />
+      <Label fx:id="lblTasktotalTid" layoutX="522.0" layoutY="226.0" prefHeight="17.0" prefWidth="52.0" text="TODO!" textAlignment="RIGHT" wrapText="true" />
    </children>
 </AnchorPane>

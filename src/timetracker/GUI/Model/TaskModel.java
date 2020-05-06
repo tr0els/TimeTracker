@@ -9,6 +9,8 @@ import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
@@ -23,8 +25,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel
-{
+public class TaskModel implements Runnable{
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -39,8 +40,7 @@ public class TaskModel
     private ObservableList<Log> tasklogById;
     private ObservableList<String> allProfessions;
 
-    private TaskModel() throws DALException, SQLException
-    {
+    public TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
         allProjects.addAll(bll.getProjects());
@@ -53,6 +53,20 @@ public class TaskModel
         allProfessions = FXCollections.observableArrayList();
 
     }
+    
+        @Override
+    public void run() {
+        try {
+            model = new TaskModel();
+        } catch (DALException ex) {
+            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+            System.out.println("Done");
+    }
+
 
     public static TaskModel getInstance() throws DALException, SQLException
     {
@@ -192,8 +206,9 @@ public class TaskModel
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Project> getProjects() throws DALException, SQLException
-    {
+    public ObservableList<Project> getProjects() throws DALException, SQLException {
+        allProjects.clear();
+        allProjects.addAll(bll.getProjects());
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
 
@@ -305,5 +320,6 @@ public class TaskModel
         allProfessions.addAll(bll.getProfessions());
         return allProfessions;
     }
+
 
 }
