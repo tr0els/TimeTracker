@@ -218,7 +218,7 @@ public class TaskController implements Initializable {
             btnStart.setGraphic(new ImageView(imgPause));
             btnStart.setOnAction(event -> {
                 pauseTask();
-                taskLogsbyDay(paneToday, dag);
+                taskLogsbyDay(paneToday, 0);
             });
             btnStart.setTranslateY(Y - 4);
             btnStart.setTranslateX(490);
@@ -229,7 +229,7 @@ public class TaskController implements Initializable {
                 btnStart.setGraphic(new ImageView(imgPlay));
                 btnStart.setOnAction(event -> {
                     startTask(log.getTask_id());
-                    taskLogsbyDay(paneToday, dag);
+                    taskLogsbyDay(paneToday, 0);
                 });
             }
             Label lblSluttid = new Label(slutTid);
