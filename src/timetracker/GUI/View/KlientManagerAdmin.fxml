@@ -21,10 +21,10 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></JFXListView>
-      <GridPane layoutX="14.0" layoutY="22.0" prefHeight="69.0" prefWidth="288.0">
+      <GridPane layoutX="14.0" layoutY="22.0" prefHeight="69.0" prefWidth="417.0">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="147.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="270.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
