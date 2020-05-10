@@ -72,7 +72,7 @@ public class BLLManager
     }
 
     /**
-     * opretter og starter en ny task og sender task object retur
+     * Starter en ny task
      *
      * @param task_name
      * @param billable
@@ -80,18 +80,8 @@ public class BLLManager
      * @param person_id
      * @return
      */
-    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
-        dal.createTask(task_name, billable, project_id, person_id);
-    }
-
-    /**
-     * starter ny tidstagning på eksisterende task
-     *
-     * @param task_id
-     */
-    public void startTask(int task_id, int person_id)
-    {
-        dal.startTask(task_id, person_id);
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
+        dal.startTask(task_name, billable, project_id, person_id);
     }
 
     /**
@@ -99,9 +89,9 @@ public class BLLManager
      *
      * @param task_id
      */
-    public void pauseTask(int person_id)
+    public void stopTask(int person_id)
     {
-        dal.pauseTask(person_id);
+        dal.stopTask(person_id);
 
     }
 

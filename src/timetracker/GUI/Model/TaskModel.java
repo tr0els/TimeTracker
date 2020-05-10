@@ -107,7 +107,7 @@ public class TaskModel implements Runnable{
     }
 
     /**
-     * opretter og starter en ny task og modtager task object
+     * Starter en ny task
      *
      * @param task_name
      * @param billable
@@ -115,29 +115,19 @@ public class TaskModel implements Runnable{
      * @param person_id
      * @return
      */
-    public void createTask(String task_name, boolean billable, int project_id, int person_id)
+    public void startTask(String task_name, boolean billable, int project_id, int person_id)
     {
-        bll.createTask(task_name, billable, project_id, person_id);
+        bll.startTask(task_name, billable, project_id, person_id);
     }
 
     /**
-     * starter ny tidstagning på eksisterende task
+     * Stopper en aktiv task
      *
      * @param task_id
      */
-    public void startTask(int task_id, int person_id)
+    public void stopTask(int person_id)
     {
-        bll.startTask(task_id, person_id);
-    }
-
-    /**
-     * pauser/stopper en aktiv task
-     *
-     * @param task_id
-     */
-    public void pauseTask(int person_id)
-    {
-        bll.pauseTask(person_id);
+        bll.stopTask(person_id);
 
     }
 

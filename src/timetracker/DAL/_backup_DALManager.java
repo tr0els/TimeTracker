@@ -28,22 +28,22 @@ import timetracker.BE.User;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class DALManager {
+public class _backup_DALManager {
 
     /**
      * Singleton opsætning af vores DALManager. singleton gør at vores
      * dalmanager ikke vil blive instansieret mere end en gang.
      */
     private DatabaseConnector dbCon;
-    private static DALManager dal = null;
+    private static _backup_DALManager dal = null;
 
-    private DALManager() throws DALException {
+    private _backup_DALManager() throws DALException {
         dbCon = new DatabaseConnector();
     }
 
-    public static DALManager getInstance() throws DALException {
+    public static _backup_DALManager getInstance() throws DALException {
         if (dal == null) {
-            dal = new DALManager();
+            dal = new _backup_DALManager();
         }
         return dal;
     }
@@ -185,41 +185,80 @@ public class DALManager {
     }
 
     /**
-     * Starter en ny task
+     * opretter ny task og returnere task
      *
      * @param task_name
      * @param billable
      * @param project_id
      * @param person_id
+     * @return
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
-        try (Connection con = dbCon.getConnection()) {
+    public void createTask(String task_name, boolean billable, int project_id, int person_id) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "INSERT INTO Tasklog (task_name, billable, project_id, person_id, task_start) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
+            int int_billable = 0;//konvertere boolean til 0 el. 1
+            if (billable == true) {
+                int_billable = 1;
+            }
 
-            PreparedStatement ps = con.prepareStatement(sql);
+            String sql = "INSERT INTO Task (task_name, billable, project_id, person_id) VALUES (?,?,?,?)";
+
+            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, task_name);
-            ps.setBoolean(2, billable);
+            ps.setInt(2, int_billable);
             ps.setInt(3, project_id);
             ps.setInt(4, person_id);
 
-            ps.execute();
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 1) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    int task_id = rs.getInt(1);
+                    startTask(task_id, person_id);
+                }
+            }
         } catch (Exception e) {
-            // todo
         }
     }
-    
+
     /**
-     * Stopper en igangværende task
+     * opretter starttidspunkt for ny task
+     *
+     * @param task_id
+     */
+    public void startTask(int task_id, int person_id) {
+        try ( Connection con = dbCon.getConnection()) {
+
+            pauseTask(person_id);
+
+            String sql = "INSERT INTO Task_log (task_id, task_start) VALUES (?, CURRENT_TIMESTAMP)";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, task_id);
+
+            ps.execute();
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    /**
+     * Finder igangværende tasks udfra en personid og pauser den/dem
      *
      * @param person_id
      */
-    public void stopTask(int person_id) {
-        try (Connection con = dbCon.getConnection()) {
+    public void pauseTask(int person_id) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
-                    + "WHERE person_id = ? AND task_end IS NULL";
+            String sql = "UPDATE Task_log SET task_end=CURRENT_TIMESTAMP\n"
+                    + "FROM Task_log\n"
+                    + "JOIN Task on Task.task_id = Task_log.task_id\n"
+                    + "WHERE Task.person_id = ? AND task_end IS NULL";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -228,13 +267,13 @@ public class DALManager {
             ps.execute();
 
         } catch (Exception e) {
-            // todo
         }
+
     }
     
 
     /**
-     * Returnerer Task udfra task_id
+     * returnere en specifik task udfra task_id
      *
      * @param task_id
      * @return
@@ -242,27 +281,30 @@ public class DALManager {
     public Task getTaskbyTaskID(int task_id) {
         Task task = new Task();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT * FROM Tasklog WHERE task_id = " + task_id + ";";
+            String sql = "SELECT * FROM Task WHERE task_id = " + task_id + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
                 task.setTask_id(rs.getInt("task_id"));
                 task.setTask_name(rs.getString("task_name"));
-                task.setBillable(rs.getBoolean("billable"));
+                task.setBillable(billable);
                 task.setPerson_id(rs.getInt("person_id"));
                 task.setProject_id(rs.getInt("project_id"));
             }
 
         } catch (Exception e) {
-            // todo
         }
         return task;
     }
-    
+
     /**
-     * Returnerer en liste af et projekts tilhørende Tasks
+     * henter en liste af Tasks fra DB via et project_id og returnere listen
      *
      * @param project_id
      * @return
@@ -270,38 +312,47 @@ public class DALManager {
     public List<Task> getTaskbyProjectID(int project_id) {
         ArrayList<Task> taskbyID = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT * FROM Tasklog WHERE project_id = " + project_id + ";";
+            String sql = "SELECT * FROM Task WHERE project_id = " + project_id + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
                 Task task = new Task();
 
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
+
                 task.setTask_id(rs.getInt("task_id"));
                 task.setTask_name(rs.getString("task_name"));
-                task.setBillable(rs.getBoolean("billable"));
                 task.setProject_id(rs.getInt("project_id"));
                 task.setPerson_id(rs.getInt("person_id"));
-                task.setBillable(rs.getBoolean("billable"));
+                task.setBillable(billable);
 
                 taskbyID.add(task);
             }
             return taskbyID;
 
         } catch (Exception e) {
-            // todo
         }
         return null;
     }
-    
+
+    /**
+     * henter en liste af Logs fra DB via et task_id og returnere listen
+     *
+     * @param task_id
+     * @return
+     */
     public List<Log> getTaskLogListbyTaskID(int task_id) {
         ArrayList<Log> tasklogbyID = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Tasklog WHERE task_id = ?;";
+            String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, task_id);
@@ -326,24 +377,24 @@ public class DALManager {
             }
 
         } catch (Exception e) {
-            // todo
         }
 
         return tasklogbyID;
     }
 
     /**
-     * Returnerer en liste af tasks ud fra person id og dag (0 = idag, 1 = igår osv.)
+     * henter en liste af task ud fra person_id og dag (0 = idag, 1 = igår osv.)
      *
      * @return
      */
     public List<Log> getTaskLogListbyDay(int person_id, int dag) {
         ArrayList<Log> tasklogbyDay = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
-            String sql = "SELECT Tasklog.*, Project.project_name, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Tasklog\n"
-                    + "JOIN Project ON Project.project_id = Tasklog.project_id\n"
+            String sql = "SELECT Task_log.*, Task.task_name, Task.billable, Project.project_name, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Task_log\n"
+                    + "JOIN Task ON Task.task_id = Task_log.task_id\n"
+                    + "JOIN Project ON Project.project_id = Task.project_id\n"
                     + "WHERE CAST(task_start AS DATE) = DATEADD(day, -" + dag + ", CONVERT(date, GETDATE()))\n"
                     + "AND person_id = ? ORDER BY task_start DESC";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -359,6 +410,10 @@ public class DALManager {
                 LocalDateTime end_time;
                 Time total_time;
 
+                boolean billable = false; //konvertere billable til boolean fra int. 
+                if (rs.getInt("billable") == 1) {
+                    billable = true;
+                }
                 if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
                     total_time = rs.getTime("total_time");
@@ -367,7 +422,7 @@ public class DALManager {
                     total_time = null;
                 }
 
-                log.setBillable(rs.getBoolean("billable"));
+                log.setBillable(billable);
                 log.setProject_name(rs.getString("project_name"));
                 log.setTask_name(rs.getString("task_name"));
                 log.setTotal_tid(total_time);
@@ -379,12 +434,11 @@ public class DALManager {
             }
 
         } catch (Exception e) {
-            // todo
         }
 
         return tasklogbyDay;
     }
-    
+
     /**
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.

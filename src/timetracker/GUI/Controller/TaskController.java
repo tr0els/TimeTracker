@@ -103,8 +103,7 @@ public class TaskController implements Initializable {
      */
     @FXML
     private void handleCreateTask(ActionEvent event) {
-        createTask();
-
+        startTask();
     }
 
     /**
@@ -132,13 +131,13 @@ public class TaskController implements Initializable {
     /**
      * Tager de relevante informationer fra GUI og sender videre.
      */
-    public void createTask() {
+    public void startTask() {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
        
 
-        model.createTask(task_name, billable, project_id, person_id);
+        model.startTask(task_name, billable, project_id, person_id);
         textTaskname.clear();
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
@@ -146,19 +145,11 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * Start task via task_id
+     * stop task via task_id
      */
-    public void startTask(int task_id) {
+    public void stopTask() {
 
-        model.startTask(task_id, person_id);
-    }
-
-    /**
-     * pauser task via task_id
-     */
-    public void pauseTask() {
-
-        model.pauseTask(person_id);
+        model.stopTask(person_id);
     }
 
     /**
@@ -217,7 +208,7 @@ public class TaskController implements Initializable {
             JFXButton btnStart = new JFXButton();
             btnStart.setGraphic(new ImageView(imgPause));
             btnStart.setOnAction(event -> {
-                pauseTask();
+                stopTask();
                 taskLogsbyDay(paneToday, 0);
             });
             btnStart.setTranslateY(Y - 4);
@@ -228,7 +219,7 @@ public class TaskController implements Initializable {
                 slutTid = log.getEnd_time().format(DateTimeFormatter.ofPattern("HH:mm"));
                 btnStart.setGraphic(new ImageView(imgPlay));
                 btnStart.setOnAction(event -> {
-                    startTask(log.getTask_id());
+                    startTask(); // Troels broke it! SORRY :) --> startTask(log.getTask_id());
                     taskLogsbyDay(paneToday, 0);
                 });
             }
