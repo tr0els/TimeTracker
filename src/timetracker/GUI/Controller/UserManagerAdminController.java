@@ -38,7 +38,8 @@ import timetracker.GUI.Model.TaskModel;
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class UserManagerAdminController implements Initializable
 {
@@ -61,6 +62,12 @@ public class UserManagerAdminController implements Initializable
     @FXML
     private JFXCheckBox checkboxAdminRole;
 
+    /**
+     * Constructor for UserManagerAdminController.
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public UserManagerAdminController() throws DALException, SQLException
     {
         model = TaskModel.getInstance();
@@ -84,6 +91,12 @@ public class UserManagerAdminController implements Initializable
         }
     }
 
+    /**
+     * Sætter JFXTreeTable op med de kolonner og populerer den med data.
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     private void populateTreeTable() throws DALException, SQLException
     {
         JFXTreeTableColumn<User, String> userName = new JFXTreeTableColumn<>("Navn");
@@ -136,6 +149,13 @@ public class UserManagerAdminController implements Initializable
         listUsers.setShowRoot(false);
     }
 
+    /**
+     * Opdaterer en User med de inputs der er tastet.
+     *
+     * @param event
+     * @throws DALException
+     * @throws SQLException
+     */
     @FXML
     private void handleUpdateUser(ActionEvent event) throws DALException, SQLException
     {
@@ -158,6 +178,13 @@ public class UserManagerAdminController implements Initializable
         populateTreeTable();
     }
 
+    /**
+     * Opretter en User med de inputs der er tastet.
+     *
+     * @param event
+     * @throws DALException
+     * @throws SQLException
+     */
     @FXML
     private void handleCreateUser(ActionEvent event) throws DALException, SQLException
     {
@@ -180,6 +207,14 @@ public class UserManagerAdminController implements Initializable
         populateTreeTable();
     }
 
+    /**
+     * Opdaterer de forskellige input-felter med den data der tilhører det
+     * objekt der bliver trykket på i JFXTreeTable.
+     *
+     * @param event
+     * @throws DALException
+     * @throws SQLException
+     */
     @FXML
     private void handleSelectionTreeTable(MouseEvent event) throws DALException, SQLException
     {
