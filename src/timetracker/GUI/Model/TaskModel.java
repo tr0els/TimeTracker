@@ -5,8 +5,10 @@
  */
 package timetracker.GUI.Model;
 
+import java.security.NoSuchAlgorithmException;
 import timetracker.BE.Task;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,7 +28,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel implements Runnable{
+public class TaskModel implements Runnable {
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -54,8 +56,8 @@ public class TaskModel implements Runnable{
         //allProfessions = FXCollections.observableArrayList();
 
     }
-    
-        @Override
+
+    @Override
     public void run() {
         try {
             model = new TaskModel();
@@ -64,19 +66,17 @@ public class TaskModel implements Runnable{
         } catch (SQLException ex) {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-            System.out.println("Done");
+
+        System.out.println("Done");
     }
 
-
-    public static TaskModel getInstance() throws DALException, SQLException
-    {
-        if (model == null)
-        {
+    public static TaskModel getInstance() throws DALException, SQLException {
+        if (model == null) {
             model = new TaskModel();
         }
         return model;
     }
+
 
 //    /**
 //     * Sender det info fra MainControllerens "createProject" videre til DAL
@@ -106,6 +106,8 @@ public class TaskModel implements Runnable{
 //        bll.deleteProject(projectID);
 //    }
 
+
+
     /**
      * Starter en ny task
      *
@@ -115,8 +117,7 @@ public class TaskModel implements Runnable{
      * @param person_id
      * @return
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id)
-    {
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
         bll.startTask(task_name, billable, project_id, person_id);
     }
 
@@ -125,8 +126,7 @@ public class TaskModel implements Runnable{
      *
      * @param task_id
      */
-    public void stopTask(int person_id)
-    {
+    public void stopTask(int person_id) {
         bll.stopTask(person_id);
 
     }
@@ -138,8 +138,7 @@ public class TaskModel implements Runnable{
      * @param project_id
      * @return
      */
-    public ObservableList<Task> getTaskById(int project_id)
-    {
+    public ObservableList<Task> getTaskById(int project_id) {
         taskById.clear();
         taskById.addAll(bll.getTaskById(project_id));
         return taskById;
@@ -152,13 +151,11 @@ public class TaskModel implements Runnable{
      * @param task_id
      * @return
      */
-    public List<Log> getTaskLogListByDay(int person_id, int dag)
-    {
+    public List<Log> getTaskLogListByDay(int person_id, int dag) {
         return bll.getTaskLogListByDay(person_id, dag);
     }
 
-    public Task getTask(int task_id)
-    {
+    public Task getTask(int task_id) {
         return bll.getTask(task_id);
     }
 
@@ -169,8 +166,7 @@ public class TaskModel implements Runnable{
      * @param task_id
      * @return
      */
-    public ObservableList<Log> getTaskLogListById(int task_id)
-    {
+    public ObservableList<Log> getTaskLogListById(int task_id) {
         tasklogById.clear();
         tasklogById.addAll(bll.getTaskLogListById(task_id));
         return tasklogById;
@@ -211,6 +207,7 @@ public class TaskModel implements Runnable{
 //        return bll.getProject(projectName, project_rate, client_id);
 //    }
 
+
 //    /**DENNE METODE LIGGER INDE I CLIENTMODEL
 //     * Sender Client objekt ned til DAL laget som skal oprettes.
 //     *
@@ -219,6 +216,7 @@ public class TaskModel implements Runnable{
 //    public void createClient(Client client) {
 //        bll.createClient(client);
 //    }
+
 //    /**
 //     * Sender Client objekt ned til DAL laget som skal ændres.
 //     *
@@ -313,4 +311,15 @@ public class TaskModel implements Runnable{
 //    }
 
 
+    /**
+     * sender det info fra MainControlleren videre til BLLManager
+     *
+     * @param email
+     * @param password
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
+    public User login(String email, String password) throws NoSuchAlgorithmException {
+        return bll.login(email, password);
+    }
 }

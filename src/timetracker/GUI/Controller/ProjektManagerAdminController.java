@@ -77,7 +77,9 @@ public class ProjektManagerAdminController implements Initializable {
         cModel = ClientModel.getInstance();
     }
 
+
 //    Denne skal vel ikke være der ? når det er en controller?????
+
 //    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
 //        if (projektController == null) {
 //            projektController = new ProjektManagerAdminController();
@@ -116,6 +118,7 @@ public class ProjektManagerAdminController implements Initializable {
      */
     @FXML
     private void handleGetCreateAction(ActionEvent event) {
+        drawer.close();
         drawer.setSidePane(createProjectPane);
         drawer.open();
         drawer.toFront();

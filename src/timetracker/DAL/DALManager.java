@@ -14,6 +14,7 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 import timetracker.BE.Task;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -193,7 +194,7 @@ public class DALManager {
      * @param person_id
      */
     public void startTask(String task_name, boolean billable, int project_id, int person_id) {
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Tasklog (task_name, billable, project_id, person_id, task_start) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
 
@@ -209,14 +210,14 @@ public class DALManager {
             // todo
         }
     }
-    
+
     /**
      * Stopper en igangværende task
      *
      * @param person_id
      */
     public void stopTask(int person_id) {
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
                     + "WHERE person_id = ? AND task_end IS NULL";
@@ -231,7 +232,6 @@ public class DALManager {
             // todo
         }
     }
-    
 
     /**
      * Returnerer Task udfra task_id
@@ -242,7 +242,7 @@ public class DALManager {
     public Task getTaskbyTaskID(int task_id) {
         Task task = new Task();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT * FROM Tasklog WHERE task_id = " + task_id + ";";
             Statement statement = con.createStatement();
@@ -260,7 +260,7 @@ public class DALManager {
         }
         return task;
     }
-    
+
     /**
      * Returnerer en liste af et projekts tilhørende Tasks
      *
@@ -270,7 +270,7 @@ public class DALManager {
     public List<Task> getTaskbyProjectID(int project_id) {
         ArrayList<Task> taskbyID = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT * FROM Tasklog WHERE project_id = " + project_id + ";";
             Statement statement = con.createStatement();
@@ -295,11 +295,11 @@ public class DALManager {
         }
         return null;
     }
-    
+
     public List<Log> getTaskLogListbyTaskID(int task_id) {
         ArrayList<Log> tasklogbyID = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT *, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Tasklog WHERE task_id = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -333,14 +333,15 @@ public class DALManager {
     }
 
     /**
-     * Returnerer en liste af tasks ud fra person id og dag (0 = idag, 1 = igår osv.)
+     * Returnerer en liste af tasks ud fra person id og dag (0 = idag, 1 = igår
+     * osv.)
      *
      * @return
      */
     public List<Log> getTaskLogListbyDay(int person_id, int dag) {
         ArrayList<Log> tasklogbyDay = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT Tasklog.*, Project.project_name, CAST(task_end - task_start AS TIME(0)) AS total_time FROM Tasklog\n"
                     + "JOIN Project ON Project.project_id = Tasklog.project_id\n"
@@ -384,7 +385,7 @@ public class DALManager {
 
         return tasklogbyDay;
     }
-    
+
     /**
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.
@@ -494,19 +495,20 @@ public class DALManager {
      *
      * @param client
      */
-    public void createUser(User user) {
+    public void createUser(User user, byte[] HashedPassword, byte[] salt) {
         try ( Connection con = dbCon.getConnection()) {
-            String sql = "INSERT INTO Person (name, surname, email, password, active, role_id, profession_id) VALUES (?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO Person (name, surname, email, password, active, role_id, profession_id, salt) VALUES (?,?,?,?,?,?,?,?);";
 
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
-            st.setString(4, user.getPassword());
+            st.setBytes(4, HashedPassword);
             st.setInt(5, 1);
             st.setInt(6, user.getRole_id());
             st.setInt(7, user.getProfession_id());
+            st.setBytes(8, salt);
 
             st.executeQuery();
 
@@ -641,5 +643,63 @@ public class DALManager {
         } catch (DALException | SQLException ex) {
         }
         return null;
+    }
+
+    /**
+     * tjekker om det login info som kommer fra BLLManageren er det samme som
+     * ligger på serveren. hvis ja returnere den et boolean som er true.
+     *
+     * @param email
+     * @param hashedPassword
+     * @return
+     */
+    public User login(String email, byte[] hashedPassword) {
+
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setNString(1, email);
+            st.setBytes(2, hashedPassword);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next() == false) {
+                System.out.println("ResultSet is empty");
+            } else {
+                do {
+                    User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
+                    String emailDAO = user.getEmail();
+                    byte[] passwordDAO = rs.getBytes("password");
+
+                    if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword)) {
+                        return user;
+                    }
+                } while (rs.next());
+            }
+        } catch (DALException | SQLException ex) {
+        }
+        return null;
+    }
+
+    /**
+     * henter det random "salt" som er tilsvarende den email som kommer fra
+     * BLLManageren
+     *
+     * @param email
+     * @return
+     */
+    public byte[] getSalt(String email) {
+        byte[] salt = null;
+
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT email, salt FROM PERSON WHERE email = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setNString(1, email);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                salt = rs.getBytes("salt");
+            }
+        } catch (Exception e) {
+        }
+        return salt;
     }
 }
