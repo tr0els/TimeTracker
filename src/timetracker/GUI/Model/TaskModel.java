@@ -40,7 +40,7 @@ public class TaskModel implements Runnable {
     //private ObservableList<Project> allProjects;
     //private ObservableList<User> allUsers;
     private ObservableList<Task> taskById;
-    private ObservableList<Log> tasklogById;
+    private ObservableList<Log> logsById;
     //private ObservableList<Profession> allProfessions;
 
     public TaskModel() throws DALException, SQLException {
@@ -52,7 +52,7 @@ public class TaskModel implements Runnable {
        // allUsers = FXCollections.observableArrayList();
         //allUsers.addAll(bll.getUsers());
         taskById = FXCollections.observableArrayList();
-        tasklogById = FXCollections.observableArrayList();
+        logsById = FXCollections.observableArrayList();
         //allProfessions = FXCollections.observableArrayList();
 
     }
@@ -131,6 +131,25 @@ public class TaskModel implements Runnable {
 
     }
 
+        /**
+     * Bygger observable liste af task udfra et project_id som kan bruges i
+     * vores view
+     *
+     * @param project_id
+     * @return
+     */
+    public ObservableList<Task> getTaskbyIDs(int project_id, int person_id) {
+        taskById.clear();
+        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
+        return taskById;
+    }
+
+    
+    public ObservableList<Log> getLogsbyID(int task_id){
+        logsById.clear();
+        logsById.addAll(bll.getLogsbyID(task_id));
+        return logsById;
+    }
   
 //    /**
 //     * Sender det info fra MainControllerens "editProject" videre til DAL laget
