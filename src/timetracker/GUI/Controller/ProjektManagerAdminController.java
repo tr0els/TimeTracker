@@ -32,6 +32,8 @@ import javafx.util.Callback;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
 import timetracker.DAL.DALException;
+import timetracker.GUI.Model.ClientModel;
+import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -65,19 +67,23 @@ public class ProjektManagerAdminController implements Initializable {
     @FXML
     private JFXTextField projektnavnEdit;
 
-    private static TaskModel model;
+    //private static TaskModel model;
+    private ProjektModel model;
+    private ClientModel cModel;
     private static ProjektManagerAdminController projektController = null;
 
     public ProjektManagerAdminController() throws DALException, SQLException {
-        model = TaskModel.getInstance();
+        model = ProjektModel.getInstance();
+        cModel = ClientModel.getInstance();
     }
 
-    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
-        if (projektController == null) {
-            projektController = new ProjektManagerAdminController();
-        }
-        return projektController;
-    }
+//    Denne skal vel ikke være der ? når det er en controller?????
+//    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
+//        if (projektController == null) {
+//            projektController = new ProjektManagerAdminController();
+//        }
+//        return projektController;
+//    }
 
     ObservableList<Client> clients;
     TreeItem<Project> project;
@@ -90,7 +96,7 @@ public class ProjektManagerAdminController implements Initializable {
         try {
             drawer.close();
 
-            clients = model.getClients();
+            clients = cModel.getClients();
             combobox.setItems(clients);
             comboboxEdit.setItems(clients);
 

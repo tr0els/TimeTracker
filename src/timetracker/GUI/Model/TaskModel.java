@@ -34,24 +34,24 @@ public class TaskModel implements Runnable{
      */
     private static BLLManager bll;
     private static TaskModel model = null;
-    private ObservableList<Client> allClients;
-    private ObservableList<Project> allProjects;
-    private ObservableList<User> allUsers;
+    //private ObservableList<Client> allClients;
+    //private ObservableList<Project> allProjects;
+    //private ObservableList<User> allUsers;
     private ObservableList<Task> taskById;
     private ObservableList<Log> tasklogById;
-    private ObservableList<Profession> allProfessions;
+    //private ObservableList<Profession> allProfessions;
 
     public TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
-        allProjects = FXCollections.observableArrayList();
-        allProjects.addAll(bll.getProjects());
-        allClients = FXCollections.observableArrayList();
-        allClients.addAll(bll.getClients());
-        allUsers = FXCollections.observableArrayList();
-        allUsers.addAll(bll.getUsers());
+        //allProjects = FXCollections.observableArrayList();
+        //allProjects.addAll(bll.getProjects());
+        //allClients = FXCollections.observableArrayList();
+       // allClients.addAll(bll.getClients());
+       // allUsers = FXCollections.observableArrayList();
+        //allUsers.addAll(bll.getUsers());
         taskById = FXCollections.observableArrayList();
         tasklogById = FXCollections.observableArrayList();
-        allProfessions = FXCollections.observableArrayList();
+        //allProfessions = FXCollections.observableArrayList();
 
     }
     
@@ -78,33 +78,33 @@ public class TaskModel implements Runnable{
         return model;
     }
 
-    /**
-     * Sender det info fra MainControllerens "createProject" videre til DAL
-     * laget
-     *
-     * @param clientID
-     * @param projectName
-     * @param hourlyPay
-     * @throws DALException
-     */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
-    {
-        bll.createProject(clientID, projectName, hourlyPay);
-    }
-
-    /**
-     * Sender det info fra MainControllerens "deleteProject" videre til DAL
-     * laget
-     *
-     * @param clientID
-     * @param projectName
-     * @param hourlyPay
-     * @throws DALException
-     */
-    public void deleteProject(int projectID) throws DALException
-    {
-        bll.deleteProject(projectID);
-    }
+//    /**
+//     * Sender det info fra MainControllerens "createProject" videre til DAL
+//     * laget
+//     *
+//     * @param clientID
+//     * @param projectName
+//     * @param hourlyPay
+//     * @throws DALException
+//     */
+//    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
+//    {
+//        bll.createProject(clientID, projectName, hourlyPay);
+//    }
+//
+//    /**
+//     * Sender det info fra MainControllerens "deleteProject" videre til DAL
+//     * laget
+//     *
+//     * @param clientID
+//     * @param projectName
+//     * @param hourlyPay
+//     * @throws DALException
+//     */
+//    public void deleteProject(int projectID) throws DALException
+//    {
+//        bll.deleteProject(projectID);
+//    }
 
     /**
      * Starter en ny task
@@ -177,39 +177,39 @@ public class TaskModel implements Runnable{
 
     }
 
-    /**
-     * Sender det info fra MainControllerens "editProject" videre til DAL laget
-     *
-     * @param clientID
-     * @param projectName
-     * @param hourlyPay
-     * @param projectID
-     */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
-    {
-        bll.editProject(clientID, projectName, hourlyPay, projectID);
-    }
-
-    /**
-     * retunere en liste af alle projekter.
-     *
-     * @return
-     * @throws DALException
-     * @throws SQLException
-     */
-    public ObservableList<Project> getProjects() throws DALException, SQLException {
-        allProjects.clear();
-        allProjects.addAll(bll.getProjects());
-        Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
-        allProjects.sort(byName);
-
-        return allProjects;
-    }
-
-    public Project getProject(String projectName, int project_rate, int client_id)
-    {
-        return bll.getProject(projectName, project_rate, client_id);
-    }
+//    /**
+//     * Sender det info fra MainControllerens "editProject" videre til DAL laget
+//     *
+//     * @param clientID
+//     * @param projectName
+//     * @param hourlyPay
+//     * @param projectID
+//     */
+//    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
+//    {
+//        bll.editProject(clientID, projectName, hourlyPay, projectID);
+//    }
+//
+//    /**
+//     * retunere en liste af alle projekter.
+//     *
+//     * @return
+//     * @throws DALException
+//     * @throws SQLException
+//     */
+//    public ObservableList<Project> getProjects() throws DALException, SQLException {
+//        allProjects.clear();
+//        allProjects.addAll(bll.getProjects());
+//        Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
+//        allProjects.sort(byName);
+//
+//        return allProjects;
+//    }
+//
+//    public Project getProject(String projectName, int project_rate, int client_id)
+//    {
+//        return bll.getProject(projectName, project_rate, client_id);
+//    }
 
 //    /**DENNE METODE LIGGER INDE I CLIENTMODEL
 //     * Sender Client objekt ned til DAL laget som skal oprettes.
@@ -219,98 +219,98 @@ public class TaskModel implements Runnable{
 //    public void createClient(Client client) {
 //        bll.createClient(client);
 //    }
-    /**
-     * Sender Client objekt ned til DAL laget som skal ændres.
-     *
-     * @param client
-     */
-    public void editClient(Client client)
-    {
-        bll.deleteClient(client);
-    }
+//    /**
+//     * Sender Client objekt ned til DAL laget som skal ændres.
+//     *
+//     * @param client
+//     */
+//    public void editClient(Client client)
+//    {
+//        bll.deleteClient(client);
+//    }
+//
+//    /**
+//     * Sender Client objekt ned til DAL laget som skal slettes.
+//     *
+//     * @param client
+//     */
+//    public void deleteClient(Client client)
+//    {
+//        bll.deleteClient(client);
+//    }
 
-    /**
-     * Sender Client objekt ned til DAL laget som skal slettes.
-     *
-     * @param client
-     */
-    public void deleteClient(Client client)
-    {
-        bll.deleteClient(client);
-    }
+//    /**
+//     * Returnerer en liste med alle Clients.
+//     *
+//     * @return
+//     * @throws DALException
+//     * @throws SQLException
+//     */
+//    public ObservableList<Client> getClients() throws DALException, SQLException
+//    {
+//        Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
+//        allClients.sort(byName);
+//        return allClients;
+//    }
 
-    /**
-     * Returnerer en liste med alle Clients.
-     *
-     * @return
-     * @throws DALException
-     * @throws SQLException
-     */
-    public ObservableList<Client> getClients() throws DALException, SQLException
-    {
-        Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
-        allClients.sort(byName);
-        return allClients;
-    }
-
-    /**
-     * Sender User objekt ned til DAL laget som skal oprettes.
-     *
-     * @param client
-     */
-    public void createUser(User user)
-    {
-        bll.createUser(user);
-    }
-
-    /**
-     * Sender User objekt ned til DAL laget som skal ændres.
-     *
-     * @param client
-     */
-    public void editUser(User user)
-    {
-        bll.editUser(user);
-    }
-
-    /**
-     * Sender Client objekt ned til DAL laget som skal slettes.
-     *
-     * @param client
-     */
-    public void deleteUser(User user)
-    {
-        bll.deleteUser(user);
-    }
-
-    /**
-     * Henter listen af Users nede fra DAL laget
-     *
-     * @return
-     * @throws DALException
-     * @throws SQLException
-     */
-    public ObservableList<User> getUsers() throws DALException, SQLException
-    {
-        allUsers.clear();
-        allUsers.addAll(bll.getUsers());
-        Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
-        allUsers.sort(byName);
-        return allUsers;
-    }
-
-    /**
-     * Returnerer en liste med de forskellige Professions.
-     *
-     * @return
-     * @throws DALException
-     * @throws SQLException
-     */
-    public ObservableList<Profession> getProfessions() throws DALException, SQLException
-    {
-        allProfessions.addAll(bll.getProfessions());
-        return allProfessions;
-    }
+//    /**
+//     * Sender User objekt ned til DAL laget som skal oprettes.
+//     *
+//     * @param client
+//     */
+//    public void createUser(User user)
+//    {
+//        bll.createUser(user);
+//    }
+//
+//    /**
+//     * Sender User objekt ned til DAL laget som skal ændres.
+//     *
+//     * @param client
+//     */
+//    public void editUser(User user)
+//    {
+//        bll.editUser(user);
+//    }
+//
+//    /**
+//     * Sender Client objekt ned til DAL laget som skal slettes.
+//     *
+//     * @param client
+//     */
+//    public void deleteUser(User user)
+//    {
+//        bll.deleteUser(user);
+//    }
+//
+//    /**
+//     * Henter listen af Users nede fra DAL laget
+//     *
+//     * @return
+//     * @throws DALException
+//     * @throws SQLException
+//     */
+//    public ObservableList<User> getUsers() throws DALException, SQLException
+//    {
+//        allUsers.clear();
+//        allUsers.addAll(bll.getUsers());
+//        Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
+//        allUsers.sort(byName);
+//        return allUsers;
+//    }
+//
+//    /**
+//     * Returnerer en liste med de forskellige Professions.
+//     *
+//     * @return
+//     * @throws DALException
+//     * @throws SQLException
+//     */
+//    public ObservableList<Profession> getProfessions() throws DALException, SQLException
+//    {
+//        allProfessions.addAll(bll.getProfessions());
+//        return allProfessions;
+//    }
 
 
 }
