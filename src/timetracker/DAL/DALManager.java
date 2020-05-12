@@ -648,9 +648,10 @@ public class DALManager {
     /**
      * tjekker om det login info som kommer fra BLLManageren er det samme som
      * ligger på serveren. hvis ja returnere den et boolean som er true.
+     *
      * @param email
      * @param hashedPassword
-     * @return 
+     * @return
      */
     public boolean login(String email, byte[] hashedPassword) {
         boolean verifiedLogin = true;
@@ -684,8 +685,9 @@ public class DALManager {
     /**
      * henter det random "salt" som er tilsvarende den email som kommer fra
      * BLLManageren
+     *
      * @param email
-     * @return 
+     * @return
      */
     public byte[] getSalt(String email) {
         byte[] salt = null;
@@ -704,9 +706,11 @@ public class DALManager {
     }
 
     /**
-     * henter det roleID som er tilsvarende til den email som kommer fra BLLManageren.
+     * henter det roleID som er tilsvarende til den email som kommer fra
+     * BLLManageren.
+     *
      * @param email
-     * @return 
+     * @return
      */
     public int getRole(String email) {
         int role = 0;

@@ -67,6 +67,30 @@ public class MainController implements Initializable {
     }
 
     /**
+     * tager det info som er inputtet i textfields og sender dem til model.
+     *
+     * @param event
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    @FXML
+    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException {
+        String email = emailTextField.getText();
+        String password = passwordTextField.getText();
+
+        if (model.login(email, password) == true) {
+            int role = model.getRole(email);
+
+            if (role == 1) {
+                handeladminlogin(event);
+            }
+            if (role == 2) {
+                handeluserlogin(event);
+            }
+        }
+    }
+
+    /**
      *
      * @param event
      * @throws IOException Håndtere login af en admin
@@ -121,29 +145,6 @@ public class MainController implements Initializable {
         stage.setResizable(false);
         stage.show();
 
-    }
-
-    /**
-     * tager det info som er inputtet i textfields og sender dem til model.
-     * @param event
-     * @throws NoSuchAlgorithmException
-     * @throws IOException 
-     */
-    @FXML
-    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException {
-        String email = emailTextField.getText();
-        String password = passwordTextField.getText();
-
-        if (model.login(email, password) == true) {
-            int role = model.getRole(email);
-
-            if (role == 1) {
-                handeladminlogin(event);
-            }
-            if (role == 2) {
-                handeluserlogin(event);
-            }
-        }
     }
 
 }

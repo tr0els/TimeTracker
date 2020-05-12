@@ -269,10 +269,11 @@ public class BLLManager {
     /**
      * tager det input som kommer fra modelen og hasher passworded, sender det
      * videre til dal.
+     *
      * @param email
      * @param password
      * @return
-     * @throws NoSuchAlgorithmException 
+     * @throws NoSuchAlgorithmException
      */
     public boolean login(String email, String password) throws NoSuchAlgorithmException {
         byte[] salt = dal.getSalt(email);
@@ -288,8 +289,9 @@ public class BLLManager {
 
     /**
      * henter rolen der er tilsvarende til den email som kommer fra modelen
+     *
      * @param username
-     * @return 
+     * @return
      */
     public int getRole(final String username) {
         return dal.getRole(username);

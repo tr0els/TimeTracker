@@ -295,10 +295,11 @@ public class TaskModel implements Runnable {
 
     /**
      * sender det info fra MainControlleren videre til BLLManager
+     *
      * @param email
      * @param password
      * @return
-     * @throws NoSuchAlgorithmException 
+     * @throws NoSuchAlgorithmException
      */
     public boolean login(String email, String password) throws NoSuchAlgorithmException {
         return bll.login(email, password);
@@ -306,8 +307,9 @@ public class TaskModel implements Runnable {
 
     /**
      * henter rolen tilsvarende til den email som kommer fra MainControlleren
+     *
      * @param username
-     * @return 
+     * @return
      */
     public int getRole(String username) {
 
