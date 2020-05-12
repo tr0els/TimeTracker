@@ -275,7 +275,7 @@ public class BLLManager {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public boolean login(String email, String password) throws NoSuchAlgorithmException {
+    public User login(String email, String password) throws NoSuchAlgorithmException {
         byte[] salt = dal.getSalt(email);
 
         final MessageDigest md = MessageDigest.getInstance("SHA-512");
@@ -285,15 +285,5 @@ public class BLLManager {
 
         return dal.login(email, HashedPassword);
 
-    }
-
-    /**
-     * henter rolen der er tilsvarende til den email som kommer fra modelen
-     *
-     * @param username
-     * @return
-     */
-    public int getRole(final String username) {
-        return dal.getRole(username);
     }
 }

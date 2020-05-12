@@ -80,8 +80,9 @@ public class MainController implements Initializable {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
 
-        if (model.login(email, password) == true) {
-            int role = model.getRole(email);
+        if (model.login(email, password) != null) {
+            
+            int role = model.login(email, password).getRole_id();
 
             if (role == 1) {
                 handeladminlogin(event);

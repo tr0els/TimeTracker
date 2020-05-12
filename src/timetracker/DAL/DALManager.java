@@ -653,11 +653,10 @@ public class DALManager {
      * @param hashedPassword
      * @return
      */
-    public boolean login(String email, byte[] hashedPassword) {
-        boolean verifiedLogin = true;
+    public User login(String email, byte[] hashedPassword) {
 
         try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT email, password FROM PERSON WHERE email = ? AND password = ?";
+            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setNString(1, email);
             st.setBytes(2, hashedPassword);
@@ -665,21 +664,20 @@ public class DALManager {
 
             if (rs.next() == false) {
                 System.out.println("ResultSet is empty");
-                verifiedLogin = false;
             } else {
                 do {
-                    String emailDAO = rs.getString("email");
+                    User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
+                    String emailDAO = user.getEmail();
                     byte[] passwordDAO = rs.getBytes("password");
 
                     if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword)) {
-                        verifiedLogin = true;
-                        break;
+                        return user;
                     }
                 } while (rs.next());
             }
         } catch (DALException | SQLException ex) {
         }
-        return verifiedLogin;
+        return null;
     }
 
     /**
@@ -703,28 +701,5 @@ public class DALManager {
         } catch (Exception e) {
         }
         return salt;
-    }
-
-    /**
-     * henter det roleID som er tilsvarende til den email som kommer fra
-     * BLLManageren.
-     *
-     * @param email
-     * @return
-     */
-    public int getRole(String email) {
-        int role = 0;
-
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT email, role_id FROM PERSON WHERE email = ?";
-            PreparedStatement st = con.prepareStatement(sql);
-            st.setNString(1, email);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                role = rs.getInt("role_id");
-            }
-        } catch (DALException | SQLException ex) {
-        }
-        return role;
     }
 }
