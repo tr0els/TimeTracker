@@ -68,6 +68,8 @@ public class MainController implements Initializable {
 
     /**
      * tager det info som er inputtet i textfields og sender dem til model.
+     * 
+     * alle passwords er 1234
      *
      * @param event
      * @throws NoSuchAlgorithmException
