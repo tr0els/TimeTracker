@@ -15,8 +15,8 @@
       </ImageView>
       <JFXButton fx:id="adminbtb" layoutX="14.0" layoutY="382.0" onAction="#handeladminlogin" text="Admin " />
       <JFXButton fx:id="user" layoutX="180.0" layoutY="382.0" onAction="#handeluserlogin" prefWidth="120.0" text="Alm. User" />
-      <JFXTextField fx:id="emailTextField" layoutX="180.0" layoutY="227.0" prefHeight="43.0" prefWidth="399.0" promptText="Email" />
-      <JFXTextField fx:id="passwordTextField" layoutX="180.0" layoutY="286.0" prefHeight="43.0" prefWidth="399.0" promptText="Password" />
+      <JFXTextField fx:id="emailTextField" labelFloat="true" layoutX="180.0" layoutY="227.0" prefHeight="43.0" prefWidth="399.0" promptText="Email" />
+      <JFXTextField fx:id="passwordTextField" labelFloat="true" layoutX="180.0" layoutY="286.0" prefHeight="43.0" prefWidth="399.0" promptText="Password" />
       <JFXButton fx:id="adminbtb1" layoutX="579.0" layoutY="382.0" onAction="#handelogin" text="Login" />
    </children>
 </AnchorPane>
