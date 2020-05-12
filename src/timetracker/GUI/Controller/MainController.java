@@ -6,9 +6,11 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import timetracker.DAL.DALException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -36,9 +38,21 @@ public class MainController implements Initializable {
      */
     private static TaskModel model;
     private static MainController main = null;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private JFXButton adminbtb;
+    @FXML
+    private JFXButton user;
+    @FXML
+    private JFXButton adminbtb1;
+    @FXML
+    private JFXTextField emailTextField;
+    @FXML
+    private JFXTextField passwordTextField;
 
     public MainController() throws DALException, SQLException {
-//        model = TaskModel.getInstance();
+        model = TaskModel.getInstance();
     }
 
     public static MainController getInstance() throws DALException, SQLException {
@@ -50,70 +64,86 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
     }
 
     /**
-     * 
+     *
      * @param event
-     * @throws IOException
-     * Håndtere login af en admin
+     * @throws IOException Håndtere login af en admin
      */
-    
-   @FXML
+    @FXML
     private void handeladminlogin(ActionEvent event) throws IOException {
-        
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
-            loader.load();
-            Parent root = loader.getRoot();
-            
-            //MenubarController controller = loader.getController();
-            
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("Time Tracker Admin");
-             stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
-            Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Currentstage.close();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        
-    }
-    
-    /**
-     * 
-     * @param event
-     * @throws IOException 
-     * Håndtere log in af en alm. user, og fjerne adminknapperne. 
-     */
 
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+        loader.load();
+        Parent root = loader.getRoot();
+
+        //MenubarController controller = loader.getController();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Time Tracker Admin");
+        stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
+        Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Currentstage.close();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+
+    }
+
+    /**
+     *
+     * @param event
+     * @throws IOException Håndtere log in af en alm. user, og fjerne
+     * adminknapperne.
+     */
     @FXML
     private void handeluserlogin(ActionEvent event) throws IOException {
-        
-         
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
-            loader.load();
-            Parent root = loader.getRoot();
-            
-            MenubarController controller = loader.getController();
-            controller.getBrugermanagerbtb().setVisible(false);
-            controller.getKlientmanagerbtb().setVisible(false);
-            controller.getProjektbtb().setVisible(false);
-            controller.getOverblikforAdmin().setVisible(false);
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("Time Tracker alm. bruger");
-            stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
-            Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Currentstage.close();
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        
-        
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
+        loader.load();
+        Parent root = loader.getRoot();
+
+        MenubarController controller = loader.getController();
+        controller.getBrugermanagerbtb().setVisible(false);
+        controller.getKlientmanagerbtb().setVisible(false);
+        controller.getProjektbtb().setVisible(false);
+        controller.getOverblikforAdmin().setVisible(false);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Time Tracker alm. bruger");
+        stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
+        Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Currentstage.close();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+
+    }
+
+    /**
+     * tager det info som er inputtet i textfields og sender dem til model.
+     * @param event
+     * @throws NoSuchAlgorithmException
+     * @throws IOException 
+     */
+    @FXML
+    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException {
+        String email = emailTextField.getText();
+        String password = passwordTextField.getText();
+
+        if (model.login(email, password) == true) {
+            int role = model.getRole(email);
+
+            if (role == 1) {
+                handeladminlogin(event);
+            }
+            if (role == 2) {
+                handeluserlogin(event);
+            }
+        }
     }
 
 }

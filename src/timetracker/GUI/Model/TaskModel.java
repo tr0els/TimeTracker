@@ -5,8 +5,10 @@
  */
 package timetracker.GUI.Model;
 
+import java.security.NoSuchAlgorithmException;
 import timetracker.BE.Task;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,7 +28,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel implements Runnable{
+public class TaskModel implements Runnable {
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -54,8 +56,8 @@ public class TaskModel implements Runnable{
         allProfessions = FXCollections.observableArrayList();
 
     }
-    
-        @Override
+
+    @Override
     public void run() {
         try {
             model = new TaskModel();
@@ -64,15 +66,12 @@ public class TaskModel implements Runnable{
         } catch (SQLException ex) {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-            System.out.println("Done");
+
+        System.out.println("Done");
     }
 
-
-    public static TaskModel getInstance() throws DALException, SQLException
-    {
-        if (model == null)
-        {
+    public static TaskModel getInstance() throws DALException, SQLException {
+        if (model == null) {
             model = new TaskModel();
         }
         return model;
@@ -87,8 +86,7 @@ public class TaskModel implements Runnable{
      * @param hourlyPay
      * @throws DALException
      */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
-    {
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
         bll.createProject(clientID, projectName, hourlyPay);
     }
 
@@ -101,8 +99,7 @@ public class TaskModel implements Runnable{
      * @param hourlyPay
      * @throws DALException
      */
-    public void deleteProject(int projectID) throws DALException
-    {
+    public void deleteProject(int projectID) throws DALException {
         bll.deleteProject(projectID);
     }
 
@@ -115,8 +112,7 @@ public class TaskModel implements Runnable{
      * @param person_id
      * @return
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id)
-    {
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
         bll.startTask(task_name, billable, project_id, person_id);
     }
 
@@ -125,8 +121,7 @@ public class TaskModel implements Runnable{
      *
      * @param task_id
      */
-    public void stopTask(int person_id)
-    {
+    public void stopTask(int person_id) {
         bll.stopTask(person_id);
 
     }
@@ -138,8 +133,7 @@ public class TaskModel implements Runnable{
      * @param project_id
      * @return
      */
-    public ObservableList<Task> getTaskById(int project_id)
-    {
+    public ObservableList<Task> getTaskById(int project_id) {
         taskById.clear();
         taskById.addAll(bll.getTaskById(project_id));
         return taskById;
@@ -152,13 +146,11 @@ public class TaskModel implements Runnable{
      * @param task_id
      * @return
      */
-    public List<Log> getTaskLogListByDay(int person_id, int dag)
-    {
+    public List<Log> getTaskLogListByDay(int person_id, int dag) {
         return bll.getTaskLogListByDay(person_id, dag);
     }
 
-    public Task getTask(int task_id)
-    {
+    public Task getTask(int task_id) {
         return bll.getTask(task_id);
     }
 
@@ -169,8 +161,7 @@ public class TaskModel implements Runnable{
      * @param task_id
      * @return
      */
-    public ObservableList<Log> getTaskLogListById(int task_id)
-    {
+    public ObservableList<Log> getTaskLogListById(int task_id) {
         tasklogById.clear();
         tasklogById.addAll(bll.getTaskLogListById(task_id));
         return tasklogById;
@@ -185,8 +176,7 @@ public class TaskModel implements Runnable{
      * @param hourlyPay
      * @param projectID
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID)
-    {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
         bll.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
@@ -206,8 +196,7 @@ public class TaskModel implements Runnable{
         return allProjects;
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id)
-    {
+    public Project getProject(String projectName, int project_rate, int client_id) {
         return bll.getProject(projectName, project_rate, client_id);
     }
 
@@ -224,8 +213,7 @@ public class TaskModel implements Runnable{
      *
      * @param client
      */
-    public void editClient(Client client)
-    {
+    public void editClient(Client client) {
         bll.deleteClient(client);
     }
 
@@ -234,8 +222,7 @@ public class TaskModel implements Runnable{
      *
      * @param client
      */
-    public void deleteClient(Client client)
-    {
+    public void deleteClient(Client client) {
         bll.deleteClient(client);
     }
 
@@ -246,8 +233,7 @@ public class TaskModel implements Runnable{
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Client> getClients() throws DALException, SQLException
-    {
+    public ObservableList<Client> getClients() throws DALException, SQLException {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;
@@ -258,8 +244,7 @@ public class TaskModel implements Runnable{
      *
      * @param client
      */
-    public void createUser(User user)
-    {
+    public void createUser(User user) {
         bll.createUser(user);
     }
 
@@ -268,8 +253,7 @@ public class TaskModel implements Runnable{
      *
      * @param client
      */
-    public void editUser(User user)
-    {
+    public void editUser(User user) {
         bll.editUser(user);
     }
 
@@ -278,8 +262,7 @@ public class TaskModel implements Runnable{
      *
      * @param client
      */
-    public void deleteUser(User user)
-    {
+    public void deleteUser(User user) {
         bll.deleteUser(user);
     }
 
@@ -290,8 +273,7 @@ public class TaskModel implements Runnable{
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<User> getUsers() throws DALException, SQLException
-    {
+    public ObservableList<User> getUsers() throws DALException, SQLException {
         allUsers.clear();
         allUsers.addAll(bll.getUsers());
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
@@ -306,11 +288,31 @@ public class TaskModel implements Runnable{
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Profession> getProfessions() throws DALException, SQLException
-    {
+    public ObservableList<Profession> getProfessions() throws DALException, SQLException {
         allProfessions.addAll(bll.getProfessions());
         return allProfessions;
     }
 
+    /**
+     * sender det info fra MainControlleren videre til BLLManager
+     * @param email
+     * @param password
+     * @return
+     * @throws NoSuchAlgorithmException 
+     */
+    public boolean login(String email, String password) throws NoSuchAlgorithmException {
+        return bll.login(email, password);
+    }
+
+    /**
+     * henter rolen tilsvarende til den email som kommer fra MainControlleren
+     * @param username
+     * @return 
+     */
+    public int getRole(String username) {
+
+        return bll.getRole(username);
+
+    }
 
 }

@@ -72,12 +72,12 @@ public class ProjektManagerAdminController implements Initializable {
         model = TaskModel.getInstance();
     }
 
-    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
-        if (projektController == null) {
-            projektController = new ProjektManagerAdminController();
-        }
-        return projektController;
-    }
+//    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
+//        if (projektController == null) {
+//            projektController = new ProjektManagerAdminController();
+//        }
+//        return projektController;
+//    }
 
     ObservableList<Client> clients;
     TreeItem<Project> project;
@@ -110,6 +110,7 @@ public class ProjektManagerAdminController implements Initializable {
      */
     @FXML
     private void handleGetCreateAction(ActionEvent event) {
+        drawer.close();
         drawer.setSidePane(createProjectPane);
         drawer.open();
         drawer.toFront();
