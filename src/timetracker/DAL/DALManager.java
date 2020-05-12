@@ -185,6 +185,146 @@ public class DALManager {
         return null;
     }
 
+     /**
+     * returnere en liste af projecter hvor person_id har lavet tasks på.
+     *
+     * @param person_id
+     * @return
+     */
+    public List<Project> getProjectsbyID(int person_id) {
+        ArrayList<Project> projectsbyID = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT p.client_id, p.project_id, p.project_name, p.project_rate,\n"
+                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
+                    + "AS total_time\n"
+                    + "FROM Project p\n"
+                    + "JOIN Task t ON t.project_id = p.project_id\n"
+                    + "JOIN Task_log tl ON t.task_id = tl.task_id\n"
+                    + "WHERE t.person_id = ?\n"
+                    + "GROUP BY p.project_id, p.project_name, p.client_id, p.project_rate;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, person_id);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Project projects = new Project();
+
+                projects.setProject_id(rs.getInt("project_id"));
+                projects.setProject_name(rs.getString("project_name"));
+                projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setClient_id(rs.getInt("client_id"));
+                projects.setTotal_tid(rs.getString("total_time"));
+
+                projectsbyID.add(projects);
+            }
+
+        } catch (DALException | SQLException ex) {
+            Logger.getLogger(DALManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return projectsbyID;
+    }
+
+    /**
+     * Returnerer en liste af et projekts tilhørende Tasks udfra person_id og
+     * project_id
+     *
+     * @param project_id
+     * @param person_id
+     * @return
+     */
+    public List<Task> getTaskbyIDs(int project_id, int person_id) {
+        ArrayList<Task> taskbyID = new ArrayList<>();
+
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT t.task_id, t.task_name, t.project_id, t.person_id, MAX(tl.task_end) as last_worked_on, \n"
+                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
+                    + "AS total_time FROM Task t\n"
+                    + "INNER JOIN Task_log tl ON t.task_id = tl.task_id\n"
+                    + "WHERE t.person_id = ? AND t.project_id = ?\n"
+                    + "Group BY t.task_id, t.task_name, t.project_id, t.person_id;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, person_id);
+            ps.setInt(2, project_id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task();
+                int task_id = rs.getInt("task_id");
+                
+                task.setTask_id(task_id);
+                task.setTask_name(rs.getString("task_name"));
+                task.setProject_id(rs.getInt("project_id"));
+                task.setPerson_id(rs.getInt("person_id"));
+                task.setTotal_tid(rs.getString("total_time"));
+                task.setLast_worked_on(rs.getTimestamp("last_worked_on").toLocalDateTime());
+               
+                taskbyID.add(task);
+            }
+
+        } catch (Exception e) {
+            // todo
+        }
+
+        return taskbyID;
+    }
+
+    public List<Log> getLogsbyID(int task_id) {
+        ArrayList<Log> logsbyID = new ArrayList<>();
+        try ( Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT *,\n"
+                    + "CONVERT(VARCHAR(5),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60/60) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60%60), 2) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)%60),2)\n"
+                    + "AS total_time\n"
+                    + "FROM Task_log tl\n"
+                    + "WHERE tl.task_id = ?\n"
+                    + "ORDER BY task_start DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, task_id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Log log = new Log();
+
+                LocalDateTime end_time;
+                if (rs.getTimestamp("task_end") != null) {
+                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
+                } else {
+                    end_time = null;
+                }
+
+                log.setLog_id(rs.getInt("log_id"));
+                log.setTask_id(rs.getInt("task_id"));
+                log.setBillable(rs.getBoolean("billable"));
+                log.setTotal_tid(rs.getString("total_time"));
+                log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+                log.setEnd_time(end_time);
+
+                logsbyID.add(log);
+            }
+
+        } catch (Exception e) {
+        }
+
+        return logsbyID;
+    }
+    
     /**
      * Starter en ny task
      *
