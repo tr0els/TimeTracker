@@ -19,6 +19,7 @@ import timetracker.DAL.DALException;
  */
 public class ProjektModel {
 
+    private ObservableList<Project> projectsbyID;
     private ObservableList<Project> allProjects;
     private static BLLManager bll;
     private static ProjektModel model = null;
@@ -34,6 +35,7 @@ public class ProjektModel {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
         allProjects.addAll(bll.getProjects());
+        projectsbyID = FXCollections.observableArrayList();
 
     }
 
@@ -92,5 +94,10 @@ public class ProjektModel {
     public Project getProject(String projectName, int project_rate, int client_id) {
         return bll.getProject(projectName, project_rate, client_id);
     }
-
+    
+    
+    public ObservableList<Project> getProjectsbyID(int person_id) {
+        projectsbyID.addAll(bll.getProjectsbyID(person_id));
+        return projectsbyID;
+    }
 }
