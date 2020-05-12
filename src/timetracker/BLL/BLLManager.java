@@ -92,7 +92,25 @@ public class BLLManager {
         dal.stopTask(person_id);
 
     }
+    
+    public List<Project> getProjectsbyID(int person_id) {
+        return dal.getProjectsbyID(person_id);
+    }
 
+    /**
+     * returnere en liste af Tasks udfra et project_id
+     *
+     * @param project_id
+     * @return
+     */
+    public List<Task> getTaskbyIDs(int project_id, int person_id) {
+        return dal.getTaskbyIDs(project_id, person_id);
+    }
+
+    public List<Log> getLogsbyID(int task_id) {
+
+        return dal.getLogsbyID(task_id);
+    }
 
     /**
      * Sender det info fra TaskModel "editProject" videre til DAL laget
