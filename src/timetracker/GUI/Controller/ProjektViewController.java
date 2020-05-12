@@ -17,7 +17,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
@@ -49,10 +51,10 @@ public class ProjektViewController implements Initializable {
     private Label lblTasktotalTid;
     @FXML
     private Label lblProjecttotalTid;
-    @FXML
-    private TreeTableColumn<Task, Log> colObject;
 
     private int person_id;
+    @FXML
+    private TreeView<String> treeView;
 
     /**
      * Initializes the controller class.
@@ -70,9 +72,35 @@ public class ProjektViewController implements Initializable {
         showProjects();
         taskListener();
         projectListener();
+        createTree();
 
     }
 
+    
+    public void createTree(){
+    
+        TreeItem root = new TreeItem("Tasks");
+
+        
+        for (int i = 0; i < model.getTaskbyIDs(9, person_id).size(); i++) {
+            TreeItem task = new TreeItem<Task>(model.getTaskbyIDs(9, person_id).get(i));
+            root.getChildren().add(task);
+                        
+            int task_id = model.getTaskbyIDs(9, person_id).get(i).getTask_id();
+            for (int j = 0; j < model.getLogsbyID(task_id).size(); j++) {
+            TreeItem log = new TreeItem<Log> (model.getLogsbyID(task_id).get(j));
+            task.getChildren().add(log);
+                
+            }
+            
+            
+        }
+        
+        treeView.setRoot(root);
+        treeView.setShowRoot(false);
+    }
+    
+    
     /**
      * henter en liste over projekter og smider dem i vores combobox
      */
