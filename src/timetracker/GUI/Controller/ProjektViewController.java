@@ -85,7 +85,6 @@ public class ProjektViewController implements Initializable {
      */
     public void showTaskbyId(int project_id) {
 
-        listTaskbyId.setItems(model.getTaskById(project_id));
     }
 
     /**
@@ -93,7 +92,7 @@ public class ProjektViewController implements Initializable {
      * @param task_id 
      */
     public void showTaskLogById(int task_id) {
-        listTasklogbyId.setItems(model.getTaskLogListById(task_id));
+
     }
 
     /**

@@ -131,48 +131,7 @@ public class TaskModel implements Runnable {
 
     }
 
-    /**
-     * Bygger observable liste af task udfra et project_id som kan bruges i
-     * vores view
-     *
-     * @param project_id
-     * @return
-     */
-    public ObservableList<Task> getTaskById(int project_id) {
-        taskById.clear();
-        taskById.addAll(bll.getTaskById(project_id));
-        return taskById;
-    }
-
-    /**
-     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår
-     * osv.)
-     *
-     * @param task_id
-     * @return
-     */
-    public List<Log> getTaskLogListByDay(int person_id, int dag) {
-        return bll.getTaskLogListByDay(person_id, dag);
-    }
-
-    public Task getTask(int task_id) {
-        return bll.getTask(task_id);
-    }
-
-    /**
-     * Bygger observable liste af Logs udfra et task_id som kan bruges i vores
-     * view
-     *
-     * @param task_id
-     * @return
-     */
-    public ObservableList<Log> getTaskLogListById(int task_id) {
-        tasklogById.clear();
-        tasklogById.addAll(bll.getTaskLogListById(task_id));
-        return tasklogById;
-
-    }
-
+  
 //    /**
 //     * Sender det info fra MainControllerens "editProject" videre til DAL laget
 //     *

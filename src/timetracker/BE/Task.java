@@ -5,12 +5,8 @@
  */
 package timetracker.BE;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javafx.collections.ObservableList;
-import timetracker.DAL.DALException;
-import timetracker.DAL.DALManager;
 
 /**
  *
@@ -21,22 +17,41 @@ public class Task {
 
     private int task_id;
     private String task_name;
-    private boolean billable;
     private int project_id;
     private int person_id;
+    private String total_tid;
 
-    public Task(int task_id, String task_name, boolean billable, int project_id, int person_id) {
+    private LocalDateTime last_worked_on;
+
+    public Task(int task_id, String task_name, int project_id, int person_id, String total_tid, LocalDateTime last_worked_on) {
 
         this.task_id = task_id;
         this.task_name = task_name;
-        this.billable = billable;
         this.project_id = project_id;
         this.person_id = person_id;
+        this.total_tid = total_tid;
+        this.last_worked_on = last_worked_on;
 
     }
 
     public Task() {
 
+    }
+
+    public LocalDateTime getLast_worked_on() {
+        return last_worked_on;
+    }
+
+    public void setLast_worked_on(LocalDateTime last_worked_on) {
+        this.last_worked_on = last_worked_on;
+    }
+
+    public String getTotal_tid() {
+        return total_tid;
+    }
+
+    public void setTotal_tid(String total_tid) {
+        this.total_tid = total_tid;
     }
 
     public int getTask_id() {
@@ -53,14 +68,6 @@ public class Task {
 
     public void setTask_name(String task_name) {
         this.task_name = task_name;
-    }
-
-    public boolean isBillable() {
-        return billable;
-    }
-
-    public void setBillable(boolean billable) {
-        this.billable = billable;
     }
 
     public int getProject_id() {
@@ -81,11 +88,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return task_name;
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String last = last_worked_on.format(format);
+        return task_name + " | Total tid brugt: " + total_tid + " | Sidst arbejdet på: " + last;
     }
 
-    
-    
     /**
      * nested class med Log data
      */
@@ -93,25 +100,31 @@ public class Task {
 
         private LocalDateTime start_time;
         private LocalDateTime end_time;
-        private Time total_tid;
+        private String total_tid;
         private int task_id;
+        private int log_id;
         private boolean billable;
-        private String task_name;
-        private String project_name;
 
-        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, boolean billable, Time total_tid, String task_name, String project_name) {
+        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, boolean billable, String total_tid, int log_id) {
             this.start_time = start_time;
             this.end_time = end_time;
             this.task_id = task_id;
             this.total_tid = total_tid;
-            this.task_name = task_name;
             this.task_id = task_id;
-            this.project_name = project_name;
             this.billable = billable;
+            this.log_id = log_id;
         }
 
         public Log() {
 
+        }
+
+        public int getLog_id() {
+            return log_id;
+        }
+
+        public void setLog_id(int log_id) {
+            this.log_id = log_id;
         }
 
         public boolean isBillable() {
@@ -122,27 +135,11 @@ public class Task {
             this.billable = billable;
         }
 
-        public String getTask_name() {
-            return task_name;
-        }
-
-        public void setTask_name(String task_name) {
-            this.task_name = task_name;
-        }
-
-        public String getProject_name() {
-            return project_name;
-        }
-
-        public void setProject_name(String project_name) {
-            this.project_name = project_name;
-        }
-
-        public Time getTotal_tid() {
+        public String getTotal_tid() {
             return total_tid;
         }
 
-        public void setTotal_tid(Time total_tid) {
+        public void setTotal_tid(String total_tid) {
             this.total_tid = total_tid;
         }
 
@@ -172,18 +169,18 @@ public class Task {
 
         @Override
         public String toString() {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("yy-mm-dd HH:mm");
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             String start = start_time.format(format);
-            
+
             String slut = "ikke afsluttet";
-            if (end_time != null)
-            {slut = end_time.format(format);
+            if (end_time != null) {
+                slut = end_time.format(format);
             }
             String total = "-";
-            if (total_tid != null){
-                total = total_tid+"";
+            if (total_tid != null) {
+                total = total_tid + "";
             }
-            return ""+total+" | ["+start+" - "+slut+"]";
+            return "" + total + " | [" + start + " - " + slut + "]" + "billable: " + billable;
         }
 
     }

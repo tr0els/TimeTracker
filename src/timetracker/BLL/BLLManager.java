@@ -93,42 +93,6 @@ public class BLLManager {
 
     }
 
-    public Task getTask(int task_id) {
-        return dal.getTaskbyTaskID(task_id);
-    }
-
-    /**
-     * returnere en liste af Tasks udfra et project_id
-     *
-     * @param project_id
-     * @return
-     */
-    public List<Task> getTaskById(int project_id) {
-        return dal.getTaskbyProjectID(project_id);
-    }
-
-    /**
-     * returnere en liste af Logs udfra et task_id
-     *
-     * @param task_id
-     * @return
-     */
-    public List<Log> getTaskLogListById(int task_id) {
-
-        return dal.getTaskLogListbyTaskID(task_id);
-    }
-
-    /**
-     * returnere en liste af Logs udfra et person_id og dag (0 = idag, 1 = igår
-     * osv.)
-     *
-     * @param task_id
-     * @return
-     */
-    public List<Log> getTaskLogListByDay(int person_id, int dag) {
-
-        return dal.getTaskLogListbyDay(person_id, dag);
-    }
 
     /**
      * Sender det info fra TaskModel "editProject" videre til DAL laget
