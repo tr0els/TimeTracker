@@ -9,11 +9,9 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.OverviewForAdminsController">
    <children>
@@ -34,11 +32,6 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
-      <ScrollPane layoutX="-277.0" layoutY="300.0" prefHeight="189.0" prefWidth="200.0">
-         <content>
-            <VBox prefHeight="305.0" prefWidth="185.0" />
-         </content>
-      </ScrollPane>
       <JFXButton fx:id="Filterkanp" layoutX="507.0" layoutY="287.0" onAction="#handleFilteropen" text="Filter" />
       <AnchorPane fx:id="searchAnchorpane" layoutY="-195.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
          <children>

@@ -77,7 +77,6 @@ public class KlientManagerAdminController implements Initializable {
     private Client newclient = new Client();
     private static ClientModel model;
     private static TaskModel taskmodel;
-    @FXML
     private JFXButton btbGåtilprojekter;
     @FXML
     private JFXButton btbcancelnyklient;
@@ -104,9 +103,9 @@ public class KlientManagerAdminController implements Initializable {
             skuffe.close();
             retklientbtb.setVisible(false);
             retvalgteklientnbtb.setVisible(false);
-            btbGåtilprojekter.setVisible(false);
+          
             listviewprojekts.setTooltip(tooltipforprojektlist());
-            btbGåtilprojekter.setVisible(false);
+         
           
 
         
@@ -148,7 +147,7 @@ public class KlientManagerAdminController implements Initializable {
         
         //tilføjer projeketer til listviewet for den valgte klient
         addprojektstolistview(selectedClient);
-        btbGåtilprojekter.setVisible(true);
+       
         
         //resetter projekt info lablsne
         lblprojektnavn.setText("");
@@ -288,10 +287,6 @@ public class KlientManagerAdminController implements Initializable {
        
     }
 
-    @FXML
-    private void handelgåtilprojektview(ActionEvent event) {
-        //todo skal tage relevant info med til projekt view
-    }
 
     @FXML
     private void handleCancelRetklient(ActionEvent event) {

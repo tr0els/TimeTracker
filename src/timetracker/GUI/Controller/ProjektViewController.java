@@ -27,6 +27,7 @@ import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.Task.Log;
 import timetracker.DAL.DALException;
+import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -40,6 +41,7 @@ public class ProjektViewController implements Initializable {
     private AnchorPane root;
 
     private TaskModel model;
+    private ProjektModel pModel;
     @FXML
     private JFXComboBox<Project> projectMenubox;
     @FXML
@@ -54,6 +56,7 @@ public class ProjektViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             model = TaskModel.getInstance();
+            pModel = ProjektModel.getInstance();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,7 +73,7 @@ public class ProjektViewController implements Initializable {
      */
     public void showProjects() {
         try {
-            projectMenubox.setItems(model.getProjects());
+            projectMenubox.setItems(pModel.getProjects());
         } catch (DALException | SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }

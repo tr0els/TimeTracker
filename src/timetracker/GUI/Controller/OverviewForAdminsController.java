@@ -36,6 +36,9 @@ import timetracker.DAL.DALException;
 import timetracker.GUI.Model.TaskModel;
 import timetracker.BE.Task.Log;
 import timetracker.BE.User;
+import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.ClientModel;
+import timetracker.GUI.Model.ProjektModel;
 
 /**
  * FXML Controller class
@@ -72,15 +75,19 @@ public class OverviewForAdminsController implements Initializable {
     private PieChart piechart;
     @FXML
     private BarChart<?, ?> barchart;
-  
-    private TaskModel taskmodel;
     @FXML
     private JFXButton Filterkanp;
     @FXML
     private TableColumn<Project, String> colKlient;
     
+     private ProjektModel pModel;
+     private BrugerModel bModel;
+     private ClientModel cModel;
+    
     public OverviewForAdminsController() throws DALException, SQLException{
-    taskmodel = TaskModel.getInstance();
+    pModel = ProjektModel.getInstance();
+    bModel = BrugerModel.getInstance();
+    cModel = ClientModel.getInstance();
         
     }
 
@@ -94,11 +101,11 @@ public class OverviewForAdminsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+                try {
        filterskuffe.setSidePane(searchAnchorpane);
        filterskuffe.toFront();
        filterskuffe.close();
-        try {
+
             populatetable();
             populatecombobox();
         } catch (DALException ex) {
@@ -120,7 +127,7 @@ public class OverviewForAdminsController implements Initializable {
     
     public void populatetable() throws DALException, SQLException{
     
-       listeAfProjekter = taskmodel.getProjects();
+       listeAfProjekter = pModel.getProjects();
          //List<Task.Log> logList = new ArrayList<>();
          
          //logList = taskmodel.getTaskLogListById(1);
@@ -143,10 +150,8 @@ public class OverviewForAdminsController implements Initializable {
         //comboPerioder
         //comboProjekter
         
-        ComboMedarbejder.setItems(taskmodel.getUsers());
-        comboKlienter.setItems(taskmodel.getClients());
-        
-        
+        ComboMedarbejder.setItems(bModel.getUsers());
+        comboKlienter.setItems(cModel.getClients());
         
         
     

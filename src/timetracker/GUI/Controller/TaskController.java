@@ -41,6 +41,7 @@ import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 
 import timetracker.DAL.DALException;
+import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -52,6 +53,7 @@ import timetracker.GUI.Model.TaskModel;
 public class TaskController implements Initializable {
 
     private TaskModel model;
+    private ProjektModel pModel;
     @FXML
     private JFXTextField textTaskname;
     @FXML
@@ -85,6 +87,7 @@ public class TaskController implements Initializable {
 
         try {
             model = TaskModel.getInstance();
+            pModel = ProjektModel.getInstance();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,7 +125,7 @@ public class TaskController implements Initializable {
      */
     public void showProjects() {
         try {
-            comboListprojects.setItems(model.getProjects());
+            comboListprojects.setItems(pModel.getProjects());
         } catch (DALException | SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }

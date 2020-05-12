@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import timetracker.BE.Profession;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
+import timetracker.GUI.Model.BrugerModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -44,7 +45,7 @@ import timetracker.GUI.Model.TaskModel;
 public class UserManagerAdminController implements Initializable
 {
 
-    private static TaskModel model;
+    private static BrugerModel model;
     private ObservableList<Profession> allProf;
 
     @FXML
@@ -70,7 +71,7 @@ public class UserManagerAdminController implements Initializable
      */
     public UserManagerAdminController() throws DALException, SQLException
     {
-        model = TaskModel.getInstance();
+        model = BrugerModel.getInstance();
     }
 
     /**
