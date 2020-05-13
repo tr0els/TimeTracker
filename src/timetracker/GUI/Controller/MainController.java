@@ -76,7 +76,7 @@ public class MainController implements Initializable {
      * @throws IOException
      */
     @FXML
-    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException {
+    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException, DALException {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
 

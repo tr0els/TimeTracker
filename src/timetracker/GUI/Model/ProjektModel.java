@@ -57,6 +57,7 @@ public class ProjektModel {
      * laget
      *
      *
+     * @param projectID
      * @throws DALException
      */
     public void deleteProject(int projectID) throws DALException {
@@ -70,8 +71,9 @@ public class ProjektModel {
      * @param projectName
      * @param hourlyPay
      * @param projectID
+     * @throws timetracker.DAL.DALException
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException {
         bll.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
@@ -91,12 +93,12 @@ public class ProjektModel {
         return allProjects;
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id) {
+    public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
         return bll.getProject(projectName, project_rate, client_id);
     }
     
     
-    public ObservableList<Project> getProjectsbyID(int person_id) {
+    public ObservableList<Project> getProjectsbyID(int person_id) throws DALException {
         projectsbyID.addAll(bll.getProjectsbyID(person_id));
         return projectsbyID;
     }

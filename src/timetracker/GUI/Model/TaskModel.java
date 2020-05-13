@@ -115,18 +115,19 @@ public class TaskModel implements Runnable {
      * @param billable
      * @param project_id
      * @param person_id
-     * @return
+     * @throws timetracker.DAL.DALException
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
         bll.startTask(task_name, billable, project_id, person_id);
     }
 
     /**
      * Stopper en aktiv task
      *
-     * @param task_id
+     * @param person_id
+     * @throws timetracker.DAL.DALException
      */
-    public void stopTask(int person_id) {
+    public void stopTask(int person_id) throws DALException {
         bll.stopTask(person_id);
 
     }
@@ -136,16 +137,18 @@ public class TaskModel implements Runnable {
      * vores view
      *
      * @param project_id
+     * @param person_id
      * @return
+     * @throws timetracker.DAL.DALException
      */
-    public ObservableList<Task> getTaskbyIDs(int project_id, int person_id) {
+    public ObservableList<Task> getTaskbyIDs(int project_id, int person_id) throws DALException {
         taskById.clear();
         taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
         return taskById;
     }
 
     
-    public ObservableList<Log> getLogsbyID(int task_id){
+    public ObservableList<Log> getLogsbyID(int task_id) throws DALException{
         logsById.clear();
         logsById.addAll(bll.getLogsbyID(task_id));
         return logsById;
@@ -296,8 +299,9 @@ public class TaskModel implements Runnable {
      * @param password
      * @return
      * @throws NoSuchAlgorithmException
+     * @throws timetracker.DAL.DALException
      */
-    public User login(String email, String password) throws NoSuchAlgorithmException {
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
         return bll.login(email, password);
     }
 }

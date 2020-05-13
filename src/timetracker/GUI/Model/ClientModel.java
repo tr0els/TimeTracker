@@ -28,7 +28,7 @@ public class ClientModel {
     
     
     
-    private ClientModel() throws DALException, SQLException{
+    private ClientModel() throws DALException{
         bll = BLLManager.getInstance();
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
@@ -36,7 +36,7 @@ public class ClientModel {
         
     }
     
-      public static ClientModel getInstance() throws DALException, SQLException {
+      public static ClientModel getInstance() throws DALException {
         if (model == null) {
             model = new ClientModel();
         }
@@ -50,7 +50,7 @@ public class ClientModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Client> getClients() throws DALException, SQLException {
+    public ObservableList<Client> getClients() throws DALException {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
         allClients.sort(byName);
         return allClients;
@@ -61,9 +61,12 @@ public class ClientModel {
       /**
      * Sender Client objekt ned til DAL laget som skal oprettes.
      *
-     * @param client
+     * @param navn
+     * @param timepris
+     * @return 
+     * @throws timetracker.DAL.DALException
      */
-    public Client createClient(String navn, int timepris) {
+    public Client createClient(String navn, int timepris) throws DALException {
         return bll.createClient(navn, timepris);
     }
 
@@ -71,23 +74,24 @@ public class ClientModel {
      * Sender Client objekt ned til DAL laget som skal ændres.
      *
      * @param client
+     * @throws timetracker.DAL.DALException
      */
-    public void editClient(Client client) {
+    public void editClient(Client client) throws DALException {
       bll.editClient(client);
       
     }
 
     /**
-     * Sender Client objekt ned til DAL laget som skal slettes.
-     * det skal vi ikke kunne 
+     * Sender Client objekt ned til DAL laget som skal slettes.det skal vi ikke kunne 
      *
      * @param client
+     * @throws timetracker.DAL.DALException
      */
-    public void deleteClient(Client client) {
+    public void deleteClient(Client client) throws DALException {
         bll.deleteClient(client);
     }
     
-    public ObservableList<Project>  getClientprojcts(Client client){
+    public ObservableList<Project>  getClientprojcts(Client client) throws DALException{
         if (allProjectsbyClientID.isEmpty()){
         allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
         }else {

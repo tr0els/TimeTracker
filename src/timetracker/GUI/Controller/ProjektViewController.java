@@ -62,22 +62,25 @@ public class ProjektViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            model = TaskModel.getInstance();
-            Pmodel = ProjektModel.getInstance();
-
-        } catch (DALException | SQLException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        person_id = 1;
-        showProjects();
-        taskListener();
-        projectListener();
-        createTree();
+          
+                model = TaskModel.getInstance();
+                Pmodel = ProjektModel.getInstance();
+                  person_id = 1;
+            showProjects();
+            taskListener();
+            projectListener();
+            createTree();
+            } catch (DALException | SQLException ex) {
+                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          
+            
+       
 
     }
 
     
-    public void createTree(){
+    public void createTree() throws DALException{
     
         TreeItem root = new TreeItem("Tasks");
 
@@ -104,7 +107,7 @@ public class ProjektViewController implements Initializable {
     /**
      * henter en liste over projekter og smider dem i vores combobox
      */
-    public void showProjects() {
+    public void showProjects() throws DALException {
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
     }
 
@@ -113,7 +116,7 @@ public class ProjektViewController implements Initializable {
      *
      * @param project_id
      */
-    public void showTaskbyId(int project_id) {
+    public void showTaskbyId(int project_id) throws DALException {
 
         listTaskbyId.setItems(model.getTaskbyIDs(project_id, person_id));
     }
@@ -123,7 +126,7 @@ public class ProjektViewController implements Initializable {
      *
      * @param task_id
      */
-    public void showTaskLogById(int task_id) {
+    public void showTaskLogById(int task_id) throws DALException {
 
         listTasklogbyId.setItems(model.getLogsbyID(task_id));
 
@@ -136,10 +139,14 @@ public class ProjektViewController implements Initializable {
     public void projectListener() {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             if (newValue != null) {
-                listTasklogbyId.getItems().clear();
-                lblTasktotalTid.setText("");
-                lblProjecttotalTid.setText(newValue.getTotal_tid());
-                showTaskbyId(newValue.getProject_id());
+                try {
+                    listTasklogbyId.getItems().clear();
+                    lblTasktotalTid.setText("");
+                    lblProjecttotalTid.setText(newValue.getTotal_tid());
+                    showTaskbyId(newValue.getProject_id());
+                } catch (DALException ex) {
+                    Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });
@@ -154,8 +161,12 @@ public class ProjektViewController implements Initializable {
         listTaskbyId.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Task> observable, Task oldValue, Task newValue) -> {
 
             if (newValue != null) {
-                lblTasktotalTid.setText(newValue.getTotal_tid());
-                showTaskLogById(newValue.getTask_id());
+                try {
+                    lblTasktotalTid.setText(newValue.getTotal_tid());
+                    showTaskLogById(newValue.getTask_id());
+                } catch (DALException ex) {
+                    Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });

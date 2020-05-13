@@ -10,7 +10,7 @@ package timetracker.DAL;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class DALException extends Exception
+public class DALException extends Exception  
 {
 
     /**

@@ -32,7 +32,7 @@ public class BrugerModel {
         return model;
     }
 
-    public BrugerModel() throws DALException, SQLException {
+    public BrugerModel() throws DALException {
         bll = BLLManager.getInstance();
         allUsers = FXCollections.observableArrayList();
         allUsers.addAll(bll.getUsers());
@@ -43,7 +43,7 @@ public class BrugerModel {
      /**
      * Sender User objekt ned til DAL laget som skal oprettes.
      *
-     * @param client
+     * @param user
      */
     public void createUser(User user)
     {
@@ -53,9 +53,10 @@ public class BrugerModel {
     /**
      * Sender User objekt ned til DAL laget som skal ændres.
      *
-     * @param client
+     * @param user
+     * @throws timetracker.DAL.DALException
      */
-    public void editUser(User user)
+    public void editUser(User user) throws DALException
     {
         bll.editUser(user);
     }
@@ -63,9 +64,9 @@ public class BrugerModel {
     /**
      * Sender Client objekt ned til DAL laget som skal slettes.
      *
-     * @param client
+     * @param user
      */
-    public void deleteUser(User user)
+    public void deleteUser(User user) throws DALException
     {
         bll.deleteUser(user);
     }
@@ -77,7 +78,7 @@ public class BrugerModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<User> getUsers() throws DALException, SQLException
+    public ObservableList<User> getUsers() throws DALException
     {
         allUsers.clear();
         allUsers.addAll(bll.getUsers());
@@ -93,7 +94,7 @@ public class BrugerModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Profession> getProfessions() throws DALException, SQLException
+    public ObservableList<Profession> getProfessions() throws DALException
     {
         allProfessions.addAll(bll.getProfessions());
         return allProfessions;

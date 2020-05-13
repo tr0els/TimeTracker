@@ -104,8 +104,6 @@ public class ProjektManagerAdminController implements Initializable {
 
         } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         populateTreeTable();

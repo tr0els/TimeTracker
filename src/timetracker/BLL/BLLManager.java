@@ -20,6 +20,8 @@ import timetracker.BE.Task.Log;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
+import timetracker.DAL.GetDataFacadeimpl;
+import timetracker.DAL.IgetDataFacadeInterface;
 
 /**
  *
@@ -34,9 +36,11 @@ public class BLLManager {
      */
     private static DALManager dal;
     private static BLLManager bll = null;
+    private final IgetDataFacadeInterface iGetData;
 
     private BLLManager() throws DALException {
         dal = DALManager.getInstance();
+        iGetData = new GetDataFacadeimpl();
     }
 
     public static BLLManager getInstance() throws DALException {
@@ -46,30 +50,8 @@ public class BLLManager {
         return bll;
     }
 
-    /**
-     * Sender det info fra TaskModel "createProject" videre til DAL laget
-     *
-     * @param clientID
-     * @param projectName
-     * @param hourlyPay
-     * @throws DALException
-     */
-    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
-        dal.createProject(clientID, projectName, hourlyPay);
-    }
 
-    /**
-     * Sender det info fra TaskModel "deleteProject" videre til DAL laget
-     *
-     * @param clientID
-     * @param projectName
-     * @param hourlyPay
-     * @throws DALException
-     */
-    public void deleteProject(int projectID) throws DALException {
-        dal.deleteProject(projectID);
-    }
-
+    //-----TASK------
     /**
      * Starter en ny task
      *
@@ -77,24 +59,24 @@ public class BLLManager {
      * @param billable
      * @param project_id
      * @param person_id
-     * @return
+     * @throws timetracker.DAL.DALException
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id) {
-        dal.startTask(task_name, billable, project_id, person_id);
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
+        iGetData.startTask(task_name, billable, project_id, person_id);
     }
 
     /**
      * pauser/stopper en aktiv task
      *
-     * @param task_id
+     * @param person_id
      */
-    public void stopTask(int person_id) {
-        dal.stopTask(person_id);
+    public void stopTask(int person_id) throws DALException {
+        iGetData.stopTask(person_id);
 
     }
     
-    public List<Project> getProjectsbyID(int person_id) {
-        return dal.getProjectsbyID(person_id);
+    public List<Project> getProjectsbyID(int person_id) throws DALException  {
+        return iGetData.getProjectsbyID(person_id);
     }
 
     /**
@@ -103,13 +85,37 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public List<Task> getTaskbyIDs(int project_id, int person_id) {
-        return dal.getTaskbyIDs(project_id, person_id);
+    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+        return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
-    public List<Log> getLogsbyID(int task_id) {
+    public List<Log> getLogsbyID(int task_id) throws DALException {
 
-        return dal.getLogsbyID(task_id);
+        return iGetData.getLogsbyID(task_id);
+    }
+    
+    //------PROJEKTER----- 
+     /**
+     * Sender det info fra TaskModel "createProject" videre til DAL laget
+     *
+     * @param clientID
+     * @param projectName
+     * @param hourlyPay
+     * @throws DALException
+     */
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException {
+        iGetData.createProject(clientID, projectName, hourlyPay);
+        
+    }
+
+    /**
+     * Sender det info fra TaskModel "deleteProject" videre til DAL laget
+     *
+     * @param projectID
+     * @throws DALException
+     */
+    public void deleteProject(int projectID) throws DALException {
+        iGetData.deleteProject(projectID);
     }
 
     /**
@@ -119,9 +125,10 @@ public class BLLManager {
      * @param projectName
      * @param hourlyPay
      * @param projectID
+     * @throws timetracker.DAL.DALException
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
-        dal.editProject(clientID, projectName, hourlyPay, projectID);
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException {
+       iGetData.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
     /**
@@ -129,23 +136,28 @@ public class BLLManager {
      *
      * @return
      * @throws DALException
-     * @throws SQLException
      */
-    public List<Project> getProjects() throws DALException, SQLException {
-        return dal.getProjects();
+    public List<Project> getProjects() throws DALException {
+        return iGetData.getProjects();
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id) {
-        return dal.getProject(projectName, project_rate, client_id);
+    public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
+        return iGetData.getProject(projectName, project_rate, client_id);
+    }
+    
+        
+    public List<Project> getProjekctsbyClientID(Client client) throws DALException  {
+       return iGetData.getProjectsbyClientID(client);
     }
 
+    //-----KLIENTER-----
     /**
      * Sender Client objekt ned til DAL laget som skal oprettes.
      *
      * @param client
      */
-    public Client createClient(String navn, int timepris) {
-        return dal.createClient(navn, timepris);
+    public Client createClient(String navn, int timepris) throws DALException  {
+        return iGetData.createClient(navn, timepris);
 
     }
 
@@ -154,8 +166,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void editClient(Client client) {
-        dal.editClient(client);
+    public void editClient(Client client) throws DALException {
+        iGetData.editClient(client);
     }
 
     /**
@@ -163,8 +175,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void deleteClient(Client client) {
-        dal.deleteClient(client);
+    public void deleteClient(Client client) throws DALException  {
+        iGetData.deleteClient(client);
     }
 
     /**
@@ -174,16 +186,18 @@ public class BLLManager {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Client> getClients() throws DALException, SQLException {
-        return dal.getClients();
+    public List<Client> getClients() throws DALException {
+        return iGetData.getClients();
     }
-
+    
+    //------BRUGER------
+    
     /**
      * Sender User objekt ned til DAL laget som skal oprettes.
      *
      * @param client
      */
-    public void createUser(User user) {
+    public void createUser(User user)  {
         {
             SecureRandom random = new SecureRandom();
             byte[] salt = new byte[16];
@@ -196,7 +210,7 @@ public class BLLManager {
 
                 final byte[] HashedPassword = md.digest(user.getPassword().getBytes(StandardCharsets.UTF_8));
 
-                dal.createUser(user, HashedPassword, salt);
+                iGetData.createUser(user, HashedPassword, salt);
 
             } catch (final Exception e) {
             }
@@ -209,8 +223,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void editUser(User user) {
-        dal.editUser(user);
+    public void editUser(User user) throws DALException {
+        iGetData.editUser(user);
     }
 
     /**
@@ -218,8 +232,8 @@ public class BLLManager {
      *
      * @param client
      */
-    public void deleteUser(User user) {
-        dal.deleteUser(user);
+    public void deleteUser(User user) throws DALException {
+        iGetData.deleteUser(user);
     }
 
     /**
@@ -229,8 +243,8 @@ public class BLLManager {
      * @throws DALException
      * @throws SQLException
      */
-    public List<User> getUsers() throws DALException, SQLException {
-        return dal.getUsers();
+    public List<User> getUsers() throws DALException {
+        return iGetData.getUsers();
     }
 
     /**
@@ -240,13 +254,11 @@ public class BLLManager {
      * @throws DALException
      * @throws SQLException
      */
-    public List<Profession> getProfessions() throws DALException, SQLException {
-        return dal.getProfessions();
+    public List<Profession> getProfessions() throws DALException {
+        return iGetData.getProfessions();
     }
 
-    public List<Project> getProjekctsbyClientID(Client client) {
-        return dal.getProjectsbyClientID(client);
-    }
+
 
     /**
      * tager det input som kommer fra modelen og hasher passworded, sender det
@@ -257,7 +269,7 @@ public class BLLManager {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public User login(String email, String password) throws NoSuchAlgorithmException {
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
         byte[] salt = dal.getSalt(email);
 
         final MessageDigest md = MessageDigest.getInstance("SHA-512");
@@ -265,7 +277,7 @@ public class BLLManager {
 
         final byte[] HashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
 
-        return dal.login(email, HashedPassword);
+        return iGetData.login(email, HashedPassword);
 
     }
 }
