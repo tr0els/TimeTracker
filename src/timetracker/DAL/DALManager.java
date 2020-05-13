@@ -634,61 +634,61 @@ public class DALManager {
 //        return null;
 //    }
 
-    /**
-     * tjekker om det login info som kommer fra BLLManageren er det samme som
-     * ligger på serveren. hvis ja returnere den et boolean som er true.
-     *
-     * @param email
-     * @param hashedPassword
-     * @return
-     */
-    public User login(String email, byte[] hashedPassword) {
-
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ?";
-            PreparedStatement st = con.prepareStatement(sql);
-            st.setNString(1, email);
-            st.setBytes(2, hashedPassword);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next() == false) {
-                System.out.println("ResultSet is empty");
-            } else {
-                do {
-                    User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
-                    String emailDAO = user.getEmail();
-                    byte[] passwordDAO = rs.getBytes("password");
-
-                    if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword)) {
-                        return user;
-                    }
-                } while (rs.next());
-            }
-        } catch (DALException | SQLException ex) {
-        }
-        return null;
-    }
-
-    /**
-     * henter det random "salt" som er tilsvarende den email som kommer fra
-     * BLLManageren
-     *
-     * @param email
-     * @return
-     */
-    public byte[] getSalt(String email) {
-        byte[] salt = null;
-
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT email, salt FROM PERSON WHERE email = ?";
-            PreparedStatement st = con.prepareStatement(sql);
-            st.setNString(1, email);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                salt = rs.getBytes("salt");
-            }
-        } catch (Exception e) {
-        }
-        return salt;
-    }
+//    /**
+//     * tjekker om det login info som kommer fra BLLManageren er det samme som
+//     * ligger på serveren. hvis ja returnere den et boolean som er true.
+//     *
+//     * @param email
+//     * @param hashedPassword
+//     * @return
+//     */
+//    public User login(String email, byte[] hashedPassword) {
+//
+//        try ( Connection con = dbCon.getConnection()) {
+//            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ?";
+//            PreparedStatement st = con.prepareStatement(sql);
+//            st.setNString(1, email);
+//            st.setBytes(2, hashedPassword);
+//            ResultSet rs = st.executeQuery();
+//
+//            if (rs.next() == false) {
+//                System.out.println("ResultSet is empty");
+//            } else {
+//                do {
+//                    User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
+//                    String emailDAO = user.getEmail();
+//                    byte[] passwordDAO = rs.getBytes("password");
+//
+//                    if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword)) {
+//                        return user;
+//                    }
+//                } while (rs.next());
+//            }
+//        } catch (DALException | SQLException ex) {
+//        }
+//        return null;
+//    }
+//
+//    /**
+//     * henter det random "salt" som er tilsvarende den email som kommer fra
+//     * BLLManageren
+//     *
+//     * @param email
+//     * @return
+//     */
+//    public byte[] getSalt(String email) {
+//        byte[] salt = null;
+//
+//        try ( Connection con = dbCon.getConnection()) {
+//            String sql = "SELECT email, salt FROM PERSON WHERE email = ?";
+//            PreparedStatement st = con.prepareStatement(sql);
+//            st.setNString(1, email);
+//            ResultSet rs = st.executeQuery();
+//            while (rs.next()) {
+//                salt = rs.getBytes("salt");
+//            }
+//        } catch (Exception e) {
+//        }
+//        return salt;
+//    }
 }

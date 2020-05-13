@@ -270,7 +270,7 @@ public class BLLManager {
      * @throws NoSuchAlgorithmException
      */
     public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-        byte[] salt = dal.getSalt(email);
+        byte[] salt = iGetData.getSalt(email);
 
         final MessageDigest md = MessageDigest.getInstance("SHA-512");
         md.update(salt);
