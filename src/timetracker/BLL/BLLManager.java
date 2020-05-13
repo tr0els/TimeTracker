@@ -34,12 +34,12 @@ public class BLLManager {
      * Singleton opsætning af vores BLLManager. singleton gør at vores
      * bllmanager ikke vil blive instansieret mere end en gang.
      */
-    private static DALManager dal;
+    //private static DALManager dal;
     private static BLLManager bll = null;
     private final IgetDataFacadeInterface iGetData;
 
     private BLLManager() throws DALException {
-        dal = DALManager.getInstance();
+       // dal = DALManager.getInstance();
         iGetData = new GetDataFacadeimpl();
     }
 
