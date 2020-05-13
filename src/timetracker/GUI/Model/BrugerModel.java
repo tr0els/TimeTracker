@@ -5,6 +5,7 @@
  */
 package timetracker.GUI.Model;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
@@ -38,6 +39,20 @@ public class BrugerModel {
         allUsers.addAll(bll.getUsers());
         allProfessions = FXCollections.observableArrayList();
 
+    }
+    
+    
+        /**
+     * sender det info fra MainControlleren videre til BLLManager
+     *
+     * @param email
+     * @param password
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws timetracker.DAL.DALException
+     */
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
+        return bll.login(email, password);
     }
     
      /**
