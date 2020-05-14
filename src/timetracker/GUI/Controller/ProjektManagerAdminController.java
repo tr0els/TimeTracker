@@ -245,7 +245,7 @@ public class ProjektManagerAdminController implements Initializable {
 
         //opretter colonerne
         JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("Projekt");
-        projectName.setPrefWidth(150);
+        projectName.setPrefWidth(250);
         JFXTreeTableColumn<Project, String> projectClient = new JFXTreeTableColumn<>("Klient");
         projectClient.setPrefWidth(150);
         JFXTreeTableColumn<Project, String> projectRate = new JFXTreeTableColumn<>("Timepris");
