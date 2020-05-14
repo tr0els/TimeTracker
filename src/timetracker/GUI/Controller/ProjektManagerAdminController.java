@@ -34,7 +34,6 @@ import timetracker.BE.Project;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ClientModel;
 import timetracker.GUI.Model.ProjektModel;
-import timetracker.GUI.Model.TaskModel;
 
 /**
  * FXML Controller class
@@ -245,18 +244,32 @@ public class ProjektManagerAdminController implements Initializable {
     private void populateTreeTable() {
 
         //opretter colonerne
-        JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("projekt");
+        JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("Projekt");
         projectName.setPrefWidth(150);
-        JFXTreeTableColumn<Project, String> totalTidBrugt = new JFXTreeTableColumn<>("Total Tid Brugt");
-        totalTidBrugt.setPrefWidth(150);
-        JFXTreeTableColumn<Project, String> sidstArbejdetPå = new JFXTreeTableColumn<>("Sidst Arbejdet På");
-        sidstArbejdetPå.setPrefWidth(150);
+        JFXTreeTableColumn<Project, String> projectClient = new JFXTreeTableColumn<>("Klient");
+        projectClient.setPrefWidth(150);
+        JFXTreeTableColumn<Project, String> projectRate = new JFXTreeTableColumn<>("Timepris");
+        projectRate.setPrefWidth(150);
 
         //vælger hvilket data der skal vises (i dette tilfælde projekt navnet) og hvilken colone det skal vises i
         projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
-                return new SimpleStringProperty(param.getValue().getValue().project_name);
+                return new SimpleStringProperty(param.getValue().getValue().getProject_name());
+            }
+        });
+        
+        projectClient.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
+                return new SimpleStringProperty(param.getValue().getValue().getClientName());
+            }
+        });
+        
+        projectRate.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
+                return new SimpleStringProperty(Integer.toString(param.getValue().getValue().getProject_rate()));
             }
         });
 
@@ -275,7 +288,7 @@ public class ProjektManagerAdminController implements Initializable {
         //sætter dataen ind i selve treetableviewet
         final TreeItem<Project> root = new RecursiveTreeItem<Project>(projects, RecursiveTreeObject::getChildren);
 
-        treeView.getColumns().setAll(projectName, totalTidBrugt, sidstArbejdetPå);
+        treeView.getColumns().setAll(projectName, projectClient, projectRate);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
