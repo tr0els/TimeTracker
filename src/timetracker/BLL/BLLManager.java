@@ -150,12 +150,24 @@ public class BLLManager {
     public List<Project> getProjekctsbyClientID(Client client) throws DALException  {
        return iGetData.getProjectsbyClientID(client);
     }
+    
+       public  List<Project> getProjectsWithExtradata() throws DALException {
+       return iGetData.getProjectWithExtraData();
+    }
+       
+      
+    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+        return iGetData.getProjectsForEmploy(medarbejder_id);
+    }
 
     //-----KLIENTER-----
     /**
      * Sender Client objekt ned til DAL laget som skal oprettes.
      *
-     * @param client
+     * @param navn
+     * @param timepris
+     * @return 
+     * @throws timetracker.DAL.DALException
      */
     public Client createClient(String navn, int timepris) throws DALException  {
         return iGetData.createClient(navn, timepris);
@@ -281,4 +293,6 @@ public class BLLManager {
         return iGetData.login(email, HashedPassword);
 
     }
+
+ 
 }

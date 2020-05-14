@@ -21,6 +21,8 @@ public class Project extends RecursiveTreeObject<Project>
     private int client_id;
     private String clientName;
     private String total_tid;
+    private String billableTime;
+
 
     public Project(int project_id, String project_name, int project_rate, int client_id, String total_tid)
     {
@@ -36,7 +38,14 @@ public class Project extends RecursiveTreeObject<Project>
     public Project()
     {
     }
-    
+    public String getBillableTime() {
+        return billableTime;
+    }
+
+    public void setBillableTime(String billableTime) {
+        this.billableTime = billableTime;
+    }
+
     public int getProject_id()
     {
         return project_id;
