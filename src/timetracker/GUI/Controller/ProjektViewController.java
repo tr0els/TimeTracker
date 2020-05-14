@@ -5,6 +5,7 @@
  */
 package timetracker.GUI.Controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import java.net.URL;
@@ -48,6 +49,12 @@ public class ProjektViewController implements Initializable {
     private int person_id;
     @FXML
     private TreeView<String> treeView;
+    @FXML
+    private Label lblProjectnavn;
+    @FXML
+    private Label lblProjectTid;
+    @FXML
+    private JFXButton btnEdit;
 
     /**
      * Initializes the controller class.
@@ -77,6 +84,7 @@ public class ProjektViewController implements Initializable {
             Task hashTask = entry.getKey();
             TreeItem task = new TreeItem<Task>(hashTask);
             root.getChildren().add(task);
+            
 
             List<Log> logs = entry.getValue();
 
@@ -107,6 +115,8 @@ public class ProjektViewController implements Initializable {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             if (newValue != null) {
                 try {
+                    lblProjectnavn.setText(newValue.getProject_name());
+                    lblProjectTid.setText(newValue.getTotal_tid());
                     createTree(newValue.getProject_id());
                 } catch (DALException ex) {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
