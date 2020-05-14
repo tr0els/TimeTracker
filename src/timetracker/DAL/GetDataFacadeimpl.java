@@ -69,6 +69,17 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     public List<Project> getProjectsbyID(int personId) throws DALException {
     return projectdao.getProjectsbyID(personId);
     }
+    
+      @Override
+    public List<Project> getProjectWithExtraData() throws DALException {
+        return projectdao.getProjectsWithExtraData();
+    }
+    
+      @Override
+    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+       return projectdao.getProjectsForEmploy(medarbejder_id);
+    }
+    
     //Task
     @Override
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException{
@@ -147,6 +158,10 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     public List<Profession> getProfessions()throws DALException {
     return brugerdao.getProfessions();
     }
+
+  
+
+  
 
 
 

@@ -33,6 +33,10 @@ public interface IgetDataFacadeInterface {
     List<Project> getProjectsbyID(int personId) throws DALException;
     
     Project getProject(String projectName, int ProjectRate, int ClientId) throws DALException;
+    
+    List<Project> getProjectWithExtraData() throws DALException;
+    
+    List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
         
     
     
@@ -75,6 +79,8 @@ public interface IgetDataFacadeInterface {
      
      //Burger --> profession
      List<Profession> getProfessions()throws DALException;
+
+  
      
      
 }
