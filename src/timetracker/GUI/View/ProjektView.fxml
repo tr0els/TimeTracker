@@ -24,6 +24,6 @@
          </font>
       </Label>
       <Label layoutX="482.0" layoutY="158.0" prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
-      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" text="Redigere" textAlignment="RIGHT" />
+      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" onAction="#handleEditTask" text="Redigere" textAlignment="RIGHT" />
    </children>
 </AnchorPane>

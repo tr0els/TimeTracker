@@ -16,12 +16,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
@@ -48,7 +49,7 @@ public class ProjektViewController implements Initializable {
 
     private int person_id;
     @FXML
-    private TreeView<String> treeView;
+    private TreeView<Log> treeView;
     @FXML
     private Label lblProjectnavn;
     @FXML
@@ -77,26 +78,42 @@ public class ProjektViewController implements Initializable {
 
     public void createTree(int project_id) throws DALException {
 
-        
-        TreeItem root = new TreeItem("Tasks");
+        treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isLeaf()) {
+                treeView.getSelectionModel().select(newValue.getChildren().get(0));
+            }
+            if (newValue != null && newValue.isLeaf()) {
+                treeView.getSelectionModel().select(newValue);
+            }
+            if (newValue != null && !newValue.isLeaf() && oldValue != null && oldValue.isLeaf()) {
+                if (oldValue == newValue.getChildren().get(0)) {
+                } else {
+                    treeView.getSelectionModel().select(newValue.getChildren().get(0));
+                }
+            }
+            
+            
+                        
+        });
+
+        TreeItem treeRoot = new TreeItem("Tasks");
 
         for (Map.Entry<Task, List<Log>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
             Task hashTask = entry.getKey();
             TreeItem task = new TreeItem<Task>(hashTask);
-            root.getChildren().add(task);
-            
+            treeRoot.getChildren().add(task);
 
             List<Log> logs = entry.getValue();
 
             for (int j = 0; j < logs.size(); j++) {
-                TreeItem log = new TreeItem<Log>(logs.get(j));
+                TreeItem<Log> log = new TreeItem<Log>(logs.get(j));
                 task.getChildren().add(log);
 
             }
 
         }
 
-        treeView.setRoot(root);
+        treeView.setRoot(treeRoot);
         treeView.setShowRoot(false);
     }
 
@@ -124,6 +141,13 @@ public class ProjektViewController implements Initializable {
 
             }
         });
+    }
+
+    @FXML
+    private void handleEditTask(ActionEvent event) {
+        
+        System.out.println(treeView.getSelectionModel().getSelectedItem().getValue().getTask_id());
+
     }
 
 }

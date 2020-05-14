@@ -177,7 +177,7 @@ public class TaskDAO {
                     + "FROM Tasklog t\n"
                     + "WHERE person_id = ? and project_id = ?\n"
                     + "GROUP BY t.project_id, t.task_name, t.billable, t.task_id\n"
-                    + "ORDER BY t.project_id, group_key, type ASC, task_start DESC;";
+                    + "ORDER BY group_key, type ASC, task_start DESC;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
