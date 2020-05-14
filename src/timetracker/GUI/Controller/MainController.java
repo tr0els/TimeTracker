@@ -23,7 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import timetracker.GUI.Model.TaskModel;
+import timetracker.GUI.Model.BrugerModel;
+
 
 /**
  *
@@ -36,7 +37,7 @@ public class MainController implements Initializable {
      * Singleton opsætning af vores MainController. singleton gør at vores
      * maincontroller ikke vil blive instansieret mere end en gang.
      */
-    private static TaskModel model;
+    private static BrugerModel model;
     private static MainController main = null;
     @FXML
     private AnchorPane root;
@@ -52,7 +53,7 @@ public class MainController implements Initializable {
     private JFXTextField passwordTextField;
 
     public MainController() throws DALException, SQLException {
-        model = TaskModel.getInstance();
+        model = BrugerModel.getInstance();
     }
 
     public static MainController getInstance() throws DALException, SQLException {
@@ -76,7 +77,7 @@ public class MainController implements Initializable {
      * @throws IOException
      */
     @FXML
-    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException {
+    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException, DALException {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
 

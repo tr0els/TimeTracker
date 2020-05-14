@@ -7,6 +7,7 @@ package timetracker.GUI.Model;
 
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Project;
@@ -21,6 +22,7 @@ public class ProjektModel {
 
     private ObservableList<Project> projectsbyID;
     private ObservableList<Project> allProjects;
+    private ObservableList<Project> allProjectsWitExtraData;
     private static BLLManager bll;
     private static ProjektModel model = null;
 
@@ -35,6 +37,7 @@ public class ProjektModel {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
         allProjects.addAll(bll.getProjects());
+        allProjectsWitExtraData = FXCollections.observableArrayList();
         projectsbyID = FXCollections.observableArrayList();
 
     }
@@ -57,6 +60,7 @@ public class ProjektModel {
      * laget
      *
      *
+     * @param projectID
      * @throws DALException
      */
     public void deleteProject(int projectID) throws DALException {
@@ -70,8 +74,9 @@ public class ProjektModel {
      * @param projectName
      * @param hourlyPay
      * @param projectID
+     * @throws timetracker.DAL.DALException
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException {
         bll.editProject(clientID, projectName, hourlyPay, projectID);
     }
 
@@ -91,13 +96,27 @@ public class ProjektModel {
         return allProjects;
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id) {
+    public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
         return bll.getProject(projectName, project_rate, client_id);
     }
     
     
-    public ObservableList<Project> getProjectsbyID(int person_id) {
+    public ObservableList<Project> getProjectsbyID(int person_id) throws DALException {
         projectsbyID.addAll(bll.getProjectsbyID(person_id));
         return projectsbyID;
     }
+    
+    public ObservableList<Project> getProjectsWithExtraData() throws DALException{
+      allProjectsWitExtraData.addAll(bll.getProjectsWithExtradata());
+      return allProjectsWitExtraData;
+    }
+    
+      
+    public ObservableList<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+        allProjectsWitExtraData.clear();
+        allProjectsWitExtraData.addAll(bll.getProjectsForEmploy(medarbejder_id));
+        return allProjectsWitExtraData;
+    }
+    
+    
 }

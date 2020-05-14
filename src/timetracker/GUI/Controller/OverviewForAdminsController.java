@@ -15,25 +15,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import timetracker.BE.Client;
-import timetracker.BE.Task;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.TaskModel;
 import timetracker.BE.Task.Log;
 import timetracker.BE.User;
 import timetracker.GUI.Model.BrugerModel;
@@ -68,9 +67,7 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private TableColumn<Project, String> colprojekts;
     @FXML
-    private TableColumn<Log, String> coltotaltid;
-    @FXML
-    private TableColumn<Project, String> colsidstarbpå;
+    private TableColumn<Project, String> coltotaltid;
     @FXML
     private PieChart piechart;
     @FXML
@@ -79,10 +76,13 @@ public class OverviewForAdminsController implements Initializable {
     private JFXButton Filterkanp;
     @FXML
     private TableColumn<Project, String> colKlient;
+    @FXML
+    private TableColumn<Project, String> colBillable;
     
      private ProjektModel pModel;
      private BrugerModel bModel;
      private ClientModel cModel;
+         
     
     public OverviewForAdminsController() throws DALException, SQLException{
     pModel = ProjektModel.getInstance();
@@ -93,7 +93,7 @@ public class OverviewForAdminsController implements Initializable {
 
     
     private ObservableList<Project> listeAfProjekter;
-    
+    FilteredList<Project> filteredItems;
 
     /**
      * Initializes the controller class.
@@ -105,8 +105,10 @@ public class OverviewForAdminsController implements Initializable {
        filterskuffe.setSidePane(searchAnchorpane);
        filterskuffe.toFront();
        filterskuffe.close();
+       filteredItems = new FilteredList<>(FXCollections.observableList(pModel.getProjectsWithExtraData()));
 
             populatetable();
+            addFilter();
             populatecombobox();
         } catch (DALException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,35 +129,75 @@ public class OverviewForAdminsController implements Initializable {
     
     public void populatetable() throws DALException, SQLException{
     
-       listeAfProjekter = pModel.getProjects();
+       //listeAfProjekter = pModel.getProjectsWithExtraData();
          //List<Task.Log> logList = new ArrayList<>();
          
          //logList = taskmodel.getTaskLogListById(1);
          
-    //    logList 
-      //  String startTid = getStart_time().format(DateTimeFormatter.ofPattern("HH:mm"));
-       
-       colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
-       
-       //coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid().toString()));
-       
-       tableview.setItems(listeAfProjekter);
+     
+      colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
+      coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
+      colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
+      colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()) );
+     //  tableview.setItems(listeAfProjekter);
    
     }
     
     private void populatecombobox() throws DALException, SQLException{
     
-        //ComboMedarbejder
-        //comboKlienter
+        
         //comboPerioder
         //comboProjekter
         
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
         
+          
+    }
+    
+    
+//    public void combofilter(ActionEvent event){
+//       
+//          FilteredList<Project> filteredItems = new FilteredList<Project>(listeAfProjekter, p -> true);
+//
+//        
+//        int val = comboKlienter.getValue().getClient_id();
+//        
+//       
+//    
+//    }
+    
+    
+    public void addFilter() throws DALException{
+        ObjectProperty<Predicate<Project>> klientFilter = new SimpleObjectProperty<>();
+        //ObjectProperty<Predicate<Project>> medarbejderFilter = new SimpleObjectProperty<>();
+        
+        klientFilter.bind(Bindings.createObjectBinding(() -> 
+            project -> comboKlienter.getValue() == null || comboKlienter.getValue().getClient_id() == project.getClient_id(), 
+            comboKlienter.valueProperty()));    
+        
+         tableview.setItems(filteredItems);
+         
+          filteredItems.predicateProperty().bind(Bindings.createObjectBinding(
+                () -> klientFilter.get(), 
+                klientFilter));
+    }
+    
+    public void getProjectsForEmploy() throws DALException{
+        
+        int medarbejderid = ComboMedarbejder.getValue().getPerson_id();
+        listeAfProjekter = pModel.getProjectsForEmploy(medarbejderid);
+       // tableview.getItems().clear();
+        tableview.setItems(listeAfProjekter);
+        
         
     
     }
-    
+
+    @FXML
+    private void handelComboMedarbejder(ActionEvent event) throws DALException {
+        getProjectsForEmploy();
+    }
+
     
 }

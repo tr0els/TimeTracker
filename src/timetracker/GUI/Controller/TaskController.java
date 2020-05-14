@@ -105,7 +105,7 @@ public class TaskController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleCreateTask(ActionEvent event) {
+    private void handleCreateTask(ActionEvent event) throws DALException {
         startTask();
     }
 
@@ -134,7 +134,7 @@ public class TaskController implements Initializable {
     /**
      * Tager de relevante informationer fra GUI og sender videre.
      */
-    public void startTask() {
+    public void startTask() throws DALException {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
@@ -150,7 +150,7 @@ public class TaskController implements Initializable {
     /**
      * stop task via task_id
      */
-    public void stopTask() {
+    public void stopTask() throws DALException {
 
         model.stopTask(person_id);
     }
