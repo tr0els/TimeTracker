@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,15 +44,6 @@ public class ProjektViewController implements Initializable {
     private ProjektModel Pmodel;
     @FXML
     private JFXComboBox<Project> projectMenubox;
-    @FXML
-    private JFXListView<Task> listTaskbyId;
-    @FXML
-    private JFXListView<Log> listTasklogbyId;
-
-    @FXML
-    private Label lblTasktotalTid;
-    @FXML
-    private Label lblProjecttotalTid;
 
     private int person_id;
     @FXML
@@ -62,74 +55,48 @@ public class ProjektViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-          
-                model = TaskModel.getInstance();
-                Pmodel = ProjektModel.getInstance();
-                  person_id = 1;
+
+            model = TaskModel.getInstance();
+            Pmodel = ProjektModel.getInstance();
+            person_id = 1;
             showProjects();
-            taskListener();
             projectListener();
-            createTree();
-            } catch (DALException | SQLException ex) {
-                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-          
-            
-       
+
+        } catch (DALException | SQLException ex) {
+            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
-    
-    public void createTree() throws DALException{
-    
-        TreeItem root = new TreeItem("Tasks");
+    public void createTree(int project_id) throws DALException {
 
         
-        for (int i = 0; i < model.getTaskbyIDs(9, person_id).size(); i++) {
-            TreeItem task = new TreeItem<Task>(model.getTaskbyIDs(9, person_id).get(i));
+        TreeItem root = new TreeItem("Tasks");
+
+        for (Map.Entry<Task, List<Log>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
+            Task hashTask = entry.getKey();
+            TreeItem task = new TreeItem<Task>(hashTask);
             root.getChildren().add(task);
-                        
-            int task_id = model.getTaskbyIDs(9, person_id).get(i).getTask_id();
-            for (int j = 0; j < model.getLogsbyID(task_id).size(); j++) {
-            TreeItem log = new TreeItem<Log> (model.getLogsbyID(task_id).get(j));
-            task.getChildren().add(log);
-                
+
+            List<Log> logs = entry.getValue();
+
+            for (int j = 0; j < logs.size(); j++) {
+                TreeItem log = new TreeItem<Log>(logs.get(j));
+                task.getChildren().add(log);
+
             }
-            
-            
+
         }
-        
+
         treeView.setRoot(root);
         treeView.setShowRoot(false);
     }
-    
-    
+
     /**
      * henter en liste over projekter og smider dem i vores combobox
      */
     public void showProjects() throws DALException {
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
-    }
-
-    /**
-     * henter en liste af task udfra et project_id og smider dem i et listview
-     *
-     * @param project_id
-     */
-    public void showTaskbyId(int project_id) throws DALException {
-
-        listTaskbyId.setItems(model.getTaskbyIDs(project_id, person_id));
-    }
-
-    /**
-     * henter en liste af logs udfra et task_id og smider dem i et listview
-     *
-     * @param task_id
-     */
-    public void showTaskLogById(int task_id) throws DALException {
-
-        listTasklogbyId.setItems(model.getLogsbyID(task_id));
-
     }
 
     /**
@@ -140,30 +107,7 @@ public class ProjektViewController implements Initializable {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             if (newValue != null) {
                 try {
-                    listTasklogbyId.getItems().clear();
-                    lblTasktotalTid.setText("");
-                    lblProjecttotalTid.setText(newValue.getTotal_tid());
-                    showTaskbyId(newValue.getProject_id());
-                } catch (DALException ex) {
-                    Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            }
-        });
-    }
-
-    /**
-     * en listener på vores listview med task, den smider logs ind i et andet
-     * listview baseret på det valgte task.
-     */
-    public void taskListener() {
-        listTaskbyId.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        listTaskbyId.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Task> observable, Task oldValue, Task newValue) -> {
-
-            if (newValue != null) {
-                try {
-                    lblTasktotalTid.setText(newValue.getTotal_tid());
-                    showTaskLogById(newValue.getTask_id());
+                    createTree(newValue.getProject_id());
                 } catch (DALException ex) {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }

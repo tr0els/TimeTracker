@@ -5,6 +5,7 @@
  */
 package timetracker.DAL;
 
+import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -42,9 +43,9 @@ public interface IgetDataFacadeInterface {
     
    // Task getTaskbyTaskID(int task_id)throws DALException;
     
-    List<Task> getTaskbyIDs(int project_id, int person_id)throws DALException;
+    HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id)throws DALException;
     
-    List<Log> getLogsbyID(int task_id)throws DALException;
+//    List<Log> getLogsbyID(int task_id)throws DALException;
     
     //List<Log> getTaskLogListbyDay(int person_id, int dag)throws DALException;
     

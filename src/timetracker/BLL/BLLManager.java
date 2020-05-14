@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -85,14 +86,14 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
-    public List<Log> getLogsbyID(int task_id) throws DALException {
-
-        return iGetData.getLogsbyID(task_id);
-    }
+//    public List<Log> getLogsbyID(int task_id) throws DALException {
+//
+//        return iGetData.getLogsbyID(task_id);
+//    }
     
     //------PROJEKTER----- 
      /**

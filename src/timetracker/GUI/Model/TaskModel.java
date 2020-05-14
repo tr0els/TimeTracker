@@ -10,6 +10,7 @@ import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,11 +49,11 @@ public class TaskModel implements Runnable {
         //allProjects = FXCollections.observableArrayList();
         //allProjects.addAll(bll.getProjects());
         //allClients = FXCollections.observableArrayList();
-       // allClients.addAll(bll.getClients());
-       // allUsers = FXCollections.observableArrayList();
+        // allClients.addAll(bll.getClients());
+        // allUsers = FXCollections.observableArrayList();
         //allUsers.addAll(bll.getUsers());
-        taskById = FXCollections.observableArrayList();
-        logsById = FXCollections.observableArrayList();
+//        taskById = FXCollections.observableArrayList();
+//        logsById = FXCollections.observableArrayList();
         //allProfessions = FXCollections.observableArrayList();
 
     }
@@ -76,7 +77,6 @@ public class TaskModel implements Runnable {
         }
         return model;
     }
-
 
 //    /**
 //     * Sender det info fra MainControllerens "createProject" videre til DAL
@@ -105,9 +105,6 @@ public class TaskModel implements Runnable {
 //    {
 //        bll.deleteProject(projectID);
 //    }
-
-
-
     /**
      * Starter en ny task
      *
@@ -132,7 +129,7 @@ public class TaskModel implements Runnable {
 
     }
 
-        /**
+    /**
      * Bygger observable liste af task udfra et project_id som kan bruges i
      * vores view
      *
@@ -141,19 +138,19 @@ public class TaskModel implements Runnable {
      * @return
      * @throws timetracker.DAL.DALException
      */
-    public ObservableList<Task> getTaskbyIDs(int project_id, int person_id) throws DALException {
-        taskById.clear();
-        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
-        return taskById;
+    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+//        taskById.clear();
+//        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
+//        return taskById;
+        return bll.getTaskbyIDs(project_id, person_id);
     }
 
-    
-    public ObservableList<Log> getLogsbyID(int task_id) throws DALException{
-        logsById.clear();
-        logsById.addAll(bll.getLogsbyID(task_id));
-        return logsById;
-    }
-  
+//    public ObservableList<Log> getLogsbyID(int task_id) throws DALException {
+//        logsById.clear();
+//        logsById.addAll(bll.getLogsbyID(task_id));
+//        return logsById;
+//    }
+
 //    /**
 //     * Sender det info fra MainControllerens "editProject" videre til DAL laget
 //     *
@@ -187,8 +184,6 @@ public class TaskModel implements Runnable {
 //    {
 //        return bll.getProject(projectName, project_rate, client_id);
 //    }
-
-
 //    /**DENNE METODE LIGGER INDE I CLIENTMODEL
 //     * Sender Client objekt ned til DAL laget som skal oprettes.
 //     *
@@ -197,7 +192,6 @@ public class TaskModel implements Runnable {
 //    public void createClient(Client client) {
 //        bll.createClient(client);
 //    }
-
 //    /**
 //     * Sender Client objekt ned til DAL laget som skal ændres.
 //     *
@@ -217,7 +211,6 @@ public class TaskModel implements Runnable {
 //    {
 //        bll.deleteClient(client);
 //    }
-
 //    /**
 //     * Returnerer en liste med alle Clients.
 //     *
@@ -231,7 +224,6 @@ public class TaskModel implements Runnable {
 //        allClients.sort(byName);
 //        return allClients;
 //    }
-
 //    /**
 //     * Sender User objekt ned til DAL laget som skal oprettes.
 //     *
@@ -290,8 +282,6 @@ public class TaskModel implements Runnable {
 //        allProfessions.addAll(bll.getProfessions());
 //        return allProfessions;
 //    }
-
-
     /**
      * sender det info fra MainControlleren videre til BLLManager
      *

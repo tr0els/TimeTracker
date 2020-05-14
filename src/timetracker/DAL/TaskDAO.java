@@ -13,8 +13,10 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Task;
+import timetracker.BE.Task.Log;
 import timetracker.DAL.DALException;
 
 /**
@@ -22,15 +24,14 @@ import timetracker.DAL.DALException;
  * @author Charlotte
  */
 public class TaskDAO {
-    
+
     private DatabaseConnector dbCon;
-    
-     public TaskDAO() throws DALException {
+
+    public TaskDAO() throws DALException {
         dbCon = new DatabaseConnector();
     }
-    
-    
-     /**
+
+    /**
      * Starter en ny task
      *
      * @param task_name
@@ -40,7 +41,7 @@ public class TaskDAO {
      * @throws timetracker.DAL.DALException
      */
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
-        try ( Connection con = dbCon.getConnection()) {
+        try (Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Tasklog (task_name, billable, project_id, person_id, task_start) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
 
@@ -56,7 +57,7 @@ public class TaskDAO {
             throw new DALException("Kunne ikke starte Tasken");
         }
     }
-    
+
     /**
      * Stopper en igangværende task
      *
@@ -64,7 +65,7 @@ public class TaskDAO {
      * @throws timetracker.DAL.DALException
      */
     public void stopTask(int person_id) throws DALException {
-        try ( Connection con = dbCon.getConnection()) {
+        try (Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
                     + "WHERE person_id = ? AND task_end IS NULL";
@@ -79,11 +80,57 @@ public class TaskDAO {
             throw new DALException("Kunne ikke stoppe tasken");
         }
     }
-    
 
-    
-    
-        /**
+//        /**
+//     * Returnerer en liste af et projekts tilhørende Tasks udfra person_id og
+//     * project_id
+//     *
+//     * @param project_id
+//     * @param person_id
+//     * @return
+//     */
+//    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException {
+//        ArrayList<Task> taskbyID = new ArrayList<>();
+//
+//        try ( Connection con = dbCon.getConnection()) {
+//
+//            String sql = "SELECT t.task_id, t.task_name, t.project_id, t.person_id, MAX(tl.task_end) as last_worked_on, \n"
+//                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
+//                    + "AS total_time FROM Task t\n"
+//                    + "INNER JOIN Task_log tl ON t.task_id = tl.task_id\n"
+//                    + "WHERE t.person_id = ? AND t.project_id = ?\n"
+//                    + "Group BY t.task_id, t.task_name, t.project_id, t.person_id;";
+//
+//            PreparedStatement ps = con.prepareStatement(sql);
+//
+//            ps.setInt(1, person_id);
+//            ps.setInt(2, project_id);
+//
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                Task task = new Task();
+//                int task_id = rs.getInt("task_id");
+//                
+//                task.setTask_id(task_id);
+//                task.setTask_name(rs.getString("task_name"));
+//                task.setProject_id(rs.getInt("project_id"));
+//                task.setPerson_id(rs.getInt("person_id"));
+//                task.setTotal_tid(rs.getString("total_time"));
+//                task.setLast_worked_on(rs.getTimestamp("last_worked_on").toLocalDateTime());
+//               
+//                taskbyID.add(task);
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new DALException("Kunne ikke finde Task på bruger og projekt");
+//        }
+//
+//        return taskbyID;
+//    }
+    /**
      * Returnerer en liste af et projekts tilhørende Tasks udfra person_id og
      * project_id
      *
@@ -91,96 +138,161 @@ public class TaskDAO {
      * @param person_id
      * @return
      */
-    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException {
-        ArrayList<Task> taskbyID = new ArrayList<>();
+    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 
-        try ( Connection con = dbCon.getConnection()) {
+        HashMap<Task, List<Log>> map = new HashMap<>();
 
-            String sql = "SELECT t.task_id, t.task_name, t.project_id, t.person_id, MAX(tl.task_end) as last_worked_on, \n"
-                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
-                    + "AS total_time FROM Task t\n"
-                    + "INNER JOIN Task_log tl ON t.task_id = tl.task_id\n"
-                    + "WHERE t.person_id = ? AND t.project_id = ?\n"
-                    + "Group BY t.task_id, t.task_name, t.project_id, t.person_id;";
+        String typeTask = "TASK";
+        String typeLog = "LOG";
+
+        try (Connection con = dbCon.getConnection()) {
+
+            String sql = "SELECT 'TASK' AS type, \n"
+                    + "	MIN(t.task_id) as task_id,\n"
+                    + "	t.project_id, t.task_name,\n"
+                    + "	MIN(t.task_start) as task_start,\n"
+                    + "	MAX(t.task_end) as task_end,\n"
+                    + "	CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+                    + "	RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
+                    + "	RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
+                    + "	AS total_time,\n"
+                    + "	t.billable, CONCAT(project_id, '-', task_name) as group_key\n"
+                    + "FROM Tasklog t\n"
+                    + "WHERE person_id = ? and project_id = ?\n"
+                    + "GROUP BY t.project_id, t.task_name, t.billable\n"
+                    + "\n"
+                    + "UNION\n"
+                    + "\n"
+                    + "SELECT 'LOG' AS type, \n"
+                    + "	t.task_id,\n"
+                    + "	t.project_id, \n"
+                    + "	t.task_name,\n"
+                    + "	MIN(t.task_start) as task_start,\n"
+                    + "	MAX(t.task_end) as task_end,\n"
+                    + "		CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+                    + "	RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
+                    + "	RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
+                    + "	AS total_time,\n"
+                    + "	t.billable, CONCAT(project_id, '-', task_name) as group_key\n"
+                    + "FROM Tasklog t\n"
+                    + "WHERE person_id = ? and project_id = ?\n"
+                    + "GROUP BY t.project_id, t.task_name, t.billable, t.task_id\n"
+                    + "ORDER BY t.project_id, group_key, type ASC, task_start DESC;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, person_id);
             ps.setInt(2, project_id);
+            ps.setInt(3, person_id);
+            ps.setInt(4, project_id);
 
             ResultSet rs = ps.executeQuery();
 
+            ArrayList<Log> logs = new ArrayList<>();
+            String group_previous = "";
             while (rs.next()) {
-                Task task = new Task();
-                int task_id = rs.getInt("task_id");
-                
-                task.setTask_id(task_id);
-                task.setTask_name(rs.getString("task_name"));
-                task.setProject_id(rs.getInt("project_id"));
-                task.setPerson_id(rs.getInt("person_id"));
-                task.setTotal_tid(rs.getString("total_time"));
-                task.setLast_worked_on(rs.getTimestamp("last_worked_on").toLocalDateTime());
-               
-                taskbyID.add(task);
+
+                String group_key = rs.getString("group_key");
+
+                if (rs.getString("type").equalsIgnoreCase(typeLog)) {
+
+                    Task.Log log = new Task.Log();
+
+                    LocalDateTime end_time;
+                    if (rs.getTimestamp("task_end") != null) {
+                        end_time = rs.getTimestamp("task_end").toLocalDateTime();
+                    } else {
+                        end_time = null;
+                    }
+
+                    log.setTask_id(rs.getInt("task_id"));
+                    log.setBillable(rs.getBoolean("billable"));
+                    log.setTotal_tid(rs.getString("total_time"));
+                    log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+                    log.setEnd_time(end_time);
+
+                    logs.add(log);
+
+                    group_key = rs.getString("group_key");
+
+                }
+
+                if (rs.getString("type").equalsIgnoreCase(typeTask)) {
+
+                    Task task = new Task();
+                    int task_id = rs.getInt("task_id");
+
+                    task.setTask_id(task_id);
+                    task.setTask_name(rs.getString("task_name"));
+                    task.setProject_id(rs.getInt("project_id"));
+                    task.setTotal_tid(rs.getString("total_time"));
+                    task.setLast_worked_on(rs.getTimestamp("task_end").toLocalDateTime());
+
+//                    System.out.println(task);
+//                    System.out.println(logs);
+
+                    map.put(task, logs);
+
+                    logs = new ArrayList<>();
+
+                    group_previous = group_key;
+                }
+
             }
 
         } catch (SQLException e) {
             throw new DALException("Kunne ikke finde Task på bruger og projekt");
         }
 
-        return taskbyID;
+        return map;
     }
+//
+//    public List<Task.Log> getLogsbyID(int task_id) throws DALException {
+//        ArrayList<Task.Log> logsbyID = new ArrayList<>();
+//        try (Connection con = dbCon.getConnection()) {
+//
+//            String sql = "SELECT *,\n"
+//                    + "CONVERT(VARCHAR(5),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60/60) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60%60), 2) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)%60),2)\n"
+//                    + "AS total_time\n"
+//                    + "FROM Task_log tl\n"
+//                    + "WHERE tl.task_id = ?\n"
+//                    + "ORDER BY task_start DESC";
+//
+//            PreparedStatement ps = con.prepareStatement(sql);
+//
+//            ps.setInt(1, task_id);
+//
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                Task.Log log = new Task.Log();
+//
+//                LocalDateTime end_time;
+//                if (rs.getTimestamp("task_end") != null) {
+//                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
+//                } else {
+//                    end_time = null;
+//                }
+//
+//                log.setLog_id(rs.getInt("log_id"));
+//                log.setTask_id(rs.getInt("task_id"));
+//                log.setBillable(rs.getBoolean("billable"));
+//                log.setTotal_tid(rs.getString("total_time"));
+//                log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
+//                log.setEnd_time(end_time);
+//
+//                logsbyID.add(log);
+//            }
+//
+//        } catch (SQLException e) {
+//            throw new DALException("kunne ikke  finde logsne til din task");
+//        }
+//
+//        return logsbyID;
+//    }
 
-    public List<Task.Log> getLogsbyID(int task_id) throws DALException {
-        ArrayList<Task.Log> logsbyID = new ArrayList<>();
-        try ( Connection con = dbCon.getConnection()) {
-
-            String sql = "SELECT *,\n"
-                    + "CONVERT(VARCHAR(5),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60/60) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60%60), 2) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)%60),2)\n"
-                    + "AS total_time\n"
-                    + "FROM Task_log tl\n"
-                    + "WHERE tl.task_id = ?\n"
-                    + "ORDER BY task_start DESC";
-
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ps.setInt(1, task_id);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Task.Log log = new Task.Log();
-
-                LocalDateTime end_time;
-                if (rs.getTimestamp("task_end") != null) {
-                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                } else {
-                    end_time = null;
-                }
-
-                log.setLog_id(rs.getInt("log_id"));
-                log.setTask_id(rs.getInt("task_id"));
-                log.setBillable(rs.getBoolean("billable"));
-                log.setTotal_tid(rs.getString("total_time"));
-                log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                log.setEnd_time(end_time);
-
-                logsbyID.add(log);
-            }
-
-        } catch (SQLException e) {
-        throw new DALException("kunne ikke  finde logsne til din task");
-        }
-
-        return logsbyID;
-   }
-    
-    
-        
 //    /**
 //     * Returnerer Task udfra task_id
 //     *
@@ -208,7 +320,6 @@ public class TaskDAO {
 //        }
 //        return task;
 //    }
-    
 //    /**
 //     * Returnerer en liste af et projekts tilhørende Tasks
 //     *
@@ -244,8 +355,6 @@ public class TaskDAO {
 //        }
 //        //return null;
 //    }
-    
-    
 //        public List<Task.Log> getTaskLogListbyTaskID(int task_id) throws DALException {
 //        ArrayList<Task.Log> tasklogbyID = new ArrayList<>();
 //
@@ -281,7 +390,6 @@ public class TaskDAO {
 //
 //        return tasklogbyID;
 //    }
-
     /**
      * Returnerer en liste af tasks ud fra person id og dag (0 = idag, 1 = igår
      * osv.)
@@ -337,5 +445,4 @@ public class TaskDAO {
 //
 //        return tasklogbyDay;
 //    }
-    
 }
