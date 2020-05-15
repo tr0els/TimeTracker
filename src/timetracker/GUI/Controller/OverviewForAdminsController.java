@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package timetracker.GUI.Controller;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -96,23 +97,34 @@ public class OverviewForAdminsController implements Initializable {
     bModel = BrugerModel.getInstance();
     cModel = ClientModel.getInstance();
         
+
+
+    private ProjektModel pModel;
+    private BrugerModel bModel;
+    private ClientModel cModel;
+
+    public OverviewForAdminsController() throws DALException, SQLException {
+        pModel = ProjektModel.getInstance();
+        bModel = BrugerModel.getInstance();
+        cModel = ClientModel.getInstance();
+
     }
 
-    
     private ObservableList<Project> listeAfProjekter;
     FilteredList<Project> filteredItems;
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-                try {
-       filterskuffe.setSidePane(searchAnchorpane);
-       filterskuffe.toFront();
-       filterskuffe.close();
-       filteredItems = new FilteredList<>(FXCollections.observableList(pModel.getProjectsWithExtraData()));
+        try {
+            filterskuffe.setSidePane(searchAnchorpane);
+            filterskuffe.toFront();
+            filterskuffe.close();
+            filteredItems = new FilteredList<>(FXCollections.observableList(pModel.getProjectsWithExtraData()));
 
             populatetable();
             //addFilter();
@@ -122,16 +134,19 @@ public class OverviewForAdminsController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-    }    
-    
+
+    }
+
     @FXML
     private void handleFilteropen(ActionEvent event) {
-        
-          if(filterskuffe.isOpened())
-        {filterskuffe.close();}
-        else { filterskuffe.open(); }
+
+        if (filterskuffe.isOpened()) {
+            filterskuffe.close();
+        } else {
+            filterskuffe.open();
+        }
     }
+
     
     
     public void populatetable() throws DALException, SQLException{
@@ -148,48 +163,32 @@ public class OverviewForAdminsController implements Initializable {
       colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()) );
       tableview.setItems(listeAfProjekter);
    
+
+
+    public void populatetable() throws DALException, SQLException {
+
+        //listeAfProjekter = pModel.getProjectsWithExtraData();
+        //List<Task.Log> logList = new ArrayList<>();
+        //logList = taskmodel.getTaskLogListById(1);
+        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
+        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
+        colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
+        colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
+        //  tableview.setItems(listeAfProjekter);
+
+>
     }
-    
-    private void populatecombobox() throws DALException, SQLException{
-    
-        
+
+    private void populatecombobox() throws DALException, SQLException {
+
         //comboPerioder
         //comboProjekter
-        
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
-        
-          
+
     }
-    
-    
-//    public void combofilter(ActionEvent event){
-//       
-//          FilteredList<Project> filteredItems = new FilteredList<Project>(listeAfProjekter, p -> true);
-//
-//        
-//        int val = comboKlienter.getValue().getClient_id();
-//        
-//       
-//    
-//    }
-    
-    
-//    public void addFilter() throws DALException{
-//        ObjectProperty<Predicate<Project>> klientFilter = new SimpleObjectProperty<>();
-//        //ObjectProperty<Predicate<Project>> medarbejderFilter = new SimpleObjectProperty<>();
-//        
-//        klientFilter.bind(Bindings.createObjectBinding(() -> 
-//            project -> comboKlienter.getValue() == null || comboKlienter.getValue().getClient_id() == project.getClient_id(), 
-//            comboKlienter.valueProperty()));    
-//        
-//         tableview.setItems(filteredItems);
-//         
-//          filteredItems.predicateProperty().bind(Bindings.createObjectBinding(
-//                () -> klientFilter.get(), 
-//                klientFilter));
-//    }
-//    
+
+ 
     public void getProjectsForfilter() throws DALException{
         
         String europeanDatePattern = "dd-MM-yyyy";
@@ -229,11 +228,10 @@ public class OverviewForAdminsController implements Initializable {
         listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected);
       
        // tableview.getItems().clear();
-        tableview.setItems(listeAfProjekter);
-        
-        
+	}
+
     
-    }
+
 
  
     @FXML
@@ -252,5 +250,4 @@ public class OverviewForAdminsController implements Initializable {
         
     }
 
-    
 }

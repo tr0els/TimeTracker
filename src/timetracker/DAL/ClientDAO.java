@@ -19,13 +19,14 @@ import timetracker.BE.Client;
  * @author Charlotte
  */
 public class ClientDAO {
-        private DatabaseConnector dbCon;
-    
-     public ClientDAO() throws DALException {
+
+    private DatabaseConnector dbCon;
+
+    public ClientDAO() throws DALException {
         dbCon = new DatabaseConnector();
     }
-     
-  /**
+
+    /**
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.
      *
@@ -78,7 +79,7 @@ public class ClientDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-        throw new DALException("Kunne ikke rette Klienten");
+            throw new DALException("Kunne ikke rette Klienten");
         }
     }
 
@@ -99,8 +100,8 @@ public class ClientDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-        
-        throw new DALException("Kunne ikke Slette Klienten");
+
+            throw new DALException("Kunne ikke Slette Klienten");
         }
     }
 
@@ -132,9 +133,5 @@ public class ClientDAO {
         }
         //return null;
     }
-   
-     
-     
-     
-     
+
 }

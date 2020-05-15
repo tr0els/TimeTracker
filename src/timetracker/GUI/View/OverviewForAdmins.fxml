@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.OverviewForAdminsController">
+
    <children>
       <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" prefHeight="150.0" prefWidth="600.0" />
       <TableView fx:id="tableview" layoutX="26.0" layoutY="319.0" prefHeight="150.0" prefWidth="567.0">
@@ -48,4 +49,5 @@
          </children>
       </AnchorPane>
    </children>
+
 </AnchorPane>

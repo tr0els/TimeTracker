@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.TaskModel;
 
-
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
@@ -23,32 +22,23 @@ import timetracker.GUI.Model.TaskModel;
  */
 public class App extends Application {
 
-      @Override
+    @Override
     public void start(Stage stage) throws Exception {
 
-        
-        
         Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/MainView.fxml"));
-        
-
 
         //MainController main;
         //main = MainController.getInstance();
-
         //main.createProject();
         //main.deleteProject();
         //main.editProject();
-
         //Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
-
-
         Scene scene = new Scene(root);
         stage.setTitle("Time Tracker login");
         stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
         stage.setScene(scene);
         stage.show();
     }
-
 
     /**
      * @param args the command line arguments

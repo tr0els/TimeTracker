@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MinTidController">
-   <children>
-      <Label layoutX="265.0" layoutY="242.0" text="min tid " />
-   </children>
+    <children>
+        <Label layoutX="265.0" layoutY="242.0" text="min tid " />
+    </children>
 </AnchorPane>

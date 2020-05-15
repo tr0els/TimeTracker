@@ -7,16 +7,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" stylesheets="@buttonsForLogin.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MainController">
-   <children>
-      <ImageView fitHeight="193.0" fitWidth="591.0" layoutX="80.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../Icons/grumsen-development.png" />
-         </image>
-      </ImageView>
-      <JFXButton fx:id="adminbtb" layoutX="14.0" layoutY="382.0" onAction="#handeladminlogin" text="Admin " />
-      <JFXButton fx:id="user" layoutX="180.0" layoutY="382.0" onAction="#handeluserlogin" prefWidth="120.0" text="Alm. User" />
-      <JFXTextField fx:id="emailTextField" labelFloat="true" layoutX="180.0" layoutY="227.0" prefHeight="43.0" prefWidth="399.0" promptText="Email" />
-      <JFXTextField fx:id="passwordTextField" labelFloat="true" layoutX="180.0" layoutY="286.0" prefHeight="43.0" prefWidth="399.0" promptText="Password" />
-      <JFXButton fx:id="adminbtb1" layoutX="579.0" layoutY="382.0" onAction="#handelogin" text="Login" />
-   </children>
+    <children>
+        <ImageView fitHeight="193.0" fitWidth="591.0" layoutX="80.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../Icons/grumsen-development.png" />
+            </image>
+        </ImageView>
+        <JFXButton fx:id="adminbtb" layoutX="14.0" layoutY="382.0" onAction="#handeladminlogin" text="Admin " />
+        <JFXButton fx:id="user" layoutX="180.0" layoutY="382.0" onAction="#handeluserlogin" prefWidth="120.0" text="Alm. User" />
+        <JFXTextField fx:id="emailTextField" labelFloat="true" layoutX="180.0" layoutY="221.0" onMouseClicked="#handleEmailMousecClicked" prefHeight="43.0" prefWidth="399.0" promptText="Email" />
+        <JFXTextField fx:id="passwordTextField" labelFloat="true" layoutX="180.0" layoutY="288.0" prefHeight="43.0" prefWidth="399.0" promptText="Password" />
+        <JFXButton fx:id="adminbtb1" layoutX="579.0" layoutY="382.0" onAction="#handelogin" text="Login" />
+    </children>
 </AnchorPane>

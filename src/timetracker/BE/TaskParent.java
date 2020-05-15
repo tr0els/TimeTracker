@@ -14,10 +14,12 @@ import java.util.List;
  * Charlotte Christensen
  */
 public class TaskParent extends TaskBase {
+
     List<TaskChild> children;
-    
-    public TaskParent() {}
-    
+
+    public TaskParent() {
+    }
+
     public TaskParent(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
         super(id, name, billable, projectId, personId, start, end, time);
     }
@@ -25,11 +27,11 @@ public class TaskParent extends TaskBase {
     public List<TaskChild> getChildren() {
         return children;
     }
-    
+
     public void setChildren(List<TaskChild> children) {
         this.children = children;
     }
-    
+
     public void addChild(TaskChild child) {
         this.children.add(child);
     }

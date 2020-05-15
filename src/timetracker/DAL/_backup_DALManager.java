@@ -270,7 +270,6 @@ public class _backup_DALManager {
         }
 
     }
-    
 
 //    /**
 //     * returnere en specifik task udfra task_id
@@ -438,7 +437,6 @@ public class _backup_DALManager {
 //
 //        return tasklogbyDay;
 //    }
-
     /**
      * Opretter en client med det client objekt der bliver sendt ned igennem
      * lagene.

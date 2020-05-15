@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
  * Charlotte Christensen
  */
 abstract class TaskBase {
+
     private int id;
     private String name;
     private boolean billable;
@@ -22,8 +23,9 @@ abstract class TaskBase {
     private LocalDateTime end;
     private String time; // maybe SimpleDateFormat("HH:mm:ss");
 
-    public TaskBase() {}
-    
+    public TaskBase() {
+    }
+
     public TaskBase(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
         this.id = id;
         this.name = name;
@@ -34,7 +36,7 @@ abstract class TaskBase {
         this.end = end;
         this.time = time;
     }
-    
+
     public int getId() {
         return id;
     }
@@ -99,5 +101,3 @@ abstract class TaskBase {
         this.time = time;
     }
 }
-
-
