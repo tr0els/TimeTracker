@@ -158,10 +158,10 @@ public class BLLManager {
         return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato);
 	}
 
-    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
-        return iGetData.getProjectsForEmploy(medarbejder_id);
-
-    }
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        return iGetData.getProjectsForEmploy(medarbejder_id);
+//
+//    }
 
     //-----KLIENTER-----
     /**

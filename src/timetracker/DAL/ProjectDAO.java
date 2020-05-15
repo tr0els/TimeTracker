@@ -371,59 +371,59 @@ public class ProjectDAO {
         //return null;
     }
 
-
-    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
-        ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
-
-        try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
-                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
-                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
-                    + "AS total_time,\n"
-                    + "convert(Varchar(5),sum(case when t1.billable = 1  then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60/60)+':'+\n"
-                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60%60),2)+ ':'+\n"
-                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)%60),2) as billabletime, c.client_name\n"
-                    + "FROM Tasklog t, Project p, Tasklog t1, Client c\n"
-                    + "where t.project_id = p.project_id\n"
-                    + "and c.client_id = p.client_id\n"
-                    + "and t.task_id = t1.task_id\n"
-                    + "and c.client_name LIKE '%" + client_clause + "%'\n"
-                    + user_clause 
-                    + fradato_caluse
-                    + tildato_clause
-                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
-            //sb.append(sql);
-            
-            
-            
-            
-            Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
-                String billabletime;
-                Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                //projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
-                projects.setClientName(rs.getString("client_name"));
-                projects.setTotal_tid(rs.getString("total_time"));
-                billabletime = rs.getString("billabletime");
-
-                if (billabletime != null) {
-                    projects.setBillableTime(billabletime);
-                } else {
-                    projects.setBillableTime("00:00:00");
-                }
-
-                allProjectsWithExtraData.add(projects);
-            }
-            return allProjectsWithExtraData;
-        } catch (SQLException ex) {
-            throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
-        }
-        //return null;
-    }
+//
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
+//
+//        try ( Connection con = dbCon.getConnection()) {
+//            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
+//                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
+//                    + "AS total_time,\n"
+//                    + "convert(Varchar(5),sum(case when t1.billable = 1  then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60/60)+':'+\n"
+//                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60%60),2)+ ':'+\n"
+//                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)%60),2) as billabletime, c.client_name\n"
+//                    + "FROM Tasklog t, Project p, Tasklog t1, Client c\n"
+//                    + "where t.project_id = p.project_id\n"
+//                    + "and c.client_id = p.client_id\n"
+//                    + "and t.task_id = t1.task_id\n"
+//                    + "and c.client_name LIKE '%" + client_clause + "%'\n"
+//                    + user_clause 
+//                    + fradato_caluse
+//                    + tildato_clause
+//                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+//            //sb.append(sql);
+//            
+//            
+//            
+//            
+//            Statement statement = con.createStatement();
+//            ResultSet rs = statement.executeQuery(sql);
+//            while (rs.next()) {
+//                String billabletime;
+//                Project projects = new Project();
+//                projects.setProject_id(rs.getInt("project_id"));
+//                projects.setProject_name(rs.getString("project_name"));
+//                //projects.setProject_rate(rs.getInt("project_rate"));
+//                projects.setClient_id(rs.getInt("client_id"));
+//                projects.setClientName(rs.getString("client_name"));
+//                projects.setTotal_tid(rs.getString("total_time"));
+//                billabletime = rs.getString("billabletime");
+//
+//                if (billabletime != null) {
+//                    projects.setBillableTime(billabletime);
+//                } else {
+//                    projects.setBillableTime("00:00:00");
+//                }
+//
+//                allProjectsWithExtraData.add(projects);
+//            }
+//            return allProjectsWithExtraData;
+//        } catch (SQLException ex) {
+//            throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
+//        }
+//        //return null;
+//    }
 
 }

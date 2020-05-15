@@ -92,16 +92,6 @@ public class OverviewForAdminsController implements Initializable {
     private JFXButton clearFilterbtb;
          
     
-    public OverviewForAdminsController() throws DALException, SQLException{
-    pModel = ProjektModel.getInstance();
-    bModel = BrugerModel.getInstance();
-    cModel = ClientModel.getInstance();
-        
-
-
-    private ProjektModel pModel;
-    private BrugerModel bModel;
-    private ClientModel cModel;
 
     public OverviewForAdminsController() throws DALException, SQLException {
         pModel = ProjektModel.getInstance();
@@ -164,20 +154,8 @@ public class OverviewForAdminsController implements Initializable {
       tableview.setItems(listeAfProjekter);
    
 
-
-    public void populatetable() throws DALException, SQLException {
-
-        //listeAfProjekter = pModel.getProjectsWithExtraData();
-        //List<Task.Log> logList = new ArrayList<>();
-        //logList = taskmodel.getTaskLogListById(1);
-        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
-        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
-        colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
-        colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
-        //  tableview.setItems(listeAfProjekter);
-
->
     }
+
 
     private void populatecombobox() throws DALException, SQLException {
 
@@ -243,6 +221,8 @@ public class OverviewForAdminsController implements Initializable {
     private void handleClearFilter(ActionEvent event) throws DALException, SQLException {
         ComboMedarbejder.getSelectionModel().clearSelection();
         comboKlienter.getSelectionModel().clearSelection();
+       tildato.setValue(null);
+       fradato.setValue(null);
        tildato.getEditor().clear();
        fradato.getEditor().clear();
         

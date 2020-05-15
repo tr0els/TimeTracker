@@ -80,11 +80,11 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
        return projectdao.getProjectsToFilter(comboUser, comboClient,  fradato, tildato);
 	}
 
-    @Override
-    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
-        return projectdao.getProjectsForEmploy(medarbejder_id);
-
-    }
+//    @Override
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        return projectdao.getProjectsForEmploy(medarbejder_id);
+//
+//    }
 
     //Task
     @Override

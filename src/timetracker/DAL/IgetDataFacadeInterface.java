@@ -41,7 +41,7 @@ public interface IgetDataFacadeInterface {
     
 
 
-    List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
+ //   List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
 
 
     //Task
