@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
       <Label layoutX="32.0" layoutY="23.0" text="Vælg Projekt:" />
       <JFXComboBox fx:id="projectMenubox" layoutX="112.0" layoutY="19.0" prefHeight="25.0" prefWidth="188.0" />
-      <JFXListView fx:id="listTaskbyId" layoutX="387.0" layoutY="84.0" prefHeight="121.0" prefWidth="188.0" />
-      <JFXListView fx:id="listTasklogbyId" layoutX="387.0" layoutY="332.0" prefHeight="121.0" prefWidth="188.0" />
-      <Label layoutX="387.0" layoutY="44.0" text="Opgaver" />
-      <Label layoutX="387.0" layoutY="291.0" text="Logs [tid | tidsinterval]" />
-      <Label layoutX="422.0" layoutY="315.0" text="Opgave total tid:" />
-      <Label fx:id="lblTasktotalTid" layoutX="522.0" layoutY="315.0" prefHeight="17.0" prefWidth="52.0" textAlignment="RIGHT" wrapText="true" />
-      <Label layoutX="422.0" layoutY="67.0" text="Project total tid:" />
-      <Label fx:id="lblProjecttotalTid" layoutX="522.0" layoutY="67.0" prefHeight="17.0" prefWidth="52.0" wrapText="true" />
-      <TreeView fx:id="treeView" layoutX="32.0" layoutY="76.0" prefHeight="383.0" prefWidth="309.0" />
+      <TreeView fx:id="treeView" layoutX="29.0" layoutY="196.0" prefHeight="241.0" prefWidth="542.0" />
+      <Label fx:id="lblProjectnavn" contentDisplay="CENTER" layoutX="29.0" layoutY="62.0" prefHeight="53.0" prefWidth="542.0" text="Vælg et projekt">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="398.0" layoutY="141.0" text="Tid brugt på projekt:" />
+      <Label fx:id="lblProjectTid" alignment="CENTER_RIGHT" layoutX="388.0" layoutY="158.0" prefHeight="17.0" prefWidth="89.0" text="0:00:00">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="482.0" layoutY="158.0" prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
+      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" onAction="#handleEditTask" text="Redigere" textAlignment="RIGHT" />
    </children>
 </AnchorPane>

@@ -5,6 +5,7 @@
  */
 package timetracker.DAL;
 
+import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -68,6 +69,17 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     public List<Project> getProjectsbyID(int personId) throws DALException {
     return projectdao.getProjectsbyID(personId);
     }
+    
+      @Override
+    public List<Project> getProjectWithExtraData() throws DALException {
+        return projectdao.getProjectsWithExtraData();
+    }
+    
+      @Override
+    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+       return projectdao.getProjectsForEmploy(medarbejder_id);
+    }
+    
     //Task
     @Override
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException{
@@ -80,14 +92,14 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     }
 
     @Override
-    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public HashMap<Task, List<Task.Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
     return taskdao.getTaskbyIDs(project_id, person_id);
     }
 
-    @Override
-    public List<Task.Log> getLogsbyID(int task_id) throws DALException {
-    return taskdao.getLogsbyID(task_id);
-    }
+//    @Override
+//    public List<Task.Log> getLogsbyID(int task_id) throws DALException {
+//    return taskdao.getLogsbyID(task_id);
+//    }
 
     
     //Klient
@@ -146,6 +158,10 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     public List<Profession> getProfessions()throws DALException {
     return brugerdao.getProfessions();
     }
+
+  
+
+  
 
 
 

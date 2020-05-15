@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -85,14 +86,14 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public List<Task> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
-    public List<Log> getLogsbyID(int task_id) throws DALException {
-
-        return iGetData.getLogsbyID(task_id);
-    }
+//    public List<Log> getLogsbyID(int task_id) throws DALException {
+//
+//        return iGetData.getLogsbyID(task_id);
+//    }
     
     //------PROJEKTER----- 
      /**
@@ -149,12 +150,24 @@ public class BLLManager {
     public List<Project> getProjekctsbyClientID(Client client) throws DALException  {
        return iGetData.getProjectsbyClientID(client);
     }
+    
+       public  List<Project> getProjectsWithExtradata() throws DALException {
+       return iGetData.getProjectWithExtraData();
+    }
+       
+      
+    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+        return iGetData.getProjectsForEmploy(medarbejder_id);
+    }
 
     //-----KLIENTER-----
     /**
      * Sender Client objekt ned til DAL laget som skal oprettes.
      *
-     * @param client
+     * @param navn
+     * @param timepris
+     * @return 
+     * @throws timetracker.DAL.DALException
      */
     public Client createClient(String navn, int timepris) throws DALException  {
         return iGetData.createClient(navn, timepris);
@@ -280,4 +293,6 @@ public class BLLManager {
         return iGetData.login(email, HashedPassword);
 
     }
+
+ 
 }
