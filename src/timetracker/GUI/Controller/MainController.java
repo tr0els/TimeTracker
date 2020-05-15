@@ -23,6 +23,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.GUI.Model.BrugerModel;
@@ -70,6 +71,7 @@ public class MainController implements Initializable {
 
     /**
      * tager det info som er inputtet i textfields og sender dem til model.
+     * validere også om det er en mulig email der er blivet inputtet.
      *
      * alle passwords er 1234
      *
@@ -95,16 +97,19 @@ public class MainController implements Initializable {
                 }
             } else {
                 emailTextField.setText("Invalid Email or Password");
+                emailTextField.setStyle("-fx-text-inner-color: red");
                 passwordTextField.clear();
             }
         } else {
             emailTextField.setText("Not a valid email");
+            emailTextField.setStyle("-fx-text-inner-color: red");
+            passwordTextField.clear();
         }
 
     }
 
     /**
-     *
+     * bliver kørt hvis brugerens login er en admin konto
      * @param event
      * @throws IOException Håndtere login af en admin
      */
@@ -130,7 +135,7 @@ public class MainController implements Initializable {
     }
 
     /**
-     *
+     * bliver kørt hvis brugeren er en normal bruger konto
      * @param event
      * @throws IOException Håndtere log in af en alm. user, og fjerne
      * adminknapperne.
@@ -158,6 +163,16 @@ public class MainController implements Initializable {
         stage.setResizable(false);
         stage.show();
 
+    }
+
+    /**
+     * markere alt i email feltet for bedre brugervenlighed
+     * @param event 
+     */
+    @FXML
+    private void handleEmailMousecClicked(MouseEvent event) {
+        emailTextField.selectAll();
+        emailTextField.setStyle("-fx-text-inner-color: black");
     }
 
 }

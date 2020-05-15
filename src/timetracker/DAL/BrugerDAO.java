@@ -21,13 +21,14 @@ import timetracker.BE.User;
  * @author Charlotte
  */
 public class BrugerDAO {
-           private DatabaseConnector dbCon;
-    
-     public BrugerDAO() throws DALException {
+
+    private DatabaseConnector dbCon;
+
+    public BrugerDAO() throws DALException {
         dbCon = new DatabaseConnector();
     }
-    
-     /**
+
+    /**
      * Opretter en User med det user objekt der bliver sendt ned igennem lagene.
      *
      * @param user
@@ -53,7 +54,7 @@ public class BrugerDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-        throw new DALException("Kunne ikke oprette bruger");
+            throw new DALException("Kunne ikke oprette bruger");
         }
     }
 
@@ -65,8 +66,7 @@ public class BrugerDAO {
      */
     public void editUser(User user) throws DALException {
         try ( Connection con = dbCon.getConnection()) {
-            int person_id = user.getPerson_id();
-            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ? WHERE person_id = " + person_id + ";";
+            String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ?, profession_id = ? WHERE person_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
 
@@ -74,12 +74,13 @@ public class BrugerDAO {
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
             st.setInt(4, user.getRole_id());
-//            st.setInt(5, user.getProfession_id());
+            st.setInt(5, user.getProfession_id());
+            st.setInt(6, user.getPerson_id());
 
             st.executeQuery();
 
         } catch (SQLException e) {
-        throw new DALException("Kunne ikke rette brugeren"); 
+//            throw new DALException("Kunne ikke rette brugeren"); <- dette ødelægger et eller andet
         }
     }
 
@@ -99,7 +100,7 @@ public class BrugerDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-        throw new DALException("Kunne ikke slette brugeren");
+            throw new DALException("Kunne ikke slette brugeren");
         }
     }
 
@@ -134,14 +135,12 @@ public class BrugerDAO {
                 allUsers.add(user);
             }
             return allUsers;
-        } catch ( SQLException ex) {
+        } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente brugerne fra Datbasen");
         }
-       // return null;
+        // return null;
     }
 
-     
-     
     /**
      * Returnerer en liste med Professions fra databasen.
      *
@@ -169,8 +168,7 @@ public class BrugerDAO {
         //return null;
     }
 
-    
-      /**
+    /**
      * tjekker om det login info som kommer fra BLLManageren er det samme som
      * ligger på serveren. hvis ja returnere den et boolean som er true.
      *
@@ -227,6 +225,5 @@ public class BrugerDAO {
         }
         return salt;
     }
-    
-    
+
 }

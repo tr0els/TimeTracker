@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
  * Charlotte Christensen
  */
 public class TaskChild extends TaskBase {
+
     private TaskParent parent;
 
-    public TaskChild() {}
-    
+    public TaskChild() {
+    }
+
     public TaskChild(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent) {
         super(id, name, billable, projectId, personId, start, end, time);
         this.parent = parent;

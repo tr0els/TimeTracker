@@ -41,11 +41,11 @@ public class BrugerModel {
         allUsers = FXCollections.observableArrayList();
         allUsers.addAll(bll.getUsers());
         allProfessions = FXCollections.observableArrayList();
+        allProfessions.addAll(bll.getProfessions());
 
     }
-    
-    
-        /**
+
+    /**
      * sender det info fra MainControlleren videre til BLLManager
      *
      * @param email
@@ -57,14 +57,13 @@ public class BrugerModel {
     public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
         return bll.login(email, password);
     }
-    
-     /**
+
+    /**
      * Sender User objekt ned til DAL laget som skal oprettes.
      *
      * @param user
      */
-    public void createUser(User user)
-    {
+    public void createUser(User user) {
         bll.createUser(user);
     }
 
@@ -74,8 +73,7 @@ public class BrugerModel {
      * @param user
      * @throws timetracker.DAL.DALException
      */
-    public void editUser(User user) throws DALException
-    {
+    public void editUser(User user) throws DALException {
         bll.editUser(user);
     }
 
@@ -84,8 +82,7 @@ public class BrugerModel {
      *
      * @param user
      */
-    public void deleteUser(User user) throws DALException
-    {
+    public void deleteUser(User user) throws DALException {
         bll.deleteUser(user);
     }
 
@@ -96,8 +93,7 @@ public class BrugerModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<User> getUsers() throws DALException
-    {
+    public ObservableList<User> getUsers() throws DALException {
         allUsers.clear();
         allUsers.addAll(bll.getUsers());
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
@@ -112,14 +108,28 @@ public class BrugerModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Profession> getProfessions() throws DALException
-    {
-        allProfessions.addAll(bll.getProfessions());
+    public ObservableList<Profession> getProfessions() throws DALException {
         return allProfessions;
     }
 
+    /**
+     * sender en inputet email ned til vores validator for at tjekke om den har
+     * en email struktur
+     * @param email
+     * @return 
+     */
     public boolean valEmail(String email) {
         return validator.valEmail(email);
+    }
+
+    /**
+     * sender det inputtet navn/efternavn ned for at tjekke at det ikke har numrer
+     * og spaces.
+     * @param name
+     * @return 
+     */
+    public boolean valName(String name) {
+        return validator.valName(name);
     }
 
 }

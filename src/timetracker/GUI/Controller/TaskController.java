@@ -138,7 +138,6 @@ public class TaskController implements Initializable {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
-       
 
         model.startTask(task_name, billable, project_id, person_id);
         textTaskname.clear();
@@ -247,12 +246,11 @@ public class TaskController implements Initializable {
 //            pane.getChildren().add(lblTaskname);
 //        }
 //    }
-
     @FXML
     private void HandleTooltipForBillable(MouseEvent event) {
-          Tooltip tip = new Tooltip();
-         
-         tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
-         checkBillable.setTooltip(tip);
+        Tooltip tip = new Tooltip();
+
+        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
+        checkBillable.setTooltip(tip);
     }
 }

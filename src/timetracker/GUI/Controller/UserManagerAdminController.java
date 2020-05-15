@@ -12,14 +12,11 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -36,7 +33,6 @@ import timetracker.BE.Profession;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.BrugerModel;
-import timetracker.GUI.Model.TaskModel;
 
 /**
  * FXML Controller class
@@ -44,8 +40,7 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class UserManagerAdminController implements Initializable
-{
+public class UserManagerAdminController implements Initializable {
 
     private static BrugerModel model;
     private ObservableList<Profession> allProf;
@@ -71,8 +66,7 @@ public class UserManagerAdminController implements Initializable
      * @throws DALException
      * @throws SQLException
      */
-    public UserManagerAdminController() throws DALException, SQLException
-    {
+    public UserManagerAdminController() throws DALException, SQLException {
         model = BrugerModel.getInstance();
     }
 
@@ -80,16 +74,13 @@ public class UserManagerAdminController implements Initializable
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        try
-        {
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
             populateTreeTable();
             allProf = model.getProfessions();
             listProfessions.setItems(allProf);
 
-        } catch (DALException | SQLException ex)
-        {
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(UserManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -100,48 +91,39 @@ public class UserManagerAdminController implements Initializable
      * @throws DALException
      * @throws SQLException
      */
-    private void populateTreeTable() throws DALException, SQLException
-    {
+    private void populateTreeTable() throws DALException, SQLException {
         JFXTreeTableColumn<User, String> userName = new JFXTreeTableColumn<>("Navn");
         userName.setPrefWidth(75);
-        userName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
-        {
+        userName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getName());
             }
         });
 
         JFXTreeTableColumn<User, String> userSurName = new JFXTreeTableColumn<>("Efternavn");
         userSurName.setPrefWidth(100);
-        userSurName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
-        {
+        userSurName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getSurname());
             }
         });
 
         JFXTreeTableColumn<User, String> userEmail = new JFXTreeTableColumn<>("Email");
         userEmail.setPrefWidth(150);
-        userEmail.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
-        {
+        userEmail.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getEmail());
             }
         });
 
         JFXTreeTableColumn<User, String> userProfession = new JFXTreeTableColumn<>("Profession");
         userProfession.setPrefWidth(150);
-        userProfession.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>()
-        {
+        userProfession.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<User, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<User, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getProfession());
             }
         });
@@ -153,61 +135,93 @@ public class UserManagerAdminController implements Initializable
     }
 
     /**
-     * Opdaterer en User med de inputs der er tastet.
+     * Opdaterer en User med de inputs der er tastet. tjekker også om der er
+     * indtastet valide fornavne, efternavne og email
      *
      * @param event
      * @throws DALException
      * @throws SQLException
      */
     @FXML
-    private void handleUpdateUser(ActionEvent event) throws DALException, SQLException
-    {
+    private void handleUpdateUser(ActionEvent event) throws DALException, SQLException {
         User user = new User();
-        user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
-        user.setName(textfieldName.getText());
-        user.setSurname(textfieldSurname.getText());
-        user.setEmail(textfieldEmail.getText());
-        user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
-        if (!checkboxAdminRole.isSelected())
-        {
-            user.setRole_id(2);
-        } else
-        {
-            user.setRole_id(1);
-        }
-        System.out.println("Så langt så godt.");
-        model.editUser(user);
 
-        populateTreeTable();
+        if (model.valName(textfieldName.getText()) && model.valName(textfieldSurname.getText()) && model.valEmail(textfieldEmail.getText())) {
+            user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
+            user.setName(textfieldName.getText());
+            user.setSurname(textfieldSurname.getText());
+            user.setEmail(textfieldEmail.getText());
+            user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+            if (!checkboxAdminRole.isSelected()) {
+                user.setRole_id(2);
+            } else {
+                user.setRole_id(1);
+            }
+            model.editUser(user);
+            populateTreeTable();
+        } else {
+            if (model.valName(textfieldName.getText()) == false) {
+                textfieldName.setText("Invalid Name");
+                textfieldName.setStyle("-fx-text-inner-color: red");
+            }
+            if (model.valName(textfieldSurname.getText()) == false) {
+                textfieldSurname.setText("Invalid Surname");
+                textfieldSurname.setStyle("-fx-text-inner-color: red");
+            }
+            if (model.valEmail(textfieldEmail.getText()) == false) {
+                textfieldEmail.setText("Invalid Email");
+                textfieldEmail.setStyle("-fx-text-inner-color: red");
+            }
+        }
+
     }
 
     /**
-     * Opretter en User med de inputs der er tastet.
+     * Opretter en User med de inputs der er tastet. tjekker også om der er
+     * indtastet valide fornavne, efternavne og email
      *
      * @param event
      * @throws DALException
      * @throws SQLException
      */
     @FXML
-    private void handleCreateUser(ActionEvent event) throws DALException, SQLException
-    {
+    private void handleCreateUser(ActionEvent event) throws DALException, SQLException {
         User user = new User();
-        user.setName(textfieldName.getText());
-        user.setSurname(textfieldSurname.getText());
-        user.setEmail(textfieldEmail.getText());
-        user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
-        if (!checkboxAdminRole.isSelected())
-        {
-            user.setRole_id(2);
-        } else
-        {
-            user.setRole_id(1);
+
+        if (model.valName(textfieldName.getText())) {
+            user.setName(textfieldName.getText());
+        } else {
+            textfieldName.setText("Invalid Name");
+            textfieldName.setStyle("-fx-text-inner-color: red");
         }
-        String inputPassword = JOptionPane.showInputDialog("Ønkset password");
-        user.setPassword(inputPassword);
-        model.createUser(user);
-        System.out.println("Controller");
-        populateTreeTable();
+
+        if (model.valName(textfieldSurname.getText())) {
+            user.setName(textfieldSurname.getText());
+        } else {
+            textfieldSurname.setText("Invalid Surname");
+            textfieldSurname.setStyle("-fx-text-inner-color: red");
+        }
+
+        if (model.valEmail(textfieldEmail.getText())) {
+            user.setEmail(textfieldEmail.getText());
+        } else {
+            textfieldEmail.setText("Invalid Email");
+            textfieldEmail.setStyle("-fx-text-inner-color: red");
+        }
+
+        if (user.getName() != null && user.getSurname() != null && user.getEmail() != null) {
+            user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+            if (!checkboxAdminRole.isSelected()) {
+                user.setRole_id(2);
+            } else {
+                user.setRole_id(1);
+            }
+            String inputPassword = JOptionPane.showInputDialog("Ønkset password");
+            user.setPassword(inputPassword);
+            model.createUser(user);
+            populateTreeTable();
+        }
+
     }
 
     /**
@@ -219,8 +233,7 @@ public class UserManagerAdminController implements Initializable
      * @throws SQLException
      */
     @FXML
-    private void handleSelectionTreeTable(MouseEvent event) throws DALException, SQLException
-    {
+    private void handleSelectionTreeTable(MouseEvent event) throws DALException, SQLException {
         TreeItem<User> chosenUser;
         chosenUser = listUsers.getSelectionModel().getSelectedItem();
         textfieldName.setText(chosenUser.getValue().getName());
@@ -229,14 +242,45 @@ public class UserManagerAdminController implements Initializable
 
         int profession_id = listUsers.getSelectionModel().getSelectedItem().getValue().getProfession_id();
 
-        for (int i = 0; i < allProf.size(); i++)
-        {
+        for (int i = 0; i < allProf.size(); i++) {
             int prof = allProf.get(i).getProfession_id();
-            if (profession_id == prof)
-            {
+            if (profession_id == prof) {
                 listProfessions.getSelectionModel().select(allProf.get(i));
             }
         }
         checkboxAdminRole.setSelected(chosenUser.getValue().isAdminCheck(chosenUser));
+    }
+
+    /**
+     * markere alt i feltet for bedre brugervenlighed
+     *
+     * @param event
+     */
+    @FXML
+    private void handleNameClicked(MouseEvent event) {
+        textfieldName.selectAll();
+        textfieldName.setStyle("-fx-text-inner-color: black");
+    }
+
+    /**
+     * markere alt i feltet for bedre brugervenlighed
+     *
+     * @param event
+     */
+    @FXML
+    private void handleSurnameClicked(MouseEvent event) {
+        textfieldSurname.selectAll();
+        textfieldSurname.setStyle("-fx-text-inner-color: black");
+    }
+
+    /**
+     * markere alt i feltet for bedre brugervenlighed
+     *
+     * @param event
+     */
+    @FXML
+    private void handleEmailClick(MouseEvent event) {
+        textfieldEmail.selectAll();
+        textfieldEmail.setStyle("-fx-text-inner-color: black");
     }
 }

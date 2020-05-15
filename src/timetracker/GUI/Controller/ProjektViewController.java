@@ -91,9 +91,7 @@ public class ProjektViewController implements Initializable {
                     treeView.getSelectionModel().select(newValue.getChildren().get(0));
                 }
             }
-            
-            
-                        
+
         });
 
         TreeItem treeRoot = new TreeItem("Tasks");
@@ -145,7 +143,7 @@ public class ProjektViewController implements Initializable {
 
     @FXML
     private void handleEditTask(ActionEvent event) {
-        
+
         System.out.println(treeView.getSelectionModel().getSelectedItem().getValue().getTask_id());
 
     }

@@ -229,7 +229,6 @@ public class DALManager {
 //
 //        return projectsbyID;
 //    }
-
 //    /**
 //     * Returnerer en liste af et projekts tilhørende Tasks udfra person_id og
 //     * project_id
@@ -279,7 +278,6 @@ public class DALManager {
 //
 //        return taskbyID;
 //    }
-
 //    public List<Log> getLogsbyID(int task_id) {
 //        ArrayList<Log> logsbyID = new ArrayList<>();
 //        try ( Connection con = dbCon.getConnection()) {
@@ -372,9 +370,6 @@ public class DALManager {
 //            // todo
 //        }
 //    }
-
-    
-
 //    /**
 //     * Opretter en client med det client objekt der bliver sendt ned igennem
 //     * lagene.
@@ -478,7 +473,6 @@ public class DALManager {
 //        }
 //        return null;
 //    }
-
 //    /**
 //     * Opretter en User med det user objekt der bliver sendt ned igennem lagene.
 //     *
@@ -583,7 +577,6 @@ public class DALManager {
 //        }
 //        return null;
 //    }
-
 //    public List<Project> getProjectsbyClientID(Client client) {
 //        ArrayList<Project> allProjectswithClientID = new ArrayList<>();
 //        int client_ID = client.getClient_id();
@@ -633,7 +626,6 @@ public class DALManager {
 //        }
 //        return null;
 //    }
-
 //    /**
 //     * tjekker om det login info som kommer fra BLLManageren er det samme som
 //     * ligger på serveren. hvis ja returnere den et boolean som er true.

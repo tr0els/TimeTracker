@@ -282,14 +282,14 @@ public class ProjektManagerAdminController implements Initializable {
                 return new SimpleStringProperty(param.getValue().getValue().getProject_name());
             }
         });
-        
+
         projectClient.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getClientName());
             }
         });
-        
+
         projectRate.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {

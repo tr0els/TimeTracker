@@ -99,24 +99,21 @@ public class ProjektModel {
     public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
         return bll.getProject(projectName, project_rate, client_id);
     }
-    
-    
+
     public ObservableList<Project> getProjectsbyID(int person_id) throws DALException {
         projectsbyID.addAll(bll.getProjectsbyID(person_id));
         return projectsbyID;
     }
-    
-    public ObservableList<Project> getProjectsWithExtraData() throws DALException{
-      allProjectsWitExtraData.addAll(bll.getProjectsWithExtradata());
-      return allProjectsWitExtraData;
+
+    public ObservableList<Project> getProjectsWithExtraData() throws DALException {
+        allProjectsWitExtraData.addAll(bll.getProjectsWithExtradata());
+        return allProjectsWitExtraData;
     }
-    
-      
+
     public ObservableList<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
         allProjectsWitExtraData.clear();
         allProjectsWitExtraData.addAll(bll.getProjectsForEmploy(medarbejder_id));
         return allProjectsWitExtraData;
     }
-    
-    
+
 }
