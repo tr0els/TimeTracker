@@ -13,6 +13,8 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.GUI.Model.BrugerModel;
-
 
 /**
  *
@@ -69,7 +70,7 @@ public class MainController implements Initializable {
 
     /**
      * tager det info som er inputtet i textfields og sender dem til model.
-     * 
+     *
      * alle passwords er 1234
      *
      * @param event
@@ -81,17 +82,25 @@ public class MainController implements Initializable {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
 
-        if (model.login(email, password) != null) {
-            
-            int role = model.login(email, password).getRole_id();
+        if (model.valEmail(email) == true) {
+            if (model.login(email, password) != null) {
 
-            if (role == 1) {
-                handeladminlogin(event);
+                int role = model.login(email, password).getRole_id();
+
+                if (role == 1) {
+                    handeladminlogin(event);
+                }
+                if (role == 2) {
+                    handeluserlogin(event);
+                }
+            } else {
+                emailTextField.setText("Invalid Email or Password");
+                passwordTextField.clear();
             }
-            if (role == 2) {
-                handeluserlogin(event);
-            }
+        } else {
+            emailTextField.setText("Not a valid email");
         }
+
     }
 
     /**

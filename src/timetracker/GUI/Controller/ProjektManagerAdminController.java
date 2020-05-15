@@ -17,16 +17,22 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import com.jfoenix.validation.RegexValidator;
+import com.jfoenix.validation.RequiredFieldValidator;
+import java.awt.event.KeyAdapter;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import timetracker.BE.Client;
@@ -77,16 +83,13 @@ public class ProjektManagerAdminController implements Initializable {
         cModel = ClientModel.getInstance();
     }
 
-
 //    Denne skal vel ikke være der ? når det er en controller?????
-
 //    public static ProjektManagerAdminController getInstance() throws DALException, SQLException {
 //        if (projektController == null) {
 //            projektController = new ProjektManagerAdminController();
 //        }
 //        return projektController;
 //    }
-
     ObservableList<Client> clients;
     TreeItem<Project> project;
 
@@ -95,6 +98,27 @@ public class ProjektManagerAdminController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        timepris.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    timepris.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        timeprisEdit.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    timeprisEdit.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
         try {
             drawer.close();
 
@@ -266,10 +290,13 @@ public class ProjektManagerAdminController implements Initializable {
         //henter det data der skal ind i listen fra databasen
         try {
             projects.addAll(model.getProjects());
+
         } catch (DALException ex) {
-            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProjektManagerAdminController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProjektManagerAdminController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         //sætter dataen ind i selve treetableviewet

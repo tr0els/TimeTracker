@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import timetracker.BE.Profession;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
+import timetracker.BLL.InputValidator;
 import timetracker.DAL.DALException;
 
 /**
@@ -25,6 +26,7 @@ public class BrugerModel {
     private ObservableList<User> allUsers;
     private static BrugerModel model = null;
     private static BLLManager bll;
+    private static InputValidator validator;
 
     public static BrugerModel getInstance() throws DALException, SQLException {
         if (model == null) {
@@ -35,6 +37,7 @@ public class BrugerModel {
 
     public BrugerModel() throws DALException {
         bll = BLLManager.getInstance();
+        validator = InputValidator.getInstance();
         allUsers = FXCollections.observableArrayList();
         allUsers.addAll(bll.getUsers());
         allProfessions = FXCollections.observableArrayList();
@@ -113,6 +116,10 @@ public class BrugerModel {
     {
         allProfessions.addAll(bll.getProfessions());
         return allProfessions;
+    }
+
+    public boolean valEmail(String email) {
+        return validator.valEmail(email);
     }
 
 }

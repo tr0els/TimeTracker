@@ -188,7 +188,7 @@ public class BrugerDAO {
             ResultSet rs = st.executeQuery();
 
             if (rs.next() == false) {
-                System.out.println("ResultSet is empty");
+                return null;
             } else {
                 do {
                     User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
