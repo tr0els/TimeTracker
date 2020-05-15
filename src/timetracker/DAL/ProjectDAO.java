@@ -15,6 +15,7 @@ import java.util.List;
 import java.lang.String;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.User;
 
 /**
  *
@@ -325,13 +326,33 @@ public class ProjectDAO
     }
     
         
-        public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException
+        public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException
     {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
         {
-            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
+            String client_clause = "";
+            String user_clause = "";
+            String fradato_caluse = "";
+            String tildato_clause = "";
+           // StringBuilder sb = new StringBuilder();
+            
+           if(comboUser != null)
+               user_clause += "AND t.person_id = " +comboUser.getPerson_id()+"\n";
+           
+           if(comboClient != null)
+               client_clause +=  comboClient.getClient_name();
+           
+           if( fradato != null )
+               fradato_caluse += "AND t.task_start >= convert(date, '"+fradato+"', 103)\n";
+           
+           if( tildato != null )
+               tildato_clause += "AND t.task_end <= convert(date, '"+tildato+"', 103)\n";
+           
+            
+            String sql = 
+                    "SELECT p.project_name,p.project_id, c.client_id,\n"
                     + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
@@ -343,8 +364,16 @@ public class ProjectDAO
                     + "where t.project_id = p.project_id\n"
                     + "and c.client_id = p.client_id\n"
                     + "and t.task_id = t1.task_id\n"
-                    + "and t.person_id =" + medarbejder_id + "\n"
+                    + "and c.client_name LIKE '%" + client_clause + "%'\n"
+                    + user_clause 
+                    + fradato_caluse
+                    + tildato_clause
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+            //sb.append(sql);
+            
+            
+            
+            
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next())
