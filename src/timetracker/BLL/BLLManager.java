@@ -154,8 +154,8 @@ public class BLLManager {
 
        
       
-    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException {
-        return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato);
+    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+        return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
 	}
 
 //    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {

@@ -297,7 +297,7 @@ public class ProjectDAO {
 
     
         
-        public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException
+        public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException
     {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
@@ -307,6 +307,8 @@ public class ProjectDAO {
             String user_clause = "";
             String fradato_caluse = "";
             String tildato_clause = "";
+            String periode_clause = "";
+            //String monthStart_clause = "";
            // StringBuilder sb = new StringBuilder();
             
            if(comboUser != null)
@@ -320,6 +322,10 @@ public class ProjectDAO {
            
            if( tildato != null )
                tildato_clause += "AND t.task_end <= convert(date, '"+tildato+"', 103)\n";
+           
+           if( monthStart != null && monthEnd != null)
+               periode_clause += "AND t.task_start Between convert(date, '"+ monthStart+"', 103) and convert(date, '"+ monthEnd+"', 103)";
+               
            
             
             String sql = 
@@ -338,6 +344,7 @@ public class ProjectDAO {
                     + user_clause 
                     + fradato_caluse
                     + tildato_clause
+                    + periode_clause
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
             //sb.append(sql);
             
