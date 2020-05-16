@@ -15,6 +15,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,7 +74,7 @@ public class KlientManagerAdminController implements Initializable {
     private Label lblprojektnavn;
     @FXML
     private Label lblprojekttimepris;
-    
+
     private Client selectedClient;
     private Client newclient = new Client();
     private static ClientModel model;
@@ -82,33 +84,46 @@ public class KlientManagerAdminController implements Initializable {
     private JFXButton btbcancelnyklient;
     @FXML
     private JFXButton btbcloseret;
-   
 
     public KlientManagerAdminController() throws DALException, SQLException {
         model = ClientModel.getInstance();
         taskmodel = TaskModel.getInstance();
     }
-    
-    
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        nydefaulttimepris.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    nydefaulttimepris.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+
+        txtrettimepris.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtrettimepris.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         try {
-            
+
             populateClientList();
-        
+
             skuffe.close();
             retklientbtb.setVisible(false);
             retvalgteklientnbtb.setVisible(false);
-          
-            listviewprojekts.setTooltip(tooltipforprojektlist());
-         
-          
 
-        
+            listviewprojekts.setTooltip(tooltipforprojektlist());
 
         } catch (DALException ex) {
             Logger.getLogger(KlientManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,99 +131,112 @@ public class KlientManagerAdminController implements Initializable {
             Logger.getLogger(KlientManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
-     * sætter alle klienterne ind i klient listviewet 
+     * sætter alle klienterne ind i klient listviewet
+     *
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     private void populateClientList() throws DALException, SQLException {
- 
-       listviewfx.setItems(model.getClients());
+
+        listviewfx.setItems(model.getClients());
 
     }
 
     /**
-     * håndtere den valgte klient fra klient listviwet, og tranportere dens info til relevandte lables, og arktivere "Ret klient knappen" mm. 
+     * håndtere den valgte klient fra klient listviwet, og tranportere dens info
+     * til relevandte lables, og arktivere "Ret klient knappen" mm.
+     *
      * @param event
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     @FXML
     private void getSelectedClient(MouseEvent event) throws DALException, SQLException {
 
         selectedClient = listviewfx.getSelectionModel().getSelectedItem();
-       
+
         klientNavnlbl.setText(selectedClient.getClient_name());
         timeprislbl.setText(selectedClient.getDefault_rate() + " DKK");
-        
+
         //gør ret klient btb og retvalgteklient btb synlige
         retklientbtb.setVisible(true);
         retvalgteklientnbtb.setVisible(true);
-        
+
         //tilføjer projeketer til listviewet for den valgte klient
         addprojektstolistview(selectedClient);
-       
-        
+
         //resetter projekt info lablsne
         lblprojektnavn.setText("");
         lblprojekttimepris.setText("");
     }
-    
+
     /**
-     * finder ud af hvilket tooltip der skal vises 
-     * @return 
+     * finder ud af hvilket tooltip der skal vises
+     *
+     * @return
      */
     private Tooltip tooltipforprojektlist() {
-            Tooltip tip = new Tooltip();
+        Tooltip tip = new Tooltip();
 
-        if (istheresomthinginprojectview()== 1) {
+        if (istheresomthinginprojectview() == 1) {
             tip.setText("Vælg en klient for at få vist deres projekter");
-            return tip;}
-        else if(istheresomthinginprojectview() == 2) {
+            return tip;
+        } else if (istheresomthinginprojectview() == 2) {
             tip.setText("Klienten har ingen projekter");
             return tip;
-    }
-    return null;
-    }
-        
-   /**
-    * hjælpe metode til at finde ud af hvad der er i projekt listviewet, og retunere en int
-    * som bruges i tooltipforprojektview() for at sætte den korrekte tooltip. 
-    * @return 
-    */     
-    public int istheresomthinginprojectview(){
-        
-        if ( selectedClient == null) {
-            return 1;}
-        if(Bindings.isEmpty(listviewprojekts.getItems()).get() && selectedClient != null )
-        {return 2;}
-      
-       return 0; 
+        }
+        return null;
     }
 
-      
+    /**
+     * hjælpe metode til at finde ud af hvad der er i projekt listviewet, og
+     * retunere en int som bruges i tooltipforprojektview() for at sætte den
+     * korrekte tooltip.
+     *
+     * @return
+     */
+    public int istheresomthinginprojectview() {
+
+        if (selectedClient == null) {
+            return 1;
+        }
+        if (Bindings.isEmpty(listviewprojekts.getItems()).get() && selectedClient != null) {
+            return 2;
+        }
+
+        return 0;
+    }
+
     /**
      * tilføjer den valgte klients projekter til listviewet
+     *
      * @param client
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     private void addprojektstolistview(Client client) throws DALException, SQLException {
         listviewprojekts.setItems(FXCollections.observableArrayList(model.getClientprojcts(client)));
     }
-    
+
     /**
-     * Tooltip eventhandler, tjekker om musen hover over projektlistview for at sætte det rigtige tooltip
-     * @param event 
+     * Tooltip eventhandler, tjekker om musen hover over projektlistview for at
+     * sætte det rigtige tooltip
+     *
+     * @param event
      */
     @FXML
     private void tooltip(MouseEvent event) {
 
         listviewprojekts.setTooltip(tooltipforprojektlist());
     }
+
     /**
-     * opret ny klient knap, som åbner draweren med txtinput felter til at oprette en klient
-     * @param event 
+     * opret ny klient knap, som åbner draweren med txtinput felter til at
+     * oprette en klient
+     *
+     * @param event
      */
     @FXML
     private void showpanewithnewklient(ActionEvent event) {
@@ -216,53 +244,60 @@ public class KlientManagerAdminController implements Initializable {
         skuffe.open();
         skuffe.toFront();
     }
+
     /**
-     * knap til at håndtere oprettelsen af en ny klien, knappen ligger i anchorpane, som ikke kan ses når draweren ikke er åben.
+     * knap til at håndtere oprettelsen af en ny klien, knappen ligger i
+     * anchorpane, som ikke kan ses når draweren ikke er åben.
+     *
      * @param event
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     @FXML
     private void handleopretklient(ActionEvent event) throws DALException, SQLException {
- 
-       Client newklient = new Client();
-       
+
+        Client newklient = new Client();
+
         String nytnavn = Nyklientnavn.getText().trim();
         int timepris = Integer.parseInt(nydefaulttimepris.getText().trim());
-       
+
         newklient = model.createClient(nytnavn, timepris);
-       
+
         model.getClients().add(newklient);
 
         listviewfx.refresh();
         skuffe.close();
 
     }
+
     /**
-     * håndtere retklient, knappen ligger i anchorpane som kun kan ses når draweren med retklien er åben. 
+     * håndtere retklient, knappen ligger i anchorpane som kun kan ses når
+     * draweren med retklien er åben.
+     *
      * @param event
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     @FXML
     private void handleretklient(ActionEvent event) throws DALException, SQLException {
-       
+
         String retnavn = txtretnavn.getText().trim();
         int rettimepris = Integer.parseInt(txtrettimepris.getText().trim().replace(" DKK", " ").trim());
 
         selectedClient.setClient_name(retnavn);
         selectedClient.setDefault_rate(rettimepris);
         model.editClient(selectedClient);
-        timeprislbl.setText(rettimepris+" DKK");
+        timeprislbl.setText(rettimepris + " DKK");
         klientNavnlbl.setText(retnavn);
         listviewfx.refresh();
         skuffe.close();
-       
 
     }
+
     /**
      * åbner draweren med ret klien txtinputfelter
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void openskuffemenretklient(ActionEvent event) {
@@ -272,26 +307,24 @@ public class KlientManagerAdminController implements Initializable {
         txtrettimepris.setText(selectedClient.getDefault_rate() + " DKK");
 
     }
+
     /**
-     * sætter info lablesne men info om det valgte projekt. 
-     * @param event 
+     * sætter info lablesne men info om det valgte projekt.
+     *
+     * @param event
      */
     @FXML
     private void getSelectedProjekt(MouseEvent event) {
-       Project valgteprojekt = listviewprojekts.getSelectionModel().getSelectedItem();
-       
-       
-       lblprojektnavn.setText(valgteprojekt.getProject_name());
-       lblprojekttimepris.setText(valgteprojekt.getProject_rate()+" DKK");
-       
-       
-    }
+        Project valgteprojekt = listviewprojekts.getSelectionModel().getSelectedItem();
 
+        lblprojektnavn.setText(valgteprojekt.getProject_name());
+        lblprojekttimepris.setText(valgteprojekt.getProject_rate() + " DKK");
+
+    }
 
     @FXML
     private void handleCancelRetklient(ActionEvent event) {
-        
-     
+
         skuffe.close();
     }
 

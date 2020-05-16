@@ -5,11 +5,17 @@
  */
 package timetracker.BE;
 
+import java.util.List;
+
 /**
  *
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskEvent {
-    
+// note: if treetableview gets angry, make this class extend TaskBase so it behaves like a task
+public class TaskDate {
+
+    private String name;
+    private String time;
+    private List<TaskParent> parents;
 }

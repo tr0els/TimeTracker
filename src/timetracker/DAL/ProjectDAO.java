@@ -15,18 +15,17 @@ import java.util.List;
 import java.lang.String;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.User;
 
 /**
  *
  * @author Charlotte
  */
-public class ProjectDAO
-{
+public class ProjectDAO {
 
     private DatabaseConnector dbCon;
 
-    public ProjectDAO() throws DALException
-    {
+    public ProjectDAO() throws DALException {
         dbCon = new DatabaseConnector();
     }
 
@@ -38,10 +37,8 @@ public class ProjectDAO
      * @param projectName
      * @param hourlyPay
      */
-    public void createProject(int clientID, String projectName, int hourlyPay)
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void createProject(int clientID, String projectName, int hourlyPay) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Project (project_name, project_rate, client_id) VALUES (?,?,?)";
 
@@ -53,8 +50,7 @@ public class ProjectDAO
 
             st.executeQuery();
 
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
         }
     }
 
@@ -65,10 +61,8 @@ public class ProjectDAO
      * @param projectID
      * @throws timetracker.DAL.DALException
      */
-    public void deleteProject(int projectID) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void deleteProject(int projectID) throws DALException {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "DELETE FROM Project WHERE project_id = ?";
 
@@ -78,8 +72,7 @@ public class ProjectDAO
 
             st.execute();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke slette projektet");
         }
     }
@@ -94,10 +87,8 @@ public class ProjectDAO
      * @param projectID
      * @throws timetracker.DAL.DALException
      */
-    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?";
 
@@ -110,8 +101,7 @@ public class ProjectDAO
 
             st.executeQuery();
 
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke rette projektet");
         }
     }
@@ -123,19 +113,16 @@ public class ProjectDAO
      * @return
      * @throws DALException
      */
-    public List<Project> getProjects() throws DALException
-    {
+    public List<Project> getProjects() throws DALException {
         ArrayList<Project> allProjects = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT project_id, project_name, project_rate, project.client_id, client_name\n"
                     + "FROM Project, Client\n"
                     + "WHERE Project.client_id = Client.client_id";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
@@ -146,8 +133,7 @@ public class ProjectDAO
                 allProjects.add(projects);
             }
             return allProjects;
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente projekter fra databasen");
         }
         //return null;
@@ -160,10 +146,8 @@ public class ProjectDAO
      * @param client_id
      * @return
      */
-    public Project getProject(String projectName, int project_rate, int client_id) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT * FROM Project WHERE project_name = ? AND project_rate = ? AND client_id = ?;";
 
@@ -175,8 +159,7 @@ public class ProjectDAO
 
             ResultSet rs = st.executeQuery();
 
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Project project = new Project();
                 project.setProject_id(rs.getInt("project_id"));
                 project.setProject_name(rs.getString("project_name"));
@@ -185,8 +168,7 @@ public class ProjectDAO
                 return project;
             }
 
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DALException("kunne ikke hente proejktet fra databasen");
         }
 
@@ -199,8 +181,7 @@ public class ProjectDAO
      * @param person_id
      * @return
      */
-    public List<Project> getProjectsbyID(int person_id) throws DALException
-    {
+    public List<Project> getProjectsbyID(int person_id) throws DALException {
         ArrayList<Project> projectsbyID = new ArrayList<>();
         
         try ( Connection con = dbCon.getConnection())
@@ -221,8 +202,7 @@ public class ProjectDAO
             ps.setInt(1, person_id);
 
             ResultSet rs = ps.executeQuery();
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Project projects = new Project();
 
                 projects.setProject_id(rs.getInt("project_id"));
@@ -234,8 +214,7 @@ public class ProjectDAO
                 projectsbyID.add(projects);
             }
 
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente dine projekter");
         }
 
@@ -248,17 +227,14 @@ public class ProjectDAO
      * @param client
      * @return
      */
-    public List<Project> getProjectsbyClientID(Client client) throws DALException
-    {
+    public List<Project> getProjectsbyClientID(Client client) throws DALException {
         ArrayList<Project> allProjectswithClientID = new ArrayList<>();
         int client_ID = client.getClient_id();
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Project WHERE client_id =  " + client_ID + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
@@ -268,19 +244,16 @@ public class ProjectDAO
                 allProjectswithClientID.add(projects);
             }
             return allProjectswithClientID;
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DALException("kunne ikke finde projekter for klienten");
         }
         // return null;
     }
 
-        public List<Project> getProjectsWithExtraData() throws DALException
-    {
+    public List<Project> getProjectsWithExtraData() throws DALException {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
                     + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
@@ -296,8 +269,7 @@ public class ProjectDAO
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 String billabletime;
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
@@ -307,9 +279,9 @@ public class ProjectDAO
                 projects.setClientName(rs.getString("client_name"));
                 projects.setTotal_tid(rs.getString("total_time"));
                 billabletime = rs.getString("billabletime");
-                
-                if(billabletime != null){
-                projects.setBillableTime(billabletime);
+
+                if (billabletime != null) {
+                    projects.setBillableTime(billabletime);
                 } else {
                     projects.setBillableTime("00:00:00");
                 }
@@ -317,22 +289,41 @@ public class ProjectDAO
                 allProjectsWithExtraData.add(projects);
             }
             return allProjectsWithExtraData;
-        } catch (SQLException ex)
-        {
-             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
+        } catch (SQLException ex) {
+            throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
         }
         //return null;
     }
+
     
         
-        public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException
+        public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException
     {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
         {
-            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
-                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+            String client_clause = "";
+            String user_clause = "";
+            String fradato_caluse = "";
+            String tildato_clause = "";
+           // StringBuilder sb = new StringBuilder();
+            
+           if(comboUser != null)
+               user_clause += "AND t.person_id = " +comboUser.getPerson_id()+"\n";
+           
+           if(comboClient != null)
+               client_clause +=  comboClient.getClient_name();
+           
+           if( fradato != null )
+               fradato_caluse += "AND t.task_start >= convert(date, '"+fradato+"', 103)\n";
+           
+           if( tildato != null )
+               tildato_clause += "AND t.task_end <= convert(date, '"+tildato+"', 103)\n";
+           
+            
+            String sql = 
+                    "SELECT p.project_name,p.project_id, c.client_id,\n"                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
                     + "AS total_time,\n"
@@ -343,12 +334,19 @@ public class ProjectDAO
                     + "where t.project_id = p.project_id\n"
                     + "and c.client_id = p.client_id\n"
                     + "and t.task_id = t1.task_id\n"
-                    + "and t.person_id =" + medarbejder_id + "\n"
+                    + "and c.client_name LIKE '%" + client_clause + "%'\n"
+                    + user_clause 
+                    + fradato_caluse
+                    + tildato_clause
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+            //sb.append(sql);
+            
+            
+            
+            
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 String billabletime;
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
@@ -358,9 +356,9 @@ public class ProjectDAO
                 projects.setClientName(rs.getString("client_name"));
                 projects.setTotal_tid(rs.getString("total_time"));
                 billabletime = rs.getString("billabletime");
-                
-                if(billabletime != null){
-                projects.setBillableTime(billabletime);
+
+                if (billabletime != null) {
+                    projects.setBillableTime(billabletime);
                 } else {
                     projects.setBillableTime("00:00:00");
                 }
@@ -368,13 +366,65 @@ public class ProjectDAO
                 allProjectsWithExtraData.add(projects);
             }
             return allProjectsWithExtraData;
-        } catch (SQLException ex)
-        {
-             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
+        } catch (SQLException ex) {
+            throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
         }
         //return null;
     }
-        
-        
-    
+
+//
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
+//
+//        try ( Connection con = dbCon.getConnection()) {
+//            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
+//                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
+//                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
+//                    + "AS total_time,\n"
+//                    + "convert(Varchar(5),sum(case when t1.billable = 1  then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60/60)+':'+\n"
+//                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)/60%60),2)+ ':'+\n"
+//                    + "right('0' + convert(Varchar(2),sum(case when t1.billable = 1 then (DATEDIFF(SECOND,t1.task_start,t1.task_end))end)%60),2) as billabletime, c.client_name\n"
+//                    + "FROM Tasklog t, Project p, Tasklog t1, Client c\n"
+//                    + "where t.project_id = p.project_id\n"
+//                    + "and c.client_id = p.client_id\n"
+//                    + "and t.task_id = t1.task_id\n"
+//                    + "and c.client_name LIKE '%" + client_clause + "%'\n"
+//                    + user_clause 
+//                    + fradato_caluse
+//                    + tildato_clause
+//                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+//            //sb.append(sql);
+//            
+//            
+//            
+//            
+//            Statement statement = con.createStatement();
+//            ResultSet rs = statement.executeQuery(sql);
+//            while (rs.next()) {
+//                String billabletime;
+//                Project projects = new Project();
+//                projects.setProject_id(rs.getInt("project_id"));
+//                projects.setProject_name(rs.getString("project_name"));
+//                //projects.setProject_rate(rs.getInt("project_rate"));
+//                projects.setClient_id(rs.getInt("client_id"));
+//                projects.setClientName(rs.getString("client_name"));
+//                projects.setTotal_tid(rs.getString("total_time"));
+//                billabletime = rs.getString("billabletime");
+//
+//                if (billabletime != null) {
+//                    projects.setBillableTime(billabletime);
+//                } else {
+//                    projects.setBillableTime("00:00:00");
+//                }
+//
+//                allProjectsWithExtraData.add(projects);
+//            }
+//            return allProjectsWithExtraData;
+//        } catch (SQLException ex) {
+//            throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
+//        }
+//        //return null;
+//    }
+
 }

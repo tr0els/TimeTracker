@@ -11,29 +11,29 @@
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
     <children>
-      <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="14.0" layoutY="34.0" prefHeight="26.0" prefWidth="285.0" promptText="Navnet på  den nye opgave" />
-      <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="439.0" layoutY="36.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="69.0" selected="true" text="Billable" />
-      <JFXComboBox fx:id="comboListprojects" layoutX="311.0" layoutY="31.0" prefHeight="28.0" prefWidth="112.0" promptText="Vælg Projekt" />
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="174.0" prefHeight="102.0" prefViewportWidth="570.0" prefWidth="572.0">
-         <content>
-            <AnchorPane fx:id="paneToday">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </AnchorPane>
-         </content>
-      </ScrollPane>
-      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="327.0" prefHeight="102.0" prefViewportWidth="570.0" prefWidth="572.0">
-         <content>
-            <AnchorPane fx:id="paneYesterday">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </AnchorPane>
-         </content>
-      </ScrollPane>
-      <Label layoutX="14.0" layoutY="151.0" prefHeight="18.0" prefWidth="178.0" text="Idag:" />
-      <Label layoutX="14.0" layoutY="303.0" prefHeight="18.0" prefWidth="178.0" text="Igår:" />
-      <JFXButton fx:id="btnCreateTask" layoutX="524.0" layoutY="31.0" onAction="#handleCreateTask" text="Start" />
+        <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="14.0" layoutY="34.0" prefHeight="26.0" prefWidth="285.0" promptText="Navnet på  den nye opgave" />
+        <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="439.0" layoutY="36.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="69.0" selected="true" text="Billable" />
+        <JFXComboBox fx:id="comboListprojects" layoutX="311.0" layoutY="31.0" prefHeight="28.0" prefWidth="112.0" promptText="Vælg Projekt" />
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="174.0" prefHeight="102.0" prefViewportWidth="570.0" prefWidth="572.0">
+            <content>
+                <AnchorPane fx:id="paneToday">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="327.0" prefHeight="102.0" prefViewportWidth="570.0" prefWidth="572.0">
+            <content>
+                <AnchorPane fx:id="paneYesterday">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+        <Label layoutX="14.0" layoutY="151.0" prefHeight="18.0" prefWidth="178.0" text="Idag:" />
+        <Label layoutX="14.0" layoutY="303.0" prefHeight="18.0" prefWidth="178.0" text="Igår:" />
+        <JFXButton fx:id="btnCreateTask" layoutX="524.0" layoutY="31.0" onAction="#handleCreateTask" text="Start" />
     </children>
 </AnchorPane>

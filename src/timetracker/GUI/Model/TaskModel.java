@@ -150,7 +150,6 @@ public class TaskModel implements Runnable {
 //        logsById.addAll(bll.getLogsbyID(task_id));
 //        return logsById;
 //    }
-
 //    /**
 //     * Sender det info fra MainControllerens "editProject" videre til DAL laget
 //     *

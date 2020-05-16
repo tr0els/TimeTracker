@@ -19,9 +19,7 @@ import javafx.scene.layout.AnchorPane;
  */
 public class FxmlLoader {
 
-    
-    
-       public static Object loadWindow(URL loc, AnchorPane pane) {
+    public static Object loadWindow(URL loc, AnchorPane pane) {
         Object controller = null;
         try {
             FXMLLoader loader = new FXMLLoader(loc);
@@ -29,14 +27,13 @@ public class FxmlLoader {
             controller = loader.getController();
             pane.getChildren().clear();
             pane.getChildren().add(parent);
-            
+
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return controller;
     }
-    
-     
+
 }
 
 //

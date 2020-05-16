@@ -41,7 +41,7 @@ public class TaskDAO {
      * @throws timetracker.DAL.DALException
      */
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "INSERT INTO Tasklog (task_name, billable, project_id, person_id, task_start) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
 
@@ -65,7 +65,7 @@ public class TaskDAO {
      * @throws timetracker.DAL.DALException
      */
     public void stopTask(int person_id) throws DALException {
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
                     + "WHERE person_id = ? AND task_end IS NULL";
@@ -96,7 +96,7 @@ public class TaskDAO {
         String typeTask = "TASK";
         String typeLog = "LOG";
 
-        try (Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection()) {
 
             String sql = "SELECT 'TASK' AS type, \n"
                     + "	MIN(t.task_id) as task_id,\n"
