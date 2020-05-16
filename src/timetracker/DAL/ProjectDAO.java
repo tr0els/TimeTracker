@@ -202,7 +202,7 @@ public class ProjectDAO
     public List<Project> getProjectsbyID(int person_id) throws DALException
     {
         ArrayList<Project> projectsbyID = new ArrayList<>();
-
+        
         try ( Connection con = dbCon.getConnection())
         {
             String sql = "SELECT p.client_id, p.project_id, p.project_name, p.project_rate,\n"

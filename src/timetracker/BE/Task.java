@@ -20,22 +20,59 @@ public class Task {
     private int project_id;
     private int person_id;
     private String total_tid;
-
+    private LocalDateTime start_time;
+    private LocalDateTime end_time;
+    private boolean billable;
+    private String stringBillable;
     private LocalDateTime last_worked_on;
-
-    public Task(int task_id, String task_name, int project_id, int person_id, String total_tid, LocalDateTime last_worked_on) {
-
+    
+    
+    public Task(int task_id, String task_name, int project_id, int person_id, String total_tid, String task_tid, LocalDateTime start_time, LocalDateTime end_time, boolean billable, LocalDateTime last_worked_on) {
         this.task_id = task_id;
         this.task_name = task_name;
         this.project_id = project_id;
         this.person_id = person_id;
         this.total_tid = total_tid;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.billable = billable;
         this.last_worked_on = last_worked_on;
-
     }
 
     public Task() {
 
+    }
+
+    public String getStringBillable() {
+        return stringBillable;
+    }
+
+    public void setStringBillable(String stringBillable) {
+        this.stringBillable = stringBillable;
+    }
+
+    public LocalDateTime getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(LocalDateTime start_time) {
+        this.start_time = start_time;
+    }
+
+    public LocalDateTime getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(LocalDateTime end_time) {
+        this.end_time = end_time;
+    }
+
+    public boolean isBillable() {
+        return billable;
+    }
+
+    public void setBillable(boolean billable) {
+        this.billable = billable;
     }
 
     public LocalDateTime getLast_worked_on() {
@@ -180,7 +217,14 @@ public class Task {
             if (total_tid != null) {
                 total = total_tid + "";
             }
-            return "" + total + " | [" + start + " - " + slut + "]" + "billable: " + billable;
+            String faktureres;
+            if (billable == true) {
+                faktureres = "Ja";
+            } else {
+                faktureres = "Nej";
+            }
+
+            return "" + total + " | [" + start + " - " + slut + "] | " + "Faktureres: " + faktureres;
         }
 
     }

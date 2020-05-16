@@ -138,7 +138,7 @@ public class TaskModel implements Runnable {
      * @return
      * @throws timetracker.DAL.DALException
      */
-    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 //        taskById.clear();
 //        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
 //        return taskById;

@@ -6,28 +6,37 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
-import timetracker.BE.Task.Log;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
@@ -49,13 +58,43 @@ public class ProjektViewController implements Initializable {
 
     private int person_id;
     @FXML
-    private TreeView<Log> treeView;
-    @FXML
     private Label lblProjectnavn;
     @FXML
     private Label lblProjectTid;
     @FXML
     private JFXButton btnEdit;
+    @FXML
+    private JFXDrawer skuffen;
+    @FXML
+    private JFXTextField txtTask_name;
+    @FXML
+    private JFXCheckBox chkboxBillable;
+    @FXML
+    private AnchorPane paneEdit;
+    @FXML
+    private JFXComboBox<Project> menuEditProjects;
+    @FXML
+    private TreeTableView<Task> treeTasks;
+    @FXML
+    private TreeTableColumn<Task, String> colTask_name;
+    @FXML
+    private TreeTableColumn<Task, String> colTask_start;
+    @FXML
+    private TreeTableColumn<Task, String> colTask_end;
+    @FXML
+    private TreeTableColumn<Task, String> colTotal_time;
+    @FXML
+    private TreeTableColumn<Task, String> colLast_worked_on;
+    @FXML
+    private TreeTableColumn<Task, String> colBillable;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+    public ProjektViewController() throws DALException, SQLException {
+
+        model = TaskModel.getInstance();
+        Pmodel = ProjektModel.getInstance();
+    }
 
     /**
      * Initializes the controller class.
@@ -63,14 +102,15 @@ public class ProjektViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            skuffen.setSidePane(paneEdit);
+            skuffen.toBack();
+            skuffen.close();
 
-            model = TaskModel.getInstance();
-            Pmodel = ProjektModel.getInstance();
             person_id = 1;
             showProjects();
             projectListener();
 
-        } catch (DALException | SQLException ex) {
+        } catch (DALException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -78,50 +118,74 @@ public class ProjektViewController implements Initializable {
 
     public void createTree(int project_id) throws DALException {
 
-        treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isLeaf()) {
-                treeView.getSelectionModel().select(newValue.getChildren().get(0));
-            }
-            if (newValue != null && newValue.isLeaf()) {
-                treeView.getSelectionModel().select(newValue);
-            }
-            if (newValue != null && !newValue.isLeaf() && oldValue != null && oldValue.isLeaf()) {
-                if (oldValue == newValue.getChildren().get(0)) {
-                } else {
-                    treeView.getSelectionModel().select(newValue.getChildren().get(0));
-                }
-            }
-            
-            
-                        
-        });
+        TreeItem ttRoot = new TreeItem("Tasks");
 
-        TreeItem treeRoot = new TreeItem("Tasks");
-
-        for (Map.Entry<Task, List<Log>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
+        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
             Task hashTask = entry.getKey();
             TreeItem task = new TreeItem<Task>(hashTask);
-            treeRoot.getChildren().add(task);
+            ttRoot.getChildren().add(task);
 
-            List<Log> logs = entry.getValue();
+            List<Task> logs = entry.getValue();
 
             for (int j = 0; j < logs.size(); j++) {
-                TreeItem<Log> log = new TreeItem<Log>(logs.get(j));
+                TreeItem<Task> log = new TreeItem<Task>(logs.get(j));
                 task.getChildren().add(log);
 
             }
+            colTask_name.setCellValueFactory(new TreeItemPropertyValueFactory<>("task_name"));
+            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
+            colLast_worked_on.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
+                    
+                    if (param.getValue().getValue().getLast_worked_on() == null) {
+                        return new SimpleStringProperty("");
+                    }else{
+                        return new SimpleStringProperty(param.getValue().getValue().getLast_worked_on().format(formatter));
+                    }
+                }
+            });
+
+            colTask_start.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
+                    
+                    if (param.getValue().getValue().getStart_time() == null) {
+                        return new SimpleStringProperty("");
+                    }else{
+                        return new SimpleStringProperty(param.getValue().getValue().getStart_time().format(formatter));
+                    }
+                }
+            });
+
+            colTask_end.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
+                    
+                    if (param.getValue().getValue().getEnd_time() == null) {
+                        return new SimpleStringProperty("");
+                    }else{
+                        return new SimpleStringProperty(param.getValue().getValue().getEnd_time().format(formatter));
+                    }
+                }
+            });
+
+            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
+            colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
+
+            treeTasks.setRoot(ttRoot);
+            treeTasks.setShowRoot(false);
 
         }
-
-        treeView.setRoot(treeRoot);
-        treeView.setShowRoot(false);
     }
 
     /**
      * henter en liste over projekter og smider dem i vores combobox
      */
     public void showProjects() throws DALException {
+
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
+
     }
 
     /**
@@ -145,8 +209,14 @@ public class ProjektViewController implements Initializable {
 
     @FXML
     private void handleEditTask(ActionEvent event) {
-        
-        System.out.println(treeView.getSelectionModel().getSelectedItem().getValue().getTask_id());
+
+        if (skuffen.isOpened()) {
+            skuffen.close();
+            skuffen.toBack();
+        } else {
+            skuffen.open();
+            skuffen.toFront();
+        }
 
     }
 

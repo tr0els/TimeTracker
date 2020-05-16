@@ -86,7 +86,7 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 

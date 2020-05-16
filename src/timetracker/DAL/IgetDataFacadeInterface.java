@@ -47,7 +47,7 @@ public interface IgetDataFacadeInterface {
     
    // Task getTaskbyTaskID(int task_id)throws DALException;
     
-    HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id)throws DALException;
+    HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
     
 //    List<Log> getLogsbyID(int task_id)throws DALException;
     
