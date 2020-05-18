@@ -165,15 +165,15 @@ public class OverviewForAdminsController implements Initializable {
         for (Project project : listeAfProjekter) {
             //henter billable timer ud fra projekt listen 
             getmetimeHHBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(0, project.getBillableTime().length()-6)))*3600;
-            System.out.println(getmetimeHHBill +" HH");
+            //System.out.println(getmetimeHHBill +" HH");
             getmetimeMMBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(howLongIsTheString(project.getBillableTime()), project.getBillableTime().length()-3)))*60;
-            System.out.println(getmetimeMMBill+ " MM");
+            //System.out.println(getmetimeMMBill+ " MM");
             
             //henter total tidud fra projekt listen
             getmetimeHHTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(0, project.getTotal_tid().length()-6)))*3600;
-            System.out.println(getmetimeHHBill +" HH");
+            //System.out.println(getmetimeHHBill +" HH");
             getmetimeMMTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(howLongIsTheString(project.getTotal_tid()), project.getTotal_tid().length()-3)))*60;
-            System.out.println(getmetimeMMBill+ " MM");
+            //System.out.println(getmetimeMMBill+ " MM");
             
                       
             getmetotalHHMMBill += getmetimeHHBill+getmetimeMMBill;
