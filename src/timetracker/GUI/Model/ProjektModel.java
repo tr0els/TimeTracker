@@ -102,6 +102,12 @@ public class ProjektModel {
         return bll.getProject(projectName, project_rate, client_id);
     }
 
+    /**
+     * returnere en liste af projects hvor person_id har lavet tasks på
+     * @param person_id
+     * @return
+     * @throws DALException 
+     */
     public ObservableList<Project> getProjectsbyID(int person_id) throws DALException {
         projectsbyID.clear();
         projectsbyID.addAll(bll.getProjectsbyID(person_id));

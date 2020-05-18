@@ -89,10 +89,21 @@ public class BLLManager {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
+    /**
+     * returnere en specifik task udfra task_id
+     * @param task_id
+     * @return
+     * @throws DALException 
+     */
     public Task getTaskbyID(int task_id) throws DALException {
         return iGetData.getTaskbyID(task_id);
     }
 
+    /**
+     * Sender en task til db for at opdatere den.
+     * @param task
+     * @throws DALException 
+     */
     public void updateTaskbyID(Task task) throws DALException{
         iGetData.updateTaskbyID(task);
     }

@@ -199,6 +199,12 @@ public class TaskDAO {
         return map;
     }
 
+    /**
+     * returnere en specifik task udfra task_id
+     * @param task_id
+     * @return
+     * @throws DALException 
+     */
     public Task getTaskbyID(int task_id) throws DALException {
         Task task = new Task();
 
@@ -233,6 +239,11 @@ public class TaskDAO {
 
     }
 
+    /**
+     * Modtager en Task og opdatere den i DB.
+     * @param task
+     * @throws DALException 
+     */
     public void updateTaskbyID(Task task) throws DALException {
 
         try (Connection con = dbCon.getConnection()) {

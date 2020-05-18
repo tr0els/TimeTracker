@@ -55,9 +55,7 @@ public interface IgetDataFacadeInterface {
     
     public void updateTaskbyID(Task task) throws DALException;
             
-            
-//    List<Log> getLogsbyID(int task_id)throws DALException;
-    //List<Log> getTaskLogListbyDay(int person_id, int dag)throws DALException;
+
     //Klient
     Client createClient(String name, int timepris) throws DALException;
 

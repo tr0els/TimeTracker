@@ -143,12 +143,21 @@ public class TaskModel implements Runnable {
         return bll.getTaskbyIDs(project_id, person_id);
     }
 
-    
+    /**
+     * returnere en specifik task udfra task_id
+     * @param task_id
+     * @return
+     * @throws DALException 
+     */
     public Task getTaskbyID(int task_id) throws DALException {
         return bll.getTaskbyID(task_id);
     }
     
-    
+    /**
+     * Sender en task til db for at opdatere den.
+     * @param task
+     * @throws DALException 
+     */
     public void updateTaskbyID(Task task) throws DALException{
         bll.updateTaskbyID(task);
     }
