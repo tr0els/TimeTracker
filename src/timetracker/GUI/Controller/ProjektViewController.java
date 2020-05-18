@@ -137,10 +137,10 @@ public class ProjektViewController implements Initializable {
             colLast_worked_on.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
-                    
+
                     if (param.getValue().getValue().getLast_worked_on() == null) {
                         return new SimpleStringProperty("");
-                    }else{
+                    } else {
                         return new SimpleStringProperty(param.getValue().getValue().getLast_worked_on().format(formatter));
                     }
                 }
@@ -149,10 +149,10 @@ public class ProjektViewController implements Initializable {
             colTask_start.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
-                    
+
                     if (param.getValue().getValue().getStart_time() == null) {
                         return new SimpleStringProperty("");
-                    }else{
+                    } else {
                         return new SimpleStringProperty(param.getValue().getValue().getStart_time().format(formatter));
                     }
                 }
@@ -161,17 +161,32 @@ public class ProjektViewController implements Initializable {
             colTask_end.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
-                    
+
                     if (param.getValue().getValue().getEnd_time() == null) {
                         return new SimpleStringProperty("");
-                    }else{
+                    } else {
                         return new SimpleStringProperty(param.getValue().getValue().getEnd_time().format(formatter));
                     }
                 }
             });
-
             colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
             colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
+
+//            treeTasks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//                if (newValue != null && !newValue.isLeaf() && oldValue == null) {
+//                    treeTasks.getSelectionModel().select(newValue.getChildren().get(0));
+//                    newValue.setExpanded(true);
+//                }
+//                
+//                if (newValue != null && !newValue.isLeaf() ) {
+//                    treeTasks.getSelectionModel().select(newValue.getChildren().get(0));
+//                    newValue.setExpanded(true);
+//                }                
+//                
+//                if (newValue != null && newValue.isLeaf()) {
+//                    treeTasks.getSelectionModel().select(newValue);
+//                }
+//            });
 
             treeTasks.setRoot(ttRoot);
             treeTasks.setShowRoot(false);
