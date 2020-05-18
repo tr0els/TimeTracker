@@ -74,10 +74,17 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         return projectdao.getProjectsWithExtraData();
     }
 
-    @Override
-    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
-        return projectdao.getProjectsForEmploy(medarbejder_id);
-    }
+    
+      @Override
+    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException {
+       return projectdao.getProjectsToFilter(comboUser, comboClient,  fradato, tildato, monthStart, monthEnd);
+	}
+
+//    @Override
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        return projectdao.getProjectsForEmploy(medarbejder_id);
+//
+//    }
 
     //Task
     @Override
@@ -91,8 +98,8 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     }
 
     @Override
-    public HashMap<Task, List<Task.Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
-        return taskdao.getTaskbyIDs(project_id, person_id);
+    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    return taskdao.getTaskbyIDs(project_id, person_id);
     }
 
 //    @Override

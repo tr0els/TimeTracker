@@ -35,16 +35,24 @@ public interface IgetDataFacadeInterface {
 
     List<Project> getProjectWithExtraData() throws DALException;
 
-    List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
+    
+    List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException;
+        
+    
+
+
+ //   List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
+
 
     //Task
     void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException;
-
-    void stopTask(int person_id) throws DALException;
-
-    // Task getTaskbyTaskID(int task_id)throws DALException;
-    HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException;
-
+    
+    void stopTask(int person_id)throws DALException;
+    
+   // Task getTaskbyTaskID(int task_id)throws DALException;
+    
+    HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
+    
 //    List<Log> getLogsbyID(int task_id)throws DALException;
     //List<Log> getTaskLogListbyDay(int person_id, int dag)throws DALException;
     //Klient

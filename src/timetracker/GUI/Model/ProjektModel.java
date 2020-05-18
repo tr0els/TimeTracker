@@ -10,7 +10,9 @@ import java.util.Comparator;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import timetracker.BE.Client;
 import timetracker.BE.Project;
+import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
@@ -110,9 +112,11 @@ public class ProjektModel {
         return allProjectsWitExtraData;
     }
 
-    public ObservableList<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+    
+      
+    public ObservableList<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd ) throws DALException {
         allProjectsWitExtraData.clear();
-        allProjectsWitExtraData.addAll(bll.getProjectsForEmploy(medarbejder_id));
+        allProjectsWitExtraData.addAll(bll.getProjectsToFilter(comboUser ,comboClient, fradato, tildato, monthStart, monthEnd));
         return allProjectsWitExtraData;
     }
 

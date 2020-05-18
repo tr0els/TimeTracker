@@ -85,7 +85,7 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public HashMap<Task, List<Log>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
@@ -152,9 +152,16 @@ public class BLLManager {
         return iGetData.getProjectWithExtraData();
     }
 
-    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
-        return iGetData.getProjectsForEmploy(medarbejder_id);
-    }
+       
+      
+    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+        return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
+	}
+
+//    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
+//        return iGetData.getProjectsForEmploy(medarbejder_id);
+//
+//    }
 
     //-----KLIENTER-----
     /**
@@ -286,5 +293,6 @@ public class BLLManager {
         return iGetData.login(email, HashedPassword);
 
     }
+
 
 }

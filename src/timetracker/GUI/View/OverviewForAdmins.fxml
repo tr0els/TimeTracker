@@ -14,37 +14,39 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.OverviewForAdminsController">
-    <children>
-        <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" prefHeight="150.0" prefWidth="600.0" />
-        <TableView fx:id="tableview" layoutX="26.0" layoutY="319.0" prefHeight="150.0" prefWidth="567.0">
-            <columns>
-                <TableColumn fx:id="colprojekts" prefWidth="184.0" text="Projekt " />
-                <TableColumn fx:id="coltotaltid" prefWidth="123.0" text="Total tid" />
-                <TableColumn fx:id="colBillable" prefWidth="152.0" text="Billable time" />
-                <TableColumn fx:id="colKlient" prefWidth="107.0" text="Klient" />
-            </columns>
-        </TableView>
-        <BarChart fx:id="barchart" layoutX="263.0" layoutY="75.0" prefHeight="189.0" prefWidth="270.0" title="Barchart">
-            <xAxis>
-                <CategoryAxis side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT" />
-            </yAxis>
-        </BarChart>
-        <JFXButton fx:id="Filterkanp" layoutX="507.0" layoutY="287.0" onAction="#handleFilteropen" text="Filter" />
-        <PieChart fx:id="piechart" layoutX="20.0" layoutY="61.0" prefHeight="199.0" prefWidth="243.0" title="Pie Chart" />
-        <AnchorPane fx:id="searchAnchorpane" layoutY="-180.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
-            <children>
-                <JFXComboBox fx:id="comboProjekter" layoutX="14.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Projekter" />
-                <JFXComboBox fx:id="comboPerioder" layoutX="137.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Perioder" />
-                <JFXDatePicker fx:id="fradato" defaultColor="#768bc6" layoutX="124.0" layoutY="94.0" prefWidth="100.0" promptText="Fradato" showWeekNumbers="true" />
-                <JFXDatePicker fx:id="tildato" defaultColor="#768bc6" layoutX="291.0" layoutY="94.0" prefHeight="28.0" prefWidth="100.0" promptText="Tildato" showWeekNumbers="true" />
-                <JFXComboBox fx:id="ComboMedarbejder" layoutX="258.0" layoutY="42.0" onAction="#handelComboMedarbejder" prefHeight="25.0" prefWidth="100.0" promptText="Medarbejder" />
-                <Label layoutX="224.0" layoutY="14.0" text="Vælg hvad du vil søge på" />
-                <JFXButton layoutX="470.0" layoutY="96.0" text="Søg" />
-                <JFXComboBox fx:id="comboKlienter" layoutX="399.0" layoutY="42.0" promptText="Klienter" />
-            </children>
-        </AnchorPane>
-    </children>
+
+   <children>
+      <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" prefHeight="150.0" prefWidth="600.0" />
+      <TableView fx:id="tableview" layoutX="26.0" layoutY="319.0" prefHeight="150.0" prefWidth="567.0">
+        <columns>
+          <TableColumn fx:id="colprojekts" prefWidth="184.0" text="Projekt " />
+          <TableColumn fx:id="coltotaltid" prefWidth="123.0" text="Total tid" />
+            <TableColumn fx:id="colBillable" prefWidth="152.0" text="Billable time" />
+            <TableColumn fx:id="colKlient" prefWidth="107.0" text="Klient" />
+        </columns>
+      </TableView>
+      <BarChart fx:id="barchart" layoutX="263.0" layoutY="75.0" prefHeight="189.0" prefWidth="270.0" title="Barchart">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <JFXButton fx:id="Filterkanp" layoutX="507.0" layoutY="287.0" onAction="#handleFilteropen" text="Filter" />
+      <PieChart fx:id="piechart" layoutX="20.0" layoutY="61.0" prefHeight="199.0" prefWidth="243.0" title="Pie Chart" />
+      <AnchorPane fx:id="searchAnchorpane" layoutX="10.0" layoutY="-161.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
+         <children>
+            <JFXComboBox fx:id="comboPerioder" layoutX="45.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Måneder" />
+            <JFXDatePicker fx:id="fradato" defaultColor="#768bc6" layoutX="28.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Fradato" showWeekNumbers="true" />
+            <JFXDatePicker fx:id="tildato" defaultColor="#768bc6" layoutX="191.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Tildato" showWeekNumbers="true" />
+            <JFXComboBox fx:id="ComboMedarbejder" layoutX="164.0" layoutY="42.0" prefHeight="25.0" prefWidth="148.0" promptText="Medarbejder" />
+            <Label layoutX="224.0" layoutY="14.0" text="Vælg hvad du vil søge på" />
+            <JFXButton fx:id="seekbtb" layoutX="453.0" layoutY="98.0" onAction="#handleSeekPressed" prefHeight="25.0" prefWidth="53.0" text="Søg" />
+            <JFXComboBox fx:id="comboKlienter" layoutX="340.0" layoutY="42.0" prefHeight="25.0" prefWidth="120.0" promptText="Klienter" />
+            <JFXButton fx:id="clearFilterbtb" layoutX="367.0" layoutY="98.0" onAction="#handleClearFilter" text="Ryd Filter" />
+         </children>
+      </AnchorPane>
+   </children>
+
 </AnchorPane>

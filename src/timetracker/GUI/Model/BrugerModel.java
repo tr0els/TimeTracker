@@ -7,6 +7,10 @@ package timetracker.GUI.Model;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Period;
+import java.time.YearMonth;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +28,8 @@ public class BrugerModel {
 
     private ObservableList<Profession> allProfessions;
     private ObservableList<User> allUsers;
+    private ObservableList<Month> listOfMonths;
+    private ObservableList<YearMonth> listOfMonthswithYears;
     private static BrugerModel model = null;
     private static BLLManager bll;
     private static InputValidator validator;
@@ -42,6 +48,9 @@ public class BrugerModel {
         allUsers.addAll(bll.getUsers());
         allProfessions = FXCollections.observableArrayList();
         allProfessions.addAll(bll.getProfessions());
+        listOfMonths = FXCollections.observableArrayList();
+        listOfMonthswithYears = FXCollections.observableArrayList();
+        
 
     }
 
@@ -131,5 +140,22 @@ public class BrugerModel {
     public boolean valName(String name) {
         return validator.valName(name);
     }
-
+    
+    public ObservableList<YearMonth> getListOfPeriods(){
+           
+        
+        for (int i = 0; i < 12; i++) {
+            YearMonth monthwithyear = YearMonth.now().minus(Period.ofMonths(i));
+            System.out.println(monthwithyear);
+            Month addMonth = LocalDate.now().getMonth().minus(i);
+            System.out.println(addMonth);
+            //String monthtoString = addMonth.toString();
+            listOfMonths.add(addMonth);      
+            listOfMonthswithYears.add(monthwithyear);
+            }
+        System.out.println(FXCollections.observableArrayList(listOfMonths));
+        System.out.println(FXCollections.observableArrayList(listOfMonthswithYears));
+       return listOfMonthswithYears;
+        
+    }
 }
