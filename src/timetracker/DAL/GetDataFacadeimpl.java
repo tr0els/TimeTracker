@@ -163,4 +163,15 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         return brugerdao.getProfessions();
     }
 
+    @Override
+    public boolean validateExistingEmail(String email) {
+       return brugerdao.validateExistingEmail(email);
+    }
+
+    @Override
+    public boolean valExistingEmailEdit(int person_id, String email) {
+        return brugerdao.valExistingEmailEdit(person_id, email);
+    }
+
+
 }

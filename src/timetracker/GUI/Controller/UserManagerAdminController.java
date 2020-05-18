@@ -147,18 +147,24 @@ public class UserManagerAdminController implements Initializable {
         User user = new User();
 
         if (model.valName(textfieldName.getText()) && model.valName(textfieldSurname.getText()) && model.valEmail(textfieldEmail.getText())) {
-            user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
-            user.setName(textfieldName.getText());
-            user.setSurname(textfieldSurname.getText());
-            user.setEmail(textfieldEmail.getText());
-            user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
-            if (!checkboxAdminRole.isSelected()) {
-                user.setRole_id(2);
-            } else {
-                user.setRole_id(1);
+            if (model.valExistingEmailEdit(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id(), textfieldEmail.getText())) {
+                user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
+                user.setName(textfieldName.getText());
+                user.setSurname(textfieldSurname.getText());
+                user.setEmail(textfieldEmail.getText());
+                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+                if (!checkboxAdminRole.isSelected()) {
+                    user.setRole_id(2);
+                } else {
+                    user.setRole_id(1);
+                }
+                model.editUser(user);
+                populateTreeTable();
+            }else{
+                textfieldEmail.setText("Email Already Exist");
+                textfieldEmail.setStyle("-fx-text-inner-color: red");
             }
-            model.editUser(user);
-            populateTreeTable();
+
         } else {
             if (model.valName(textfieldName.getText()) == false) {
                 textfieldName.setText("Invalid Name");
@@ -196,7 +202,7 @@ public class UserManagerAdminController implements Initializable {
         }
 
         if (model.valName(textfieldSurname.getText())) {
-            user.setName(textfieldSurname.getText());
+            user.setSurname(textfieldSurname.getText());
         } else {
             textfieldSurname.setText("Invalid Surname");
             textfieldSurname.setStyle("-fx-text-inner-color: red");
@@ -210,16 +216,22 @@ public class UserManagerAdminController implements Initializable {
         }
 
         if (user.getName() != null && user.getSurname() != null && user.getEmail() != null) {
-            user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
-            if (!checkboxAdminRole.isSelected()) {
-                user.setRole_id(2);
+            if (model.valExistingEmail(textfieldEmail.getText())) {
+                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+                if (!checkboxAdminRole.isSelected()) {
+                    user.setRole_id(2);
+                } else {
+                    user.setRole_id(1);
+                }
+                String inputPassword = JOptionPane.showInputDialog("Ønkset password");
+                user.setPassword(inputPassword);
+                model.createUser(user);
+                populateTreeTable();
             } else {
-                user.setRole_id(1);
+                textfieldEmail.setText("Email Already Exist");
+                textfieldEmail.setStyle("-fx-text-inner-color: red");
             }
-            String inputPassword = JOptionPane.showInputDialog("Ønkset password");
-            user.setPassword(inputPassword);
-            model.createUser(user);
-            populateTreeTable();
+
         }
 
     }
@@ -283,4 +295,5 @@ public class UserManagerAdminController implements Initializable {
         textfieldEmail.selectAll();
         textfieldEmail.setStyle("-fx-text-inner-color: black");
     }
+
 }

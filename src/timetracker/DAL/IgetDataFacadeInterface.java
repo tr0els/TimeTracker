@@ -81,5 +81,11 @@ public interface IgetDataFacadeInterface {
 
     //Bruger --> profession
     List<Profession> getProfessions() throws DALException;
+    
+    boolean validateExistingEmail(String email);
+
+    public boolean valExistingEmailEdit(int person_id, String email);
+
+
 
 }

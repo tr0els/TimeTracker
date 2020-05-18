@@ -225,5 +225,59 @@ public class BrugerDAO {
         }
         return salt;
     }
+    
+    public boolean validateExistingEmail(String email){
+        boolean validation = true;
+        
+        try (Connection con = dbCon.getConnection()){
+            String sql = "SELECT email FROM PERSON WHERE email = ?";
+            PreparedStatement st  = con.prepareStatement(sql);
+            st.setString(1, email);
+            ResultSet rs = st.executeQuery();
+            
+            while (rs.next()) {
+                if (!rs.next()) {
+                    validation = false;
+                }
+            }
+        } catch (Exception e) {
+        }
+        
+        return validation;
+    }
+
+    
+    /**
+     * bugged
+     * @param person_id
+     * @param email
+     * @return 
+     */
+    boolean valExistingEmailEdit(int person_id, String email) {
+        boolean validationEdit = false;
+        String dbEmail;
+        
+        try (Connection con = dbCon.getConnection()){
+            String sql = "SELECT email FROM PERSON WHERE person_id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, person_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                dbEmail = rs.getString("email");
+                
+                if (!validateExistingEmail(email)){
+                    validationEdit = false;
+                }
+                if (email.equals(dbEmail)){
+                    validationEdit = true;
+                }
+
+            }
+        } catch (Exception e) {
+        }
+        
+        return validationEdit;
+    }
+
 
 }
