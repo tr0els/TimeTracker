@@ -191,6 +191,7 @@ public class OverviewForAdminsController implements Initializable {
     
     public int howLongIsTheString(String timeStirng) {
         
+        //fra SQL ved vi at denne string kan max være 9 lang
         if(timeStirng.length() == 9 )
             return 4;
             else 
@@ -318,7 +319,7 @@ public class OverviewForAdminsController implements Initializable {
         }
 
         
-       if (fradato.getValue() != null && comboPerioder !=null) {
+       if (fradato.getValue() != null && comboPerioder.getValue() !=null) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
@@ -333,7 +334,7 @@ public class OverviewForAdminsController implements Initializable {
         }
        
            
-       if (tildato.getValue() != null && comboPerioder !=null) {
+       if (tildato.getValue() != null && comboPerioder.getValue() !=null) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
