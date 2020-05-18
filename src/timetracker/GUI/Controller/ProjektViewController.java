@@ -125,6 +125,12 @@ public class ProjektViewController implements Initializable {
 
     }
 
+    
+    /**
+     * Laver treeTableview fra hashMap
+     * @param project_id
+     * @throws DALException 
+     */
     public void createTree(int project_id) throws DALException {
 
         TreeItem ttRoot = new TreeItem("Tasks");
@@ -188,7 +194,7 @@ public class ProjektViewController implements Initializable {
     }
 
     /**
-     * henter en liste over projekter og smider dem i vores combobox
+     * henter lister over projekter og smider dem i de rigtige menuer (combobox)
      */
     public void showProjects() throws DALException, SQLException {
 
@@ -218,6 +224,10 @@ public class ProjektViewController implements Initializable {
         });
     }
 
+    /**
+     * Åbner vores redigeringsvindue/skuffe og henter de relevante data ind i deres felter
+     * @param event 
+     */
     @FXML
     private void handleOpenEdit(ActionEvent event) {
         int task_id;
@@ -253,6 +263,11 @@ public class ProjektViewController implements Initializable {
         skuffen.toFront();
     }
 
+    
+    /**
+     * opdatere vores task der skal redigeres med de relevante data og sender den afsted for at blive opdateret i db
+     * @param event 
+     */
     @FXML
     private void handleEdit(ActionEvent event) {
         try {
@@ -276,6 +291,10 @@ public class ProjektViewController implements Initializable {
         }
     }
 
+    /**
+     * Lukker vores redigeringsvindue
+     * @param event 
+     */
     @FXML
     private void handleCancel(ActionEvent event) {
         skuffen.close();
