@@ -115,6 +115,7 @@ public class ProjektModel {
     }
 
     public ObservableList<Project> getProjectsWithExtraData() throws DALException {
+        allProjectsWitExtraData.clear();
         allProjectsWitExtraData.addAll(bll.getProjectsWithExtradata());
         return allProjectsWitExtraData;
     }
