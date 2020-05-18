@@ -74,18 +74,16 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         return projectdao.getProjectsWithExtraData();
     }
 
-    
-      @Override
-    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException {
-       return projectdao.getProjectsToFilter(comboUser, comboClient,  fradato, tildato, monthStart, monthEnd);
-	}
+    @Override
+    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+        return projectdao.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
+    }
 
 //    @Override
 //    public List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException {
 //        return projectdao.getProjectsForEmploy(medarbejder_id);
 //
 //    }
-
     //Task
     @Override
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
@@ -99,13 +97,18 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
 
     @Override
     public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
-    return taskdao.getTaskbyIDs(project_id, person_id);
+        return taskdao.getTaskbyIDs(project_id, person_id);
+    }
+    
+    @Override
+    public Task getTaskbyID(int task_id) throws DALException {
+        return taskdao.getTaskbyID(task_id);
+    }
+    
+    public void updateTaskbyID(Task task) throws DALException{
+        taskdao.updateTaskbyID(task);
     }
 
-//    @Override
-//    public List<Task.Log> getLogsbyID(int task_id) throws DALException {
-//    return taskdao.getLogsbyID(task_id);
-//    }
     //Klient
     @Override
     public Client createClient(String name, int timepris) throws DALException {

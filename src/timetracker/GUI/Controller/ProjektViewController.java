@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -88,7 +89,13 @@ public class ProjektViewController implements Initializable {
     @FXML
     private TreeTableColumn<Task, String> colBillable;
 
+    private ObservableList<Project> projects;
+
+    private Task edit_task;
+
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    @FXML
+    private JFXButton btnCancel;
 
     public ProjektViewController() throws DALException, SQLException {
 
@@ -112,6 +119,8 @@ public class ProjektViewController implements Initializable {
 
         } catch (DALException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -172,22 +181,6 @@ public class ProjektViewController implements Initializable {
             colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
             colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
 
-//            treeTasks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//                if (newValue != null && !newValue.isLeaf() && oldValue == null) {
-//                    treeTasks.getSelectionModel().select(newValue.getChildren().get(0));
-//                    newValue.setExpanded(true);
-//                }
-//                
-//                if (newValue != null && !newValue.isLeaf() ) {
-//                    treeTasks.getSelectionModel().select(newValue.getChildren().get(0));
-//                    newValue.setExpanded(true);
-//                }                
-//                
-//                if (newValue != null && newValue.isLeaf()) {
-//                    treeTasks.getSelectionModel().select(newValue);
-//                }
-//            });
-
             treeTasks.setRoot(ttRoot);
             treeTasks.setShowRoot(false);
 
@@ -197,9 +190,12 @@ public class ProjektViewController implements Initializable {
     /**
      * henter en liste over projekter og smider dem i vores combobox
      */
-    public void showProjects() throws DALException {
+    public void showProjects() throws DALException, SQLException {
 
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
+
+        projects = Pmodel.getProjects();
+        menuEditProjects.setItems(projects);
 
     }
 
@@ -223,15 +219,63 @@ public class ProjektViewController implements Initializable {
     }
 
     @FXML
-    private void handleEditTask(ActionEvent event) {
+    private void handleOpenEdit(ActionEvent event) {
+        int task_id;
 
-        if (skuffen.isOpened()) {
+        try { // checker om der er valgt en log eller task, hvis det ikke er en log(leaf) så vælger den den føste log der er under den valgte task.
+            if (!treeTasks.getSelectionModel().selectedItemProperty().getValue().isLeaf()) {
+                task_id = treeTasks.getSelectionModel().getSelectedItem().getChildren().get(0).getValue().getTask_id();
+                treeTasks.getSelectionModel().getSelectedItem().setExpanded(true);
+                treeTasks.getSelectionModel().select(treeTasks.getSelectionModel().getSelectedItem().getChildren().get(0));
+                edit_task = model.getTaskbyID(task_id);
+
+            } else {
+                task_id = treeTasks.getSelectionModel().getSelectedItem().getValue().getTask_id();
+                edit_task = model.getTaskbyID(task_id);
+            }
+
+            txtTask_name.setText(edit_task.getTask_name());
+            chkboxBillable.setSelected(edit_task.isBillable());
+
+            for (int i = 0; i < projects.size(); i++) {
+
+                if (edit_task.getProject_id() == projects.get(i).getProject_id()) {
+                    menuEditProjects.getSelectionModel().select(projects.get(i));
+                }
+
+            }
+
+        } catch (DALException ex) {
+            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        skuffen.open();
+        skuffen.toFront();
+    }
+
+    @FXML
+    private void handleEdit(ActionEvent event) {
+        try {
+
+            edit_task.setTask_name(txtTask_name.getText());
+            edit_task.setBillable(chkboxBillable.isSelected());
+            edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
+
+            model.updateTaskbyID(edit_task);
+
+            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
+            
             skuffen.close();
             skuffen.toBack();
-        } else {
-            skuffen.open();
-            skuffen.toFront();
+        } catch (DALException ex) {
+            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        skuffen.close();
+        skuffen.toBack();
 
     }
 

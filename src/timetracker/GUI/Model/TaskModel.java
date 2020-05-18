@@ -40,8 +40,6 @@ public class TaskModel implements Runnable {
     //private ObservableList<Client> allClients;
     //private ObservableList<Project> allProjects;
     //private ObservableList<User> allUsers;
-    private ObservableList<Task> taskById;
-    private ObservableList<Log> logsById;
     //private ObservableList<Profession> allProfessions;
 
     public TaskModel() throws DALException, SQLException {
@@ -145,6 +143,15 @@ public class TaskModel implements Runnable {
         return bll.getTaskbyIDs(project_id, person_id);
     }
 
+    
+    public Task getTaskbyID(int task_id) throws DALException {
+        return bll.getTaskbyID(task_id);
+    }
+    
+    
+    public void updateTaskbyID(Task task) throws DALException{
+        bll.updateTaskbyID(task);
+    }
 //    public ObservableList<Log> getLogsbyID(int task_id) throws DALException {
 //        logsById.clear();
 //        logsById.addAll(bll.getLogsbyID(task_id));

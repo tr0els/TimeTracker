@@ -89,10 +89,14 @@ public class BLLManager {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
-//    public List<Log> getLogsbyID(int task_id) throws DALException {
-//
-//        return iGetData.getLogsbyID(task_id);
-//    }
+    public Task getTaskbyID(int task_id) throws DALException {
+        return iGetData.getTaskbyID(task_id);
+    }
+
+    public void updateTaskbyID(Task task) throws DALException{
+        iGetData.updateTaskbyID(task);
+    }
+
     //------PROJEKTER----- 
     /**
      * Sender det info fra TaskModel "createProject" videre til DAL laget
