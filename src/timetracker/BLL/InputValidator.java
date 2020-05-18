@@ -7,12 +7,21 @@ package timetracker.BLL;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import timetracker.DAL.DALException;
+import timetracker.DAL.GetDataFacadeimpl;
+import timetracker.DAL.IgetDataFacadeInterface;
 
 /**
  *
  * @author Draik
  */
 public class InputValidator {
+    
+    private final IgetDataFacadeInterface iGetData;
+    
+    private InputValidator() throws DALException{
+        iGetData = new GetDataFacadeimpl();
+    }
 
     /**
      * Singleton opsætning af vores InputValidator. singleton gør at vores
@@ -20,7 +29,7 @@ public class InputValidator {
      */
     private static InputValidator validator = null;
 
-    public static InputValidator getInstance() {
+    public static InputValidator getInstance() throws DALException {
         if (validator == null) {
             validator = new InputValidator();
         }
@@ -50,5 +59,17 @@ public class InputValidator {
         Matcher matcher = emailPat.matcher(input);
         return matcher.find();
     }
+    
+    /**
+     * checks if and email already exist
+     */
+    public boolean valExistingEmail(String email){
+        return iGetData.validateExistingEmail(email);
+    }
+
+    public boolean valExistingEmailEdit(int person_id, String email) {
+        return iGetData.valExistingEmailEdit(person_id, email);
+    }
+
 
 }

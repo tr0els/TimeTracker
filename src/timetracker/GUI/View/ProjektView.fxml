@@ -27,13 +27,15 @@
          </font>
       </Label>
       <Label layoutX="482.0" layoutY="158.0" prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
-      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" onAction="#handleEditTask" text="Redigere" textAlignment="RIGHT" />
+      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" onAction="#handleOpenEdit" text="Redigere" textAlignment="RIGHT" />
       <JFXDrawer fx:id="skuffen" direction="TOP" prefHeight="105.0" prefWidth="590.0" />
       <AnchorPane fx:id="paneEdit" layoutX="5.0" layoutY="-112.0" prefHeight="105.0" prefWidth="590.0">
          <children>
             <JFXTextField fx:id="txtTask_name" layoutX="21.0" layoutY="17.0" prefHeight="25.0" prefWidth="203.0" />
             <JFXCheckBox fx:id="chkboxBillable" layoutX="234.0" layoutY="21.0" text="Faktureres" />
             <JFXComboBox fx:id="menuEditProjects" layoutX="385.0" layoutY="17.0" />
+            <JFXButton fx:id="btnEdit" layoutX="512.0" layoutY="66.0" onAction="#handleEdit" text="Opdater" />
+            <JFXButton fx:id="btnCancel" layoutX="441.0" layoutY="66.0" onAction="#handleCancel" text="Fortryd" />
          </children>
       </AnchorPane>
       <TreeTableView fx:id="treeTasks" layoutX="5.0" layoutY="175.0" maxWidth="590.0" prefHeight="254.0" prefWidth="590.0" showRoot="false">

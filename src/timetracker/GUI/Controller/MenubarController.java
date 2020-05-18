@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,11 +18,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import timetracker.DAL.DALException;
 import timetracker.GUI.Controller.FxmlLoader;
+import timetracker.GUI.Model.BrugerModel;
 
 /**
  * FXML Controller class
@@ -52,13 +56,21 @@ public class MenubarController implements Initializable {
     private JFXButton brugermanagerbtb;
     @FXML
     private JFXButton klientmanagerbtb;
+    @FXML
+    private Label loggedInUser;
+    
+    private static BrugerModel model;
+        public MenubarController() throws DALException, SQLException {
+        model = BrugerModel.getInstance();
+    }
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        loggedInUser.setText(model.getUser().getName() + " " + model.getUser().getSurname());
+        FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/TaskView.fxml"), viewpane);
     }
 
     @FXML

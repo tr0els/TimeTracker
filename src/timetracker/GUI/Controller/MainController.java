@@ -6,6 +6,7 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import timetracker.DAL.DALException;
@@ -52,7 +53,7 @@ public class MainController implements Initializable {
     @FXML
     private JFXTextField emailTextField;
     @FXML
-    private JFXTextField passwordTextField;
+    private JFXPasswordField passwordTextField;
 
     public MainController() throws DALException, SQLException {
         model = BrugerModel.getInstance();
@@ -113,7 +114,6 @@ public class MainController implements Initializable {
      * @param event
      * @throws IOException Håndtere login af en admin
      */
-    @FXML
     private void handeladminlogin(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -140,7 +140,6 @@ public class MainController implements Initializable {
      * @throws IOException Håndtere log in af en alm. user, og fjerne
      * adminknapperne.
      */
-    @FXML
     private void handeluserlogin(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -173,6 +172,18 @@ public class MainController implements Initializable {
     private void handleEmailMousecClicked(MouseEvent event) {
         emailTextField.selectAll();
         emailTextField.setStyle("-fx-text-inner-color: black");
+    }
+
+    @FXML
+    private void FillAdminLogininfo(ActionEvent event) {
+        emailTextField.setText("Admin@email.com");
+        passwordTextField.setText("1234");
+    }
+
+    @FXML
+    private void fillBrugerLoginInfo(ActionEvent event) {
+        emailTextField.setText("Bruger@email.com");
+        passwordTextField.setText("1234");
     }
 
 }

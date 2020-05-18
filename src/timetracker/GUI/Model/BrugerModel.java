@@ -33,6 +33,7 @@ public class BrugerModel {
     private static BrugerModel model = null;
     private static BLLManager bll;
     private static InputValidator validator;
+    private User user;
 
     public static BrugerModel getInstance() throws DALException, SQLException {
         if (model == null) {
@@ -50,7 +51,6 @@ public class BrugerModel {
         allProfessions.addAll(bll.getProfessions());
         listOfMonths = FXCollections.observableArrayList();
         listOfMonthswithYears = FXCollections.observableArrayList();
-        
 
     }
 
@@ -64,7 +64,12 @@ public class BrugerModel {
      * @throws timetracker.DAL.DALException
      */
     public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-        return bll.login(email, password);
+        user = bll.login(email, password);
+        return user;
+    }
+    
+    public User getUser(){
+        return user;
     }
 
     /**
@@ -141,6 +146,10 @@ public class BrugerModel {
         return validator.valName(name);
     }
     
+    public boolean valExistingEmail(String email){
+        return validator.valExistingEmail(email);
+    }
+    
     public ObservableList<YearMonth> getListOfPeriods(){
                    
         for (int i = 0; i < 12; i++) {
@@ -157,4 +166,10 @@ public class BrugerModel {
        return listOfMonthswithYears;
         
     }
+
+    public boolean valExistingEmailEdit(int person_id, String email) {
+        return validator.valExistingEmailEdit(person_id, email);
+    }
+
+
 }
