@@ -255,7 +255,7 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private void handleSeekPressed(ActionEvent event) throws DALException, SQLException {
         getProjectsForfilter();
-        filterskuffe.toBack();
+        //filterskuffe.toBack();
         filterskuffe.close();
     }
 
