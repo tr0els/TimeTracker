@@ -76,8 +76,8 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
 
     
       @Override
-    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException {
-       return projectdao.getProjectsToFilter(comboUser, comboClient,  fradato, tildato);
+    public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException {
+       return projectdao.getProjectsToFilter(comboUser, comboClient,  fradato, tildato, monthStart, monthEnd);
 	}
 
 //    @Override

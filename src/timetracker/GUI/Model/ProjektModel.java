@@ -114,9 +114,9 @@ public class ProjektModel {
 
     
       
-    public ObservableList<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato ) throws DALException {
+    public ObservableList<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd ) throws DALException {
         allProjectsWitExtraData.clear();
-        allProjectsWitExtraData.addAll(bll.getProjectsToFilter(comboUser ,comboClient, fradato, tildato));
+        allProjectsWitExtraData.addAll(bll.getProjectsToFilter(comboUser ,comboClient, fradato, tildato, monthStart, monthEnd));
         return allProjectsWitExtraData;
     }
 

@@ -16,15 +16,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Predicate;
+import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -37,7 +37,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import timetracker.BE.Client;
 import timetracker.DAL.DALException;
-import timetracker.BE.Task.Log;
 import timetracker.BE.User;
 import timetracker.GUI.Model.BrugerModel;
 import timetracker.GUI.Model.ClientModel;
@@ -55,9 +54,7 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private AnchorPane searchAnchorpane;
     @FXML
-    private JFXComboBox<?> comboProjekter;
-    @FXML
-    private JFXComboBox<?> comboPerioder;
+    private JFXComboBox<YearMonth> comboPerioder;
     @FXML
     private JFXDatePicker fradato;
     @FXML
@@ -82,16 +79,16 @@ public class OverviewForAdminsController implements Initializable {
     private TableColumn<Project, String> colKlient;
     @FXML
     private TableColumn<Project, String> colBillable;
-    
-     private ProjektModel pModel;
-     private BrugerModel bModel;
-     private ClientModel cModel;
     @FXML
     private JFXButton seekbtb;
     @FXML
     private JFXButton clearFilterbtb;
-         
+    private ProjektModel pModel;
+    private BrugerModel bModel;
+    private ClientModel cModel;
     
+    private ObservableList<Project> listeAfProjekter;
+    private ObservableList<String> listOfMonths;
 
     public OverviewForAdminsController() throws DALException, SQLException {
         pModel = ProjektModel.getInstance();
@@ -100,8 +97,6 @@ public class OverviewForAdminsController implements Initializable {
 
     }
 
-    private ObservableList<Project> listeAfProjekter;
-    FilteredList<Project> filteredItems;
 
     /**
      * Initializes the controller class.
@@ -114,10 +109,7 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
             filterskuffe.close();
-            filteredItems = new FilteredList<>(FXCollections.observableList(pModel.getProjectsWithExtraData()));
-
             populatetable();
-            //addFilter();
             populatecombobox();
         } catch (DALException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,83 +129,75 @@ public class OverviewForAdminsController implements Initializable {
         }
     }
 
-    
-    
-    public void populatetable() throws DALException, SQLException{
-    
-       listeAfProjekter = pModel.getProjectsWithExtraData();
-         //List<Task.Log> logList = new ArrayList<>();
-         
-         //logList = taskmodel.getTaskLogListById(1);
-         
-     
-      colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
-      coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
-      colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
-      colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()) );
-      tableview.setItems(listeAfProjekter);
-   
+    public void populatetable() throws DALException, SQLException {
+
+        listeAfProjekter = pModel.getProjectsWithExtraData();
+        
+        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
+        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
+        colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
+        colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
+        tableview.setItems(listeAfProjekter);
 
     }
-
 
     private void populatecombobox() throws DALException, SQLException {
 
-        //comboPerioder
-        //comboProjekter
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
+        comboPerioder.setItems(bModel.getListOfPeriods());
+      
+
 
     }
 
- 
-    public void getProjectsForfilter() throws DALException{
-        
+    public void getProjectsForfilter() throws DALException, SQLException {
+
         String europeanDatePattern = "dd-MM-yyyy";
-        
+
         User comboUser = null;
         Client comboKlient = null;
         String fradatoSelected = null;
         String tildatoSelected = null;
+        String MonthStart = null;
+        String MonthEnd = null;
         
-        
-       
-        
-        if(fradato.getValue() != null)
-            fradatoSelected =  fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
-               System.out.println(fradatoSelected);
-        
-        if(tildato.getValue() != null )
-            tildatoSelected =  tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
-               System.out.println(tildatoSelected);
-               
-        if (comboKlienter.getValue() != null)
-            comboKlient = (Client) comboKlienter.getValue();
-        if(ComboMedarbejder.getValue() != null)
-            comboUser = (User) ComboMedarbejder.getValue();
-        
-        if( fradato.getValue() !=null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue()))
-        {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setHeaderText("Fejl i datoer");
-            alert.setTitle("Fejl i valg af til- og fradatoer");
-            alert.setContentText("fradato må ikke ligge efter tildato \n og tildato må ikke ligge før fradatoen");
-            alert.showAndWait();
-           
+   
+
+        if (fradato.getValue() != null) {
+            fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
         }
- 
-            
-        listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected);
-      
-       // tableview.getItems().clear();
-	}
+        System.out.println(fradatoSelected);
 
-    
+        if (tildato.getValue() != null) {
+            tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+        }
+        System.out.println(tildatoSelected);
 
+        if (comboKlienter.getValue() != null) {
+            comboKlient = (Client) comboKlienter.getValue();
+        }
+        if (ComboMedarbejder.getValue() != null) {
+            comboUser = (User) ComboMedarbejder.getValue();
+        }
+        if(comboPerioder.getValue() != null ){
+            YearMonth getmonth =  comboPerioder.getValue();
+            MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            int lengthOfMonth =  getmonth.lengthOfMonth();
+            MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth-1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            System.out.println(MonthStart);
+            System.out.println(MonthEnd);
+        }
+        
+        checkFilter();
+         
+        listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
 
- 
+        // tableview.getItems().clear();
+    }
+
     @FXML
-    private void handleSeekPressed(ActionEvent event) throws DALException {
+    private void handleSeekPressed(ActionEvent event) throws DALException, SQLException {
         getProjectsForfilter();
     }
 
@@ -221,13 +205,63 @@ public class OverviewForAdminsController implements Initializable {
     private void handleClearFilter(ActionEvent event) throws DALException, SQLException {
         ComboMedarbejder.getSelectionModel().clearSelection();
         comboKlienter.getSelectionModel().clearSelection();
-       tildato.setValue(null);
-       fradato.setValue(null);
-       tildato.getEditor().clear();
-       fradato.getEditor().clear();
+        comboPerioder.getSelectionModel().clearSelection();
+        tildato.setValue(null);
+        fradato.setValue(null);
+        tildato.getEditor().clear();
+        fradato.getEditor().clear();
+
+        populatetable();
+
+    }
+    /**
+     * tjekker Filter vaglene, 
+     */
+    public void checkFilter() throws DALException, SQLException{
         
-       populatetable();
+         if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue())) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setHeaderText("Fejl i datoer");
+            alert.setTitle("Fejl i valg af til- og fradato");
+            alert.setContentText("fradato må ikke ligge efter tildato \n og tildato må ikke ligge før fradatoen");
+            alert.showAndWait();
+            tildato.setValue(null);
+            fradato.setValue(null);
+            tildato.getEditor().clear();
+            fradato.getEditor().clear();
+        }
+
         
+       if (fradato.getValue() != null && comboPerioder !=null) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setHeaderText("Fejl i filtrering");
+            alert.setTitle("Fejl i valg af filtering");
+            alert.setContentText("Du kan ikke søge på fra- og tildatoer\nog på perioder, på sammetid");
+            alert.showAndWait();
+            tildato.setValue(null);
+            fradato.setValue(null);
+            tildato.getEditor().clear();
+            fradato.getEditor().clear();
+            comboPerioder.getSelectionModel().clearSelection();
+            populatetable();
+        }
+       
+           
+       if (tildato.getValue() != null && comboPerioder !=null) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setHeaderText("Fejl i filtrering");
+            alert.setTitle("Fejl i valg af filtering");
+            alert.setContentText("Du kan ikke søge på fra- og tildatoer\nog på perioder, på sammetid");
+            alert.showAndWait();
+            tildato.setValue(null);
+            fradato.setValue(null);
+            tildato.getEditor().clear();
+            fradato.getEditor().clear();
+            comboPerioder.getSelectionModel().clearSelection();
+            populatetable();
+       }
+       
+       
     }
 
 }

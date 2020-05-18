@@ -36,7 +36,7 @@ public interface IgetDataFacadeInterface {
     List<Project> getProjectWithExtraData() throws DALException;
 
     
-    List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato) throws DALException;
+    List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException;
         
     
 
