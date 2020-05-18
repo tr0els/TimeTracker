@@ -194,7 +194,7 @@ public class ProjektViewController implements Initializable {
 
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
 
-        projects = Pmodel.getProjects();
+        projects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(projects);
 
     }
@@ -264,7 +264,11 @@ public class ProjektViewController implements Initializable {
             model.updateTaskbyID(edit_task);
 
             createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
-            
+            lblProjectTid.setText(menuEditProjects.getSelectionModel().getSelectedItem().getTotal_tid());
+            lblProjectnavn.setText(menuEditProjects.getSelectionModel().getSelectedItem().getProject_name());
+
+            projectMenubox.getSelectionModel().clearSelection();
+
             skuffen.close();
             skuffen.toBack();
         } catch (DALException ex) {
