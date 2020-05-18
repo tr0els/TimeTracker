@@ -103,6 +103,7 @@ public class ProjektModel {
     }
 
     public ObservableList<Project> getProjectsbyID(int person_id) throws DALException {
+        projectsbyID.clear();
         projectsbyID.addAll(bll.getProjectsbyID(person_id));
         return projectsbyID;
     }
