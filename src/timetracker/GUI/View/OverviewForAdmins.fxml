@@ -13,11 +13,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.OverviewForAdminsController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" stylesheets="@StyleForOverview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.OverviewForAdminsController">
 
    <children>
       <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" prefHeight="150.0" prefWidth="600.0" />
-      <TableView fx:id="tableview" layoutX="26.0" layoutY="319.0" prefHeight="150.0" prefWidth="567.0">
+      <TableView fx:id="tableview" layoutX="12.0" layoutY="297.0" prefHeight="172.0" prefWidth="581.0">
         <columns>
           <TableColumn fx:id="colprojekts" prefWidth="184.0" text="Projekt " />
           <TableColumn fx:id="coltotaltid" prefWidth="123.0" text="Total tid" />
@@ -25,7 +25,7 @@
             <TableColumn fx:id="colKlient" prefWidth="107.0" text="Klient" />
         </columns>
       </TableView>
-      <BarChart fx:id="barchart" layoutX="263.0" layoutY="75.0" prefHeight="189.0" prefWidth="270.0" title="Barchart">
+      <BarChart fx:id="barchart" layoutX="-360.0" layoutY="130.0" prefHeight="189.0" prefWidth="270.0" title="Barchart">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -33,8 +33,8 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
-      <JFXButton fx:id="Filterkanp" layoutX="507.0" layoutY="287.0" onAction="#handleFilteropen" text="Filter" />
-      <PieChart fx:id="piechart" layoutX="20.0" layoutY="61.0" prefHeight="199.0" prefWidth="243.0" title="Pie Chart" />
+      <JFXButton fx:id="Filterkanp" layoutX="490.0" layoutY="250.0" onAction="#handleFilteropen" text="Filter" />
+      <PieChart fx:id="piechart" layoutX="35.0" layoutY="14.0" prefHeight="258.0" prefWidth="356.0" title="Billable and nonbillable " />
       <AnchorPane fx:id="searchAnchorpane" layoutX="10.0" layoutY="-161.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
          <children>
             <JFXComboBox fx:id="comboPerioder" layoutX="45.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Måneder" />
@@ -47,6 +47,7 @@
             <JFXButton fx:id="clearFilterbtb" layoutX="367.0" layoutY="98.0" onAction="#handleClearFilter" text="Ryd Filter" />
          </children>
       </AnchorPane>
+      <Label fx:id="lblforPiechart" layoutX="355.0" layoutY="43.0" />
    </children>
 
 </AnchorPane>

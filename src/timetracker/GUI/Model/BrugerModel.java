@@ -142,19 +142,18 @@ public class BrugerModel {
     }
     
     public ObservableList<YearMonth> getListOfPeriods(){
-           
-        
+                   
         for (int i = 0; i < 12; i++) {
             YearMonth monthwithyear = YearMonth.now().minus(Period.ofMonths(i));
-            System.out.println(monthwithyear);
+            //System.out.println(monthwithyear);
             Month addMonth = LocalDate.now().getMonth().minus(i);
-            System.out.println(addMonth);
+            //System.out.println(addMonth);
             //String monthtoString = addMonth.toString();
-            listOfMonths.add(addMonth);      
+           // listOfMonths.add(addMonth);      
             listOfMonthswithYears.add(monthwithyear);
             }
-        System.out.println(FXCollections.observableArrayList(listOfMonths));
-        System.out.println(FXCollections.observableArrayList(listOfMonthswithYears));
+        //System.out.println(FXCollections.observableArrayList(listOfMonths));
+        //System.out.println(FXCollections.observableArrayList(listOfMonthswithYears));
        return listOfMonthswithYears;
         
     }

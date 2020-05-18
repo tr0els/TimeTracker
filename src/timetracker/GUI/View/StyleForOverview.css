@@ -1,0 +1,36 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18. maj 2020, 13.29.58
+    Author     : Charlotte
+*/
+
+*{
+
+    -fx-grumsen : #435a9a; 
+    -fx-grumsen-lysere: #768bc6;
+
+}
+
+.label{
+
+    -fx-font-size: 12;
+    -fx-text-fill: -fx-grumsen;
+    
+
+
+
+}
+
+.pie{
+    
+    
+    
+    
+}
+
+.data0.chart-pie{ -fx-pie-color: -fx-grumsen; }
+.data1.chart-pie{ -fx-pie-color: -fx-grumsen-lysere; }

@@ -16,25 +16,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Month;
+import java.text.DecimalFormat;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import timetracker.BE.Client;
 import timetracker.DAL.DALException;
 import timetracker.BE.User;
@@ -83,12 +85,19 @@ public class OverviewForAdminsController implements Initializable {
     private JFXButton seekbtb;
     @FXML
     private JFXButton clearFilterbtb;
-    private ProjektModel pModel;
-    private BrugerModel bModel;
-    private ClientModel cModel;
     
+    private final ProjektModel pModel;
+    private final BrugerModel bModel;
+    private final ClientModel cModel;
+    private double totalhouersForPiechart;
+    private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
-    private ObservableList<String> listOfMonths;
+  //  private ObservableList<String> listOfMonths;
+    @FXML
+    private Label lblforPiechart;
+    final Label caption = new Label("");
+    private Tooltip tipholder = new Tooltip();
+
 
     public OverviewForAdminsController() throws DALException, SQLException {
         pModel = ProjektModel.getInstance();
@@ -110,6 +119,7 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.toFront();
             filterskuffe.close();
             populatetable();
+            handlePieChart();
             populatecombobox();
         } catch (DALException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
@@ -138,8 +148,56 @@ public class OverviewForAdminsController implements Initializable {
         colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
         colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
         tableview.setItems(listeAfProjekter);
+        
+        //totalhouersForPiechart;
 
     }
+    
+    public void populatepieChart(){
+        
+        int getmetimeHHBill;
+        int getmetimeMMBill;
+        double getmetotalHHMMBill = 0.0;
+        int getmetimeHHTotal;
+        int getmetimeMMTotal;
+        double getmetotalHHMMTotal = 0.0;
+        
+        for (Project project : listeAfProjekter) {
+            //henter billable timer ud fra projekt listen 
+            getmetimeHHBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(0, project.getBillableTime().length()-6)))*3600;
+            System.out.println(getmetimeHHBill +" HH");
+            getmetimeMMBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(howLongIsTheString(project.getBillableTime()), project.getBillableTime().length()-3)))*60;
+            System.out.println(getmetimeMMBill+ " MM");
+            
+            //henter total tidud fra projekt listen
+            getmetimeHHTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(0, project.getTotal_tid().length()-6)))*3600;
+            System.out.println(getmetimeHHBill +" HH");
+            getmetimeMMTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(howLongIsTheString(project.getTotal_tid()), project.getTotal_tid().length()-3)))*60;
+            System.out.println(getmetimeMMBill+ " MM");
+            
+                      
+            getmetotalHHMMBill += getmetimeHHBill+getmetimeMMBill;
+            getmetotalHHMMTotal += getmetimeHHTotal+getmetimeMMTotal;
+        }
+        billaableHouersForPiechart = (getmetotalHHMMBill/3600);
+        totalhouersForPiechart = (getmetotalHHMMTotal/3600);
+        
+     
+       
+    
+    }
+    
+       
+    
+    public int howLongIsTheString(String timeStirng) {
+        
+        if(timeStirng.length() == 9 )
+            return 4;
+            else 
+            return 3;
+            
+    }
+    
 
     private void populatecombobox() throws DALException, SQLException {
 
@@ -147,7 +205,7 @@ public class OverviewForAdminsController implements Initializable {
         comboKlienter.setItems(cModel.getClients());
         comboPerioder.setItems(bModel.getListOfPeriods());
       
-
+       
 
     }
 
@@ -162,17 +220,15 @@ public class OverviewForAdminsController implements Initializable {
         String MonthStart = null;
         String MonthEnd = null;
         
-   
-
         if (fradato.getValue() != null) {
             fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
         }
-        System.out.println(fradatoSelected);
+        //System.out.println(fradatoSelected);
 
         if (tildato.getValue() != null) {
             tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
         }
-        System.out.println(tildatoSelected);
+       // System.out.println(tildatoSelected);
 
         if (comboKlienter.getValue() != null) {
             comboKlient = (Client) comboKlienter.getValue();
@@ -185,20 +241,22 @@ public class OverviewForAdminsController implements Initializable {
             MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
             int lengthOfMonth =  getmonth.lengthOfMonth();
             MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth-1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
-            System.out.println(MonthStart);
-            System.out.println(MonthEnd);
+           // System.out.println(MonthStart);
+           // System.out.println(MonthEnd);
         }
         
         checkFilter();
          
         listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
-
+        handlePieChart();
         // tableview.getItems().clear();
     }
 
     @FXML
     private void handleSeekPressed(ActionEvent event) throws DALException, SQLException {
         getProjectsForfilter();
+        filterskuffe.toBack();
+        filterskuffe.close();
     }
 
     @FXML
@@ -212,8 +270,36 @@ public class OverviewForAdminsController implements Initializable {
         fradato.getEditor().clear();
 
         populatetable();
+        handlePieChart();
 
     }
+    
+    
+        public void handlePieChart()
+    {   populatepieChart();
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
+                new PieChart.Data("Billable", billaableHouersForPiechart)
+        );
+     
+        piechart.setData(pieChartData);
+        piechart.setClockwise(true);
+        piechart.setLabelLineLength(5);
+        piechart.setLegendVisible(false);
+        piechart.setLegendSide(Side.LEFT);
+        piechart.setStartAngle(90);
+        
+        DecimalFormat df = new DecimalFormat("#.##");
+        
+        lblforPiechart.setText("non Billabale timer brugt " + (df.format(totalhouersForPiechart - billaableHouersForPiechart)) + "\n" 
+                + "Billable timer brugt " + df.format(billaableHouersForPiechart) + "\n" 
+                + "I alt Timer brugt " + df.format(totalhouersForPiechart));
+        
+      
+        
+    }
+    
+    
     /**
      * tjekker Filter vaglene, 
      */
