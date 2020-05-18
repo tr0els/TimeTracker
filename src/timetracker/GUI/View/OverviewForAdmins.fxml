@@ -35,13 +35,13 @@
       </BarChart>
       <JFXButton fx:id="Filterkanp" layoutX="490.0" layoutY="250.0" onAction="#handleFilteropen" text="Filter" />
       <PieChart fx:id="piechart" layoutX="35.0" layoutY="14.0" prefHeight="258.0" prefWidth="356.0" title="Billable and nonbillable " />
-      <AnchorPane fx:id="searchAnchorpane" layoutX="10.0" layoutY="-161.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
+      <AnchorPane fx:id="searchAnchorpane" layoutX="10.0" layoutY="-150.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
          <children>
-            <JFXComboBox fx:id="comboPerioder" layoutX="45.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Måneder" />
+            <JFXComboBox fx:id="comboPerioder" layoutX="28.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Måneder" />
             <JFXDatePicker fx:id="fradato" defaultColor="#768bc6" layoutX="28.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Fradato" showWeekNumbers="true" />
             <JFXDatePicker fx:id="tildato" defaultColor="#768bc6" layoutX="191.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Tildato" showWeekNumbers="true" />
             <JFXComboBox fx:id="ComboMedarbejder" layoutX="164.0" layoutY="42.0" prefHeight="25.0" prefWidth="148.0" promptText="Medarbejder" />
-            <Label layoutX="224.0" layoutY="14.0" text="Vælg hvad du vil søge på" />
+            <Label layoutX="216.0" layoutY="14.0" text="Vælg hvad du vil søge på" />
             <JFXButton fx:id="seekbtb" layoutX="453.0" layoutY="98.0" onAction="#handleSeekPressed" prefHeight="25.0" prefWidth="53.0" text="Søg" />
             <JFXComboBox fx:id="comboKlienter" layoutX="340.0" layoutY="42.0" prefHeight="25.0" prefWidth="120.0" promptText="Klienter" />
             <JFXButton fx:id="clearFilterbtb" layoutX="367.0" layoutY="98.0" onAction="#handleClearFilter" text="Ryd Filter" />
