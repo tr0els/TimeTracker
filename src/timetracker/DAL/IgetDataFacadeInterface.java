@@ -48,13 +48,14 @@ public interface IgetDataFacadeInterface {
     void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException;
     
     void stopTask(int person_id)throws DALException;
-    
-   // Task getTaskbyTaskID(int task_id)throws DALException;
-    
+          
     HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
+       
+    public Task getTaskbyID(int task_id) throws DALException;
     
-//    List<Log> getLogsbyID(int task_id)throws DALException;
-    //List<Log> getTaskLogListbyDay(int person_id, int dag)throws DALException;
+    public void updateTaskbyID(Task task) throws DALException;
+            
+
     //Klient
     Client createClient(String name, int timepris) throws DALException;
 

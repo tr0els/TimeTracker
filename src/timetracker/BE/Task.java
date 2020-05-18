@@ -126,8 +126,14 @@ public class Task {
     @Override
     public String toString() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String last = last_worked_on.format(format);
-        return task_name + " | Total tid brugt: " + total_tid + " | Sidst arbejdet på: " + last;
+        String last;
+        if (last_worked_on == null)
+        {
+            last = "Ikke afsluttet!";
+        }else{
+        last = last_worked_on.format(format);
+        }
+        return task_id + ": " + task_name + " | Total tid brugt: " + total_tid + " | Sidst arbejdet på: " + last;
     }
 
     /**
