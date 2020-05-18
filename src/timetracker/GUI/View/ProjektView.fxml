@@ -41,11 +41,11 @@
       <TreeTableView fx:id="treeTasks" layoutX="5.0" layoutY="175.0" maxWidth="590.0" prefHeight="254.0" prefWidth="590.0" showRoot="false">
          <columns>
             <TreeTableColumn fx:id="colTask_name" maxWidth="155.0" prefWidth="155.0" resizable="false" text="Opgave" />
-            <TreeTableColumn fx:id="colTask_start" maxWidth="105.0" prefWidth="105.0" resizable="false" text="Start" />
-            <TreeTableColumn fx:id="colTask_end" maxWidth="105.0" prefWidth="105.0" resizable="false" text="Slut" />
-            <TreeTableColumn fx:id="colTotal_time" maxWidth="55.0" prefWidth="55.0" resizable="false" text="Total tid" />
-            <TreeTableColumn fx:id="colLast_worked_on" maxWidth="105.0" prefWidth="105.0" resizable="false" text="Sidst arbejdet på" />
-            <TreeTableColumn fx:id="colBillable" maxWidth="64.0" prefWidth="64.0" resizable="false" text="Faktureres" />
+            <TreeTableColumn fx:id="colTask_start" maxWidth="105.0" prefWidth="105.0" resizable="false" sortable="false" text="Start" />
+            <TreeTableColumn fx:id="colTask_end" maxWidth="105.0" prefWidth="105.0" resizable="false" sortable="false" text="Slut" />
+            <TreeTableColumn fx:id="colTotal_time" maxWidth="55.0" prefWidth="55.0" resizable="false" sortable="false" text="Total tid" />
+            <TreeTableColumn fx:id="colLast_worked_on" maxWidth="105.0" prefWidth="105.0" resizable="false" sortType="DESCENDING" text="Sidst arbejdet på" />
+            <TreeTableColumn fx:id="colBillable" maxWidth="64.0" prefWidth="64.0" resizable="false" sortable="false" text="Faktureres" />
          </columns>
       </TreeTableView>
    </children>

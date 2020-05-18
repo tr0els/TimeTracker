@@ -29,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeSortMode;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
@@ -79,13 +80,13 @@ public class ProjektViewController implements Initializable {
     @FXML
     private TreeTableColumn<Task, String> colTask_name;
     @FXML
-    private TreeTableColumn<Task, String> colTask_start;
+    private TreeTableColumn<Task, LocalDateTime> colTask_start;
     @FXML
-    private TreeTableColumn<Task, String> colTask_end;
+    private TreeTableColumn<Task, LocalDateTime> colTask_end;
     @FXML
     private TreeTableColumn<Task, String> colTotal_time;
     @FXML
-    private TreeTableColumn<Task, String> colLast_worked_on;
+    private TreeTableColumn<Task, LocalDateTime> colLast_worked_on;
     @FXML
     private TreeTableColumn<Task, String> colBillable;
 
@@ -125,11 +126,11 @@ public class ProjektViewController implements Initializable {
 
     }
 
-    
     /**
      * Laver treeTableview fra hashMap
+     *
      * @param project_id
-     * @throws DALException 
+     * @throws DALException
      */
     public void createTree(int project_id) throws DALException {
 
@@ -149,44 +150,62 @@ public class ProjektViewController implements Initializable {
             }
             colTask_name.setCellValueFactory(new TreeItemPropertyValueFactory<>("task_name"));
             colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
-            colLast_worked_on.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
 
-                    if (param.getValue().getValue().getLast_worked_on() == null) {
-                        return new SimpleStringProperty("");
-                    } else {
-                        return new SimpleStringProperty(param.getValue().getValue().getLast_worked_on().format(formatter));
+            colLast_worked_on.setCellValueFactory(new TreeItemPropertyValueFactory<>("last_worked_on"));
+            colLast_worked_on.setCellFactory(column -> {
+                return new TreeTableCell<Task, LocalDateTime>() {
+
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText("");
+                        } else {
+                            setText(formatter.format(item));
+                        }
                     }
-                }
+
+                };
             });
 
-            colTask_start.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
+            colTask_start.setCellValueFactory(new TreeItemPropertyValueFactory<>("start_time"));
+            colTask_start.setCellFactory(column -> {
+                return new TreeTableCell<Task, LocalDateTime>() {
 
-                    if (param.getValue().getValue().getStart_time() == null) {
-                        return new SimpleStringProperty("");
-                    } else {
-                        return new SimpleStringProperty(param.getValue().getValue().getStart_time().format(formatter));
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText("");
+                        } else {
+                            setText(formatter.format(item));
+                        }
                     }
-                }
+
+                };
             });
 
-            colTask_end.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Task, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Task, String> param) {
+            colTask_end.setCellValueFactory(new TreeItemPropertyValueFactory<>("end_time"));
+            colTask_end.setCellFactory(column -> {
+                return new TreeTableCell<Task, LocalDateTime>() {
 
-                    if (param.getValue().getValue().getEnd_time() == null) {
-                        return new SimpleStringProperty("");
-                    } else {
-                        return new SimpleStringProperty(param.getValue().getValue().getEnd_time().format(formatter));
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText("");
+                        } else {
+                            setText(formatter.format(item));
+                        }
                     }
-                }
+
+                };
             });
+
             colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
             colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
-
+            
+            treeTasks.getSortOrder().add(colLast_worked_on);
             treeTasks.setRoot(ttRoot);
             treeTasks.setShowRoot(false);
 
@@ -225,8 +244,10 @@ public class ProjektViewController implements Initializable {
     }
 
     /**
-     * Åbner vores redigeringsvindue/skuffe og henter de relevante data ind i deres felter
-     * @param event 
+     * Åbner vores redigeringsvindue/skuffe og henter de relevante data ind i
+     * deres felter
+     *
+     * @param event
      */
     @FXML
     private void handleOpenEdit(ActionEvent event) {
@@ -263,10 +284,11 @@ public class ProjektViewController implements Initializable {
         skuffen.toFront();
     }
 
-    
     /**
-     * opdatere vores task der skal redigeres med de relevante data og sender den afsted for at blive opdateret i db
-     * @param event 
+     * opdatere vores task der skal redigeres med de relevante data og sender
+     * den afsted for at blive opdateret i db
+     *
+     * @param event
      */
     @FXML
     private void handleEdit(ActionEvent event) {
@@ -293,7 +315,8 @@ public class ProjektViewController implements Initializable {
 
     /**
      * Lukker vores redigeringsvindue
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void handleCancel(ActionEvent event) {
