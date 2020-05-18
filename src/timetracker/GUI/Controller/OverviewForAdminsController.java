@@ -303,6 +303,8 @@ public class OverviewForAdminsController implements Initializable {
     
     /**
      * tjekker Filter vaglene, 
+     * @throws timetracker.DAL.DALException
+     * @throws java.sql.SQLException
      */
     public void checkFilter() throws DALException, SQLException{
         
@@ -316,6 +318,8 @@ public class OverviewForAdminsController implements Initializable {
             fradato.setValue(null);
             tildato.getEditor().clear();
             fradato.getEditor().clear();
+            populatetable();
+            handlePieChart();
         }
 
         
@@ -331,6 +335,7 @@ public class OverviewForAdminsController implements Initializable {
             fradato.getEditor().clear();
             comboPerioder.getSelectionModel().clearSelection();
             populatetable();
+            handlePieChart();
         }
        
            
@@ -346,6 +351,7 @@ public class OverviewForAdminsController implements Initializable {
             fradato.getEditor().clear();
             comboPerioder.getSelectionModel().clearSelection();
             populatetable();
+            handlePieChart();
        }
        
        
