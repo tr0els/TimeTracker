@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="682.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
+   <children>
+      <JFXButton fx:id="btbExport" layoutX="378.0" layoutY="461.0" prefHeight="25.0" prefWidth="116.0" />
+      <Label fx:id="lblProjektnavn" layoutX="20.0" layoutY="52.0" text="Label" />
+      <TableView fx:id="tableView" layoutX="14.0" layoutY="126.0" prefHeight="335.0" prefWidth="650.0">
+        <columns>
+          <TableColumn fx:id="colOpgave" prefWidth="136.0" text="Opgave" />
+            <TableColumn fx:id="colStart" prefWidth="149.0" text="Start" />
+            <TableColumn fx:id="colEnd" prefWidth="139.0" text="Slut" />
+            <TableColumn fx:id="colBillable" prefWidth="78.0" text="Billable" />
+            <TableColumn fx:id="colMedarebjder" prefWidth="147.0" text="Medarbejder" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
