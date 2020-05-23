@@ -53,16 +53,15 @@ public class PopUpDataViewController implements Initializable {
     private Label lblProjektnavn;
     @FXML
     private TableView<TaskForDataView> tableView;
-    
-    
+    @FXML
+    private TableColumn<TaskForDataView, String> colBillable; 
     
 
     private final TaskModel tModel;
     private ObservableList<TaskForDataView> listeAfTask;
     private Project choosenProject = null;
     private User userFromOVerview = null;
-    @FXML
-    private TableColumn<TaskForDataView, String> colBillable;
+   
      String europeanDatePattern = "dd-MM-yyyy HH:mm";
     
     public PopUpDataViewController() throws DALException, SQLException{

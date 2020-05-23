@@ -93,6 +93,10 @@ public class OverviewForAdminsController implements Initializable {
     private JFXButton seekbtb;
     @FXML
     private JFXButton clearFilterbtb;
+    @FXML
+    private JFXButton btbPopupData;
+    @FXML
+    private Label lblforPiechart;
     
     private final ProjektModel pModel;
     private  BrugerModel bModel;
@@ -101,13 +105,11 @@ public class OverviewForAdminsController implements Initializable {
     private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
  
-    @FXML
-    private Label lblforPiechart;
+    
     final Label caption = new Label("");
     private Tooltip tipholder = new Tooltip();
     private User UserLoggedInForMinTid= null;
-    @FXML
-    private JFXButton btbPopupData;
+
  
 
 
@@ -134,7 +136,8 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
             filterskuffe.close();
-            
+            //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
+            //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
             if (UserLoggedInForMinTid == null){
             populatetable();
             handlePieChart();
@@ -169,7 +172,7 @@ public class OverviewForAdminsController implements Initializable {
         listeAfProjekter = pModel.getProjectsWithExtraData();
         else {
         listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null , null, null, null, null);
-            System.out.println(UserLoggedInForMinTid.getPerson_id());
+          
         
         }
         colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
@@ -338,19 +341,20 @@ public class OverviewForAdminsController implements Initializable {
                 new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
                 new PieChart.Data("Billable", billaableHouersForPiechart)
         );
-     
+       DecimalFormat df = new DecimalFormat("#.##");
         piechart.setData(pieChartData);
-        piechart.setClockwise(true);
-        piechart.setLabelLineLength(5);
-        piechart.setLegendVisible(false);
-        piechart.setLegendSide(Side.LEFT);
+        pieChartData.forEach(data -> data.nameProperty().bind(Bindings.concat(data.getName(), " ", df.format(data.getPieValue()), " Timer")));
         piechart.setStartAngle(90);
+        piechart.setLegendSide(Side.RIGHT);
+        piechart.setLabelsVisible(false);
         
-        DecimalFormat df = new DecimalFormat("#.##");
+    
         
-        lblforPiechart.setText("non Billabale timer brugt " + (df.format(totalhouersForPiechart - billaableHouersForPiechart)) + "\n" 
-                + "Billable timer brugt " + df.format(billaableHouersForPiechart) + "\n" 
-                + "I alt Timer brugt " + df.format(totalhouersForPiechart));
+        
+        
+        //lblforPiechart.setText("non Billabale timer brugt " + (df.format(totalhouersForPiechart - billaableHouersForPiechart)) + "\n" 
+          //      + "Billable timer brugt " + df.format(billaableHouersForPiechart) + "\n" 
+            //    + "I alt Timer brugt " + df.format(totalhouersForPiechart));
         
       
         
@@ -412,18 +416,30 @@ public class OverviewForAdminsController implements Initializable {
        
        
     }
-    
+    /**
+     * metoden bruges i menubarcontroller, når vi klikker ind på min tid, på den måde får vi sat den nuværende bruger som er logget ind. 
+     * @param currentUser
+     * @throws DALException
+     * @throws SQLException 
+     */
   public void getCurrentUserForMinTidView(User currentUser)  throws DALException, SQLException{
             UserLoggedInForMinTid = currentUser;
             initalizePopulatethings();
             
 
   }
-
+  /**
+   * bruges i menubarcontroller til at disable medarbejdercomboboxen i min tid. 
+   * @return 
+   */
     public JFXComboBox<User> getComboMedarbejder() {
         return ComboMedarbejder;
     }
-    
+    /**
+     * initalisere min tid viewet, hvis der er en user som er logget ind bruges i getcurrentuserformintidview 
+     * @throws DALException
+     * @throws SQLException 
+     */
   public void initalizePopulatethings()  throws DALException, SQLException{
       if (UserLoggedInForMinTid != null){
             populatetable();
@@ -432,18 +448,27 @@ public class OverviewForAdminsController implements Initializable {
       } 
   
   } 
-  
+  /**
+   * Håndtere kanppen til at åbne et overbilk over taks i et projekt. 
+   * @param event
+   * @throws IOException
+   * @throws DALException 
+   */
     @FXML
     private void handelPopupDataView(ActionEvent event) throws IOException, DALException {
+        
         User transferUser = null;     
         Project selectedProject= null;
         
+        //vi tjekker om vores tableview er tomt
         first:
        if( !listeAfProjekter.isEmpty())
-       {    
+       {    //hvis den ikke er tom tjekker vi om der er valgt et projekt i tabellen, hvis der er det ligger vi projekt objektet 
+           //over i vores selectedProjekt
            second: 
           if(tableview.getSelectionModel().getSelectedItem() != null )
                selectedProject = tableview.getSelectionModel().getSelectedItem();
+           //hvis der ikke er valgt et projekt i tabellen, åbner vi en alert, og stopper 'if kørslen', så vi ikke  åbner et tomt dataview
            third:
           if(tableview.getSelectionModel().getSelectedItem() == null ){
                Alert alert = new Alert(AlertType.ERROR);
@@ -455,7 +480,9 @@ public class OverviewForAdminsController implements Initializable {
                break first;
            }
             
-           
+           //hvis der er valgt et projekt, tjekker vi om det er brugeren som er logget ind eller om det et en bruger fra comboboxen vi skal bruge i dataoverblikker 
+           //hvis ikke det er nogen af dem er det en admin som er logget ind og har ikke brugt comboboxen til at filtere på.
+           //hvis det er tilfældet sætter vi tranferuser til null, på den mådet kommer alle bruger med ud
            if(UserLoggedInForMinTid != null)
            {transferUser = UserLoggedInForMinTid;}
            else if(ComboMedarbejder.getValue() != null  )

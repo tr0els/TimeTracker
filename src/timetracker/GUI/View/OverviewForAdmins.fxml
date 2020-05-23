@@ -33,8 +33,8 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
-      <JFXButton fx:id="Filterkanp" layoutX="428.0" layoutY="250.0" onAction="#handleFilteropen" text="Filter" />
-      <PieChart fx:id="piechart" layoutX="35.0" layoutY="14.0" prefHeight="258.0" prefWidth="356.0" />
+      <JFXButton fx:id="Filterkanp" layoutX="513.0" layoutY="200.0" onAction="#handleFilteropen" text="Filter" />
+      <PieChart fx:id="piechart" layoutX="15.0" layoutY="14.0" prefHeight="258.0" prefWidth="475.0" />
       <AnchorPane fx:id="searchAnchorpane" layoutX="10.0" layoutY="-164.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
          <children>
             <JFXComboBox fx:id="comboPerioder" layoutX="28.0" layoutY="42.0" prefHeight="25.0" prefWidth="120.0" promptText="Måneder" />
@@ -47,7 +47,7 @@
             <JFXButton fx:id="clearFilterbtb" layoutX="350.0" layoutY="98.0" onAction="#handleClearFilter" text="Ryd Filter" />
          </children>
       </AnchorPane>
-      <Label fx:id="lblforPiechart" layoutX="390.0" layoutY="75.0" />
+      <Label fx:id="lblforPiechart" layoutX="544.0" layoutY="174.0" />
       <JFXButton fx:id="btbPopupData" layoutX="493.0" layoutY="242.0" onAction="#handelPopupDataView" text="Vis opgaver &#10;for projektet" />
    </children>
 
