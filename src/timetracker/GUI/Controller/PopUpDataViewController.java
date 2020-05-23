@@ -6,6 +6,12 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
+import static com.oracle.tools.packager.RelativeFileSet.Type.data;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -19,6 +25,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -118,9 +125,14 @@ public class PopUpDataViewController implements Initializable {
     }
     
     
-    
-    public Label getLabel(){
-    return lblProjektnavn;
+  
+
+    @FXML
+    private void handleExportCSV(ActionEvent event) throws Exception {
+   
     }
+    
+    
+   
     
 }

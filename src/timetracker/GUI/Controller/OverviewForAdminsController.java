@@ -106,9 +106,6 @@ public class OverviewForAdminsController implements Initializable {
     private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
  
-    
-    final Label caption = new Label("");
-    private Tooltip tipholder = new Tooltip();
     private User UserLoggedInForMinTid= null;
     private Stage popupStage;
 
@@ -133,11 +130,10 @@ public class OverviewForAdminsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             
-            
-         
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
             filterskuffe.close();
+            btbPopupData.setVisible(false);
             //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
             //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
             if (UserLoggedInForMinTid == null){
@@ -228,8 +224,8 @@ public class OverviewForAdminsController implements Initializable {
      * @return 
      */
     public int howLongIsTheString(String timeStirng) {
-        
-        //fra SQL ved vi at denne string kan max være 9 lang
+        int howlong = timeStirng.length();
+        //fra vores SQL ved vi at denne string kan max være 9 varchar lang
         if(timeStirng.length() == 9 )
             //hvis den er 9 lang ved vi minutterne starter på position 4 000:00:00 HHH/MM/SS
             return 4;
@@ -348,16 +344,7 @@ public class OverviewForAdminsController implements Initializable {
         pieChartData.forEach(data -> data.nameProperty().bind(Bindings.concat(data.getName(), " ", df.format(data.getPieValue()), " Timer")));
         piechart.setStartAngle(90);
         piechart.setLegendSide(Side.RIGHT);
-        piechart.setLabelsVisible(false);
-        
-    
-        
-        
-        
-        //lblforPiechart.setText("non Billabale timer brugt " + (df.format(totalhouersForPiechart - billaableHouersForPiechart)) + "\n" 
-          //      + "Billable timer brugt " + df.format(billaableHouersForPiechart) + "\n" 
-            //    + "I alt Timer brugt " + df.format(totalhouersForPiechart));
-        
+        piechart.setLabelsVisible(false);     
       
         
     }
@@ -496,12 +483,11 @@ public class OverviewForAdminsController implements Initializable {
            Parent popup = loader.load();                    
            PopUpDataViewController controller = loader.<PopUpDataViewController>getController();
            controller.TransferProjektID(selectedProject, transferUser );
-           //controller.getLabel().setText(selectedProject.getProject_name());
+         
           if(popupStage ==  null){
            Scene scene = new Scene(popup);
            
            popupStage = new Stage();
-           //popupStage.setTitle("Overblik over tiden brugt på et Projekt");
            popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
            popupStage.setScene(scene);
            popupStage.setResizable(false);
@@ -510,6 +496,7 @@ public class OverviewForAdminsController implements Initializable {
            
            popupStage.show();}
            popupStage.show();
+           popupStage.toFront();
            popupStage.setTitle(selectedProject.getProject_name().toUpperCase() + "  "+ selectedProject.getProject_rate()+ " DKK");
           
         
