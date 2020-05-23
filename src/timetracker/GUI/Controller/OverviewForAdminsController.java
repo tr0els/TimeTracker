@@ -44,6 +44,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import timetracker.BE.Client;
 import timetracker.DAL.DALException;
@@ -109,6 +110,7 @@ public class OverviewForAdminsController implements Initializable {
     final Label caption = new Label("");
     private Tooltip tipholder = new Tooltip();
     private User UserLoggedInForMinTid= null;
+    private Stage popupStage;
 
  
 
@@ -450,16 +452,15 @@ public class OverviewForAdminsController implements Initializable {
   } 
   /**
    * Håndtere kanppen til at åbne et overbilk over taks i et projekt. 
-   * @param event
    * @throws IOException
    * @throws DALException 
    */
-    @FXML
-    private void handelPopupDataView(ActionEvent event) throws IOException, DALException {
+    private void handelPopupDataView() throws IOException, DALException, SQLException {
         
         User transferUser = null;     
         Project selectedProject= null;
-        
+       
+       
         //vi tjekker om vores tableview er tomt
         first:
        if( !listeAfProjekter.isEmpty())
@@ -488,32 +489,39 @@ public class OverviewForAdminsController implements Initializable {
            else if(ComboMedarbejder.getValue() != null  )
            {transferUser = ComboMedarbejder.getValue();}
            else transferUser = null;
+            
            
-           FXMLLoader loader = new FXMLLoader();
-           loader.setLocation(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
-           loader.load();
-           Parent root = loader.getRoot();
-           
-           PopUpDataViewController controller = loader.getController();
+          
+           FXMLLoader loader = new FXMLLoader(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
+           Parent popup = loader.load();                    
+           PopUpDataViewController controller = loader.<PopUpDataViewController>getController();
            controller.TransferProjektID(selectedProject, transferUser );
+           //controller.getLabel().setText(selectedProject.getProject_name());
+          if(popupStage ==  null){
+           Scene scene = new Scene(popup);
            
-           Scene scene = new Scene(root);
-           Stage stage = new Stage();
-           stage.setTitle("Overblik over tiden brugt på et Projekt");
-           stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
-           stage.setScene(scene);
-           stage.setResizable(false);
-           stage.show();
+           popupStage = new Stage();
+           //popupStage.setTitle("Overblik over tiden brugt på et Projekt");
+           popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
+           popupStage.setScene(scene);
+           popupStage.setResizable(false);
+           popupStage.setTitle(selectedProject.getProject_name() +"  "+ selectedProject.getProject_rate()+ " DKK");
+          
            
+           popupStage.show();}
+           popupStage.show();
+           popupStage.setTitle(selectedProject.getProject_name().toUpperCase() + "  "+ selectedProject.getProject_rate()+ " DKK");
+          
+        
        }
-       
-       else {
-           Alert alert = new Alert(AlertType.ERROR);
-           alert.setHeaderText("Fejl i Åbning af  Data Overblik");
-           alert.setTitle("Fejl");
-           alert.setContentText("der er ikke nogen projekter \n"
-                   + "at få vist Data fra");
-           alert.showAndWait();}
+    
+    }
+    
+    
+
+    @FXML
+    private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException {
+        handelPopupDataView();
     }
           
           

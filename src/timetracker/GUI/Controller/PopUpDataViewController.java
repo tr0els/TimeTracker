@@ -14,8 +14,10 @@ import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,9 +60,10 @@ public class PopUpDataViewController implements Initializable {
     
 
     private final TaskModel tModel;
-    private ObservableList<TaskForDataView> listeAfTask;
+    private  ObservableList<TaskForDataView> listeAfTask;
     private Project choosenProject = null;
     private User userFromOVerview = null;
+ 
    
      String europeanDatePattern = "dd-MM-yyyy HH:mm";
     
@@ -71,20 +74,22 @@ public class PopUpDataViewController implements Initializable {
     
     }
     
+     
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //populateTable();
-
+         
     }    
  
     
     public void populateTable() throws DALException{
         
+        listeAfTask =  tModel.getListOfTaskForDataView(choosenProject, userFromOVerview);
         
-        listeAfTask = tModel.getListOfTaskForDataView(choosenProject, userFromOVerview);
         
         colOpgave.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         colStart.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))));
@@ -99,7 +104,8 @@ public class PopUpDataViewController implements Initializable {
         colMedarebjder.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedarbejder()));
     
         tableView.setItems(listeAfTask);
-        lblProjektnavn.setText(choosenProject.getProject_name());
+        tableView.getSelectionModel().setCellSelectionEnabled(false);
+       
         
     }
     
@@ -107,8 +113,14 @@ public class PopUpDataViewController implements Initializable {
     
     this.choosenProject = project;
     this.userFromOVerview = user;
-    populateTable();
+    populateTable(); 
+
+    }
     
+    
+    
+    public Label getLabel(){
+    return lblProjektnavn;
     }
     
 }

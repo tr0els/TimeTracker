@@ -17,7 +17,7 @@
 
    <children>
       <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" layoutY="9.0" prefHeight="150.0" prefWidth="600.0" />
-      <TableView fx:id="tableview" layoutX="12.0" layoutY="297.0" prefHeight="172.0" prefWidth="581.0">
+      <TableView fx:id="tableview" layoutX="12.0" layoutY="297.0" onMouseClicked="#handelSelectedProject" prefHeight="172.0" prefWidth="581.0">
         <columns>
           <TableColumn fx:id="colprojekts" prefWidth="184.0" text="Projekt " />
           <TableColumn fx:id="coltotaltid" prefWidth="123.0" text="Total tid" />
@@ -48,7 +48,7 @@
          </children>
       </AnchorPane>
       <Label fx:id="lblforPiechart" layoutX="544.0" layoutY="174.0" />
-      <JFXButton fx:id="btbPopupData" layoutX="493.0" layoutY="242.0" onAction="#handelPopupDataView" text="Vis opgaver &#10;for projektet" />
+      <JFXButton fx:id="btbPopupData" layoutX="493.0" layoutY="242.0" text="Vis opgaver &#10;for projektet" />
    </children>
 
 </AnchorPane>

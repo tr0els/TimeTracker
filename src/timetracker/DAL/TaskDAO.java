@@ -314,7 +314,7 @@ public class TaskDAO {
                 if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
             } else {
-               end_time = null;
+               end_time = LocalDateTime.now();
             }
     
             String Billable; 

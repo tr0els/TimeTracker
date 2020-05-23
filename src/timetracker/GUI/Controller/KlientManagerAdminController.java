@@ -309,7 +309,7 @@ public class KlientManagerAdminController implements Initializable {
     }
 
     /**
-     * sætter info lablesne men info om det valgte projekt.
+     * sætter info lablesne med info om det valgte projekt.
      *
      * @param event
      */
