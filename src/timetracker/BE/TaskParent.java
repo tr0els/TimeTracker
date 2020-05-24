@@ -20,8 +20,8 @@ public class TaskParent extends TaskBase {
     public TaskParent() {
     }
 
-    public TaskParent(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
-        super(id, name, billable, projectId, personId, start, end, time);
+    public TaskParent(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
+        super(name, billable, projectId, personId, start, end, time);
     }
 
     public List<TaskChild> getChildren() {

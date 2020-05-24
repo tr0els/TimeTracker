@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-abstract class TaskBase {
+abstract public class TaskBase {
 
     private int id;
     private String name;
@@ -26,8 +26,7 @@ abstract class TaskBase {
     public TaskBase() {
     }
 
-    public TaskBase(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
-        this.id = id;
+    public TaskBase(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
         this.name = name;
         this.billable = billable;
         this.projectId = projectId;

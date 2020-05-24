@@ -12,10 +12,17 @@ import java.util.List;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-// note: if treetableview gets angry, make this class extend TaskBase so it behaves like a task
-public class TaskDate {
+public class TaskResult {
 
-    private String name;
-    private String time;
-    private List<TaskParent> parents;
+    private List<? extends TaskBase> tasks;
+
+    public TaskResult() {}
+
+    public List<? extends TaskBase> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<? extends TaskBase> tasks) {
+        this.tasks = tasks;
+    }
 }

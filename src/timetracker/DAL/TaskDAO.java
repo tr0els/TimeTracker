@@ -10,15 +10,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import timetracker.BE.Task;
-import timetracker.BE.Task.Log;
-import timetracker.DAL.DALException;
+import timetracker.BE.TaskBase;
+import timetracker.BE.TaskChild;
+import timetracker.BE.TaskGroup;
+import timetracker.BE.TaskParent;
+import timetracker.BE.TaskResult;
 
 /**
  *
@@ -268,5 +269,237 @@ public class TaskDAO {
             throw new DALException("Kunne ikke opdatere tasken");
         }
 
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+    /**
+     * Gets all tasks for a person grouped by date,
+     * including time spent on tasks per date, parent task, and child task.
+     * 
+     * @return todo
+     * @throws DALException
+     * @throws SQLException 
+     */
+    private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException, SQLException {
+
+        // Result to be returned
+        //List<? extends TaskBase> tasks;
+        
+        // Fetch task data
+        try (Connection con = dbCon.getConnection()) {
+            String sql =
+                    "-- LOCAL VARIABLES\n"
+                    + "DECLARE @person_id int = 0\n"
+                    + "\n"
+                    + "SELECT *, MIN(task_start) OVER (PARTITION BY task_date, task_name, project_id, billable ORDER BY task_start) AS group_start FROM \n"
+                    + "(\n"
+                    + "-- PARENT TASKS (CALCULATED TASKS BASED ON GROUPING OF ACTUAL TASK DATA)\n"
+                    + "SELECT \n"
+                    + "	'TaskParent' AS type,\n"
+                    + "	COUNT(task_id) AS num_children, \n"
+                    + "	NULL AS task_id,\n"
+                    + "	task_name, \n"
+                    + "	billable, \n"
+                    + "	project_id, \n"
+                    + "	MIN(task_start) AS task_start, \n"
+                    + "	MAX(task_end) AS task_end, \n"
+                    + "	CAST(task_start AS DATE) as task_date,\n"
+                    + "	CAST(SUM(DATEDIFF(HOUR, task_start, task_end)) AS VARCHAR) + ':' +\n"
+                    + "		RIGHT('0' + CAST(SUM(DATEDIFF(MINUTE, task_start, task_end)) AS VARCHAR), 2) + ':' +\n"
+                    + "		RIGHT('0' + CAST(SUM(DATEDIFF(SECOND, task_start, task_end)) AS VARCHAR), 2) AS total_time,\n"
+                    + "	CASE WHEN billable = 1 THEN (\n"
+                    + "	CAST(SUM(DATEDIFF(HOUR, task_start, task_end)) AS VARCHAR) + ':' +\n"
+                    + "		RIGHT('0' + CAST(SUM(DATEDIFF(MINUTE, task_start, task_end)) AS VARCHAR), 2) + ':' +\n"
+                    + "		RIGHT('0' + CAST(SUM(DATEDIFF(SECOND, task_start, task_end)) AS VARCHAR), 2)) ELSE '0:00:00' END AS billable_time,\n"
+                    + "		0 AS is_group_total\n"
+                    + "FROM \n"
+                    + "	Tasklog\n"
+                    + "WHERE \n"
+                    + "	task_end IS NOT NULL AND \n"
+                    + "	person_id = CASE WHEN (@person_id = 0) THEN person_id ELSE @person_id END\n"
+                    + "GROUP BY \n"
+                    + "	task_name, \n"
+                    + "	billable, \n"
+                    + "	project_id, \n"
+                    + "	CAST(task_start AS DATE)\n"
+                    + "\n"
+                    + "UNION\n"
+                    + "\n"
+                    + "-- CHILD TASKS (ACTUAL STORED TASKLOGS)\n"
+                    + "SELECT \n"
+                    + "	'TaskChild' AS type,\n"
+                    + "	1 AS num_children, \n"
+                    + "	task_id,\n"
+                    + "	task_name, \n"
+                    + "	billable, \n"
+                    + "	project_id, \n"
+                    + "	task_start, \n"
+                    + "	task_end, \n"
+                    + "	CAST(task_start AS DATE) AS task_date,\n"
+                    + "	CONVERT(VARCHAR(5),DATEDIFF(SECOND,task_start,task_end)/60/60) + ':' + \n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)/60%60), 2) + ':' +\n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)%60),2)\n"
+                    + "		AS total_time,\n"
+                    + "		CASE WHEN billable = 1 THEN CONVERT(VARCHAR(5),DATEDIFF(SECOND,task_start,task_end)/60/60) + ':' + \n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)/60%60), 2) + ':' +\n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)%60),2) ELSE '0:00:00' END AS billable_time,\n"
+                    + "		0 AS is_group_total\n"
+                    + "FROM \n"
+                    + "	Tasklog\n"
+                    + "WHERE \n"
+                    + "	task_end IS NOT NULL AND \n"
+                    + "	person_id = CASE WHEN (@person_id = 0) THEN person_id ELSE @person_id END\n"
+                    + "\n"
+                    + "UNION\n"
+                    + "\n"
+                    + "-- DATE TASKS (CALCULATED TASKS BASED ON GROUPING OF ACTUAL TASK DATA)\n"
+                    + "SELECT \n"
+                    + "	'TaskGroup' AS type,\n"
+                    + "	COUNT(*) AS num_children, \n"
+                    + "	NULL,\n"
+                    + "	NULL, \n"
+                    + "	NULL, \n"
+                    + "	NULL, \n"
+                    + "	NULL, \n"
+                    + "	NULL, \n"
+                    + "	CAST(task_start AS DATE) as task_date,\n"
+                    + "	CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,task_start,task_end))/60/60) + ':' + \n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,task_start,task_end))/60%60), 2) + ':' +\n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,task_start,task_end))%60),2)\n"
+                    + "		AS total_time,\n"
+                    + "		CONVERT(VARCHAR(5),SUM(CASE WHEN billable = 1 THEN (DATEDIFF(SECOND,task_start,task_end))END)/60/60)+ ':' + \n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),SUM(CASE WHEN billable = 1 THEN (DATEDIFF(SECOND,task_start,task_end))END)/60%60),2)+ ':'+\n"
+                    + "		RIGHT('0' + CONVERT(VARCHAR(2),SUM(CASE WHEN billable = 1 THEN (DATEDIFF(SECOND,task_start,task_end))END)%60),2) AS billable_time,\n"
+                    + "	1 AS is_group_total\n"
+                    + "FROM \n"
+                    + "	Tasklog\n"
+                    + "WHERE \n"
+                    + "	task_end IS NOT NULL AND \n"
+                    + "	person_id = CASE WHEN (@person_id = 0) THEN person_id ELSE @person_id END\n"
+                    + "GROUP BY \n"
+                    + "	CAST(task_start AS DATE)\n"
+                    + ") AS MyTaskTable\n"
+                    + "\n"
+                    + "ORDER BY \n"
+                    + "	task_date DESC,\n"
+                    + "	is_group_total DESC,\n"
+                    + "	group_start ASC,\n"
+                    + "	task_name DESC,\n"
+                    + "	project_id DESC,\n"
+                    + "	billable ASC,\n"
+                    + "	task_start ASC,\n"
+                    + "	type DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, person_id);
+            
+            ResultSet rs = ps.executeQuery();
+
+            // Create lists to hold the different types of tasks
+            List<TaskGroup> allTaskGroups = (groupBy != null) ? new ArrayList<>() : null; // if null then no group will be returned
+            List<TaskParent> allTaskParents = (groupBy == null && includeTaskParents == true) ? new ArrayList<>() : null;
+            List<TaskChild> allTaskChildren = (includeTaskParents == false && includeTaskChildren == true) ? null : null;
+            
+            // Declare objects to reference tasks currently being processed
+            TaskGroup tg = null;
+            TaskParent tp = null;
+
+            while (rs.next()) {
+
+                // Instantiate task entities and add them to their respective
+                // relations to build a hierarchy (stacking). It is done using
+                // the task type and the specific order of tasks returned by 
+                // the sql query.                
+                if(rs.getString("type").equals("TaskGroup")) {                    
+
+                    tg = new TaskGroup();
+
+                    tg.setName(rs.getString("name"));
+                    tg.setTime(rs.getString("total_time"));
+
+                    // Add group to list of all groups
+                    allTaskGroups.add(tg);
+                }
+                
+                if(rs.getString("type").equals("TaskParent")) {
+
+                    tp = new TaskParent();
+                    
+                    tp.setName(rs.getString("name"));
+                    tp.setBillable(rs.getBoolean("billable"));
+                    tp.setProjectId(rs.getInt("project_id"));
+                    tp.setPersonId(rs.getInt("person_id"));
+                    tp.setStart(rs.getTimestamp("task_start").toLocalDateTime());
+                    tp.setEnd(rs.getTimestamp("task_end").toLocalDateTime());
+                    tp.setTime(rs.getString("total_time"));
+                    
+                    // Add parent to current group or list of all parents
+                    if(tg != null) {
+                        tg.addParent(tp);
+                    } else {
+                        allTaskParents.add(tp);
+                    }
+                }
+        
+                if(rs.getString("type").equals("TaskChild")) {
+                    TaskChild tc = new TaskChild();
+                
+                    tc.setId(rs.getInt("id"));
+                    tc.setName(rs.getString("name"));
+                    tc.setBillable(rs.getBoolean("billable"));
+                    tc.setProjectId(rs.getInt("project_id"));
+                    tc.setPersonId(rs.getInt("person_id"));
+                    tc.setStart(rs.getTimestamp("task_start").toLocalDateTime());
+                    tc.setEnd(rs.getTimestamp("task_end").toLocalDateTime());
+                    tc.setTime(rs.getString("total_time"));
+                    
+                    // Add child to current parent or list of all children
+                    if(tp != null) {
+                        tp.addChild(tc);
+                    } else {
+                        allTaskChildren.add(tc);
+                    }
+                }
+            }
+            
+            if(allTaskGroups != null) {
+                return allTaskGroups;
+            } else if (allTaskParents != null) {
+                return allTaskParents;
+            } else {
+                return allTaskChildren;
+            }
+        } catch (SQLException e) {
+            throw new DALException("Could not connect to database");
+        }
+    }
+    
+    /* be
+    public enum TaskGroupByList {
+        DATE,
+        PROJECT;
+    }
+    */
+        
+    public List<TaskGroup> getTasksGroupedByDate() throws DALException, SQLException {
+        return (List<TaskGroup>)getTasks(0, "DATE", true, true);
+    }
+    
+    public List<TaskGroup> getTasksGroupedByDate() throws DALException, SQLException {
+        return (List<TaskGroup>)getTasks(0, "DATE", true, true);
     }
 }
