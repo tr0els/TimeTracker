@@ -80,8 +80,25 @@ public class MenubarController implements Initializable {
     }
 
     @FXML
-    private void loadMinTidView(ActionEvent event) {
-        FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/MinTid.fxml"), viewpane);
+    private void loadMinTidView(ActionEvent event) throws IOException, DALException, SQLException {
+       // FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/MinTid.fxml"), viewpane);
+        
+        FXMLLoader loader = new FXMLLoader();
+        
+        loader.setLocation(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"));
+        Parent parent = loader.load();
+      
+        
+        OverviewForAdminsController controller = loader.getController();
+        
+        controller.getComboMedarbejder().setVisible(false);
+        controller.getCurrentUserForMinTidView(model.getUser());
+        
+  
+        viewpane.getChildren().clear();
+        viewpane.getChildren().add(parent);
+            
+    
     }
 
     @FXML
@@ -92,6 +109,7 @@ public class MenubarController implements Initializable {
     @FXML
     private void loadoverblik(ActionEvent event) {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"), viewpane);
+                       
     }
 
     @FXML
@@ -153,7 +171,10 @@ public class MenubarController implements Initializable {
     public JFXButton getBrugermanagerbtb() {
         return brugermanagerbtb;
     }
-
+    /**
+     * get overbliks button for overbliks view, så vi kan bruge setVisible() i main controlleren 
+     * @return 
+     */
     public JFXButton getOverblikforAdmin() {
         return overblikbtb;
     }

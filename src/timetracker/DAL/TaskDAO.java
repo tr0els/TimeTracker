@@ -14,12 +14,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.ObservableList;
+import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.TaskBase;
 import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
 import timetracker.BE.TaskResult;
+import timetracker.BE.Task.Log;
+import timetracker.BE.TaskForDataView;
+import timetracker.BE.User;
+import timetracker.DAL.DALException;
 
 /**
  *
@@ -270,7 +278,72 @@ public class TaskDAO {
         }
 
     }
+
+
+
+   public  List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
+       List<TaskForDataView> taskForOverviewData = new ArrayList<>();
+       
+  
+       
+       try (Connection con = dbCon.getConnection()){
+       
+       String project_id = "";
+       String user_id =  "";
+       
+       
+       if(project != null )
+       {
+           project_id += "and p.project_id =" + project.getProject_id()+ "\n";
+       }
+       
+       if(user != null)
+       {
+       user_id += "and pr.person_id = " +user.getPerson_id() +"\n";
+       }
+       
+           
+       String sql = 
+            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name from tasklog tl , Project p, Person pr \n" 
+          + "where tl.project_id = p.project_id  \n"
+          + "and pr.person_id = tl.person_id \n"
+          + project_id 
+          + user_id;
+         // + "and p.project_id = 9 \n"
+          //+ "and pr.person_id = 1 " ;
+
+        Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+             LocalDateTime end_time;
+                if (rs.getTimestamp("task_end") != null) {
+                    end_time = rs.getTimestamp("task_end").toLocalDateTime();
+            } else {
+               end_time = LocalDateTime.now();
+            }
     
+            String Billable; 
+            TaskForDataView task = new TaskForDataView();
+            task.setName(rs.getString("task_name"));
+            task.setStart(rs.getTimestamp("task_start").toLocalDateTime());
+            task.setEnd(end_time);
+            task.setBillable(rs.getBoolean("billable"));
+            task.setMedarbejder(rs.getString("name"));
+            
+            taskForOverviewData.add(task);
+                
+                
+             
+            }
+         
+       
+      
+       } catch (SQLException ex) {
+          throw new DALException("kunne ikke hente din liste af task");
+        }
+       
+          return taskForOverviewData;
+    }
     
     
     
@@ -499,7 +572,7 @@ public class TaskDAO {
         return (List<TaskGroup>)getTasks(0, "DATE", true, true);
     }
     
-    public List<TaskGroup> getTasksGroupedByDate() throws DALException, SQLException {
-        return (List<TaskGroup>)getTasks(0, "DATE", true, true);
-    }
+
+
+
 }

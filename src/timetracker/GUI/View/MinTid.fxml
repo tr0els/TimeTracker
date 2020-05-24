@@ -1,10 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MinTidController">
-    <children>
-        <Label layoutX="265.0" layoutY="242.0" text="min tid " />
-    </children>
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="580.0" stylesheets="@StyleForOverview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MinTidController">
+
+   <children>
+      <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" layoutY="9.0" prefHeight="150.0" prefWidth="600.0" />
+      <TableView fx:id="tableview" layoutX="12.0" layoutY="297.0" prefHeight="172.0" prefWidth="581.0">
+        <columns>
+          <TableColumn fx:id="colprojekts" prefWidth="184.0" text="Projekt " />
+          <TableColumn fx:id="coltotaltid" prefWidth="123.0" text="Total tid" />
+            <TableColumn fx:id="colBillable" prefWidth="152.0" text="Billable time" />
+            <TableColumn fx:id="colKlient" prefWidth="107.0" text="Klient" />
+        </columns>
+      </TableView>
+      <BarChart fx:id="barchart" layoutX="-360.0" layoutY="130.0" prefHeight="189.0" prefWidth="270.0" title="Barchart">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <JFXButton fx:id="Filterkanp" layoutX="490.0" layoutY="250.0" onAction="#handleFilteropen" text="Filter" />
+      <PieChart fx:id="piechart" layoutX="35.0" layoutY="14.0" prefHeight="258.0" prefWidth="356.0" title="Billable and nonbillable " />
+      <AnchorPane fx:id="searchAnchorpane" layoutX="1.0" layoutY="-162.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
+         <children>
+            <JFXComboBox fx:id="comboPerioder" layoutX="28.0" layoutY="42.0" prefHeight="25.0" prefWidth="87.0" promptText="Måneder" />
+            <JFXDatePicker fx:id="fradato" defaultColor="#768bc6" layoutX="28.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Fradato" showWeekNumbers="true" />
+            <JFXDatePicker fx:id="tildato" defaultColor="#768bc6" layoutX="191.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Tildato" showWeekNumbers="true" />
+            <Label layoutX="216.0" layoutY="14.0" text="Vælg hvad du vil søge på" />
+            <JFXButton fx:id="seekbtb" layoutX="453.0" layoutY="98.0" onAction="#handleSeekPressed" prefHeight="25.0" prefWidth="53.0" text="Søg" />
+            <JFXComboBox fx:id="comboKlienter" layoutX="340.0" layoutY="42.0" prefHeight="25.0" prefWidth="120.0" promptText="Klienter" />
+            <JFXButton fx:id="clearFilterbtb" layoutX="367.0" layoutY="98.0" onAction="#handleClearFilter" text="Ryd Filter" />
+         </children>
+      </AnchorPane>
+      <Label fx:id="lblforPiechart" layoutX="390.0" layoutY="75.0" />
+   </children>
+
 </AnchorPane>

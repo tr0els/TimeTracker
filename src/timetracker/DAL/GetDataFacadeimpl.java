@@ -7,10 +7,14 @@ package timetracker.DAL;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
+import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 
 /**
@@ -20,7 +24,7 @@ import timetracker.BE.User;
 public class GetDataFacadeimpl implements IgetDataFacadeInterface {
 
     private BrugerDAO brugerdao;
-    private ClientDAO clientdao;
+    private ClientDAO clientdao; 
     private ProjectDAO projectdao;
     private TaskDAO taskdao;
 
@@ -108,6 +112,11 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     public void updateTaskbyID(Task task) throws DALException{
         taskdao.updateTaskbyID(task);
     }
+    
+    @Override
+     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException{
+      return taskdao.getListOfTaskForDataView(project, user);
+     } 
 
     //Klient
     @Override

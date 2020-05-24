@@ -14,10 +14,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
+import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
@@ -307,6 +309,10 @@ public class BLLManager {
 
         return iGetData.login(email, HashedPassword);
 
+    }
+
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
+       return iGetData.getListOfTaskForDataView(project, user);
     }
 
 
