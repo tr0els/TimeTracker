@@ -22,20 +22,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeSortMode;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
@@ -97,6 +108,12 @@ public class ProjektViewController implements Initializable {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     @FXML
     private JFXButton btnCancel;
+    @FXML
+    private VBox vboxTasks;
+    @FXML
+    private HBox hboxHeader;
+
+    private ObservableList<Task> observablelogs;
 
     public ProjektViewController() throws DALException, SQLException {
 
@@ -118,12 +135,33 @@ public class ProjektViewController implements Initializable {
             showProjects();
             projectListener();
 
+            setHBox();
+
         } catch (DALException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void setHBox() {
+
+        Label arrow = new Label("#");
+        arrow.setPrefWidth(25);
+//        arrow.setMaxWidth(25);
+        arrow.setAlignment(Pos.CENTER);
+
+        Label taskname = new Label("Opgave navn");
+        taskname.setPrefWidth(150);
+
+        Label totaltime = new Label("Total tid");
+        totaltime.setPrefWidth(120);
+
+        Label lastworkedon = new Label("Sidst arbejdet på");
+        lastworkedon.setPrefWidth(150);
+
+        hboxHeader.getChildren().addAll(arrow, taskname, totaltime, lastworkedon);
     }
 
     /**
@@ -133,83 +171,171 @@ public class ProjektViewController implements Initializable {
      * @throws DALException
      */
     public void createTree(int project_id) throws DALException {
-
-        TreeItem ttRoot = new TreeItem("Tasks");
-
+        vboxTasks.getChildren().clear();
         for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
             Task hashTask = entry.getKey();
-            TreeItem task = new TreeItem<Task>(hashTask);
-            ttRoot.getChildren().add(task);
+
+            HBox headerBox = new HBox();
+            Label tasknameHead = new Label(hashTask.getTask_name());
+            tasknameHead.setPrefWidth(150);
+
+            Label totaltimeHead = new Label(hashTask.getTotal_tid());
+            totaltimeHead.setPrefWidth(120);
+
+            Label lastworkedonHead = new Label(formatter.format(hashTask.getLast_worked_on()));
+            lastworkedonHead.setPrefWidth(150);
+
+            headerBox.getChildren().addAll(tasknameHead, totaltimeHead, lastworkedonHead);
 
             List<Task> logs = entry.getValue();
+            observablelogs = FXCollections.observableArrayList();
+            observablelogs.addAll(logs);
 
-            for (int j = 0; j < logs.size(); j++) {
-                TreeItem<Task> log = new TreeItem<Task>(logs.get(j));
-                task.getChildren().add(log);
+            TableView tableView = new TableView<>(observablelogs);
 
-            }
-            colTask_name.setCellValueFactory(new TreeItemPropertyValueFactory<>("task_name"));
-            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
+            TableColumn<Task, LocalDateTime> starttime = new TableColumn("Start");
+            starttime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
 
-            colLast_worked_on.setCellValueFactory(new TreeItemPropertyValueFactory<>("last_worked_on"));
-            colLast_worked_on.setCellFactory(column -> {
-                return new TreeTableCell<Task, LocalDateTime>() {
+            TableColumn<Task, LocalDateTime> endtime = new TableColumn("Slut");
+            endtime.setCellValueFactory(new PropertyValueFactory<>("end_time"));
 
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText("");
-                        } else {
-                            setText(formatter.format(item));
-                        }
+            TableColumn<Task, String> totaltime = new TableColumn("Total tid");
+            totaltime.setCellValueFactory(new PropertyValueFactory<>("total_tid"));
+
+            TableColumn<Task, String> billable = new TableColumn("Faktureres");
+            billable.setCellValueFactory(new PropertyValueFactory<>("stringBillable"));
+
+            TableColumn<Task, Integer> redigere = new TableColumn("Redigeres");
+            redigere.setCellValueFactory(new PropertyValueFactory<>("task_id"));
+            redigere.setCellFactory(param -> new TableCell<Task, Integer>() {
+                private final JFXButton editbtn = new JFXButton("redigere");
+
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText("");
+                    } else {
+                        setGraphic(editbtn);
                     }
-
-                };
+                    editbtn.setOnAction(event -> editTask(item.intValue()));
+                }
             });
 
-            colTask_start.setCellValueFactory(new TreeItemPropertyValueFactory<>("start_time"));
-            colTask_start.setCellFactory(column -> {
-                return new TreeTableCell<Task, LocalDateTime>() {
+            tableView.getColumns().addAll(starttime, endtime, totaltime, billable, redigere);
+            tableView.setFixedCellSize(25);
+            double tableHeight = observablelogs.size() * tableView.getFixedCellSize() + tableView.getFixedCellSize();
+            tableView.setPrefHeight(tableHeight);
 
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText("");
-                        } else {
-                            setText(formatter.format(item));
-                        }
-                    }
+            TitledPane titledPane = new TitledPane();
+            titledPane.setGraphic(headerBox);
+            titledPane.setContent(tableView);
+            titledPane.setExpanded(false);
 
-                };
-            });
-
-            colTask_end.setCellValueFactory(new TreeItemPropertyValueFactory<>("end_time"));
-            colTask_end.setCellFactory(column -> {
-                return new TreeTableCell<Task, LocalDateTime>() {
-
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty) {
-                            setText("");
-                        } else {
-                            setText(formatter.format(item));
-                        }
-                    }
-
-                };
-            });
-
-            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
-            colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
-            
-            treeTasks.getSortOrder().add(colLast_worked_on);
-            treeTasks.setRoot(ttRoot);
-            treeTasks.setShowRoot(false);
+            vboxTasks.getChildren().add(titledPane);
 
         }
+
+//        TreeItem ttRoot = new TreeItem("Tasks");
+//
+//        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
+//            Task hashTask = entry.getKey();
+//            TreeItem task = new TreeItem<Task>(hashTask);
+//            ttRoot.getChildren().add(task);
+//
+//            List<Task> logs = entry.getValue();
+//
+//            for (int j = 0; j < logs.size(); j++) {
+//                TreeItem<Task> log = new TreeItem<Task>(logs.get(j));
+//                task.getChildren().add(log);
+//
+//            }
+//            colTask_name.setCellValueFactory(new TreeItemPropertyValueFactory<>("task_name"));
+//            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
+//
+//            colLast_worked_on.setCellValueFactory(new TreeItemPropertyValueFactory<>("last_worked_on"));
+//            colLast_worked_on.setCellFactory(column -> {
+//                return new TreeTableCell<Task, LocalDateTime>() {
+//
+//                    @Override
+//                    protected void updateItem(LocalDateTime item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                        if (item == null || empty) {
+//                            setText("");
+//                        } else {
+//                            setText(formatter.format(item));
+//                        }
+//                    }
+//
+//                };
+//            });
+//
+//            colTask_start.setCellValueFactory(new TreeItemPropertyValueFactory<>("start_time"));
+//            colTask_start.setCellFactory(column -> {
+//                return new TreeTableCell<Task, LocalDateTime>() {
+//
+//                    @Override
+//                    protected void updateItem(LocalDateTime item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                        if (item == null || empty) {
+//                            setText("");
+//                        } else {
+//                            setText(formatter.format(item));
+//                        }
+//                    }
+//
+//                };
+//            });
+//
+//            colTask_end.setCellValueFactory(new TreeItemPropertyValueFactory<>("end_time"));
+//            colTask_end.setCellFactory(column -> {
+//                return new TreeTableCell<Task, LocalDateTime>() {
+//
+//                    @Override
+//                    protected void updateItem(LocalDateTime item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                        if (item == null || empty) {
+//                            setText("");
+//                        } else {
+//                            setText(formatter.format(item));
+//                        }
+//                    }
+//
+//                };
+//            });
+//
+//            colTotal_time.setCellValueFactory(new TreeItemPropertyValueFactory<>("total_tid"));
+//            colBillable.setCellValueFactory(new TreeItemPropertyValueFactory<>("stringBillable"));
+//            
+//            treeTasks.getSortOrder().add(colLast_worked_on);
+//            treeTasks.setRoot(ttRoot);
+//            treeTasks.setShowRoot(false);
+//
+//        }
+    }
+
+    public void editTask(int task_id) {
+        try {
+            edit_task = model.getTaskbyID(task_id);
+
+            txtTask_name.setText(edit_task.getTask_name());
+            chkboxBillable.setSelected(edit_task.isBillable());
+
+            for (int i = 0; i < projects.size(); i++) {
+
+                if (edit_task.getProject_id() == projects.get(i).getProject_id()) {
+                    menuEditProjects.getSelectionModel().select(projects.get(i));
+                }
+
+            }
+
+        } catch (DALException ex) {
+            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        skuffen.open();
+        skuffen.toFront();
+
     }
 
     /**
@@ -218,7 +344,6 @@ public class ProjektViewController implements Initializable {
     public void showProjects() throws DALException, SQLException {
 
         projectMenubox.setItems(Pmodel.getProjectsbyID(person_id));
-
         projects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(projects);
 
@@ -251,37 +376,7 @@ public class ProjektViewController implements Initializable {
      */
     @FXML
     private void handleOpenEdit(ActionEvent event) {
-        int task_id;
 
-        try { // checker om der er valgt en log eller task, hvis det ikke er en log(leaf) så vælger den den føste log der er under den valgte task.
-            if (!treeTasks.getSelectionModel().selectedItemProperty().getValue().isLeaf()) {
-                task_id = treeTasks.getSelectionModel().getSelectedItem().getChildren().get(0).getValue().getTask_id();
-                treeTasks.getSelectionModel().getSelectedItem().setExpanded(true);
-                treeTasks.getSelectionModel().select(treeTasks.getSelectionModel().getSelectedItem().getChildren().get(0));
-                edit_task = model.getTaskbyID(task_id);
-
-            } else {
-                task_id = treeTasks.getSelectionModel().getSelectedItem().getValue().getTask_id();
-                edit_task = model.getTaskbyID(task_id);
-            }
-
-            txtTask_name.setText(edit_task.getTask_name());
-            chkboxBillable.setSelected(edit_task.isBillable());
-
-            for (int i = 0; i < projects.size(); i++) {
-
-                if (edit_task.getProject_id() == projects.get(i).getProject_id()) {
-                    menuEditProjects.getSelectionModel().select(projects.get(i));
-                }
-
-            }
-
-        } catch (DALException ex) {
-            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        skuffen.open();
-        skuffen.toFront();
     }
 
     /**
@@ -300,15 +395,19 @@ public class ProjektViewController implements Initializable {
 
             model.updateTaskbyID(edit_task);
 
-            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
-            lblProjectTid.setText(menuEditProjects.getSelectionModel().getSelectedItem().getTotal_tid());
-            lblProjectnavn.setText(menuEditProjects.getSelectionModel().getSelectedItem().getProject_name());
+            int p_ID = menuEditProjects.getSelectionModel().getSelectedItem().getProject_id();
+            String p_tid = menuEditProjects.getSelectionModel().getSelectedItem().getTotal_tid(); //henter gammel værdi! :(
+            String p_navn = menuEditProjects.getSelectionModel().getSelectedItem().getProject_name();
 
-            projectMenubox.getSelectionModel().clearSelection();
+            lblProjectTid.setText(p_tid);
+            lblProjectnavn.setText(p_navn);
 
+            createTree(p_ID);
+            showProjects();
+            
             skuffen.close();
             skuffen.toBack();
-        } catch (DALException ex) {
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

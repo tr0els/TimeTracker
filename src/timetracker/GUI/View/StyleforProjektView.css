@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 19. maj 2020, 08.37.26
+    Author     : BBran
+*/
+
+.titled-pane .title {
+    -fx-background-color: transparent ;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: white;
+}
+
+.table-view {
+  -fx-table-cell-border-color: transparent;
+
+}
+
+.table-cell{
+    -fx-alignment: CENTER;
+}
+.table-row-cell{ 
+    -fx-table-cell-border-color: transparent;
+}
