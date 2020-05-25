@@ -87,6 +87,8 @@ public interface IgetDataFacadeInterface {
 
     public boolean valExistingEmailEdit(int person_id, String email);
 
+    public void disableUser(User disableUser);
+
 
 
 }

@@ -6,6 +6,7 @@
 package timetracker.BE;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import java.util.Objects;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -32,7 +33,6 @@ public class User extends RecursiveTreeObject<User> {
         this.email = email;
         this.role_id = role_id;
         this.profession_id = profession_id;
-
     }
 
     public User(int person_id, String name, String surname, String email, String role, String profession) {
@@ -133,6 +133,54 @@ public class User extends RecursiveTreeObject<User> {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (this.person_id != other.person_id) {
+            return false;
+        }
+        if (this.role_id != other.role_id) {
+            return false;
+        }
+        if (this.profession_id != other.profession_id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.surname, other.surname)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(this.role, other.role)) {
+            return false;
+        }
+        if (!Objects.equals(this.profession, other.profession)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

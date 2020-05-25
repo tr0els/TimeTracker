@@ -20,7 +20,8 @@
         <JFXTextField fx:id="textfieldEmail" layoutX="92.0" layoutY="80.0" onMouseClicked="#handleEmailClick" prefHeight="25.0" prefWidth="222.0" />
         <JFXComboBox fx:id="listProfessions" layoutX="92.0" layoutY="109.0" prefHeight="25.0" prefWidth="222.0" />
         <JFXCheckBox fx:id="checkboxAdminRole" layoutX="347.0" layoutY="113.0" text="Admin" />
-        <JFXButton layoutX="414.0" layoutY="32.0" onAction="#handleCreateUser" prefHeight="25.0" prefWidth="115.0" text="Opret bruger" />
-        <JFXButton layoutX="414.0" layoutY="72.0" onAction="#handleUpdateUser" prefHeight="25.0" prefWidth="115.0" text="Opdater bruger" />
+        <JFXButton layoutX="414.0" layoutY="32.0" onAction="#handleCreateUser" prefHeight="25.0" prefWidth="115.0" text="Opret Bruger" />
+        <JFXButton layoutX="414.0" layoutY="72.0" onAction="#handleUpdateUser" prefHeight="25.0" prefWidth="115.0" text="Opdater Bruger" />
+      <JFXButton layoutX="414.0" layoutY="109.0" onAction="#handleDisableUser" prefHeight="25.0" prefWidth="115.0" text="Fjern Bruger" />
     </children>
 </AnchorPane>

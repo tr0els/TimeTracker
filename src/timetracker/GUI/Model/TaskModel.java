@@ -297,16 +297,16 @@ public class TaskModel implements Runnable {
 //        allProfessions.addAll(bll.getProfessions());
 //        return allProfessions;
 //    }
-    /**
-     * sender det info fra MainControlleren videre til BLLManager
-     *
-     * @param email
-     * @param password
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws timetracker.DAL.DALException
-     */
-    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-        return bll.login(email, password);
-    }
+//    /**
+//     * sender det info fra MainControlleren videre til BLLManager
+//     *
+//     * @param email
+//     * @param password
+//     * @return
+//     * @throws NoSuchAlgorithmException
+//     * @throws timetracker.DAL.DALException
+//     */
+//    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
+//        return bll.login(email, password);
+//    }
 }

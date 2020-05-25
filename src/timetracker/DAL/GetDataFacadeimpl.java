@@ -176,5 +176,10 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         return brugerdao.valExistingEmailEdit(person_id, email);
     }
 
+    @Override
+    public void disableUser(User disableUser) {
+        brugerdao.disableUser(disableUser);
+    }
+
 
 }
