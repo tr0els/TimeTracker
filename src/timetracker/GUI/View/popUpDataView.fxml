@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="682.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
+   <children>
+      <JFXButton fx:id="btbExport" layoutX="224.0" layoutY="444.0" onAction="#handleExportCSV" prefHeight="42.0" prefWidth="102.0" text="Export til CSV" />
+      <Label fx:id="lblProjektnavn" layoutX="39.0" layoutY="55.0" />
+      <TableView fx:id="tableView" focusTraversable="false" layoutX="14.0" layoutY="32.0" prefHeight="400.0" prefWidth="650.0" tableMenuButtonVisible="true">
+        <columns>
+          <TableColumn fx:id="colOpgave" editable="false" prefWidth="136.0" text="Opgave" />
+            <TableColumn fx:id="colStart" editable="false" prefWidth="149.0" text="Start" />
+            <TableColumn fx:id="colEnd" editable="false" prefWidth="139.0" text="Slut" />
+            <TableColumn fx:id="colBillable" editable="false" prefWidth="78.0" text="Billable" />
+            <TableColumn fx:id="colMedarebjder" editable="false" prefWidth="147.0" text="Medarbejder" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -251,8 +251,8 @@ public class ProjectDAO {
     public List<Project> getProjectsWithExtraData() throws DALException {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
-        try (Connection con = dbCon.getConnection()) {
-            String sql = "SELECT p.project_name,p.project_id, c.client_id,\n"
+        try ( Connection con = dbCon.getConnection()) {
+            String sql = "SELECT p.project_name,p.project_id, c.client_id, p.project_rate,\n"
                     + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
@@ -264,7 +264,7 @@ public class ProjectDAO {
                     + "where t.project_id = p.project_id\n"
                     + "and c.client_id = p.client_id\n"
                     + "and t.task_id = t1.task_id\n"
-                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
@@ -272,7 +272,7 @@ public class ProjectDAO {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
-                //projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setProject_rate(rs.getInt("project_rate"));
                 projects.setClient_id(rs.getInt("client_id"));
                 projects.setClientName(rs.getString("client_name"));
                 projects.setTotal_tid(rs.getString("total_time"));
@@ -303,30 +303,28 @@ public class ProjectDAO {
             String tildato_clause = "";
             String periode_clause = "";
             //String monthStart_clause = "";
-            // StringBuilder sb = new StringBuilder();
-
-            if (comboUser != null) {
-                user_clause += "AND t.person_id = " + comboUser.getPerson_id() + "\n";
-            }
-
-            if (comboClient != null) {
-                client_clause += comboClient.getClient_name();
-            }
-
-            if (fradato != null) {
-                fradato_caluse += "AND t.task_start >= convert(date, '" + fradato + "', 103)\n";
-            }
-
-            if (tildato != null) {
-                tildato_clause += "AND t.task_end <= convert(date, '" + tildato + "', 103)\n";
-            }
-
-            if (monthStart != null && monthEnd != null) {
-                periode_clause += "AND t.task_start Between convert(date, '" + monthStart + "', 103) and convert(date, '" + monthEnd + "', 103)";
-            }
-
-            String sql
-                    = "SELECT p.project_name,p.project_id, c.client_id,\n" + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
+           // StringBuilder sb = new StringBuilder();
+            
+           if(comboUser != null)
+               user_clause += "AND t.person_id = " +comboUser.getPerson_id()+"\n";
+           
+           if(comboClient != null)
+               client_clause +=  comboClient.getClient_name();
+           
+           if( fradato != null )
+               fradato_caluse += "AND t.task_start >= convert(date, '"+fradato+"', 103)\n";
+           
+           if( tildato != null )
+               tildato_clause += "AND t.task_end <= convert(date, '"+tildato+"', 103)\n";
+           
+           if( monthStart != null && monthEnd != null)
+               periode_clause += "AND t.task_start Between convert(date, '"+ monthStart+"', 103) and convert(date, '"+ monthEnd+"', 103)";
+               
+           
+            
+            String sql = 
+                    "SELECT p.project_name,p.project_id, c.client_id, p.project_rate,\n"                    
+                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))%60),2)\n"
                     + "AS total_time,\n"
@@ -342,7 +340,7 @@ public class ProjectDAO {
                     + fradato_caluse
                     + tildato_clause
                     + periode_clause
-                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id;";
+                    + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
             //sb.append(sql);
 
             Statement statement = con.createStatement();
@@ -352,7 +350,7 @@ public class ProjectDAO {
                 Project projects = new Project();
                 projects.setProject_id(rs.getInt("project_id"));
                 projects.setProject_name(rs.getString("project_name"));
-                //projects.setProject_rate(rs.getInt("project_rate"));
+                projects.setProject_rate(rs.getInt("project_rate"));
                 projects.setClient_id(rs.getInt("client_id"));
                 projects.setClientName(rs.getString("client_name"));
                 projects.setTotal_tid(rs.getString("total_time"));
