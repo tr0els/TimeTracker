@@ -89,13 +89,11 @@ public class ClientModel {
     }
 
     public ObservableList<Project> getClientprojcts(Client client) throws DALException {
-        if (allProjectsbyClientID.isEmpty()) {
-            allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
-        } else {
+     
             allProjectsbyClientID.clear();
-            allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
-        }
-
+            //allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
+            allProjectsbyClientID.addAll(bll.getProjectsToFilter(null, client, null, null, null, null));
+        
         return allProjectsbyClientID;
 
     }

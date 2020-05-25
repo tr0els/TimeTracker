@@ -160,7 +160,7 @@ public class UserManagerAdminController implements Initializable {
                 }
                 model.editUser(user);
                 populateTreeTable();
-            }else{
+            } else {
                 textfieldEmail.setText("Email Already Exist");
                 textfieldEmail.setStyle("-fx-text-inner-color: red");
             }
@@ -294,6 +294,20 @@ public class UserManagerAdminController implements Initializable {
     private void handleEmailClick(MouseEvent event) {
         textfieldEmail.selectAll();
         textfieldEmail.setStyle("-fx-text-inner-color: black");
+    }
+
+    @FXML
+    private void handleDisableUser(ActionEvent event) {
+        int opt = JOptionPane.showConfirmDialog(null, "Vil du fjerne denne bruger?", "Fjern Bruger", JOptionPane.YES_NO_OPTION);
+        if (opt == 0) {
+            User disableUser = new User();
+            TreeItem c = (TreeItem) listUsers.getSelectionModel().getSelectedItem();
+            disableUser = listUsers.getSelectionModel().getSelectedItem().getValue();
+
+            model.disableUser(disableUser);
+            boolean remove = c.getParent().getChildren().remove(c);
+        }
+
     }
 
 }

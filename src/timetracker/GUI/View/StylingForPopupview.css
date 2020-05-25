@@ -4,9 +4,10 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 18. maj 2020, 13.29.58
+    Created on : 25. maj 2020, 14.41.48
     Author     : Charlotte
 */
+
 
 *{
 
@@ -31,15 +32,6 @@ and open the template in the editor.
 
 }
 
-.pie{
-    
-    
-    
-    
-}
-
-.data0.chart-pie{ -fx-pie-color: -fx-grumsen; }
-.data1.chart-pie{ -fx-pie-color: -fx-grumsen-lysere; }
 
 
 
@@ -104,15 +96,16 @@ and open the template in the editor.
 }
 
 
+.table-view .show-hide-columns-button{
+    
+    -fx-background-color: -fx-grumsen-baggrund;
+}
+
 
 
 .table-view .filler{
     
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-grumsen-baggrund ;
 }
 
-.table-row-cell:selected {
-    -fx-background-color: -fx-grumsen-lysere;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
+

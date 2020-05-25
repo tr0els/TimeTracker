@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,13 +23,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ClientModel;
+import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -70,15 +76,14 @@ public class KlientManagerAdminController implements Initializable {
     private JFXButton retvalgteklientnbtb;
     @FXML
     private JFXTextField txtrettimepris;
-    @FXML
     private Label lblprojektnavn;
-    @FXML
     private Label lblprojekttimepris;
 
     private Client selectedClient;
     private Client newclient = new Client();
     private static ClientModel model;
     private static TaskModel taskmodel;
+   
     private JFXButton btbGåtilprojekter;
     @FXML
     private JFXButton btbcancelnyklient;
@@ -88,6 +93,7 @@ public class KlientManagerAdminController implements Initializable {
     public KlientManagerAdminController() throws DALException, SQLException {
         model = ClientModel.getInstance();
         taskmodel = TaskModel.getInstance();
+   
     }
 
     /**
@@ -118,11 +124,10 @@ public class KlientManagerAdminController implements Initializable {
         try {
 
             populateClientList();
-
             skuffe.close();
             retklientbtb.setVisible(false);
             retvalgteklientnbtb.setVisible(false);
-
+            listviewprojekts.setFocusTraversable(false);
             listviewprojekts.setTooltip(tooltipforprojektlist());
 
         } catch (DALException ex) {
@@ -165,11 +170,11 @@ public class KlientManagerAdminController implements Initializable {
         retvalgteklientnbtb.setVisible(true);
 
         //tilføjer projeketer til listviewet for den valgte klient
+        
         addprojektstolistview(selectedClient);
 
-        //resetter projekt info lablsne
-        lblprojektnavn.setText("");
-        lblprojekttimepris.setText("");
+  
+
     }
 
     /**
@@ -217,7 +222,19 @@ public class KlientManagerAdminController implements Initializable {
      * @throws SQLException
      */
     private void addprojektstolistview(Client client) throws DALException, SQLException {
+            listviewprojekts.setCellFactory((ListView<Project> para) -> {
+                ListCell<Project> cell = new ListCell<Project>() {
+                    @Override
+                    protected void updateItem(Project item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.getProject_name() + " - " + item.getProject_rate() + " DKK");
+                        }}};
+                
+                return cell;
+            });
         listviewprojekts.setItems(FXCollections.observableArrayList(model.getClientprojcts(client)));
+        
     }
 
     /**
@@ -308,19 +325,7 @@ public class KlientManagerAdminController implements Initializable {
 
     }
 
-    /**
-     * sætter info lablesne med info om det valgte projekt.
-     *
-     * @param event
-     */
-    @FXML
-    private void getSelectedProjekt(MouseEvent event) {
-        Project valgteprojekt = listviewprojekts.getSelectionModel().getSelectedItem();
-
-        lblprojektnavn.setText(valgteprojekt.getProject_name());
-        lblprojekttimepris.setText(valgteprojekt.getProject_rate() + " DKK");
-
-    }
+ 
 
     @FXML
     private void handleCancelRetklient(ActionEvent event) {
