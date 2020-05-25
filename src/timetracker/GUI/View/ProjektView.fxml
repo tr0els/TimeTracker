@@ -17,7 +17,7 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforProjektView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
-      <AnchorPane fx:id="paneEdit" layoutY="-140.0" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: white;">
+      <AnchorPane fx:id="paneEdit" layoutY="-140.0" prefHeight="140.0" prefWidth="600.0">
          <children>
             <JFXTextField fx:id="txtTask_name" layoutX="14.0" layoutY="17.0" prefHeight="25.0" prefWidth="300.0" />
             <JFXCheckBox fx:id="chkboxBillable" layoutX="324.0" layoutY="22.0" text="Faktureres" />
@@ -37,7 +37,7 @@
       <JFXComboBox fx:id="projectMenubox" layoutX="112.0" layoutY="19.0" prefHeight="25.0" prefWidth="188.0" />
       <Pane fx:id="paneProjectDetails" layoutX="9.0" layoutY="64.0" prefHeight="422.0" prefWidth="582.0" style="-fx-background-color: transparent;">
          <children>
-            <HBox alignment="BOTTOM_CENTER" layoutX="1.0" prefHeight="53.0" prefWidth="580.0" style="-fx-background-color: #d4f2ff; -fx-border-color: #435a9a; -fx-padding: 2px; -fx-border-radius: 10px; -fx-background-radius: 10px;">
+            <HBox fx:id="hbox_head" alignment="BOTTOM_CENTER" layoutX="1.0" prefHeight="53.0" prefWidth="580.0">
                <children>
                   <Label fx:id="lblProjectnavn" contentDisplay="CENTER" prefHeight="53.0" prefWidth="282.0" text="Vælg et projekt">
                      <font>
@@ -53,8 +53,8 @@
                   <Label prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
                </children>
             </HBox>
-            <HBox fx:id="hboxHeader" alignment="BOTTOM_LEFT" layoutX="1.0" layoutY="62.0" prefHeight="20.0" prefWidth="580.0" style="-fx-background-color: #bdbdbd; -fx-border-color: #8c8c8c; -fx-background-radius: 5px; -fx-border-radius: 5px;" />
-            <ScrollPane fx:id="scrollPaneTask" fitToWidth="true" hbarPolicy="NEVER" layoutX="1.0" layoutY="85.0" prefHeight="336.0" prefWidth="580.0" style="-fx-background-color: transparent;">
+            <HBox fx:id="hboxHeader" alignment="BOTTOM_LEFT" layoutX="1.0" layoutY="62.0" prefHeight="20.0" prefWidth="580.0" />
+            <ScrollPane fx:id="scrollPaneTask" fitToWidth="true" hbarPolicy="NEVER" layoutX="1.0" layoutY="85.0" prefHeight="336.0" prefWidth="580.0">
                <content>
                   <VBox fx:id="vboxTasks" maxWidth="560.0" prefWidth="560.0" style="-fx-border-color: transparent;" />
                </content>

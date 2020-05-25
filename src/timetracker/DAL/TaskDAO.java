@@ -177,6 +177,7 @@ public class TaskDAO {
                     log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                     log.setEnd_time(end_time);
                     log.setStringBillable(sBillable);
+                    log.setTask_name(rs.getString("task_name"));
 
                     logs.add(log);
 
