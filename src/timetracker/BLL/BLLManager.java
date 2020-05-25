@@ -290,25 +290,10 @@ public class BLLManager {
         return iGetData.getProfessions();
     }
 
-    /**
-     * tager det input som kommer fra modelen og hasher passworded, sender det
-     * videre til dal.
-     *
-     * @param email
-     * @param password
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-        byte[] salt = iGetData.getSalt(email);
 
-        final MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.update(salt);
 
-        final byte[] HashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
-
-        return iGetData.login(email, HashedPassword);
-
+    public void disableUser(User disableUser) {
+        iGetData.disableUser(disableUser);
     }
 
     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {

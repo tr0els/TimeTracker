@@ -304,11 +304,13 @@ public class TaskDAO {
        
            
        String sql = 
-            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name from tasklog tl , Project p, Person pr \n" 
+            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name \n"
+          + "from tasklog tl , Project p, Person pr \n"  
           + "where tl.project_id = p.project_id  \n"
           + "and pr.person_id = tl.person_id \n"
           + project_id 
-          + user_id;
+          + user_id
+          + "order by tl.task_start asc;";
          // + "and p.project_id = 9 \n"
           //+ "and pr.person_id = 1 " ;
 
@@ -327,6 +329,7 @@ public class TaskDAO {
             task.setName(rs.getString("task_name"));
             task.setStart(rs.getTimestamp("task_start").toLocalDateTime());
             task.setEnd(end_time);
+          
             task.setBillable(rs.getBoolean("billable"));
             task.setMedarbejder(rs.getString("name"));
             
@@ -339,7 +342,7 @@ public class TaskDAO {
        
       
        } catch (SQLException ex) {
-          throw new DALException("kunne ikke hente din liste af task");
+          throw new DALException("kunne ikke hente din liste af task" + ex);
         }
        
           return taskForOverviewData;
@@ -369,10 +372,7 @@ public class TaskDAO {
      */
     private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException, SQLException {
 
-        // Result to be returned
-        //List<? extends TaskBase> tasks;
-        
-        // Fetch task data
+        // Fetch task data 
         try (Connection con = dbCon.getConnection()) {
             String sql =
                     "-- LOCAL VARIABLES\n"
@@ -482,19 +482,19 @@ public class TaskDAO {
             
             ResultSet rs = ps.executeQuery();
 
-            // Create lists to hold the different types of tasks
-            List<TaskGroup> allTaskGroups = (groupBy != null) ? new ArrayList<>() : null; // if null then no group will be returned
+            // Lists that holds the different types of tasks
+            List<TaskGroup> allTaskGroups = (groupBy != null) ? new ArrayList<>() : null;
             List<TaskParent> allTaskParents = (groupBy == null && includeTaskParents == true) ? new ArrayList<>() : null;
             List<TaskChild> allTaskChildren = (includeTaskParents == false && includeTaskChildren == true) ? null : null;
             
-            // Declare objects to reference tasks currently being processed
+            // Variables that reference tasks currently being processed
             TaskGroup tg = null;
             TaskParent tp = null;
 
             while (rs.next()) {
 
                 // Instantiate task entities and add them to their respective
-                // relations to build a hierarchy (stacking). It is done using
+                // relations to build a hierarchy (stacking). It is relying on
                 // the task type and the specific order of tasks returned by 
                 // the sql query.                
                 if(rs.getString("type").equals("TaskGroup")) {                    
@@ -549,6 +549,7 @@ public class TaskDAO {
                 }
             }
             
+            // Return list of tasks
             if(allTaskGroups != null) {
                 return allTaskGroups;
             } else if (allTaskParents != null) {
@@ -561,13 +562,6 @@ public class TaskDAO {
         }
     }
     
-    /* be
-    public enum TaskGroupByList {
-        DATE,
-        PROJECT;
-    }
-    */
-        
     public List<TaskGroup> getTasksGroupedByDate() throws DALException, SQLException {
         return (List<TaskGroup>)getTasks(0, "DATE", true, true);
     }

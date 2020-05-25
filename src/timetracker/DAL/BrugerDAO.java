@@ -115,10 +115,10 @@ public class BrugerDAO {
         ArrayList<User> allUsers = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, Person.profession_id ,profession_name\n"
+            String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, Person.profession_id ,profession_name, active\n"
                     + "FROM Person, Profession, Role\n"
                     + "WHERE Person.role_id = Role.role_id\n"
-                    + "AND Person.profession_id = Profession.profession_id;";
+                    + "AND Person.profession_id = Profession.profession_id AND active = 1";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
@@ -179,7 +179,7 @@ public class BrugerDAO {
     public User login(String email, byte[] hashedPassword) {
 
         try ( Connection con = dbCon.getConnection()) {
-            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ?";
+            String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ? AND active = 1";
             PreparedStatement st = con.prepareStatement(sql);
             st.setNString(1, email);
             st.setBytes(2, hashedPassword);
@@ -277,6 +277,22 @@ public class BrugerDAO {
         }
         
         return validationEdit;
+    }
+
+    /**
+     * sætter den User som er valgt fra GUI'en til at være deaktiveret.
+     * @param disableUser 
+     */
+    void disableUser(User disableUser) {
+        try (Connection con = dbCon.getConnection()){
+            String sql = "UPDATE Person SET active = ? WHERE person_id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, 0);
+            st.setInt(2, disableUser.getPerson_id());
+            st.executeQuery();
+            
+        } catch (Exception e) {
+        }
     }
 
 

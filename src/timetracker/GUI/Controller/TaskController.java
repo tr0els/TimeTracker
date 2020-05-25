@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -21,8 +22,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,6 +82,20 @@ public class TaskController implements Initializable {
     private int idag = 0;
     private int igår = 1;
     private int person_id;
+    @FXML
+    private Label timerHours;
+    @FXML
+    private Label timerMinutes;
+    @FXML
+    private Label timerSeconds;
+
+    int timerSecondsv = 0;
+    int timerMinutesv = 0;
+    int timerHoursv = 0;
+
+    boolean timerState = false;
+    @FXML
+    private JFXButton timerButton;
 
     /**
      * Initializes the controller class.
@@ -144,6 +164,7 @@ public class TaskController implements Initializable {
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
 //        taskLogsbyDay(paneToday, 0);
+
     }
 
     /**
@@ -152,6 +173,66 @@ public class TaskController implements Initializable {
     public void stopTask() throws DALException {
 
         model.stopTask(person_id);
+    }
+
+    @FXML
+    private void HandleTooltipForBillable(MouseEvent event) {
+        Tooltip tip = new Tooltip();
+
+        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
+        checkBillable.setTooltip(tip);
+    }
+
+    @FXML
+    private void handleStartStopTask(ActionEvent event) {
+
+        if (timerState == false) {
+            timerState = true;
+            timerButton.setText("Stop Task");
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (timerState) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (timerSecondsv >= 60) {
+                                        timerSecondsv = 0;
+                                        timerMinutesv++;
+                                    }
+                                    if (timerMinutesv >= 60) {
+                                        timerSecondsv = 0;
+                                        timerMinutesv = 0;
+                                        timerHoursv++;
+                                    }
+
+                                    timerSeconds.setText(" : " + timerSecondsv);
+                                    timerMinutes.setText(" : " + timerMinutesv);
+                                    timerHours.setText(timerHoursv + "");
+                                    timerSecondsv++;
+
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            break;
+                        }
+
+                    }
+                }
+            });
+            t.setDaemon(true);
+            t.start();
+        } else {
+            timerState = false;
+            timerButton.setText("Start Task");
+        }
+
     }
 
 //    /**
@@ -246,11 +327,4 @@ public class TaskController implements Initializable {
 //            pane.getChildren().add(lblTaskname);
 //        }
 //    }
-    @FXML
-    private void HandleTooltipForBillable(MouseEvent event) {
-        Tooltip tip = new Tooltip();
-
-        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
-        checkBillable.setTooltip(tip);
-    }
 }

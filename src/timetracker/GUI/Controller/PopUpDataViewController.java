@@ -6,25 +6,15 @@
 package timetracker.GUI.Controller;
 
 import com.jfoenix.controls.JFXButton;
-import static com.oracle.tools.packager.RelativeFileSet.Type.data;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.net.URI;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,13 +25,9 @@ import javafx.scene.control.TableView;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import timetracker.BE.Project;
-import timetracker.BE.Task;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.BrugerModel;
-import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -124,6 +110,10 @@ public class PopUpDataViewController implements Initializable
         this.userFromOVerview = user;
         populateTable();
         
+       
+     
+                
+        
     }
     
     @FXML
@@ -144,14 +134,17 @@ public class PopUpDataViewController implements Initializable
             {
                 FileWriter fw = new FileWriter(fileToSave);
                 BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(colOpgave.getText() + "," + colStart.getText() + "," + colEnd.getText() + "," + colBillable.getText() + "," + colMedarebjder.getText());
+                bw.write(colOpgave.getText() + ";" + colStart.getText() + ";" + colEnd.getText() + ";" + colBillable.getText() + ";" + colMedarebjder.getText());
                 bw.newLine();
                 for (TaskForDataView tfdv : listeAfTask) {
-                    {
-                        bw.write(tfdv.getName() + "," + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ "," + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ "," + tfdv.isBillable() + "," + tfdv.getMedarbejder());
+                    {   
+                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern)) +";"+ tfdv.isBillable() + ";" + tfdv.getMedarbejder());
                     }
                     bw.newLine();
+                  
                 }
+                bw.newLine();
+                bw.write("Projekt navn : "+choosenProject.getProject_name() +";"+"timepris : " +choosenProject.getProject_rate()+" DKK");
                 bw.close();
                 fw.close();
             } catch (IOException ex)

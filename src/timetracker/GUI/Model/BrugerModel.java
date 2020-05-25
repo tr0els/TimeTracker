@@ -64,7 +64,7 @@ public class BrugerModel {
      * @throws timetracker.DAL.DALException
      */
     public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-        user = bll.login(email, password);
+        user = validator.login(email, password);
         return user;
     }
     
@@ -169,6 +169,10 @@ public class BrugerModel {
 
     public boolean valExistingEmailEdit(int person_id, String email) {
         return validator.valExistingEmailEdit(person_id, email);
+    }
+
+    public void disableUser(User disableUser) {
+        bll.disableUser(disableUser);
     }
 
 
