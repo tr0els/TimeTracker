@@ -38,6 +38,6 @@
       <Label fx:id="timerHours" layoutX="203.0" layoutY="112.0" text="00:" />
       <Label fx:id="timerMinutes" layoutX="223.0" layoutY="112.0" text="00:" />
       <Label fx:id="timerSeconds" layoutX="242.0" layoutY="112.0" text="00" />
-      <JFXButton layoutX="273.0" layoutY="108.0" onAction="#handleStartStopTask" text="Start Task" />
+      <JFXButton fx:id="timerButton" layoutX="273.0" layoutY="108.0" onAction="#handleStartStopTask" text="Start Task" />
     </children>
 </AnchorPane>

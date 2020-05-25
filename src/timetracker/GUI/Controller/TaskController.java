@@ -26,6 +26,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +56,7 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskController extends TimerTask implements Initializable {
+public class TaskController implements Initializable {
 
     private TaskModel model;
     private ProjektModel pModel;
@@ -90,14 +93,16 @@ public class TaskController extends TimerTask implements Initializable {
     int timerMinutesv = 0;
     int timerHoursv = 0;
 
-    boolean timerState = true;
+    boolean timerState = false;
+    @FXML
+    private JFXButton timerButton;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         person_id = 1; //midlertidigt, skal hentes fra login
 
         try {
@@ -180,41 +185,57 @@ public class TaskController extends TimerTask implements Initializable {
 
     @FXML
     private void handleStartStopTask(ActionEvent event) {
-        Timer timer = new Timer();
-        timer.schedule(this, 1000, 1000);
-    }
 
-    @Override
-    public void run() {
-        try {
-            if (timerSecondsv >= 60) {
-                timerSecondsv = 0;
-                timerMinutesv++;
-            }
-            if (timerMinutesv >= 60) {
-                timerSecondsv = 0;
-                timerMinutesv = 0;
-                timerHoursv++;
-            }
+        if (timerState == false) {
+            timerState = true;
+            timerButton.setText("Stop Task");
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (timerState) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (timerSecondsv >= 60) {
+                                        timerSecondsv = 0;
+                                        timerMinutesv++;
+                                    }
+                                    if (timerMinutesv >= 60) {
+                                        timerSecondsv = 0;
+                                        timerMinutesv = 0;
+                                        timerHoursv++;
+                                    }
 
-            setTimerLabels();
-//            timerSeconds.setText(" : " + timerSecondsv);
-            timerSecondsv++;
+                                    timerSeconds.setText(" : " + timerSecondsv);
+                                    timerMinutes.setText(" : " + timerMinutesv);
+                                    timerHours.setText(timerHoursv + "");
+                                    timerSecondsv++;
 
-//            timerSeconds.setText(" : " + timerSecondsv);
-//            timerMinutes.setText(" : " + timerMinutesv);
-//            timerHours.setText(" : " + timerHoursv);
-        } catch (Exception e) {
+                                } catch (Exception e) {
 
+                                }
+                            }
+                        });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            break;
+                        }
+
+                    }
+                }
+            });
+            t.setDaemon(true);
+            t.start();
+        } else {
+            timerState = false;
+            timerButton.setText("Start Task");
         }
 
     }
-    
-    public void setTimerLabels(){
-        timerSeconds.setText(" : " + timerSecondsv);
-    }
 
-    //    /**
+//    /**
 //     * opbygger view med task for den valgte dag idag = 0, igår = 1
 //     *
 //     */
