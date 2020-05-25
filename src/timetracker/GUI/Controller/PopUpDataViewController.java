@@ -144,14 +144,17 @@ public class PopUpDataViewController implements Initializable
             {
                 FileWriter fw = new FileWriter(fileToSave);
                 BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(colOpgave.getText() + "," + colStart.getText() + "," + colEnd.getText() + "," + colBillable.getText() + "," + colMedarebjder.getText());
+                bw.write(colOpgave.getText() + ";" + colStart.getText() + ";" + colEnd.getText() + ";" + colBillable.getText() + ";" + colMedarebjder.getText());
                 bw.newLine();
                 for (TaskForDataView tfdv : listeAfTask) {
                     {
-                        bw.write(tfdv.getName() + "," + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ "," + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ "," + tfdv.isBillable() + "," + tfdv.getMedarbejder());
+                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.isBillable() + ";" + tfdv.getMedarbejder());
                     }
                     bw.newLine();
+                  
                 }
+                bw.newLine();
+                bw.write("Projekt navn : "+choosenProject.getProject_name() +";"+"timepris : " +choosenProject.getProject_rate()+"DKK");
                 bw.close();
                 fw.close();
             } catch (IOException ex)

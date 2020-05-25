@@ -194,21 +194,32 @@ public class OverviewForAdminsController implements Initializable {
         double getmetotalHHMMTotal = 0.0;
         
         for (Project project : listeAfProjekter) {
-            //henter billable timer ud fra projekt listen
-            //vi * med 3600, for det er skeunder der er i en time, og vi * med 60 for det er det antal sekunder der er i et minut
-            getmetimeHHBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(0, project.getBillableTime().length()-6)))*3600;
-            getmetimeMMBill = (Integer.parseUnsignedInt(project.getBillableTime().substring(howLongIsTheString(project.getBillableTime()), project.getBillableTime().length()-3)))*60;
-     
+            String timeBil = project.getBillableTime();
+            String[] timesplitupBil = timeBil.split(":");
             
+            String hhBil = timesplitupBil[0];
+            String mmBil = timesplitupBil[1];
+            String secBil = timesplitupBil[2];
+            
+            String time = project.getTotal_tid();
+            String[] timesplitup = time.split(":");
+            
+            String hhTotal = timesplitup[0];
+            String mmTotal = timesplitup[1];
+            String secTotal = timesplitup[2];
+         
+            //henter billable timer ud fra projekt listen
+            getmetimeHHBill = (Integer.parseInt(hhBil)*3600);
+            getmetimeMMBill = (Integer.parseInt(mmBil)*60);
+                        
             //henter total tidud fra projekt listen
             //vi * med 3600, for det er skeunder der er i en time, og vi * med 60 for det er det antal sekunder der er i et minut
-            getmetimeHHTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(0, project.getTotal_tid().length()-6)))*3600;
-            getmetimeMMTotal = (Integer.parseUnsignedInt(project.getTotal_tid().substring(howLongIsTheString(project.getTotal_tid()), project.getTotal_tid().length()-3)))*60;
-       
+            getmetimeHHTotal = (Integer.parseInt(hhTotal)*3600);
+            getmetimeMMTotal = (Integer.parseInt(mmTotal)*60);
             
             //her tager vi bill HH og MM som er konverteret til sekunder og lægger over i en variabel  for at give os et total for projektet.        
-            getmetotalHHMMBill += getmetimeHHBill+getmetimeMMBill;
-            getmetotalHHMMTotal += getmetimeHHTotal+getmetimeMMTotal;
+            getmetotalHHMMBill += getmetimeHHBill+getmetimeMMBill+ (Integer.parseInt(secBil));
+            getmetotalHHMMTotal += getmetimeHHTotal+getmetimeMMTotal+ (Integer.parseInt(secTotal));
         }
         //når vi er færdig med loopet, dividere vi med 3600, for at få konvereteret vore sekunder til timer i decimaltal
         billaableHouersForPiechart = (getmetotalHHMMBill/3600);
@@ -216,24 +227,7 @@ public class OverviewForAdminsController implements Initializable {
            
     }
     
-       
-    /**
-     * denne metode bruges i populatePiechart(), og er en hjælpe medtode til at finde ud af hvor lang en String er om den er 8 eller 9 værdier lang 
-     * for at finde ud af hvor minutterne står i Stringen. 
-     * @param timeStirng
-     * @return 
-     */
-    public int howLongIsTheString(String timeStirng) {
-        int howlong = timeStirng.length();
-        //fra vores SQL ved vi at denne string kan max være 9 varchar lang
-        if(timeStirng.length() == 9 )
-            //hvis den er 9 lang ved vi minutterne starter på position 4 000:00:00 HHH/MM/SS
-            return 4;
-            else 
-            //hvis ikke den er 9 lang ved vi at minutterne starter på position 3 00:00:00 HH/MM/SS
-            return 3;
-            
-    }
+   
     
 /**
  * gøre Comboboxene klar med lister
