@@ -10,22 +10,39 @@ and open the template in the editor.
 
 .titled-pane .title {
     -fx-background-color: transparent ;
+    -fx-font-weight: bold;
+}
+.titled-pane {
+    -fx-background-color: transparent;
+    -fx-box-border: transparent;
 }
 
-.table-view .column-header,
+.table-view .column-header {
+    -fx-background-color:  #bdbdbd;
+    -fx-font-weight: normal;
+}
+
 .table-view .column-header .filler,
 .table-view .column-header-background .filler {
-    -fx-background-color: white;
+    -fx-background-color:  transparent;
 }
 
 .table-view {
   -fx-table-cell-border-color: transparent;
-
+  -fx-background-color: transparent;
 }
 
 .table-cell{
     -fx-alignment: CENTER;
 }
 .table-row-cell{ 
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: white;
+}
+
+.table-row-cell:filled:selected {
+  -fx-background: -fx-control-inner-background ;
+  -fx-background-color: -fx-table-cell-border-color, -fx-background ;
+  -fx-background-insets: 0, 0 0 0 0 ;
     -fx-table-cell-border-color: transparent;
 }
