@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -21,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -50,7 +53,7 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskController implements Initializable {
+public class TaskController extends TimerTask implements Initializable {
 
     private TaskModel model;
     private ProjektModel pModel;
@@ -76,13 +79,25 @@ public class TaskController implements Initializable {
     private int idag = 0;
     private int igår = 1;
     private int person_id;
+    @FXML
+    private Label timerHours;
+    @FXML
+    private Label timerMinutes;
+    @FXML
+    private Label timerSeconds;
+
+    int timerSecondsv = 0;
+    int timerMinutesv = 0;
+    int timerHoursv = 0;
+
+    boolean timerState = true;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         person_id = 1; //midlertidigt, skal hentes fra login
 
         try {
@@ -144,6 +159,7 @@ public class TaskController implements Initializable {
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
 //        taskLogsbyDay(paneToday, 0);
+
     }
 
     /**
@@ -154,7 +170,51 @@ public class TaskController implements Initializable {
         model.stopTask(person_id);
     }
 
-//    /**
+    @FXML
+    private void HandleTooltipForBillable(MouseEvent event) {
+        Tooltip tip = new Tooltip();
+
+        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
+        checkBillable.setTooltip(tip);
+    }
+
+    @FXML
+    private void handleStartStopTask(ActionEvent event) {
+        Timer timer = new Timer();
+        timer.schedule(this, 1000, 1000);
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (timerSecondsv >= 60) {
+                timerSecondsv = 0;
+                timerMinutesv++;
+            }
+            if (timerMinutesv >= 60) {
+                timerSecondsv = 0;
+                timerMinutesv = 0;
+                timerHoursv++;
+            }
+
+            setTimerLabels();
+//            timerSeconds.setText(" : " + timerSecondsv);
+            timerSecondsv++;
+
+//            timerSeconds.setText(" : " + timerSecondsv);
+//            timerMinutes.setText(" : " + timerMinutesv);
+//            timerHours.setText(" : " + timerHoursv);
+        } catch (Exception e) {
+
+        }
+
+    }
+    
+    public void setTimerLabels(){
+        timerSeconds.setText(" : " + timerSecondsv);
+    }
+
+    //    /**
 //     * opbygger view med task for den valgte dag idag = 0, igår = 1
 //     *
 //     */
@@ -246,11 +306,4 @@ public class TaskController implements Initializable {
 //            pane.getChildren().add(lblTaskname);
 //        }
 //    }
-    @FXML
-    private void HandleTooltipForBillable(MouseEvent event) {
-        Tooltip tip = new Tooltip();
-
-        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
-        checkBillable.setTooltip(tip);
-    }
 }
