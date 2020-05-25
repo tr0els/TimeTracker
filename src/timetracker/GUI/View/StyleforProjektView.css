@@ -17,14 +17,11 @@ and open the template in the editor.
     -fx-box-border: transparent;
 }
 
-.table-view .column-header {
-    -fx-background-color:  #bdbdbd;
-    -fx-font-weight: normal;
-}
-
+.table-view .column-header,
 .table-view .column-header .filler,
 .table-view .column-header-background .filler {
-    -fx-background-color:  transparent;
+    -fx-background-color:  #bdbdbd;
+    -fx-font-weight: normal;
 }
 
 .table-view {
@@ -44,5 +41,5 @@ and open the template in the editor.
   -fx-background: -fx-control-inner-background ;
   -fx-background-color: -fx-table-cell-border-color, -fx-background ;
   -fx-background-insets: 0, 0 0 0 0 ;
-    -fx-table-cell-border-color: transparent;
+  -fx-table-cell-border-color: transparent;
 }

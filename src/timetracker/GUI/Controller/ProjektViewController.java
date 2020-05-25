@@ -151,9 +151,10 @@ public class ProjektViewController implements Initializable {
             loadProjects();
             showProjects();
             projectListener();
-
             setHBox();
 
+            projectMenubox.getSelectionModel().select(0);
+            
         } catch (DALException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -217,6 +218,8 @@ public class ProjektViewController implements Initializable {
 
             TableColumn<Task, LocalDateTime> starttime = new TableColumn("Start");
             starttime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
+            starttime.setPrefWidth(200);
+            starttime.setResizable(false);
             starttime.setCellFactory(column -> {
                 return new TableCell<Task, LocalDateTime>(){
                     
@@ -235,6 +238,9 @@ public class ProjektViewController implements Initializable {
             
             TableColumn<Task, LocalDateTime> endtime = new TableColumn("Slut");
             endtime.setCellValueFactory(new PropertyValueFactory<>("end_time"));
+            endtime.setPrefWidth(200);
+            endtime.setResizable(false);
+            
             endtime.setCellFactory(column -> {
                 return new TableCell<Task, LocalDateTime>(){
                     
@@ -251,8 +257,12 @@ public class ProjektViewController implements Initializable {
                 };
             });
             
+                        
             TableColumn<Task, String> totaltime = new TableColumn("Total tid");
             totaltime.setCellValueFactory(new PropertyValueFactory<>("total_tid"));
+            totaltime.setPrefWidth(110);
+            totaltime.setResizable(false);
+            
 
             TableColumn<Task, Boolean> billable = new TableColumn(" ");
             billable.setCellValueFactory(new PropertyValueFactory<>("billable"));
@@ -276,8 +286,8 @@ public class ProjektViewController implements Initializable {
                     }
                 }
             });
+
             
-    
             TableColumn<Task, Integer> redigere = new TableColumn(" ");
             redigere.setCellValueFactory(new PropertyValueFactory<>("task_id"));
             redigere.setPrefWidth(25);
@@ -305,6 +315,8 @@ public class ProjektViewController implements Initializable {
             tableView.setFixedCellSize(25);
             double tableHeight = observablelogs.size() * tableView.getFixedCellSize() + tableView.getFixedCellSize();
             tableView.setPrefHeight(tableHeight);
+
+                        
 
             TitledPane titledPane = new TitledPane();
             titledPane.setGraphic(headerBox);
