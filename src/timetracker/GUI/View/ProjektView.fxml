@@ -6,12 +6,14 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforProjektView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
       <Label layoutX="32.0" layoutY="23.0" text="Vælg Projekt:" />
       <JFXComboBox fx:id="projectMenubox" layoutX="112.0" layoutY="19.0" prefHeight="25.0" prefWidth="188.0" />
@@ -27,7 +29,6 @@
          </font>
       </Label>
       <Label layoutX="482.0" layoutY="158.0" prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
-      <JFXButton fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" layoutX="507.0" layoutY="443.0" onAction="#handleOpenEdit" text="Redigere" textAlignment="RIGHT" />
       <JFXDrawer fx:id="skuffen" direction="TOP" prefHeight="105.0" prefWidth="590.0" />
       <AnchorPane fx:id="paneEdit" layoutX="5.0" layoutY="-112.0" prefHeight="105.0" prefWidth="590.0">
          <children>
@@ -38,15 +39,15 @@
             <JFXButton fx:id="btnCancel" layoutX="441.0" layoutY="66.0" onAction="#handleCancel" text="Fortryd" />
          </children>
       </AnchorPane>
-      <TreeTableView fx:id="treeTasks" layoutX="5.0" layoutY="175.0" maxWidth="590.0" prefHeight="254.0" prefWidth="590.0" showRoot="false">
-         <columns>
-            <TreeTableColumn fx:id="colTask_name" maxWidth="155.0" prefWidth="155.0" resizable="false" text="Opgave" />
-            <TreeTableColumn fx:id="colTask_start" maxWidth="105.0" prefWidth="105.0" resizable="false" sortable="false" text="Start" />
-            <TreeTableColumn fx:id="colTask_end" maxWidth="105.0" prefWidth="105.0" resizable="false" sortable="false" text="Slut" />
-            <TreeTableColumn fx:id="colTotal_time" maxWidth="55.0" prefWidth="55.0" resizable="false" sortable="false" text="Total tid" />
-            <TreeTableColumn fx:id="colLast_worked_on" maxWidth="105.0" prefWidth="105.0" resizable="false" sortType="DESCENDING" text="Sidst arbejdet på" />
-            <TreeTableColumn fx:id="colBillable" maxWidth="64.0" prefWidth="64.0" resizable="false" sortable="false" text="Faktureres" />
-         </columns>
-      </TreeTableView>
+      <Pane layoutX="10.0" layoutY="175.0" prefHeight="311.0" prefWidth="582.0" style="-fx-border-color: black;">
+         <children>
+            <HBox fx:id="hboxHeader" layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="580.0" />
+            <ScrollPane hbarPolicy="NEVER" layoutX="1.0" layoutY="27.0" prefHeight="283.0" prefWidth="580.0" vbarPolicy="ALWAYS">
+               <content>
+                  <VBox fx:id="vboxTasks" prefWidth="566.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

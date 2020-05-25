@@ -14,14 +14,24 @@ import java.time.LocalDateTime;
  */
 public class TaskChild extends TaskBase {
 
+    private int id;
     private TaskParent parent;
 
     public TaskChild() {
     }
 
     public TaskChild(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent) {
-        super(id, name, billable, projectId, personId, start, end, time);
+        super(name, billable, projectId, personId, start, end, time);
+        this.id = id;
         this.parent = parent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public TaskParent getParent() {

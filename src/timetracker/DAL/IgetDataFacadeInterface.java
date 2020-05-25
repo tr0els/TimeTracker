@@ -7,11 +7,13 @@ package timetracker.DAL;
 
 import java.util.HashMap;
 import java.util.List;
+import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.Task.Log;
+import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 
 /**
@@ -54,6 +56,8 @@ public interface IgetDataFacadeInterface {
     public Task getTaskbyID(int task_id) throws DALException;
     
     public void updateTaskbyID(Task task) throws DALException;
+    
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException;
             
 
     //Klient

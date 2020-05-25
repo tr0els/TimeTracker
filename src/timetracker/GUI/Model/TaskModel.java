@@ -20,6 +20,7 @@ import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
+import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -40,7 +41,7 @@ public class TaskModel implements Runnable {
     //private ObservableList<Client> allClients;
     //private ObservableList<Project> allProjects;
     //private ObservableList<User> allUsers;
-    //private ObservableList<Profession> allProfessions;
+    private ObservableList<TaskForDataView> taskForDataview;
 
     public TaskModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
@@ -52,7 +53,7 @@ public class TaskModel implements Runnable {
         //allUsers.addAll(bll.getUsers());
 //        taskById = FXCollections.observableArrayList();
 //        logsById = FXCollections.observableArrayList();
-        //allProfessions = FXCollections.observableArrayList();
+        taskForDataview = FXCollections.observableArrayList();
 
     }
 
@@ -297,16 +298,25 @@ public class TaskModel implements Runnable {
 //        allProfessions.addAll(bll.getProfessions());
 //        return allProfessions;
 //    }
-//    /**
-//     * sender det info fra MainControlleren videre til BLLManager
-//     *
-//     * @param email
-//     * @param password
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws timetracker.DAL.DALException
-//     */
-//    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
-//        return bll.login(email, password);
-//    }
+    /**
+     * sender det info fra MainControlleren videre til BLLManager
+     *
+     * @param email
+     * @param password
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws timetracker.DAL.DALException
+     */
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
+        return bll.login(email, password);
+    }
+ 
+     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException{
+     taskForDataview.clear();
+     taskForDataview.addAll(bll.getListOfTaskForDataView(project, user));
+     return taskForDataview;
+     
+     
+     }
+    
 }
