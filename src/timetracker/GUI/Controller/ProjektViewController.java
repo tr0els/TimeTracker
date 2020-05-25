@@ -51,6 +51,7 @@ import javafx.util.Callback;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.DAL.DALException;
+import timetracker.GUI.Model.BrugerModel;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
@@ -66,6 +67,7 @@ public class ProjektViewController implements Initializable {
 
     private TaskModel model;
     private ProjektModel Pmodel;
+    private BrugerModel Bmodel;
     @FXML
     private JFXComboBox<Project> projectMenubox;
 
@@ -121,6 +123,7 @@ public class ProjektViewController implements Initializable {
 
         model = TaskModel.getInstance();
         Pmodel = ProjektModel.getInstance();
+        Bmodel = BrugerModel.getInstance();
     }
 
     /**
@@ -133,7 +136,7 @@ public class ProjektViewController implements Initializable {
             skuffen.toBack();
             skuffen.close();
 
-            person_id = 1;
+            person_id = Bmodel.getUser().getPerson_id();
             loadProjects();
             showProjects();
             projectListener();
@@ -198,12 +201,43 @@ public class ProjektViewController implements Initializable {
 
             TableColumn<Task, LocalDateTime> starttime = new TableColumn("Start");
             starttime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
-
+            starttime.setCellFactory(column -> {
+                return new TableCell<Task, LocalDateTime>(){
+                    
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty){
+                            setText("");
+                        }else{
+                            setText(formatter.format(item));
+                        }
+                    }
+                    
+                };
+            });
+            
             TableColumn<Task, LocalDateTime> endtime = new TableColumn("Slut");
             endtime.setCellValueFactory(new PropertyValueFactory<>("end_time"));
-
+            endtime.setCellFactory(column -> {
+                return new TableCell<Task, LocalDateTime>(){
+                    
+                    @Override
+                    protected void updateItem(LocalDateTime item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty){
+                            setText("");
+                        }else{
+                            setText(formatter.format(item));
+                        }
+                    }
+                    
+                };
+            });
+            
             TableColumn<Task, String> totaltime = new TableColumn("Total tid");
             totaltime.setCellValueFactory(new PropertyValueFactory<>("total_tid"));
+            
 
             TableColumn<Task, String> billable = new TableColumn("Faktureres");
             billable.setCellValueFactory(new PropertyValueFactory<>("stringBillable"));
@@ -327,20 +361,19 @@ public class ProjektViewController implements Initializable {
 
             model.updateTaskbyID(edit_task);
 
-            Project p = menuEditProjects.getSelectionModel().getSelectedItem();
+            loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
+            
+            for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
 
-            loadProjects();
-
-            for (int i = 0; i < personalProjects.size(); i++) {
-
-                if (p.getProject_id() == personalProjects.get(i).getProject_id()) {
+                if (menuEditProjects.getSelectionModel().getSelectedItem().getProject_id() == personalProjects.get(i).getProject_id()) {
                     projectMenubox.getSelectionModel().select(personalProjects.get(i));
                 }
 
             }
 
-            createTree(p.getProject_id());
-            showProjects();
+            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id()); //opdatere taskview med det view som hvor den opdatere task ligger i.
+            
+            showProjects(); //indlæser ny liste til vores editvindue
 
             skuffen.close();
             skuffen.toBack();
