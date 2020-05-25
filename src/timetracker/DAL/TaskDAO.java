@@ -304,11 +304,13 @@ public class TaskDAO {
        
            
        String sql = 
-            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name from tasklog tl , Project p, Person pr \n" 
+            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name \n"
+          + "from tasklog tl , Project p, Person pr \n"  
           + "where tl.project_id = p.project_id  \n"
           + "and pr.person_id = tl.person_id \n"
           + project_id 
-          + user_id;
+          + user_id
+          + "order by tl.task_start asc;";
          // + "and p.project_id = 9 \n"
           //+ "and pr.person_id = 1 " ;
 
@@ -327,6 +329,7 @@ public class TaskDAO {
             task.setName(rs.getString("task_name"));
             task.setStart(rs.getTimestamp("task_start").toLocalDateTime());
             task.setEnd(end_time);
+          
             task.setBillable(rs.getBoolean("billable"));
             task.setMedarbejder(rs.getString("name"));
             
@@ -339,7 +342,7 @@ public class TaskDAO {
        
       
        } catch (SQLException ex) {
-          throw new DALException("kunne ikke hente din liste af task");
+          throw new DALException("kunne ikke hente din liste af task" + ex);
         }
        
           return taskForOverviewData;

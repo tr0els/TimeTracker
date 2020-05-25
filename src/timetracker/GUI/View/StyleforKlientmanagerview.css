@@ -56,7 +56,7 @@ and open the template in the editor.
 
 }
 
-.list-cell:hover{  
+#clientListView .list-cell:hover{  
     -fx-border-width: 3px; 
     -fx-border-color: -fx-grumsen;
 
@@ -65,7 +65,7 @@ and open the template in the editor.
 
 }
 
-.list-cell:filled:selected{
+#clientListView .list-cell:filled:selected{
     -fx-border-width: 3px; 
     -fx-border-color: -fx-grumsen;
     -fx-font-weight: bold;
@@ -76,15 +76,15 @@ and open the template in the editor.
 
 }
 
-.list-view .list-cell:even {
+.jfx-list-view .list-cell:even {
 
 
 
 }
 
-.list-view .list-cell:odd{
+.jfx-list-view .list-cell:odd{
 
-    -fx-background-color: #7c80b0;
+    -fx-background-color: -fx-grumsen-lysere;
     -fx-text-fill: white;
 }
 
@@ -92,30 +92,24 @@ and open the template in the editor.
 .jfx-list-view{
 
     -fx-focus-traversable: false;
-    -fx-border-width: 3px; 
+    -fx-border-width: 2px; 
     -fx-border-color: -fx-grumsen;
-    -fx-border-radius: 5px;
+    
 
 }
+
+
 
 
 
 .button{
 
     -fx-border-width: 2px;
-    -fx-border-radius: 10px, 50px; 
-
-    -fx-background-radius: 10px 50px; 
     -fx-background-color: -fx-grumsen;
-
-
 
     -fx-text-fill: white;
     -fx-font-size: 12;
     -fx-alignment: center;
-
-
-
     -fx-transition-duration: 0.4s;
 
 
@@ -125,13 +119,9 @@ and open the template in the editor.
 
 .button:hover{
 
-
-    -fx-border-radius: 10px 50px; 
     -fx-border-color: -fx-grumsen;
     -fx-background-color: transparent;
     -fx-text-fill: -fx-grumsen;
-
-
 
 }
 

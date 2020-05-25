@@ -179,6 +179,7 @@ public class OverviewForAdminsController implements Initializable {
         colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
         tableview.setItems(listeAfProjekter);
         
+        
     }
     /**
      * denne metode bruges til at beregne tiden der er brugt på et projekt, i billable og total værdier som vi allere har i vores listeAfPorjekter
