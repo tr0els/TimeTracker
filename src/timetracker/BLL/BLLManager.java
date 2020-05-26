@@ -297,8 +297,8 @@ public class BLLManager {
         iGetData.disableUser(disableUser);
     }
 
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
-       return iGetData.getListOfTaskForDataView(project, user);
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+       return iGetData.getListOfTaskForDataView(project, user, fradato,tildato,monthStart,monthEnd);
     }
 
 

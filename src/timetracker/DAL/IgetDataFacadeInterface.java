@@ -58,7 +58,7 @@ public interface IgetDataFacadeInterface {
     
     public void updateTaskbyID(Task task) throws DALException;
     
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException;
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException;
             
 
     //Klient

@@ -302,8 +302,7 @@ public class ProjectDAO {
             String fradato_caluse = "";
             String tildato_clause = "";
             String periode_clause = "";
-            //String monthStart_clause = "";
-           // StringBuilder sb = new StringBuilder();
+          
             
            if(comboUser != null)
                user_clause += "AND t.person_id = " +comboUser.getPerson_id()+"\n";
@@ -312,13 +311,13 @@ public class ProjectDAO {
                client_clause +=  comboClient.getClient_name();
            
            if( fradato != null )
-               fradato_caluse += "AND t.task_start >= convert(date, '"+fradato+"', 103)\n";
+               fradato_caluse += "AND  cast(t.task_start as date)  >=  convert(date, '"+fradato+"', 105) \n";
            
            if( tildato != null )
-               tildato_clause += "AND t.task_end <= convert(date, '"+tildato+"', 103)\n";
+               tildato_clause += "AND cast(t.task_end as date) <= convert(date, '"+tildato+"', 105) \n";
            
            if( monthStart != null && monthEnd != null)
-               periode_clause += "AND t.task_start Between convert(date, '"+ monthStart+"', 103) and convert(date, '"+ monthEnd+"', 103)";
+               periode_clause += "AND cast(t.task_start as date) Between convert(date, '"+monthStart+"', 105) and  convert(date, '"+monthEnd+"', 105) \n";
                
            
             
