@@ -165,10 +165,10 @@ public class ProjektViewController implements Initializable {
         
 
         Label totaltime = new Label("Total tid");
-        totaltime.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.25));
+        totaltime.setPrefWidth(60);
 
         Label lastworkedon = new Label("Sidst arbejdet på");
-        lastworkedon.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.25));
+        lastworkedon.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23));
 
         hboxHeader.getChildren().addAll(arrow, taskname, lastworkedon, totaltime);
     }
@@ -187,15 +187,19 @@ public class ProjektViewController implements Initializable {
 
             HBox headerBox = new HBox();
             Label tasknameHead = new Label(hashTask.getTask_name());
-            tasknameHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5).subtract(25/2));
+            tasknameHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5));
 
             Label totaltimeHead = new Label(hashTask.getTotal_tid());
-            totaltimeHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.25).subtract(25/4));
+            totaltimeHead.setPrefWidth(60);
+            totaltimeHead.setAlignment(Pos.CENTER_RIGHT);
 
             Label lastworkedonHead = new Label(formatter.format(hashTask.getLast_worked_on()));
-            lastworkedonHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.25).subtract(25/4));
+            lastworkedonHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23).subtract(17));
+
+            Region endspace = new Region();
             
-            headerBox.getChildren().addAll(tasknameHead, lastworkedonHead, totaltimeHead);
+            headerBox.setHgrow(endspace, Priority.ALWAYS);
+            headerBox.getChildren().addAll(tasknameHead, lastworkedonHead, totaltimeHead, endspace);
 
             
             VBox logVbox = new VBox();
@@ -206,18 +210,17 @@ public class ProjektViewController implements Initializable {
                 Task t = entry.getValue().get(i);
                 
                 HBox logHbox = new HBox();
+                logHbox.setAlignment(Pos.CENTER_LEFT);
                 
-                Label log_start = new Label(t.getStart_time().format(formatter).toString());
                 
-                Label log_tdivider = new Label(" - ");
-                
-                Label log_end = new Label(t.getEnd_time().format(formatter).toString());
-                
+                Label log = new Label(t.getStart_time().format(formatter).toString() + " - " + t.getEnd_time().format(formatter).toString());
+               
                 Region spacer = new Region();
                 
                 Label log_total = new Label(t.getTotal_tid());
-                log_total.setPrefWidth(78);
+                log_total.setPrefWidth(60);
                 log_total.setStyle("-fx-font-weight: bold;");
+                log_total.setAlignment(Pos.CENTER_RIGHT);
                 
                 if (t.isBillable() == true){
                     billable = new ImageView(icon_billable);
@@ -232,13 +235,12 @@ public class ProjektViewController implements Initializable {
    
                 logHbox.setHgrow(spacer, Priority.ALWAYS);
                 
-                logHbox.setMargin(editbtn, new Insets(0,20,0,0));
-                logHbox.setMargin(billable, new Insets(0,10,0,0));
-                logHbox.setMargin(log_total, new Insets(0,10,0,0));
-                logHbox.setMargin(log_end, new Insets(0,10,0,0));
-                logHbox.setMargin(log_start, new Insets(0,0,0,30));
-                logHbox.setAlignment(Pos.CENTER_LEFT);
-                logHbox.getChildren().addAll(log_start, log_tdivider, log_end, spacer, billable, log_total, editbtn);
+                logHbox.setMargin(editbtn, new Insets(0,5,0,0));
+                logHbox.setMargin(billable, new Insets(0,2,0,0));
+                logHbox.setMargin(log_total, new Insets(0,19,0,0));
+                logHbox.setMargin(log, new Insets(0,0,0,30));
+                
+                logHbox.getChildren().addAll(log, spacer, billable, log_total, editbtn);
                 
                 logVbox.getChildren().add(logHbox);
             }

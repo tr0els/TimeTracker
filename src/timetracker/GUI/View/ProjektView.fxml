@@ -7,6 +7,7 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -37,20 +38,26 @@
       <JFXComboBox fx:id="projectMenubox" layoutX="112.0" layoutY="19.0" prefHeight="25.0" prefWidth="188.0" />
       <Pane fx:id="paneProjectDetails" layoutX="9.0" layoutY="64.0" prefHeight="422.0" prefWidth="582.0" style="-fx-background-color: transparent;">
          <children>
-            <HBox fx:id="hbox_head" alignment="BOTTOM_CENTER" layoutX="1.0" prefHeight="53.0" prefWidth="580.0">
+            <HBox fx:id="hbox_head" alignment="CENTER" layoutX="1.0" prefHeight="53.0" prefWidth="580.0">
                <children>
-                  <Label fx:id="lblProjectnavn" contentDisplay="CENTER" prefHeight="53.0" prefWidth="282.0" text="Vælg et projekt">
+                  <Label fx:id="lblProjectnavn" contentDisplay="CENTER" prefHeight="53.0" prefWidth="500.0" text="Vælg et projekt" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="36.0" />
                      </font>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
                   </Label>
-                  <Label text="Tid brugt på projekt:" />
-                  <Label fx:id="lblProjectTid" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="89.0" text="0:00:00">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="17.0" prefWidth="89.0" text="ialt. [H:mm:ss]" />
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="107.0" text="Total tid:" />
+                        <Label fx:id="lblProjectTid" alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="102.0" text="0:00">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
             <HBox fx:id="hboxHeader" alignment="BOTTOM_LEFT" layoutX="1.0" layoutY="62.0" prefHeight="20.0" prefWidth="580.0" />
