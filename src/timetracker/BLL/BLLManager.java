@@ -300,6 +300,10 @@ public class BLLManager {
     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
        return iGetData.getListOfTaskForDataView(project, user);
     }
+    
+    public void changelogTask(Task task, int person_id){
+        iGetData.changelogTask(task, person_id);
+    }
 
 
 }

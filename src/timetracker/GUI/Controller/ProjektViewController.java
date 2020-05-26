@@ -43,8 +43,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
+import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.ChangelogModel;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
@@ -61,6 +63,7 @@ public class ProjektViewController implements Initializable {
     private TaskModel model;
     private ProjektModel Pmodel;
     private BrugerModel Bmodel;
+    private ChangelogModel Cmodel;
     @FXML
     private JFXComboBox<Project> projectMenubox;
 
@@ -116,12 +119,15 @@ public class ProjektViewController implements Initializable {
     private ScrollPane scrollPaneTask;
     @FXML
     private HBox hbox_head;
+    @FXML
+    private Label lblClientname;
 
     public ProjektViewController() throws DALException, SQLException {
 
         model = TaskModel.getInstance();
         Pmodel = ProjektModel.getInstance();
         Bmodel = BrugerModel.getInstance();
+        Cmodel = ChangelogModel.getInstance();
     }
 
     /**
@@ -203,13 +209,14 @@ public class ProjektViewController implements Initializable {
 
             
             VBox logVbox = new VBox();
-          
+            logVbox.setId("logVBox");
             
             for (int i = 0; i < entry.getValue().size(); i++) {
                 
                 Task t = entry.getValue().get(i);
                 
                 HBox logHbox = new HBox();
+                logHbox.setId("logHBox");
                 logHbox.setAlignment(Pos.CENTER_LEFT);
                 
                 
@@ -313,6 +320,7 @@ public class ProjektViewController implements Initializable {
                 try {
                     lblProjectnavn.setText(newValue.getProject_name());
                     lblProjectTid.setText(newValue.getTotal_tid());
+                    lblClientname.setText(newValue.getClientName());
                     createTree(newValue.getProject_id());
                 } catch (DALException ex) {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -349,8 +357,7 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
 
-            
-
+            Cmodel.changelogTask(edit_task, person_id);
             
             model.updateTaskbyID(edit_task);
 

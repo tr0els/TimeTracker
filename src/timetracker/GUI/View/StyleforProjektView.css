@@ -25,10 +25,18 @@ and open the template in the editor.
 .titled-pane .title {
     -fx-background-color: transparent ;
     -fx-font-weight: bold;
+    -fx-border-color: -fx-grumsen; 
+    -fx-border-width: 1 0 0 0; 
+/*    -fx-background-radius: 3px; 
+    -fx-border-radius: 3px;*/
 }
 
 .titled-pane .content {
     -fx-background-color: transparent;
+}
+
+.titled-pane > .content > * {
+    -fx-padding: 2px;
 }
 
 .titled-pane {
@@ -57,9 +65,41 @@ and open the template in the editor.
 }
 
 #hboxHeader {
-    -fx-background-color: -fx-grumsen-lysere; 
-    -fx-border-color: #8c8c8c; 
+    -fx-background-color: transparent; 
+/*    -fx-border-color: -fx-grumsen; 
+    -fx-background-radius: 3px; 
+    -fx-border-radius: 3px;*/
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+#logHBox {
+    -fx-background-color: white;
+    -fx-border-color: -fx-grumsen;
     -fx-background-radius: 3px; 
     -fx-border-radius: 3px;
+}
+
+#logVBox {
+    -fx-spacing: 2px;
+    /*-fx-background-color: -fx-grumsen-lysere;*/
+    
+}
+
+#vboxTasks {
+    -fx-spacing: 2px;
+}
+
+#lblClientname {
+    -fx-alignment: TOP_RIGHT;
+    -fx-font-size: 16px;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: darkgrey;
+    -fx-padding: 5px;
+}
+
+#lblProjectnavn {
+    -fx-text-fill: -fx-grumsen;
     -fx-font-weight: bold;
 }
