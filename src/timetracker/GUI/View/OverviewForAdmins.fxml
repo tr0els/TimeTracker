@@ -17,7 +17,7 @@
 
    <children>
       <JFXDrawer fx:id="filterskuffe" defaultDrawerSize="150.0" direction="TOP" layoutX="1.0" layoutY="9.0" prefHeight="150.0" prefWidth="600.0" />
-      <TableView fx:id="tableview" layoutX="12.0" layoutY="280.0" onMouseClicked="#handelSelectedProject" prefHeight="189.0" prefWidth="581.0">
+      <TableView fx:id="tableview" layoutX="12.0" layoutY="280.0" onMouseClicked="#handelSelectedProject" onMouseEntered="#handelTooltipForTableView" prefHeight="189.0" prefWidth="581.0">
         <columns>
           <TableColumn fx:id="colprojekts" editable="false" prefWidth="184.0" text="Projekt " />
           <TableColumn fx:id="coltotaltid" editable="false" prefWidth="123.0" text="Total tid" />
@@ -35,7 +35,7 @@
       </BarChart>
       <JFXButton fx:id="Filterkanp" layoutX="490.0" layoutY="215.0" onAction="#handleFilteropen" prefHeight="51.0" prefWidth="93.0" text="Åben/luk&#10;Filter" textAlignment="CENTER" />
       <PieChart fx:id="piechart" layoutX="15.0" layoutY="14.0" prefHeight="258.0" prefWidth="475.0" />
-      <AnchorPane fx:id="searchAnchorpane" layoutX="-598.0" layoutY="103.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
+      <AnchorPane fx:id="searchAnchorpane" layoutX="-650.0" layoutY="111.0" prefHeight="143.0" prefWidth="581.0" style="-fx-background-color: #afbbdd;">
          <children>
             <JFXComboBox fx:id="comboPerioder" layoutX="28.0" layoutY="42.0" prefHeight="25.0" prefWidth="120.0" promptText="Måneder" />
             <JFXDatePicker fx:id="fradato" defaultColor="#768bc6" layoutX="28.0" layoutY="95.0" prefHeight="30.0" prefWidth="120.0" promptText="Fradato" showWeekNumbers="true" />

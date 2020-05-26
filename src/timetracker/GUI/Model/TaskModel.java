@@ -300,9 +300,9 @@ public class TaskModel implements Runnable {
 //        return allProfessions;
 //    }
  
-     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException{
+     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException{
      taskForDataview.clear();
-     taskForDataview.addAll(bll.getListOfTaskForDataView(project, user));
+     taskForDataview.addAll(bll.getListOfTaskForDataView(project, user, fradato,tildato,monthStart,monthEnd));
      return taskForDataview;
      
      
