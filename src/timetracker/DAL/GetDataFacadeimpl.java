@@ -192,10 +192,10 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         brugerdao.disableUser(disableUser);
     }
 
-    public void changelogTask(Task task, User user) {
+    public void changelogTask(Task task, int person_id) {
         try
         {
-            changelogdao.changelogTask(task, user);
+            changelogdao.changelogTask(task, person_id);
         } catch (DALException ex)
         {
             Logger.getLogger(GetDataFacadeimpl.class.getName()).log(Level.SEVERE, null, ex);

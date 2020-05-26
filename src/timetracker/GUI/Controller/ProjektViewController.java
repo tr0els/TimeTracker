@@ -357,9 +357,7 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
 
-            User user = new User();
-            user.setPerson_id(person_id);
-            Cmodel.changelogTask(edit_task, user);
+            Cmodel.changelogTask(edit_task, person_id);
             
             model.updateTaskbyID(edit_task);
 

@@ -32,8 +32,8 @@ public class ChangelogModel
         return model;
     }
     
-    public void changelogTask(Task task, User user){
-        bll.changelogTask(task, user);
+    public void changelogTask(Task task, int person_id){
+        bll.changelogTask(task, person_id);
     }
     
 }
