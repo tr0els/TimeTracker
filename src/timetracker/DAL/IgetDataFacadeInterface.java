@@ -7,6 +7,7 @@ package timetracker.DAL;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -51,7 +52,7 @@ public interface IgetDataFacadeInterface {
     
     void stopTask(int person_id)throws DALException;
           
-    HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
+    TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
        
     public Task getTaskbyID(int task_id) throws DALException;
     

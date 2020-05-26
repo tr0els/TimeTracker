@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
@@ -87,7 +88,7 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 

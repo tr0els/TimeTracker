@@ -7,6 +7,7 @@ package timetracker.DAL;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -100,7 +101,7 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     }
 
     @Override
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
         return taskdao.getTaskbyIDs(project_id, person_id);
     }
     
