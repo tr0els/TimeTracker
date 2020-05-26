@@ -119,6 +119,8 @@ public class ProjektViewController implements Initializable {
     private ScrollPane scrollPaneTask;
     @FXML
     private HBox hbox_head;
+    @FXML
+    private Label lblClientname;
 
     public ProjektViewController() throws DALException, SQLException {
 
@@ -207,14 +209,14 @@ public class ProjektViewController implements Initializable {
 
             
             VBox logVbox = new VBox();
-          
+            logVbox.setId("logVBox");
             
             for (int i = 0; i < entry.getValue().size(); i++) {
                 
                 Task t = entry.getValue().get(i);
                 
                 HBox logHbox = new HBox();
-                logHbox.setId("logBox");
+                logHbox.setId("logHBox");
                 logHbox.setAlignment(Pos.CENTER_LEFT);
                 
                 
@@ -318,6 +320,7 @@ public class ProjektViewController implements Initializable {
                 try {
                     lblProjectnavn.setText(newValue.getProject_name());
                     lblProjectTid.setText(newValue.getTotal_tid());
+                    lblClientname.setText(newValue.getClientName());
                     createTree(newValue.getProject_id());
                 } catch (DALException ex) {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
