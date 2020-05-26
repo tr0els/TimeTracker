@@ -28,7 +28,7 @@ import timetracker.BE.TaskResult;
 import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
-import timetracker.BLL.Sortbydate;
+import timetracker.BLL.Sorttaskbydatedesc;
 import timetracker.DAL.DALException;
 
 /**
@@ -103,7 +103,7 @@ public class TaskDAO {
      */
     public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 
-        TreeMap<Task, List<Task>> map = new TreeMap<>(new Sortbydate());
+        TreeMap<Task, List<Task>> map = new TreeMap<>(new Sorttaskbydatedesc());
 
         String typeTask = "TASK";
         String typeLog = "LOG";
