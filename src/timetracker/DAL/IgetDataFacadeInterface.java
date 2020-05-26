@@ -93,6 +93,7 @@ public interface IgetDataFacadeInterface {
 
     public void disableUser(User disableUser);
 
-
+    //Changelog
+    public void changelogTask(Task task, User user);
 
 }

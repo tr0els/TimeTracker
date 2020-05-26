@@ -58,8 +58,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Callback;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
+import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.ChangelogModel;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
@@ -76,6 +78,7 @@ public class ProjektViewController implements Initializable {
     private TaskModel model;
     private ProjektModel Pmodel;
     private BrugerModel Bmodel;
+    private ChangelogModel Cmodel;
     @FXML
     private JFXComboBox<Project> projectMenubox;
 
@@ -134,6 +137,7 @@ public class ProjektViewController implements Initializable {
         model = TaskModel.getInstance();
         Pmodel = ProjektModel.getInstance();
         Bmodel = BrugerModel.getInstance();
+        Cmodel = ChangelogModel.getInstance();
     }
 
     /**
@@ -422,8 +426,9 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
 
-            
-
+            User user = new User();
+            user.setPerson_id(person_id);
+            Cmodel.changelogTask(edit_task, user);
             
             model.updateTaskbyID(edit_task);
 
