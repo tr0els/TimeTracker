@@ -95,6 +95,6 @@ public interface IgetDataFacadeInterface {
     public void disableUser(User disableUser);
 
     //Changelog
-    public void changelogTask(Task task, User user);
+    public void changelogTask(Task task, int person_id);
 
 }

@@ -301,8 +301,8 @@ public class BLLManager {
        return iGetData.getListOfTaskForDataView(project, user);
     }
     
-    public void changelogTask(Task task, User user){
-        iGetData.changelogTask(task, user);
+    public void changelogTask(Task task, int person_id){
+        iGetData.changelogTask(task, person_id);
     }
 
 
