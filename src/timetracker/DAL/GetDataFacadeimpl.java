@@ -28,13 +28,14 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     private ClientDAO clientdao; 
     private ProjectDAO projectdao;
     private TaskDAO taskdao;
+    private ChangelogDAO changelogdao;
 
     public GetDataFacadeimpl() throws DALException {
         brugerdao = new BrugerDAO();
         clientdao = new ClientDAO();
         projectdao = new ProjectDAO();
         taskdao = new TaskDAO();
-
+        changelogdao = new ChangelogDAO();
     }
 
     //Projekter 
@@ -191,5 +192,14 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
         brugerdao.disableUser(disableUser);
     }
 
+    public void changelogTask(Task task, int person_id) {
+        try
+        {
+            changelogdao.changelogTask(task, person_id);
+        } catch (DALException ex)
+        {
+            Logger.getLogger(GetDataFacadeimpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 }

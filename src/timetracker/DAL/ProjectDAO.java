@@ -185,15 +185,16 @@ public class ProjectDAO {
         ArrayList<Project> projectsbyID = new ArrayList<>();
 
         try (Connection con = dbCon.getConnection()) {
-            String sql = "SELECT p.client_id, p.project_id, p.project_name, p.project_rate,\n"
+            String sql = "SELECT p.client_id, c.client_name, p.project_id, p.project_name, p.project_rate,\n"
                     + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
                     + "AS total_time FROM Project p\n"
+                    + "JOIN Client c on p.client_id = c.client_id\n"
                     + "JOIN Tasklog tl on p.project_id = tl.project_id\n"
                     + "WHERE tl.person_id = ?\n"
-                    + "GROUP BY p.project_id, p.project_name, p.client_id, p.project_rate\n"
-                    + "ORDER BY p.project_id;";
+                    + "GROUP BY p.project_id, p.project_name, p.client_id, p.project_rate, c.client_name\n"
+                    + "ORDER BY p.project_name;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -208,6 +209,7 @@ public class ProjectDAO {
                 projects.setProject_rate(rs.getInt("project_rate"));
                 projects.setClient_id(rs.getInt("client_id"));
                 projects.setTotal_tid(rs.getString("total_time"));
+                projects.setClientName(rs.getString("client_name"));
 
                 projectsbyID.add(projects);
             }
@@ -251,7 +253,7 @@ public class ProjectDAO {
     public List<Project> getProjectsWithExtraData() throws DALException {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
+        try (Connection con = dbCon.getConnection()) {
             String sql = "SELECT p.project_name,p.project_id, c.client_id, p.project_rate,\n"
                     + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,t.task_start,t.task_end))/60%60), 2) + ':' +\n"
@@ -302,6 +304,7 @@ public class ProjectDAO {
             String fradato_caluse = "";
             String tildato_clause = "";
             String periode_clause = "";
+
           
             
            if(comboUser != null)
@@ -340,7 +343,7 @@ public class ProjectDAO {
                     + tildato_clause
                     + periode_clause
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
-            //sb.append(sql);
+    
 
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
