@@ -18,7 +18,7 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforProjektView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
-      <AnchorPane fx:id="paneEdit" layoutY="-140.0" prefHeight="140.0" prefWidth="600.0">
+      <AnchorPane fx:id="paneEdit" layoutY="-140.0" prefHeight="140.0" prefWidth="600.0" style="-fx-background-color: #768bc6;">
          <children>
             <JFXTextField fx:id="txtTask_name" layoutX="14.0" layoutY="17.0" prefHeight="25.0" prefWidth="300.0" />
             <JFXCheckBox fx:id="chkboxBillable" checkedColor="#435a9a" layoutX="324.0" layoutY="22.0" text="Faktureres" />

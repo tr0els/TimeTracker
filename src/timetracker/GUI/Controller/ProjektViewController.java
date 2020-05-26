@@ -210,6 +210,7 @@ public class ProjektViewController implements Initializable {
                 Task t = entry.getValue().get(i);
                 
                 HBox logHbox = new HBox();
+                logHbox.setId("logBox");
                 logHbox.setAlignment(Pos.CENTER_LEFT);
                 
                 
