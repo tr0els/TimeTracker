@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -27,6 +28,7 @@ import timetracker.BE.TaskResult;
 import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
+import timetracker.BLL.Sorttaskbydatedesc;
 import timetracker.DAL.DALException;
 
 /**
@@ -99,9 +101,9 @@ public class TaskDAO {
      * @param person_id
      * @return
      */
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 
-        HashMap<Task, List<Task>> map = new HashMap<>();
+        TreeMap<Task, List<Task>> map = new TreeMap<>(new Sorttaskbydatedesc());
 
         String typeTask = "TASK";
         String typeLog = "LOG";
@@ -177,6 +179,7 @@ public class TaskDAO {
                     log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
                     log.setEnd_time(end_time);
                     log.setStringBillable(sBillable);
+                    log.setTask_name(rs.getString("task_name"));
 
                     logs.add(log);
 

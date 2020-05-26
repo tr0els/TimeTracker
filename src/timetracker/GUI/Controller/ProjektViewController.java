@@ -12,7 +12,6 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
-import com.jfoenix.controls.JFXTreeTableView;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -24,38 +23,24 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeSortMode;
-import javafx.scene.control.TreeTableCell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
-import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
-import javafx.util.Callback;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.User;
@@ -129,8 +114,11 @@ public class ProjektViewController implements Initializable {
     private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
     private Image icon_billable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
     private Image icon_notbillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
+    private ImageView billable;
     @FXML
     private ScrollPane scrollPaneTask;
+    @FXML
+    private HBox hbox_head;
 
     public ProjektViewController() throws DALException, SQLException {
 
@@ -177,16 +165,16 @@ public class ProjektViewController implements Initializable {
         arrow.setAlignment(Pos.CENTER);
 
         Label taskname = new Label("Opgave navn");
-        taskname.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(2));
+        taskname.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5));
         
 
         Label totaltime = new Label("Total tid");
-        totaltime.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(4));
+        totaltime.setPrefWidth(60);
 
         Label lastworkedon = new Label("Sidst arbejdet på");
-        lastworkedon.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(4));
+        lastworkedon.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23));
 
-        hboxHeader.getChildren().addAll(arrow, taskname, totaltime, lastworkedon);
+        hboxHeader.getChildren().addAll(arrow, taskname, lastworkedon, totaltime);
     }
 
     /**
@@ -203,130 +191,69 @@ public class ProjektViewController implements Initializable {
 
             HBox headerBox = new HBox();
             Label tasknameHead = new Label(hashTask.getTask_name());
-            tasknameHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(2).subtract(25/2));
+            tasknameHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5));
 
             Label totaltimeHead = new Label(hashTask.getTotal_tid());
-            totaltimeHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(4).subtract(25/4));
+            totaltimeHead.setPrefWidth(60);
+            totaltimeHead.setAlignment(Pos.CENTER_RIGHT);
 
             Label lastworkedonHead = new Label(formatter.format(hashTask.getLast_worked_on()));
-            lastworkedonHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().divide(4).subtract(25/4));
-            
-            headerBox.getChildren().addAll(tasknameHead, totaltimeHead, lastworkedonHead);
+            lastworkedonHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23).subtract(17));
 
-            List<Task> logs = entry.getValue();
-            observablelogs = FXCollections.observableArrayList();
-            observablelogs.addAll(logs);
-
-            TableView tableView = new TableView<>(observablelogs);
-
-
-            TableColumn<Task, LocalDateTime> starttime = new TableColumn("Start");
-            starttime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
-            starttime.setPrefWidth(200);
-            starttime.setResizable(false);
-            starttime.setCellFactory(column -> {
-                return new TableCell<Task, LocalDateTime>(){
-                    
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty){
-                            setText("");
-                        }else{
-                            setText(formatter.format(item));
-                        }
-                    }
-                    
-                };
-            });
+            Region endspace = new Region();
             
-            TableColumn<Task, LocalDateTime> endtime = new TableColumn("Slut");
-            endtime.setCellValueFactory(new PropertyValueFactory<>("end_time"));
-            endtime.setPrefWidth(200);
-            endtime.setResizable(false);
-            
-            endtime.setCellFactory(column -> {
-                return new TableCell<Task, LocalDateTime>(){
-                    
-                    @Override
-                    protected void updateItem(LocalDateTime item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item == null || empty){
-                            setText("");
-                        }else{
-                            setText(formatter.format(item));
-                        }
-                    }
-                    
-                };
-            });
-            
-                        
-            TableColumn<Task, String> totaltime = new TableColumn("Total tid");
-            totaltime.setCellValueFactory(new PropertyValueFactory<>("total_tid"));
-            totaltime.setPrefWidth(110);
-            totaltime.setResizable(false);
-            
+            headerBox.setHgrow(endspace, Priority.ALWAYS);
+            headerBox.getChildren().addAll(tasknameHead, lastworkedonHead, totaltimeHead, endspace);
 
-            TableColumn<Task, Boolean> billable = new TableColumn(" ");
-            billable.setCellValueFactory(new PropertyValueFactory<>("billable"));
-            billable.setPrefWidth(25);
-            billable.setMinWidth(25);
-            billable.setResizable(false);
-            billable.setSortable(false);
-            billable.setCellFactory(param -> new TableCell<Task, Boolean>() {
-                private final JFXButton editbtn = new JFXButton(""); 
+            
+            VBox logVbox = new VBox();
+          
+            
+            for (int i = 0; i < entry.getValue().size(); i++) {
                 
-
-                @Override
-                protected void updateItem(Boolean item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty){
-                            setText("");}
-                    else if (item == true) {
-                        setGraphic(new ImageView(icon_billable));
-                    } else {
-                        setGraphic(new ImageView(icon_notbillable));
-                    }
-                }
-            });
-
-            
-            TableColumn<Task, Integer> redigere = new TableColumn(" ");
-            redigere.setCellValueFactory(new PropertyValueFactory<>("task_id"));
-            redigere.setPrefWidth(25);
-            redigere.setMinWidth(25);
-            redigere.setResizable(false);
-            redigere.setSortable(false);
-            redigere.setCellFactory(param -> new TableCell<Task, Integer>() {
-                private final JFXButton editbtn = new JFXButton(""); 
+                Task t = entry.getValue().get(i);
                 
-
-                @Override
-                protected void updateItem(Integer item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setText("");
-                    } else {
-                        editbtn.setGraphic(new ImageView(icon_edit));
-                        setGraphic(editbtn);
-                    }
-                    editbtn.setOnAction(event -> editTask(item.intValue()));
+                HBox logHbox = new HBox();
+                logHbox.setAlignment(Pos.CENTER_LEFT);
+                
+                
+                Label log = new Label(t.getStart_time().format(formatter).toString() + " - " + t.getEnd_time().format(formatter).toString());
+               
+                Region spacer = new Region();
+                
+                Label log_total = new Label(t.getTotal_tid());
+                log_total.setPrefWidth(60);
+                log_total.setStyle("-fx-font-weight: bold;");
+                log_total.setAlignment(Pos.CENTER_RIGHT);
+                
+                if (t.isBillable() == true){
+                    billable = new ImageView(icon_billable);
+                }else{
+                    billable = new ImageView(icon_notbillable);
                 }
-            });
-
-            tableView.getColumns().addAll(starttime, endtime, totaltime, billable, redigere);
-            tableView.setFixedCellSize(25);
-            double tableHeight = observablelogs.size() * tableView.getFixedCellSize() + tableView.getFixedCellSize();
-            tableView.setPrefHeight(tableHeight);
-
-                        
-
+                
+                
+                JFXButton editbtn = new JFXButton(""); 
+                editbtn.setGraphic(new ImageView(icon_edit));
+                editbtn.setOnAction(event -> editTask(t.getTask_id()));
+   
+                logHbox.setHgrow(spacer, Priority.ALWAYS);
+                
+                logHbox.setMargin(editbtn, new Insets(0,5,0,0));
+                logHbox.setMargin(billable, new Insets(0,2,0,0));
+                logHbox.setMargin(log_total, new Insets(0,19,0,0));
+                logHbox.setMargin(log, new Insets(0,0,0,30));
+                
+                logHbox.getChildren().addAll(log, spacer, billable, log_total, editbtn);
+                
+                logVbox.getChildren().add(logHbox);
+            }
+            
             TitledPane titledPane = new TitledPane();
             titledPane.setGraphic(headerBox);
-            titledPane.setContent(tableView);
+            titledPane.setContent(logVbox);
             titledPane.setExpanded(false);
-
+            
             vboxTasks.getChildren().add(titledPane);
 
         }

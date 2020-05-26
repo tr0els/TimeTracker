@@ -8,38 +8,58 @@ and open the template in the editor.
     Author     : BBran
 */
 
+
+*{
+
+    -fx-grumsen : #435a9a; 
+    -fx-grumsen-lysere: #768bc6;
+
+}
+
+.root {
+
+-fx-background-color: white; 
+
+}
+
 .titled-pane .title {
     -fx-background-color: transparent ;
     -fx-font-weight: bold;
 }
+
+.titled-pane .content {
+    -fx-background-color: transparent;
+}
+
 .titled-pane {
     -fx-background-color: transparent;
     -fx-box-border: transparent;
 }
 
-.table-view .column-header,
-.table-view .column-header .filler,
-.table-view .column-header-background .filler {
-    -fx-background-color:  #bdbdbd;
-    -fx-font-weight: normal;
+.scroll-pane {
+    -fx-background-color: transparent;
 }
 
-.table-view {
-  -fx-table-cell-border-color: transparent;
-  -fx-background-color: transparent;
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
 }
 
-.table-cell{
-    -fx-alignment: CENTER;
-}
-.table-row-cell{ 
-    -fx-table-cell-border-color: transparent;
+#paneEdit {
     -fx-background-color: white;
 }
 
-.table-row-cell:filled:selected {
-  -fx-background: -fx-control-inner-background ;
-  -fx-background-color: -fx-table-cell-border-color, -fx-background ;
-  -fx-background-insets: 0, 0 0 0 0 ;
-  -fx-table-cell-border-color: transparent;
+#hbox_head {
+    -fx-background-color: transparent; 
+    -fx-border-color: -fx-grumsen; 
+    -fx-padding: 2px; 
+    -fx-border-radius: 5px; 
+    -fx-background-radius: 5px;
+}
+
+#hboxHeader {
+    -fx-background-color: -fx-grumsen-lysere; 
+    -fx-border-color: #8c8c8c; 
+    -fx-background-radius: 3px; 
+    -fx-border-radius: 3px;
+    -fx-font-weight: bold;
 }
