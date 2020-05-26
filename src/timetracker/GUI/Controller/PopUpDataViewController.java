@@ -102,7 +102,7 @@ public class PopUpDataViewController implements Initializable
                 mmTotal +=1;
             } 
             
-                mmTotal = (Math.round(mmTotal/15) * 15) % 60;
+            mmTotal = (Math.round(mmTotal/15) * 15) % 60;
             totaltimeString = hhTotal + ":" + String.format( "%02d", mmTotal);
             return new SimpleStringProperty(totaltimeString);
         });
