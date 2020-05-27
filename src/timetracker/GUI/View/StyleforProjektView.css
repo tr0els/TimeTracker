@@ -98,7 +98,9 @@ and open the template in the editor.
 #hboxHeader {
     -fx-background-color: transparent; 
     -fx-font-weight: bold;
+    -fx-font-style: italic;
     -fx-alignment: CENTER_LEFT;
+    
 }
 
 #logHBox {

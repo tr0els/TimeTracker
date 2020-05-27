@@ -242,7 +242,7 @@ public class ProjektViewController implements Initializable
 
                 logHbox.setMargin(editbtn, new Insets(0, 5, 0, 0));
                 logHbox.setMargin(billable, new Insets(0, 2, 0, 0));
-                logHbox.setMargin(log_total, new Insets(0, 19, 0, 0));
+                logHbox.setMargin(log_total, new Insets(0, 25, 0, 0));
                 logHbox.setMargin(log, new Insets(0, 0, 0, 30));
 
                 logHbox.getChildren().addAll(log, spacer, billable, log_total, editbtn);
