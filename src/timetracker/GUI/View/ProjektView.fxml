@@ -27,15 +27,15 @@
             <JFXButton fx:id="btnCancel" layoutX="440.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
             <AnchorPane id="paneTime" layoutX="168.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
                <children>
-                  <JFXDatePicker fx:id="dateTo" defaultColor="#435a9a" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />
-                  <JFXTimePicker fx:id="timeTo" defaultColor="#435a9a" layoutX="8.0" layoutY="50.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXDatePicker fx:id="dateTo" defaultColor="#768bc6" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeTo" defaultColor="#768bc6" layoutX="8.0" layoutY="50.0" prefHeight="28.0" prefWidth="116.0" />
                   <Label layoutX="7.0" layoutY="6.0" text="Til:" />
                </children>
             </AnchorPane>
             <AnchorPane id="paneTime" layoutX="14.0" layoutY="48.0" prefHeight="90.0" prefWidth="122.0">
                <children>
-                  <JFXDatePicker fx:id="dateFrom" defaultColor="#435a9a" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="116.0" />
-                  <JFXTimePicker fx:id="timeFrom" defaultColor="#435a9a" layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXDatePicker fx:id="dateFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="116.0" />
                   <Label layoutX="5.0" layoutY="6.0" text="Fra:" />
                </children>
             </AnchorPane>
