@@ -32,9 +32,9 @@ public class TaskForDataView extends TaskBase
      * @param project
      * @param userName
      */
-    public TaskForDataView(String name, boolean billable, int projectId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent, Project project, String userName)
+    public TaskForDataView(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent, Project project, String userName)
     {
-        super(name, billable, projectId, start, end, time);
+        super(name, billable, projectId, personId, start, end, time);
         this.project = project;
         this.user = userName;
     }

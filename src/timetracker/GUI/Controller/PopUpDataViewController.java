@@ -118,7 +118,7 @@ public class PopUpDataViewController implements Initializable
             }
             return new SimpleStringProperty(billableAsString);
         });
-        colMedarebjder.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMedarbejder()));
+        colMedarebjder.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser()));
         
         tableView.setItems(listeAfTask);
         tableView.getSelectionModel().setCellSelectionEnabled(false);
@@ -167,7 +167,7 @@ public class PopUpDataViewController implements Initializable
                 bw.newLine();
                 for (TaskForDataView tfdv : listeAfTask) {
                     {   
-                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern)) +";"+ tfdv.isBillable() + ";" + tfdv.getMedarbejder());
+                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern)) +";"+ tfdv.isBillable() + ";" + tfdv.getUser());
                     }
                     bw.newLine();
                   
