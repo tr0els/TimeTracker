@@ -25,15 +25,14 @@ public class TaskChild extends TaskBase
      * @param name
      * @param billable
      * @param projectId
-     * @param personId
      * @param start
      * @param end
      * @param time
      * @param parent
      */
-    public TaskChild(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent)
+    public TaskChild(int id, String name, boolean billable, int projectId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent)
     {
-        super(name, billable, projectId, personId, start, end, time);
+        super(name, billable, projectId, start, end, time);
         this.id = id;
         this.parent = parent;
     }

@@ -18,22 +18,30 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforProjektView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektViewController">
    <children>
-      <AnchorPane fx:id="paneEdit" layoutY="-149.0" prefHeight="150.0" prefWidth="600.0" style="-fx-background-color: #768bc6;">
+      <AnchorPane fx:id="paneEdit" layoutY="-150.0" prefHeight="150.0" prefWidth="600.0">
          <children>
-            <JFXTextField fx:id="txtTask_name" layoutX="14.0" layoutY="17.0" prefHeight="25.0" prefWidth="300.0" />
-            <JFXCheckBox fx:id="chkboxBillable" checkedColor="#435a9a" layoutX="324.0" layoutY="22.0" text="Faktureres" />
-            <JFXComboBox fx:id="menuEditProjects" layoutX="411.0" layoutY="18.0" prefHeight="25.0" prefWidth="160.0" />
-            <JFXButton fx:id="btnEdit" layoutX="516.0" layoutY="100.0" onAction="#handleEdit" text="Opdater" />
-            <JFXButton fx:id="btnCancel" layoutX="461.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
-            <JFXDatePicker fx:id="dateFrom" defaultColor="#435a9a" layoutX="50.0" layoutY="65.0" />
-            <JFXDatePicker fx:id="dateTo" defaultColor="#435a9a" layoutX="279.0" layoutY="65.0" />
-            <JFXTimePicker fx:id="timeFrom" defaultColor="#435a9a" layoutX="50.0" layoutY="99.0" />
-            <JFXTimePicker fx:id="timeTo" defaultColor="#435a9a" layoutX="272.0" layoutY="99.0" />
-            <Label layoutX="14.0" layoutY="57.0" text="Fra:" />
-            <Label layoutX="238.0" layoutY="57.0" text="Til:" />
+            <JFXTextField fx:id="txtTask_name" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="390.0" />
+            <JFXCheckBox fx:id="chkboxBillable" checkedColor="#435a9a" layoutX="323.0" layoutY="48.0" text="Faktureres" />
+            <JFXComboBox fx:id="menuEditProjects" layoutX="426.0" layoutY="10.0" prefHeight="25.0" prefWidth="160.0" />
+            <JFXButton fx:id="btnEdit" layoutX="513.0" layoutY="100.0" onAction="#handleEdit" text="Opdater" />
+            <JFXButton fx:id="btnCancel" layoutX="440.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
+            <AnchorPane id="paneTime" layoutX="168.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
+               <children>
+                  <JFXDatePicker fx:id="dateTo" defaultColor="#768bc6" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeTo" defaultColor="#768bc6" layoutX="8.0" layoutY="50.0" prefHeight="28.0" prefWidth="116.0" />
+                  <Label layoutX="7.0" layoutY="6.0" text="Til:" />
+               </children>
+            </AnchorPane>
+            <AnchorPane id="paneTime" layoutX="14.0" layoutY="48.0" prefHeight="90.0" prefWidth="122.0">
+               <children>
+                  <JFXDatePicker fx:id="dateFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="116.0" />
+                  <Label layoutX="5.0" layoutY="6.0" text="Fra:" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      <JFXDrawer fx:id="skuffen" defaultDrawerSize="140.0" direction="TOP" layoutY="1.0" prefHeight="150.0" prefWidth="600.0" />
+      <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" layoutY="1.0" prefHeight="150.0" prefWidth="600.0" />
       <JFXComboBox fx:id="projectMenubox" layoutX="94.0" layoutY="14.0" prefHeight="25.0" prefWidth="188.0" />
       <Label layoutX="14.0" layoutY="18.0" text="Vælg Projekt:" />
       <Pane fx:id="paneProjectDetails" layoutX="9.0" layoutY="51.0" prefHeight="435.0" prefWidth="582.0" style="-fx-background-color: transparent;">

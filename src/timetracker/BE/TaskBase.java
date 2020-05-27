@@ -40,7 +40,7 @@ abstract public class TaskBase
         this.name = name;
         this.billable = billable;
         this.projectId = projectId;
-        this.personId = personId;
+        //this.personId = personId;
         this.start = start;
         this.end = end;
         this.time = time;

@@ -6,6 +6,7 @@
 package timetracker.BE;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
 public class TaskParent extends TaskBase
 {
 
-    List<TaskChild> children;
+    List<TaskChild> children = new ArrayList<>();
 
     /**
      * Constructor for Client som tager imod parametre

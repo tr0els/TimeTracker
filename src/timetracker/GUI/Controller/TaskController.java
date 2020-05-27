@@ -8,44 +8,28 @@ package timetracker.GUI.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
-import static java.lang.Thread.sleep;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
-
+import timetracker.BE.TaskGroup;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
@@ -96,6 +80,10 @@ public class TaskController implements Initializable {
     boolean timerState = false;
     @FXML
     private JFXButton timerButton;
+    @FXML
+    private ScrollPane taskScrollPane;
+    
+    private ObservableList<Project> allProjects;
 
     /**
      * Initializes the controller class.
@@ -108,6 +96,7 @@ public class TaskController implements Initializable {
         try {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
+            setTasksGroupedByDate();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +105,6 @@ public class TaskController implements Initializable {
         showProjects();
 //        taskLogsbyDay(paneToday, idag);
 //        taskLogsbyDay(paneYesterday, igår);
-
     }
 
     /**
@@ -144,11 +132,7 @@ public class TaskController implements Initializable {
      * henter en liste over projekter og smider dem i vores combobox
      */
     public void showProjects() {
-        try {
-            comboListprojects.setItems(pModel.getProjects());
-        } catch (DALException | SQLException ex) {
-            Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        comboListprojects.setItems(pModel.getProjectsCache());
     }
 
     /**
@@ -344,4 +328,20 @@ public class TaskController implements Initializable {
 //            pane.getChildren().add(lblTaskname);
 //        }
 //    }
+    
+    public void setTasksGroupedByDate() throws DALException {
+
+        // Get users tasks grouped by date
+        List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
+        
+        // Build task view
+	Pane taskPane = TaskUtil.getView(tasks, pModel.getProjectsCache());
+        /*
+        for (TaskGroup task : tasks) {
+            System.out.println("TaskGroup - Name: " + task.getName() + " totoa: " + task.getTime());
+        }
+        */
+        // put pane in scrollpane
+        taskScrollPane.setContent(taskPane);      
+    }
 }
