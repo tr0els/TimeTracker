@@ -6,7 +6,6 @@
 package timetracker.BE;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -31,7 +30,7 @@ public class Project extends RecursiveTreeObject<Project>
      * @param projectName
      * @param projectRate
      * @param clientId
-     * @param total_tid
+     * @param totalTime
      */
     public Project(int projectId, String projectName, int projectRate, int clientId, String totalTime)
     {

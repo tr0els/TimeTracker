@@ -15,7 +15,7 @@ import timetracker.BE.Task;
 public class Sorttaskbydatedesc implements Comparator<Task>{
     
     public int compare(Task a, Task b){
-        return b.getLast_worked_on().compareTo(a.getLast_worked_on());
+        return b.getLastWorkedOn().compareTo(a.getLastWorkedOn());
     }
     
 }

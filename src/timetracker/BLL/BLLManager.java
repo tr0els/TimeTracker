@@ -7,23 +7,17 @@ package timetracker.BLL;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import timetracker.BE.Task;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
-import timetracker.DAL.DALManager;
 import timetracker.DAL.GetDataFacadeimpl;
 import timetracker.DAL.IgetDataFacadeInterface;
 
