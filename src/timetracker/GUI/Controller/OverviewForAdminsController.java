@@ -135,6 +135,7 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.toFront();
             filterskuffe.close();
             btbPopupData.setVisible(false);
+         
            
             //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
             //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
@@ -519,14 +520,15 @@ public class OverviewForAdminsController implements Initializable {
 
     @FXML
     private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException {
+          if (event.getClickCount() >1)
         handelPopupDataView();
     }
 
     @FXML
     private void handelTooltipForTableView(MouseEvent event) {
-        
+     
         tableview.setTooltip(getToolTipForTableView());
-   
+        
         
     }
           
@@ -539,7 +541,7 @@ public class OverviewForAdminsController implements Initializable {
             tip.setText("Det er ikke nogle Projekter at vise");
             return tip;
         } else  {
-            tip.setText("Klik på et Projekt, for at få vist dens tilhørende opgaver");
+            tip.setText("Dobbel klik på et Projekt, for at få vist dens tilhørende opgaver");
             return tip;
         }
        
