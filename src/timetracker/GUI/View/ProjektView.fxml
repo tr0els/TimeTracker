@@ -25,7 +25,7 @@
             <JFXComboBox fx:id="menuEditProjects" layoutX="426.0" layoutY="10.0" prefHeight="25.0" prefWidth="160.0" />
             <JFXButton fx:id="btnEdit" layoutX="513.0" layoutY="100.0" onAction="#handleEdit" text="Opdater" />
             <JFXButton fx:id="btnCancel" layoutX="440.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
-            <AnchorPane id="paneTime" layoutX="182.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
+            <AnchorPane id="paneTime" layoutX="168.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
                <children>
                   <JFXDatePicker fx:id="dateTo" defaultColor="#435a9a" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />
                   <JFXTimePicker fx:id="timeTo" defaultColor="#435a9a" layoutX="8.0" layoutY="50.0" prefHeight="28.0" prefWidth="116.0" />
