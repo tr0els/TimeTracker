@@ -44,7 +44,7 @@ import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
+
 
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ProjektModel;

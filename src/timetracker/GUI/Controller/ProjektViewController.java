@@ -66,7 +66,7 @@ public class ProjektViewController implements Initializable
     private ObservableList<Project> personalProjects;
     private Task edit_task;
     private ObservableList<Task> observablelogs;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
     private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
     private Image icon_billable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
     private Image icon_notbillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
@@ -382,7 +382,7 @@ public class ProjektViewController implements Initializable
 
             }
 
-            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere taskview med det view som hvor den opdatere task ligger i.
+            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere gui til det project hvor den opdatere task ligger i.
 
             showProjects(); //indlæser ny liste til vores editvindue
 

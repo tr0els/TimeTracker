@@ -20,7 +20,6 @@ import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
