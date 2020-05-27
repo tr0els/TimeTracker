@@ -284,7 +284,7 @@ public class TaskDAO {
 
 
 
-   public  List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
+   public  List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
        List<TaskForDataView> taskForOverviewData = new ArrayList<>();
        
   
@@ -293,29 +293,49 @@ public class TaskDAO {
        
        String project_id = "";
        String user_id =  "";
-       
-       
-       if(project != null )
-       {
-           project_id += "and p.project_id =" + project.getProjectId()+ "\n";
-       }
-       
-       if(user != null)
-       {
-       user_id += "and pr.person_id = " +user.getPerson_id() +"\n";
-       }
-       
+       String fradato_caluse = "";
+       String tildato_clause = "";
+       String periode_clause = "";
+          
+            
+           if (fradato != null) {
+               fradato_caluse += "AND  cast(tl.task_start as date)  >= '" + fradato + "'\n";
+           }
+
+           if (tildato != null) {
+               tildato_clause += "AND cast(tl.task_end as date) <= '" + tildato + "' \n";
+           }
+
+           if (monthStart != null && monthEnd != null) {
+               periode_clause += "AND cast(tl.task_start as date) Between convert(date, '" + monthStart + "', 103) and convert(date, '" + monthEnd + "', 103)";
+           }
+
+           if (project != null) {
+               project_id += "and p.project_id =" + project.getProject_id() + "\n";
+           }
+
+           if (user != null) {
+               user_id += "and per.person_id = " + user.getPerson_id() + "\n";
+           }
+
            
        String sql = 
-            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name \n"
-          + "from tasklog tl , Project p, Person pr \n"  
+            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(per.name, + ' ' + per.surname) as fullname, \n"
+               +"CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n" 
+          + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n" 
+          + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2) as time \n"
+          + "from tasklog tl , Project p, Person per \n"  
           + "where tl.project_id = p.project_id  \n"
-          + "and pr.person_id = tl.person_id \n"
+          + "and per.person_id = tl.person_id \n"
+          + "and tl.task_end is not null \n"     
           + project_id 
           + user_id
+          + fradato_caluse
+          + tildato_clause
+          + periode_clause     
+          + "group by tl.task_name, tl.task_start, tl.task_end, tl.billable, per.name, per.surname\n" 
           + "order by tl.task_start asc;";
-         // + "and p.project_id = 9 \n"
-          //+ "and pr.person_id = 1 " ;
+      
 
         Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -331,9 +351,9 @@ public class TaskDAO {
             task.setName(rs.getString("task_name"));
             task.setStart(rs.getTimestamp("task_start").toLocalDateTime());
             task.setEnd(end_time);
-          
+            task.setTime(rs.getString("time"));
             task.setBillable(rs.getBoolean("billable"));
-            task.setMedarbejder(rs.getString("name"));
+            task.setMedarbejder(rs.getString("fullname"));
             
             taskForOverviewData.add(task);
             }

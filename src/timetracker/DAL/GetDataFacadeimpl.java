@@ -116,8 +116,8 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
     }
     
     @Override
-     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException{
-      return taskdao.getListOfTaskForDataView(project, user);
+     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user , String fradato, String tildato, String monthStart, String monthEnd) throws DALException{
+      return taskdao.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd);
      } 
 
     //Klient

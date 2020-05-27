@@ -6,16 +6,17 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="682.0" stylesheets="@StylingForPopupview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
+<AnchorPane prefHeight="495.0" prefWidth="649.0" stylesheets="@StylingForPopupview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
    <children>
-      <JFXButton fx:id="btbExport" layoutX="290.0" layoutY="444.0" onAction="#handleExportCSV" prefHeight="42.0" prefWidth="102.0" text="Export til CSV" />
-      <Label fx:id="lblProjektnavn" layoutX="39.0" layoutY="55.0" />
-      <TableView fx:id="tableView" focusTraversable="false" layoutX="14.0" layoutY="32.0" prefHeight="400.0" prefWidth="650.0" tableMenuButtonVisible="true">
+      <JFXButton fx:id="btbExport" layoutX="510.0" layoutY="407.0" onAction="#handleExportCSV" prefHeight="42.0" prefWidth="102.0" text="Export til CSV" />
+      <Label fx:id="lblProjektnavn" layoutX="48.0" layoutY="398.0" />
+      <TableView fx:id="tableView" focusTraversable="false" layoutX="9.0" layoutY="17.0" prefHeight="366.0" prefWidth="631.0" tableMenuButtonVisible="true">
         <columns>
-          <TableColumn fx:id="colOpgave" editable="false" prefWidth="136.0" text="Opgave" />
-            <TableColumn fx:id="colStart" editable="false" prefWidth="149.0" text="Start" />
-            <TableColumn fx:id="colEnd" editable="false" prefWidth="139.0" text="Slut" />
-            <TableColumn fx:id="colBillable" editable="false" prefWidth="78.0" text="Billable" />
+          <TableColumn fx:id="colOpgave" editable="false" prefWidth="131.0" text="Opgave" />
+            <TableColumn fx:id="colStart" editable="false" prefWidth="119.0" text="Start" />
+            <TableColumn fx:id="colEnd" editable="false" prefWidth="118.0" text="Slut" />
+            <TableColumn fx:id="colhhmm" prefWidth="78.0" text="HH:MM" />
+            <TableColumn fx:id="colBillable" editable="false" prefWidth="60.0" text="Billable" />
             <TableColumn fx:id="colMedarebjder" editable="false" prefWidth="147.0" text="Medarbejder" />
         </columns>
       </TableView>

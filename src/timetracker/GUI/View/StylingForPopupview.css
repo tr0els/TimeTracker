@@ -87,14 +87,15 @@ and open the template in the editor.
 }
 
 
+
 .table-view .column-header-background .label{
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: left;
-    -fx-text-fill: #435a9a;
+    -fx-text-fill: black;
     -fx-font-size: 14;
+    -fx-font-weight: normal;
     
 }
-
 
 .table-view .show-hide-columns-button{
     

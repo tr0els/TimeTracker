@@ -59,8 +59,14 @@ public class PopUpDataViewController implements Initializable
     private ObservableList<TaskForDataView> listeAfTask;
     private Project choosenProject = null;
     private User userFromOVerview = null;
+    private String fradato = null;
+    private String tildato = null;
+    private String monthStart = null;
+    private String monthEnd = null;
     
     String europeanDatePattern = "dd-MM-yyyy HH:mm";
+    @FXML
+    private TableColumn<TaskForDataView, String> colhhmm;
     
     public PopUpDataViewController() throws DALException, SQLException
     {
@@ -78,11 +84,27 @@ public class PopUpDataViewController implements Initializable
     
     public void populateTable() throws DALException
     {
-        listeAfTask = tModel.getListOfTaskForDataView(choosenProject, userFromOVerview);
+        listeAfTask = tModel.getListOfTaskForDataView(choosenProject, userFromOVerview, fradato, tildato, monthStart,monthEnd);
         
         colOpgave.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         colStart.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))));
         colEnd.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern))));
+        colhhmm.setCellValueFactory(cellData ->    
+        {   String hhMM = cellData.getValue().getTime();
+            String[] timesplitup = hhMM.split(":");
+            
+            int hhTotal = Integer.parseInt(timesplitup[0]);
+            int mmTotal = Integer.parseInt(timesplitup[1]);
+            int secTotal = Integer.parseInt(timesplitup[2]);
+            String totaltimeString;
+            if ( secTotal >= 30)
+            {
+                mmTotal +=1;
+            } 
+            totaltimeString = hhTotal + ":" + String.format( "%02d", mmTotal);
+            return new SimpleStringProperty(totaltimeString);
+        });
+            
         colBillable.setCellValueFactory(cellData ->
         {
             boolean billable = cellData.getValue().isBillable();
@@ -103,12 +125,19 @@ public class PopUpDataViewController implements Initializable
         
     }
     
-    public void TransferProjektID(Project project, User user) throws DALException
+    public void TransferInfoForPopup(Project project, User user , String fradato, String tildato, String monthStart, String monthEnd ) throws DALException
     {
         
         this.choosenProject = project;
         this.userFromOVerview = user;
+        this.tildato = tildato;
+        this.fradato = fradato;
+        this.monthStart = monthStart;
+        this.monthEnd = monthEnd;
+        
         populateTable();
+        lblProjektnavn.setText("Dette er er overblik over opgaverne for dit valgte projekt. \n" +"På denne sider er det muligt for dig at eksportere opgaverne, \n"+
+                 "til en CSV fil. \n"+ "\nOBS, det er ikke muligt at redigere i opgaverne på denne side!");
         
        
      

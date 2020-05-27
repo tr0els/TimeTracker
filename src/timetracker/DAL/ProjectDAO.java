@@ -304,8 +304,6 @@ public class ProjectDAO {
             String fradato_caluse = "";
             String tildato_clause = "";
             String periode_clause = "";
-            //String monthStart_clause = "";
-            // StringBuilder sb = new StringBuilder();
 
             if (comboUser != null) {
                 user_clause += "AND t.person_id = " + comboUser.getPerson_id() + "\n";
@@ -346,7 +344,7 @@ public class ProjectDAO {
                     + tildato_clause
                     + periode_clause
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
-            //sb.append(sql);
+    
 
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);

@@ -46,7 +46,7 @@ and open the template in the editor.
 .button{
 
     -fx-border-width: 2px;
-    -fx-background-color: -fx-grumsen;
+    -fx-background-color:   -fx-grumsen-lysere;
 
     -fx-text-fill: white;
     -fx-font-size: 12;
@@ -98,12 +98,16 @@ and open the template in the editor.
 .table-view .column-header-background .label{
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: left;
-    -fx-text-fill: #435a9a;
+    -fx-text-fill: black;
     -fx-font-size: 14;
+    -fx-font-weight: normal;
     
 }
 
-
+.date-picker-popup .arrow-button .arrow{
+    -fx-backgruond-color: black;
+ 
+}
 
 
 .table-view .filler{
@@ -116,3 +120,25 @@ and open the template in the editor.
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: -fx-grumsen-lysere;
+    
+    
+}
+
+
+
+
+.date-picker-popup > * > .spinner > .label {
+    
+     -fx-font-size: 23;
+    
+}
+
+
+
+
+
+
