@@ -20,8 +20,8 @@ public class TaskChild extends TaskBase {
     public TaskChild() {
     }
 
-    public TaskChild(int id, String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent) {
-        super(name, billable, projectId, personId, start, end, time);
+    public TaskChild(int id, String name, boolean billable, int projectId, LocalDateTime start, LocalDateTime end, String time, TaskParent parent) {
+        super(name, billable, projectId, start, end, time);
         this.id = id;
         this.parent = parent;
     }

@@ -5,6 +5,7 @@
  */
 package timetracker.DAL;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.TaskForDataView;
+import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
 
 /**
@@ -89,6 +91,11 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface {
 //
 //    }
     //Task
+    @Override
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+        return taskdao.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
+    }
+    
     @Override
     public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
         taskdao.startTask(task_name, billable, project_id, person_id);

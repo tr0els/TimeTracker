@@ -5,6 +5,7 @@
  */
 package timetracker.BE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class TaskGroup extends TaskBase {
 
     private String name;
     private String time;
-    private List<TaskParent> parents;
+    private List<TaskParent> parents = new ArrayList<>();
 
     public TaskGroup() {}
 

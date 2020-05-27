@@ -20,6 +20,7 @@ import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
+import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.DAL.DALManager;
@@ -54,6 +55,19 @@ public class BLLManager {
     }
 
     //-----TASK------
+    /**
+     * 
+     * @param personId
+     * @param groupBy
+     * @param includeTaskParents
+     * @param includeTaskChildren
+     * @return
+     * @throws DALException 
+     */
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+        return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
+    }
+    
     /**
      * Starter en ny task
      *

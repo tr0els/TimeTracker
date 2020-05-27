@@ -21,6 +21,7 @@ import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
+import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -126,6 +127,10 @@ public class TaskModel implements Runnable {
     public void stopTask(int person_id) throws DALException {
         bll.stopTask(person_id);
 
+    }
+    
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+        return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
 
     /**

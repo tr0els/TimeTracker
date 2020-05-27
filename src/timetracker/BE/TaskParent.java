@@ -6,6 +6,7 @@
 package timetracker.BE;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +16,13 @@ import java.util.List;
  */
 public class TaskParent extends TaskBase {
 
-    List<TaskChild> children;
+    List<TaskChild> children = new ArrayList<>();
 
     public TaskParent() {
     }
 
-    public TaskParent(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
-        super(name, billable, projectId, personId, start, end, time);
+    public TaskParent(String name, boolean billable, int projectId, LocalDateTime start, LocalDateTime end, String time) {
+        super(name, billable, projectId, start, end, time);
     }
 
     public List<TaskChild> getChildren() {

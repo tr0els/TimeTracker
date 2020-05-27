@@ -26,11 +26,11 @@ abstract public class TaskBase {
     public TaskBase() {
     }
 
-    public TaskBase(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
+    public TaskBase(String name, boolean billable, int projectId, LocalDateTime start, LocalDateTime end, String time) {
         this.name = name;
         this.billable = billable;
         this.projectId = projectId;
-        this.personId = personId;
+        //this.personId = personId;
         this.start = start;
         this.end = end;
         this.time = time;

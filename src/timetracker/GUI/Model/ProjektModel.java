@@ -38,7 +38,7 @@ public class ProjektModel {
     public ProjektModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
-        allProjects.addAll(bll.getProjects());
+        allProjects.addAll(bll.getProjects()); // kan fjernes da den alligevel kaldes ved getProjects? - Troels
         allProjectsWitExtraData = FXCollections.observableArrayList();
         projectsbyID = FXCollections.observableArrayList();
 
@@ -95,6 +95,11 @@ public class ProjektModel {
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProject_name().compareTo(cl2.getProject_name());
         allProjects.sort(byName);
 
+        return allProjects;
+    }
+    
+    // Get the existing list of projects without reloading from database
+    public ObservableList<Project> getProjectsCache() {
         return allProjects;
     }
 
