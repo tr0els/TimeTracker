@@ -140,7 +140,7 @@ public class TaskUtil {
         
         // select the project in combobox that matches the tasks project id
         for (Project p : projects) {
-            if(p.getProject_id() == taskParent.getProjectId()) {
+            if(p.getProjectId() == taskParent.getProjectId()) {
                 project.getSelectionModel().select(p);
             }
         }
@@ -150,9 +150,9 @@ public class TaskUtil {
         
         // edit project
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            taskParent.setProjectId(newVal.getProject_id());
+            taskParent.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProject_id() + " - "+newVal.getProject_name() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
         });
         
         // billable
@@ -257,7 +257,7 @@ public class TaskUtil {
         
         // select the project in combobox that matches the tasks project id
         for (Project p : projects) {
-            if(p.getProject_id() == taskChild.getProjectId()) {
+            if(p.getProjectId() == taskChild.getProjectId()) {
                 project.getSelectionModel().select(p);
             }
         }
@@ -267,9 +267,9 @@ public class TaskUtil {
         
         // edit project
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            taskChild.setProjectId(newVal.getProject_id());
+            taskChild.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProject_id() + " - "+newVal.getProject_name() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
         });
         
         // billable
