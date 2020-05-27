@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-abstract public class TaskBase {
+abstract public class TaskBase
+{
 
     private int id;
     private String name;
@@ -23,10 +24,19 @@ abstract public class TaskBase {
     private LocalDateTime end;
     private String time; // maybe SimpleDateFormat("HH:mm:ss");
 
-    public TaskBase() {
-    }
-
-    public TaskBase(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time) {
+    /**
+     * Constructor for Client som tager imod parametre
+     *
+     * @param name
+     * @param billable
+     * @param projectId
+     * @param personId
+     * @param start
+     * @param end
+     * @param time
+     */
+    public TaskBase(String name, boolean billable, int projectId, int personId, LocalDateTime start, LocalDateTime end, String time)
+    {
         this.name = name;
         this.billable = billable;
         this.projectId = projectId;
@@ -36,67 +46,155 @@ abstract public class TaskBase {
         this.time = time;
     }
 
-    public int getId() {
+    /**
+     * Constructor for Client
+     */
+    public TaskBase()
+    {
+    }
+
+    /**
+     * Returnerer id
+     * @return 
+     */
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    /**
+     * Sætter id
+     * @param id 
+     */
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getName() {
+    /**
+     * Returnerer name
+     * @return 
+     */
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Sætter name
+     * @param name 
+     */
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public boolean isBillable() {
+    /**
+     * Returnerer billable
+     * @return 
+     */
+    public boolean isBillable()
+    {
         return billable;
     }
 
-    public void setBillable(boolean billable) {
+    /**
+     * Sætter billable
+     * @param billable 
+     */
+    public void setBillable(boolean billable)
+    {
         this.billable = billable;
     }
 
-    public int getProjectId() {
+    /**
+     * Returnerer projectId
+     * @return 
+     */
+    public int getProjectId()
+    {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    /**
+     * Sætter projectId
+     * @param projectId 
+     */
+    public void setProjectId(int projectId)
+    {
         this.projectId = projectId;
     }
 
-    public int getPersonId() {
+    /**
+     * Returnerer personId
+     * @return 
+     */
+    public int getPersonId()
+    {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    /**
+     * Sætter personId
+     * @param personId 
+     */
+    public void setPersonId(int personId)
+    {
         this.personId = personId;
     }
 
-    public LocalDateTime getStart() {
+    /**
+     * Returnerer start
+     * @return 
+     */
+    public LocalDateTime getStart()
+    {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    /**
+     * Sætter start
+     * @param start 
+     */
+    public void setStart(LocalDateTime start)
+    {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    /**
+     * Returnerer end
+     * @return 
+     */
+    public LocalDateTime getEnd()
+    {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    /**
+     * Sætter end
+     * @param end 
+     */
+    public void setEnd(LocalDateTime end)
+    {
         this.end = end;
     }
 
-    public String getTime() {
+    /**
+     * Returnerer time
+     * @return 
+     */
+    public String getTime()
+    {
         return time;
     }
 
-    public void setTime(String time) {
+    /**
+     * Sætter time
+     * 
+     * @param time 
+     */
+    public void setTime(String time)
+    {
         this.time = time;
     }
 }

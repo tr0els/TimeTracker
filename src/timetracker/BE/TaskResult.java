@@ -12,17 +12,35 @@ import java.util.List;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskResult {
+public class TaskResult
+{
 
     private List<? extends TaskBase> tasks;
 
-    public TaskResult() {}
+    /**
+     * Constructor for Client
+     */
+    public TaskResult()
+    {
+    }
 
-    public List<? extends TaskBase> getTasks() {
+    /**
+     * Returnerer tasks
+     *
+     * @return
+     */
+    public List<? extends TaskBase> getTasks()
+    {
         return tasks;
     }
 
-    public void setTasks(List<? extends TaskBase> tasks) {
+    /**
+     * Sætter tasks
+     *
+     * @param tasks
+     */
+    public void setTasks(List<? extends TaskBase> tasks)
+    {
         this.tasks = tasks;
     }
 }

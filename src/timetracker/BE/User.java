@@ -14,29 +14,52 @@ import javafx.scene.control.TreeItem;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class User extends RecursiveTreeObject<User> {
+public class User extends RecursiveTreeObject<User>
+{
 
-    private int person_id;
+    private int personId;
     private String name;
     private String surname;
     private String email;
     private String password;
-    private int role_id;
-    private int profession_id;
+    private int roleId;
     private String role;
+    private int professionId;
     private String profession;
 
-    public User(int person_id, String name, String surname, String email, int role_id, int profession_id) {
-        this.person_id = person_id;
+    /**
+     * Constructor for User som tager imod parametre
+     *
+     * @param personId
+     * @param name
+     * @param surname
+     * @param email
+     * @param roleId
+     * @param professionId
+     */
+    public User(int personId, String name, String surname, String email, int roleId, int professionId)
+    {
+        this.personId = personId;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.role_id = role_id;
-        this.profession_id = profession_id;
+        this.roleId = roleId;
+        this.professionId = professionId;
     }
 
-    public User(int person_id, String name, String surname, String email, String role, String profession) {
-        this.person_id = person_id;
+    /**
+     * Constructor for User som tager imod parametre
+     *
+     * @param personId
+     * @param name
+     * @param surname
+     * @param email
+     * @param role
+     * @param profession
+     */
+    public User(int personId, String name, String surname, String email, String role, String profession)
+    {
+        this.personId = personId;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -44,147 +67,303 @@ public class User extends RecursiveTreeObject<User> {
         this.profession = profession;
     }
 
-    public User() {
+    /**
+     * Constructor for User
+     */
+    public User()
+    {
     }
 
-    public int getPerson_id() {
-        return person_id;
+    /**
+     * Returnerer personId
+     *
+     * @return
+     */
+    public int getPersonId()
+    {
+        return personId;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    /**
+     * Sætter personId
+     *
+     * @param personId
+     */
+    public void setPersonId(int personId)
+    {
+        this.personId = personId;
     }
 
-    public String getName() {
+    /**
+     * Returnerer name
+     *
+     * @return
+     */
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Sætter name
+     *
+     * @param name
+     */
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getSurname() {
+    /**
+     * Returnerer surname
+     *
+     * @return
+     */
+    public String getSurname()
+    {
         return surname;
     }
 
-    public void setSurname(String surname) {
+    /**
+     * Sætter surname
+     *
+     * @param surname
+     */
+    public void setSurname(String surname)
+    {
         this.surname = surname;
     }
 
-    public String getEmail() {
+    /**
+     * Returnerer email
+     *
+     * @return
+     */
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    /**
+     * Sætter email
+     *
+     * @param email
+     */
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getPassword() {
+    /**
+     * Returnerer password
+     *
+     * @return
+     */
+    public String getPassword()
+    {
         return password;
     }
 
-    public void setPassword(String password) {
+    /**
+     * Sætter password
+     *
+     * @param password
+     */
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public int getRole_id() {
-        return role_id;
+    /**
+     * Returnerer roleId
+     *
+     * @return
+     */
+    public int getRoleId()
+    {
+        return roleId;
     }
 
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
+    /**
+     * Sætter roleId
+     *
+     * @param roleId
+     */
+    public void setRoleId(int roleId)
+    {
+        this.roleId = roleId;
     }
 
-    public int getProfession_id() {
-        return profession_id;
+    /**
+     * Returnerer professionId
+     *
+     * @return
+     */
+    public int getProfessionId()
+    {
+        return professionId;
     }
 
-    public void setProfession_id(int profession_id) {
-        this.profession_id = profession_id;
+    /**
+     * Sætter professionId
+     *
+     * @param professionId
+     */
+    public void setProfessionId(int professionId)
+    {
+        this.professionId = professionId;
     }
 
-    public String getRole() {
+    /**
+     * Returnerer role
+     *
+     * @return
+     */
+    public String getRole()
+    {
         return role;
     }
 
-    public void setRole(String role) {
+    /**
+     * Sætter role
+     *
+     * @param role
+     */
+    public void setRole(String role)
+    {
         this.role = role;
     }
 
-    public String getProfession() {
+    /**
+     * Returnerer profession
+     *
+     * @return
+     */
+    public String getProfession()
+    {
         return profession;
     }
 
-    public void setProfession(String profession) {
+    /**
+     * Sætter profession
+     *
+     * @param profession
+     */
+    public void setProfession(String profession)
+    {
         this.profession = profession;
     }
 
-    public boolean isAdmin(User user) {
-        if (role_id == 1) {
+    /**
+     * Returnerer en boolean om User er Admin eller ej
+     *
+     * @param user
+     * @return
+     */
+    public boolean isAdmin(User user)
+    {
+        if (roleId == 1)
+        {
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public boolean isAdminCheck(TreeItem<User> chosenUser) {
-        if (role_id == 1) {
+    /**
+     * Returnerer en boolean om User er Admin eller ej til TreeTableView
+     *
+     * @param chosenUser
+     * @return
+     */
+    public boolean isAdminCheck(TreeItem<User> chosenUser)
+    {
+        if (roleId == 1)
+        {
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 7;
         return hash;
     }
 
+    /**
+     * Bruges til at sammenligne to brugere
+     *
+     * @param obj
+     * @return
+     */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
             return true;
         }
-        if (obj == null) {
+        if (obj == null)
+        {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (getClass() != obj.getClass())
+        {
             return false;
         }
         final User other = (User) obj;
-        if (this.person_id != other.person_id) {
+        if (this.personId != other.personId)
+        {
             return false;
         }
-        if (this.role_id != other.role_id) {
+        if (this.roleId != other.roleId)
+        {
             return false;
         }
-        if (this.profession_id != other.profession_id) {
+        if (this.professionId != other.professionId)
+        {
             return false;
         }
-        if (!Objects.equals(this.name, other.name)) {
+        if (!Objects.equals(this.name, other.name))
+        {
             return false;
         }
-        if (!Objects.equals(this.surname, other.surname)) {
+        if (!Objects.equals(this.surname, other.surname))
+        {
             return false;
         }
-        if (!Objects.equals(this.email, other.email)) {
+        if (!Objects.equals(this.email, other.email))
+        {
             return false;
         }
-        if (!Objects.equals(this.password, other.password)) {
+        if (!Objects.equals(this.password, other.password))
+        {
             return false;
         }
-        if (!Objects.equals(this.role, other.role)) {
+        if (!Objects.equals(this.role, other.role))
+        {
             return false;
         }
-        if (!Objects.equals(this.profession, other.profession)) {
+        if (!Objects.equals(this.profession, other.profession))
+        {
             return false;
         }
         return true;
     }
 
+    /**
+     * ToString metode så klassen viser det rigtige
+     *
+     * @return
+     */
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "" + name + " " + surname;
     }
 

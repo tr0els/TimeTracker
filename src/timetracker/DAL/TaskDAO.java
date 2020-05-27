@@ -308,7 +308,7 @@ public class TaskDAO {
            }
 
            if (user != null) {
-               user_id += "and per.person_id = " + user.getPerson_id() + "\n";
+               user_id += "and per.person_id = " + user.getPersonId()+ "\n";
            }
 
            
@@ -346,7 +346,7 @@ public class TaskDAO {
             task.setEnd(end_time);
             task.setTime(rs.getString("time"));
             task.setBillable(rs.getBoolean("billable"));
-            task.setMedarbejder(rs.getString("fullname"));
+            task.setUser(rs.getString("fullname"));
             
             taskForOverviewData.add(task);
             }

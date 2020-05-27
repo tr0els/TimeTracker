@@ -14,8 +14,6 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -88,7 +86,7 @@ public class MainController implements Initializable {
         if (model.valEmail(email) == true) {
             if (model.login(email, password) != null) {
 
-                int role = model.login(email, password).getRole_id();
+                int role = model.login(email, password).getRoleId();
 
                 if (role == 1) {
                     handeladminlogin(event);

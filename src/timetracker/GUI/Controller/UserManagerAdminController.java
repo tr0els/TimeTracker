@@ -44,6 +44,8 @@ public class UserManagerAdminController implements Initializable {
 
     private static BrugerModel model;
     private ObservableList<Profession> allProf;
+    private final int ADMINROLEID = 1;
+    private final int USERROLEID = 2; 
 
     @FXML
     private AnchorPane root;
@@ -147,16 +149,16 @@ public class UserManagerAdminController implements Initializable {
         User user = new User();
 
         if (model.valName(textfieldName.getText()) && model.valName(textfieldSurname.getText()) && model.valEmail(textfieldEmail.getText())) {
-            if (model.valExistingEmailEdit(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id(), textfieldEmail.getText())) {
-                user.setPerson_id(listUsers.getSelectionModel().getSelectedItem().getValue().getPerson_id());
+            if (model.valExistingEmailEdit(listUsers.getSelectionModel().getSelectedItem().getValue().getPersonId(), textfieldEmail.getText())) {
+                user.setPersonId(listUsers.getSelectionModel().getSelectedItem().getValue().getPersonId());
                 user.setName(textfieldName.getText());
                 user.setSurname(textfieldSurname.getText());
                 user.setEmail(textfieldEmail.getText());
-                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
+                user.setProfessionId(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
                 if (!checkboxAdminRole.isSelected()) {
-                    user.setRole_id(2);
+                    user.setRoleId(USERROLEID);
                 } else {
-                    user.setRole_id(1);
+                    user.setRoleId(ADMINROLEID);
                 }
                 model.editUser(user);
                 populateTreeTable();
@@ -217,11 +219,11 @@ public class UserManagerAdminController implements Initializable {
 
         if (user.getName() != null && user.getSurname() != null && user.getEmail() != null) {
             if (model.valExistingEmail(textfieldEmail.getText())) {
-                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
+                user.setProfessionId(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
                 if (!checkboxAdminRole.isSelected()) {
-                    user.setRole_id(2);
+                    user.setRoleId(USERROLEID);
                 } else {
-                    user.setRole_id(1);
+                    user.setRoleId(ADMINROLEID);
                 }
                 String inputPassword = JOptionPane.showInputDialog("Ønkset password");
                 user.setPassword(inputPassword);
@@ -252,7 +254,7 @@ public class UserManagerAdminController implements Initializable {
         textfieldSurname.setText(chosenUser.getValue().getSurname());
         textfieldEmail.setText(chosenUser.getValue().getEmail());
 
-        int profession_id = listUsers.getSelectionModel().getSelectedItem().getValue().getProfession_id();
+        int profession_id = listUsers.getSelectionModel().getSelectedItem().getValue().getProfessionId();
 
         for (int i = 0; i < allProf.size(); i++) {
             int prof = allProf.get(i).getProfessionId();

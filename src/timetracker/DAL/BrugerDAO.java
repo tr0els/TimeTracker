@@ -47,8 +47,8 @@ public class BrugerDAO {
             st.setString(3, user.getEmail());
             st.setBytes(4, HashedPassword);
             st.setInt(5, 1);
-            st.setInt(6, user.getRole_id());
-            st.setInt(7, user.getProfession_id());
+            st.setInt(6, user.getRoleId());
+            st.setInt(7, user.getProfessionId());
             st.setBytes(8, salt);
 
             st.executeQuery();
@@ -73,9 +73,9 @@ public class BrugerDAO {
             st.setString(1, user.getName());
             st.setString(2, user.getSurname());
             st.setString(3, user.getEmail());
-            st.setInt(4, user.getRole_id());
-            st.setInt(5, user.getProfession_id());
-            st.setInt(6, user.getPerson_id());
+            st.setInt(4, user.getRoleId());
+            st.setInt(5, user.getProfessionId());
+            st.setInt(6, user.getPersonId());
 
             st.executeQuery();
 
@@ -95,7 +95,7 @@ public class BrugerDAO {
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setInt(1, user.getPerson_id());
+            st.setInt(1, user.getPersonId());
 
             st.executeQuery();
 
@@ -123,13 +123,13 @@ public class BrugerDAO {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 User user = new User();
-                user.setPerson_id(rs.getInt("person_id"));
+                user.setPersonId(rs.getInt("person_id"));
                 user.setName(rs.getString("name"));
                 user.setSurname(rs.getString("surname"));
                 user.setEmail(rs.getString("email"));
-                user.setRole_id(rs.getInt("role_id"));
+                user.setRoleId(rs.getInt("role_id"));
                 user.setRole(rs.getString("role_name"));
-                user.setProfession_id(rs.getInt("profession_id"));
+                user.setProfessionId(rs.getInt("profession_id"));
                 user.setProfession(rs.getString("profession_name"));
 
                 allUsers.add(user);
@@ -288,7 +288,7 @@ public class BrugerDAO {
             String sql = "UPDATE Person SET active = ? WHERE person_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, 0);
-            st.setInt(2, disableUser.getPerson_id());
+            st.setInt(2, disableUser.getPersonId());
             st.executeQuery();
             
         } catch (Exception e) {

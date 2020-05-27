@@ -13,7 +13,8 @@ import java.time.format.DateTimeFormatter;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class Task {
+public class Task
+{
 
     private int taskId;
     private String taskName;
@@ -25,9 +26,22 @@ public class Task {
     private boolean billable;
     private String stringBillable;
     private LocalDateTime lastWorkedOn;
-    
-    
-    public Task(int taskId, String taskName, int projectId, int personId, String totalTime, String task_tid, LocalDateTime startTime, LocalDateTime endTime, boolean billable, LocalDateTime lastWorkedOn) {
+
+    /**
+     * Constructor for Task som tager imod parametre
+     *
+     * @param taskId
+     * @param taskName
+     * @param projectId
+     * @param personId
+     * @param totalTime
+     * @param startTime
+     * @param endTime
+     * @param billable
+     * @param lastWorkedOn
+     */
+    public Task(int taskId, String taskName, int projectId, int personId, String totalTime, LocalDateTime startTime, LocalDateTime endTime, boolean billable, LocalDateTime lastWorkedOn)
+    {
         this.taskId = taskId;
         this.taskName = taskName;
         this.projectId = projectId;
@@ -39,99 +53,230 @@ public class Task {
         this.lastWorkedOn = lastWorkedOn;
     }
 
-    public Task() {
+    /**
+     * Constructor for Project
+     */
+    public Task()
+    {
 
     }
 
-    public String getStringBillable() {
+    /**
+     * Returnerer stringBillable
+     *
+     * @return
+     */
+    public String getStringBillable()
+    {
         return stringBillable;
     }
 
-    public void setStringBillable(String stringBillable) {
+    /**
+     * Sætter stringBillable
+     *
+     * @param stringBillable
+     */
+    public void setStringBillable(String stringBillable)
+    {
         this.stringBillable = stringBillable;
     }
 
-    public LocalDateTime getStartTime() {
+    /**
+     * Returnerer startTime
+     *
+     * @return
+     */
+    public LocalDateTime getStartTime()
+    {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    /**
+     * Sætter startTime
+     *
+     * @param startTime
+     */
+    public void setStartTime(LocalDateTime startTime)
+    {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    /**
+     * Returnerer endTime
+     *
+     * @return
+     */
+    public LocalDateTime getEndTime()
+    {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    /**
+     * Sætter endTime
+     *
+     * @param endTime
+     */
+    public void setEndTime(LocalDateTime endTime)
+    {
         this.endTime = endTime;
     }
 
-    public boolean isBillable() {
+    /**
+     * Returnerer billable
+     *
+     * @return
+     */
+    public boolean isBillable()
+    {
         return billable;
     }
 
-    public void setBillable(boolean billable) {
+    /**
+     * Sætter billable
+     *
+     * @param billable
+     */
+    public void setBillable(boolean billable)
+    {
         this.billable = billable;
     }
 
-    public LocalDateTime getLastWorkedOn() {
+    /**
+     * Returnerer lastWorkedOn
+     *
+     * @return
+     */
+    public LocalDateTime getLastWorkedOn()
+    {
         return lastWorkedOn;
     }
 
-    public void setLastWorkedOn(LocalDateTime lastWorkedOn) {
+    /**
+     * Sætter lastWorkedOn
+     *
+     * @param lastWorkedOn
+     */
+    public void setLastWorkedOn(LocalDateTime lastWorkedOn)
+    {
         this.lastWorkedOn = lastWorkedOn;
     }
 
-    public String getTotalTime() {
+    /**
+     * Returnerer totalTime
+     *
+     * @return
+     */
+    public String getTotalTime()
+    {
         return totalTime;
     }
 
-    public void setTotalTime(String totalTime) {
+    /**
+     * Sætter totalTime
+     *
+     * @param totalTime
+     */
+    public void setTotalTime(String totalTime)
+    {
         this.totalTime = totalTime;
     }
 
-    public int getTaskId() {
+    /**
+     * Returnerer taskId
+     *
+     * @return
+     */
+    public int getTaskId()
+    {
         return taskId;
     }
 
-    public void setTaskId(int taskId) {
+    /**
+     * Sætter taskId
+     *
+     * @param taskId
+     */
+    public void setTaskId(int taskId)
+    {
         this.taskId = taskId;
     }
 
-    public String getTaskName() {
+    /**
+     * Returnerer taskName
+     *
+     * @return
+     */
+    public String getTaskName()
+    {
         return taskName;
     }
 
-    public void setTaskName(String taskName) {
+    /**
+     * Sætter taskName
+     *
+     * @param taskName
+     */
+    public void setTaskName(String taskName)
+    {
         this.taskName = taskName;
     }
 
-    public int getProjectId() {
+    /**
+     * Returnerer projectId
+     *
+     * @return
+     */
+    public int getProjectId()
+    {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    /**
+     * Sætter projectId
+     *
+     * @param projectId
+     */
+    public void setProjectId(int projectId)
+    {
         this.projectId = projectId;
     }
 
-    public int getPersonId() {
+    /**
+     * Returnerer personId
+     *
+     * @return
+     */
+    public int getPersonId()
+    {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    /**
+     * Sætter personId
+     *
+     * @param personId
+     */
+    public void setPersonId(int personId)
+    {
         this.personId = personId;
     }
 
+    /**
+     * ToString metode så klassen viser det rigtige
+     *
+     * @return
+     */
     @Override
-    public String toString() {
+    public String toString()
+    {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String last;
         if (lastWorkedOn == null)
         {
             last = "Ikke afsluttet!";
-        }else{
-        last = lastWorkedOn.format(format);
+        } else
+        {
+            last = lastWorkedOn.format(format);
         }
         return taskId + ": " + taskName + " | Total tid brugt: " + totalTime + " | Sidst arbejdet på: " + last;
     }

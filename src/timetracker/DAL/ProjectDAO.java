@@ -306,7 +306,7 @@ public class ProjectDAO {
             String periode_clause = "";
 
             if (comboUser != null) {
-                user_clause += "AND t.person_id = " + comboUser.getPerson_id() + "\n";
+                user_clause += "AND t.person_id = " + comboUser.getPersonId()+ "\n";
             }
 
             if (comboClient != null) {
