@@ -71,7 +71,7 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private JFXDatePicker tildato;
     @FXML
-    private  JFXComboBox<User> ComboMedarbejder;
+    private JFXComboBox<User> ComboMedarbejder;
     @FXML
     private JFXComboBox<Client> comboKlienter;
     @FXML
@@ -82,8 +82,6 @@ public class OverviewForAdminsController implements Initializable {
     private TableColumn<Project, String> coltotaltid;
     @FXML
     private PieChart piechart;
-    @FXML
-    private BarChart<?, ?> barchart;
     @FXML
     private JFXButton Filterkanp;
     @FXML
@@ -98,21 +96,17 @@ public class OverviewForAdminsController implements Initializable {
     private JFXButton btbPopupData;
     @FXML
     private Label lblforPiechart;
-    
+
     private final ProjektModel pModel;
-    private  BrugerModel bModel;
+    private BrugerModel bModel;
     private final ClientModel cModel;
     private double totalhouersForPiechart;
     private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
-    private final  String europeanDatePattern = "dd-MM-yyyy";
- 
-    private User UserLoggedInForMinTid= null;
+    private final String europeanDatePattern = "dd-MM-yyyy";
+
+    private User UserLoggedInForMinTid = null;
     private Stage popupStage;
-
- 
-
-
 
     public OverviewForAdminsController() throws DALException, SQLException {
         pModel = ProjektModel.getInstance();
@@ -120,7 +114,6 @@ public class OverviewForAdminsController implements Initializable {
         cModel = ClientModel.getInstance();
 
     }
-
 
     /**
      * Initializes the controller class.
@@ -130,30 +123,32 @@ public class OverviewForAdminsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            
+
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
             filterskuffe.close();
             btbPopupData.setVisible(false);
-         
-           
+
             //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
             //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
-            if (UserLoggedInForMinTid == null){
-            populatetable();
-            handlePieChart();
-            populatecombobox();
-            
-        }
-        
-    }   catch (DALException ex) {
+            if (UserLoggedInForMinTid == null) {
+                populatetable();
+                handlePieChart();
+                populatecombobox();
+
+            }
+
+        } catch (DALException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
-        } }
+        }
+    }
+
     /**
      * håndtere Filterknappen som åbner skuffen med filter mulighederne
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void handleFilteropen(ActionEvent event) {
@@ -164,156 +159,160 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.open();
         }
     }
+
     /*
     metoden her gøre vores tableview klar til at kunne holde vores værider fra listeAfProjekter 
     til slut fylder vi tableViewet op med opjekter fra listeAfProjekter
-    */
+     */
     public void populatetable() throws DALException, SQLException {
-        if(UserLoggedInForMinTid == null )
-        listeAfProjekter = pModel.getProjectsWithExtraData();
-        else {
-        listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null , null, null, null, null);
-          
-        
+        if (UserLoggedInForMinTid == null) {
+            listeAfProjekter = pModel.getProjectsWithExtraData();
+        } else {
+            listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null, null, null, null, null);
+
         }
         colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProjectName()));
         coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime()));
         colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
         colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
         tableview.setItems(listeAfProjekter);
-        
-        
+
     }
+
     /**
-     * denne metode bruges til at beregne tiden der er brugt på et projekt, i billable og total værdier som vi allere har i vores listeAfPorjekter
-     * vi renger dem om til sekunder, for at converetere dem til timer i double så 1.5 timer er 90 minutter som er 5400 sekunder. 
+     * denne metode bruges til at beregne tiden der er brugt på et projekt, i
+     * billable og total værdier som vi allere har i vores listeAfPorjekter vi
+     * renger dem om til sekunder, for at converetere dem til timer i double så
+     * 1.5 timer er 90 minutter som er 5400 sekunder.
      */
-    public void populatepieChart(){
-        
+    public void populatepieChart() {
+
         int getmetimeHHBill;
         int getmetimeMMBill;
         double getmetotalHHMMBill = 0.0;
         int getmetimeHHTotal;
         int getmetimeMMTotal;
         double getmetotalHHMMTotal = 0.0;
-        
+
         for (Project project : listeAfProjekter) {
             String timeBil = project.getBillableTime();
             String[] timesplitupBil = timeBil.split(":");
-            
+
             String hhBil = timesplitupBil[0];
             String mmBil = timesplitupBil[1];
             String secBil = timesplitupBil[2];
-            
+
             String time = project.getTotalTime();
             String[] timesplitup = time.split(":");
-            
+
             String hhTotal = timesplitup[0];
             String mmTotal = timesplitup[1];
             String secTotal = timesplitup[2];
-         
+
             //henter billable timer ud fra projekt listen
-            getmetimeHHBill = (Integer.parseInt(hhBil)*3600);
-            getmetimeMMBill = (Integer.parseInt(mmBil)*60);
-                        
+            getmetimeHHBill = (Integer.parseInt(hhBil) * 3600);
+            getmetimeMMBill = (Integer.parseInt(mmBil) * 60);
+
             //henter total tidud fra projekt listen
             //vi * med 3600, for det er skeunder der er i en time, og vi * med 60 for det er det antal sekunder der er i et minut
-            getmetimeHHTotal = (Integer.parseInt(hhTotal)*3600);
-            getmetimeMMTotal = (Integer.parseInt(mmTotal)*60);
-            
+            getmetimeHHTotal = (Integer.parseInt(hhTotal) * 3600);
+            getmetimeMMTotal = (Integer.parseInt(mmTotal) * 60);
+
             //her tager vi bill HH og MM som er konverteret til sekunder og lægger over i en variabel  for at give os et total for projektet.        
-            getmetotalHHMMBill += getmetimeHHBill+getmetimeMMBill+ (Integer.parseInt(secBil));
-            getmetotalHHMMTotal += getmetimeHHTotal+getmetimeMMTotal+ (Integer.parseInt(secTotal));
+            getmetotalHHMMBill += getmetimeHHBill + getmetimeMMBill + (Integer.parseInt(secBil));
+            getmetotalHHMMTotal += getmetimeHHTotal + getmetimeMMTotal + (Integer.parseInt(secTotal));
         }
         //når vi er færdig med loopet, dividere vi med 3600, for at få konvereteret vore sekunder til timer i decimaltal
-        billaableHouersForPiechart = (getmetotalHHMMBill/3600);
-        totalhouersForPiechart = (getmetotalHHMMTotal/3600);
-           
+        billaableHouersForPiechart = (getmetotalHHMMBill / 3600);
+        totalhouersForPiechart = (getmetotalHHMMTotal / 3600);
+
     }
-    
-   
-    
-/**
- * gøre Comboboxene klar med lister
- * @throws DALException
- * @throws SQLException 
- */
+
+    /**
+     * gøre Comboboxene klar med lister
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     private void populatecombobox() throws DALException, SQLException {
 
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
         comboPerioder.setItems(bModel.getListOfPeriods());
-      
-       
 
     }
+
     /**
-     * håndtere de valgte søge kritier, og sender værdierne ind i ProjektModellen og opdatere ListeafPRojekter med filteret
+     * håndtere de valgte søge kritier, og sender værdierne ind i
+     * ProjektModellen og opdatere ListeafPRojekter med filteret
+     *
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public void getProjectsForfilter() throws DALException, SQLException {
 
-       
-      
         User comboUser = null;
         Client comboKlient = null;
         String fradatoSelected = null;
         String tildatoSelected = null;
         String MonthStart = null;
         String MonthEnd = null;
-        first:{
-        if(UserLoggedInForMinTid != null)
-              comboUser = UserLoggedInForMinTid;
-        
-        if (fradato.getValue() != null) {
-            fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
-        }
-       
+        first:
+        {
+            if (UserLoggedInForMinTid != null) {
+                comboUser = UserLoggedInForMinTid;
+            }
 
-        if (tildato.getValue() != null) {
-            tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
-        }
-       
+            if (fradato.getValue() != null) {
+                fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            }
 
-        if (comboKlienter.getValue() != null) {
-            comboKlient = (Client) comboKlienter.getValue();
-        }
-        if (ComboMedarbejder.getValue() != null) {
-            comboUser = (User) ComboMedarbejder.getValue();
-        }
-        if(comboPerioder.getValue() != null ){
-            YearMonth getmonth =  comboPerioder.getValue();
-            MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
-            int lengthOfMonth =  getmonth.lengthOfMonth();
-            MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth-1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
-          
-        }
-        
-        if(checkFilter()== true ){
-        break first;
-        }
-         
-        listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
-        handlePieChart();
+            if (tildato.getValue() != null) {
+                tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            }
+
+            if (comboKlienter.getValue() != null) {
+                comboKlient = (Client) comboKlienter.getValue();
+            }
+            if (ComboMedarbejder.getValue() != null) {
+                comboUser = (User) ComboMedarbejder.getValue();
+            }
+            if (comboPerioder.getValue() != null) {
+                YearMonth getmonth = comboPerioder.getValue();
+                MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+                int lengthOfMonth = getmonth.lengthOfMonth();
+                MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth - 1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
+
+            }
+
+            if (checkFilter() == true) {
+                break first;
+            }
+
+            listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
+            handlePieChart();
         }
     }
-/**
- * Håndtere søgningen, og lukker draweren 
- * @param event
- * @throws DALException
- * @throws SQLException 
- */
+
+    /**
+     * Håndtere søgningen, og lukker draweren
+     *
+     * @param event
+     * @throws DALException
+     * @throws SQLException
+     */
     @FXML
     private void handleSeekPressed(ActionEvent event) throws DALException, SQLException {
         getProjectsForfilter();
         filterskuffe.close();
     }
+
     /**
      * Nul stiller filter, og tableview samt piechart
+     *
      * @param event
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     @FXML
     private void handleClearFilter(ActionEvent event) throws DALException, SQLException {
@@ -329,35 +328,34 @@ public class OverviewForAdminsController implements Initializable {
         handlePieChart();
 
     }
-    
+
     /**
      * Håndere PieChart og fremviser det med data
      */
-        public void handlePieChart()
-    {   populatepieChart();
+    public void handlePieChart() {
+        populatepieChart();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
                 new PieChart.Data("Billable", billaableHouersForPiechart)
         );
-       DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.##");
         piechart.setData(pieChartData);
         pieChartData.forEach(data -> data.nameProperty().bind(Bindings.concat(data.getName(), " ", df.format(data.getPieValue()), " Timer")));
         piechart.setStartAngle(90);
         piechart.setLegendSide(Side.RIGHT);
-        piechart.setLabelsVisible(false);     
-      
-        
+        piechart.setLabelsVisible(false);
+
     }
-    
-    
+
     /**
-     * tjekker Filter vaglene, 
+     * tjekker Filter vaglene,
+     *
      * @throws timetracker.DAL.DALException
      * @throws java.sql.SQLException
      */
-    public boolean  checkFilter() throws DALException, SQLException{
-        
-         if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue())) {
+    public boolean checkFilter() throws DALException, SQLException {
+
+        if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue())) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i datoer");
             alert.setTitle("Fejl i valg af til- og fradato");
@@ -369,11 +367,10 @@ public class OverviewForAdminsController implements Initializable {
             populatetable();
             handlePieChart();
             alert.showAndWait();
-        return true;
-         }
+            return true;
+        }
 
-        
-       if (fradato.getValue() != null && comboPerioder.getValue() !=null) {
+        if (fradato.getValue() != null && comboPerioder.getValue() != null) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
@@ -388,9 +385,8 @@ public class OverviewForAdminsController implements Initializable {
             handlePieChart();
             return true;
         }
-       
-           
-       if (tildato.getValue() != null && comboPerioder.getValue() !=null) {
+
+        if (tildato.getValue() != null && comboPerioder.getValue() != null) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
@@ -404,47 +400,57 @@ public class OverviewForAdminsController implements Initializable {
             populatetable();
             handlePieChart();
             return true;
-       }
-       
-       return false;
+        }
+
+        return false;
     }
+
     /**
-     * metoden bruges i menubarcontroller, når vi klikker ind på min tid, på den måde får vi sat den nuværende bruger som er logget ind. 
+     * metoden bruges i menubarcontroller, når vi klikker ind på min tid, på den
+     * måde får vi sat den nuværende bruger som er logget ind.
+     *
      * @param currentUser
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
-  public void getCurrentUserForMinTidView(User currentUser)  throws DALException, SQLException{
-            UserLoggedInForMinTid = currentUser;
-            initalizePopulatethings();
-            
+    public void getCurrentUserForMinTidView(User currentUser) throws DALException, SQLException {
+        UserLoggedInForMinTid = currentUser;
+        initalizePopulatethings();
 
-  }
-  /**
-   * bruges i menubarcontroller til at disable medarbejdercomboboxen i min tid. 
-   * @return 
-   */
+    }
+
+    /**
+     * bruges i menubarcontroller til at disable medarbejdercomboboxen i min
+     * tid.
+     *
+     * @return
+     */
     public JFXComboBox<User> getComboMedarbejder() {
         return ComboMedarbejder;
     }
+
     /**
-     * initalisere min tid viewet, hvis der er en user som er logget ind bruges i getcurrentuserformintidview 
+     * initalisere min tid viewet, hvis der er en user som er logget ind bruges
+     * i getcurrentuserformintidview
+     *
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
-  public void initalizePopulatethings()  throws DALException, SQLException{
-      if (UserLoggedInForMinTid != null){
+    public void initalizePopulatethings() throws DALException, SQLException {
+        if (UserLoggedInForMinTid != null) {
             populatetable();
             handlePieChart();
             populatecombobox();
-      } 
-  
-  } 
-  /**
-   * Håndtere kanppen til at åbne et overbilk over taks i et projekt. 
-   * @throws IOException
-   * @throws DALException 
-   */
+        }
+
+    }
+
+    /**
+     * Håndtere knappen til at åbne et overbilk over taks i et projekt.
+     *
+     * @throws IOException
+     * @throws DALException
+     */
     private void handelPopupDataView() throws IOException, DALException, SQLException {
 
         User transferUser = null;
@@ -454,10 +460,10 @@ public class OverviewForAdminsController implements Initializable {
         String MonthStart = null;
         String MonthEnd = null;
 
-        //vi tjekker om vores tableview er tomt
+        //vi tjekker at vores tableview ikke er tomt
         first:
-        if (!listeAfProjekter.isEmpty()) {    //hvis den ikke er tom tjekker vi om der er valgt et projekt i tabellen, hvis der er det ligger vi projekt objektet 
-            //over i vores selectedProjekt
+        if (!listeAfProjekter.isEmpty()) {   
+            
             second:
             if (tableview.getSelectionModel().getSelectedItem() != null) {
                 selectedProject = tableview.getSelectionModel().getSelectedItem();
@@ -489,8 +495,8 @@ public class OverviewForAdminsController implements Initializable {
                 MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth - 1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
 
             }
-            if(checkFilter() == true) {
-            break first;
+            if (checkFilter() == true) {
+                break first;
             }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
             Parent popup = loader.load();
@@ -515,38 +521,45 @@ public class OverviewForAdminsController implements Initializable {
         }
 
     }
-    
-    
-
+    /**
+     * håndere hvis man dobbeltklikker på et projekt  
+     * @param event
+     * @throws IOException
+     * @throws DALException
+     * @throws SQLException 
+     */
     @FXML
     private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException {
-          if (event.getClickCount() >1)
-        handelPopupDataView();
+        if (event.getClickCount() > 1) {
+            handelPopupDataView();
+        }
     }
-
+    /**
+     * eventhandler til når musen er inde for tableviewet, for at vise tooltip
+     * @param event 
+     */
     @FXML
     private void handelTooltipForTableView(MouseEvent event) {
-     
+
         tableview.setTooltip(getToolTipForTableView());
-        
-        
+
     }
-          
- 
-    public Tooltip getToolTipForTableView(){
-    
-          Tooltip tip = new Tooltip();
+    /**
+     * bruges til at sætte tooltip for tableviewet 
+     * @return 
+     */
+    public Tooltip getToolTipForTableView() {
+
+        Tooltip tip = new Tooltip();
 
         if (listeAfProjekter.isEmpty()) {
             tip.setText("Det er ikke nogle Projekter at vise");
             return tip;
-        } else  {
+        } else {
             tip.setText("Dobbel klik på et Projekt, for at få vist dens tilhørende opgaver");
             return tip;
         }
-       
-    }
-    
-    }
-    
 
+    }
+
+}

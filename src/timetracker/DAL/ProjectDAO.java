@@ -90,7 +90,7 @@ public class ProjectDAO {
     public void editProject(int clientID, String projectName, int hourlyPay, int projectID) throws DALException {
         try (Connection con = dbCon.getConnection()) {
 
-            String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?";
+            String sql = "UPDATE Project SET Project_name = ?, project_rate = ?, client_id = ? WHERE project_id = ?;";
 
             PreparedStatement st = con.prepareStatement(sql);
 
@@ -102,7 +102,7 @@ public class ProjectDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-            throw new DALException("Kunne ikke rette projektet");
+            //throw new DALException("Kunne ikke rette projektet" +e);
         }
     }
 
@@ -231,7 +231,7 @@ public class ProjectDAO {
         ArrayList<Project> allProjectswithClientID = new ArrayList<>();
         int client_ID = client.getClientId();
         try (Connection con = dbCon.getConnection()) {
-            String sql = "SELECT * FROM Project WHERE client_id =  " + client_ID + ";";
+            String sql = "SELECT * FROM Project p WHERE p.client_id =  " + client_ID + "order by p.project_name ;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
@@ -243,6 +243,7 @@ public class ProjectDAO {
 
                 allProjectswithClientID.add(projects);
             }
+            System.out.println(allProjectswithClientID);
             return allProjectswithClientID;
         } catch (SQLException ex) {
             throw new DALException("kunne ikke finde projekter for klienten");
@@ -285,9 +286,10 @@ public class ProjectDAO {
                 } else {
                     projects.setBillableTime("00:00:00");
                 }
-
+                System.out.println(allProjectsWithExtraData);
                 allProjectsWithExtraData.add(projects);
             }
+                        System.out.println(allProjectsWithExtraData);
             return allProjectsWithExtraData;
         } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
@@ -347,6 +349,8 @@ public class ProjectDAO {
     
 
             Statement statement = con.createStatement();
+            
+            System.out.println(sql);
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 String billabletime;
@@ -366,8 +370,10 @@ public class ProjectDAO {
                 }
 
                 allProjectsWithExtraData.add(projects);
-            }
+                  
+            } System.out.println(allProjectsWithExtraData);
             return allProjectsWithExtraData;
+             
         } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
         }

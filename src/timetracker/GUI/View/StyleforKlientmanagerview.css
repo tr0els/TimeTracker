@@ -88,12 +88,18 @@ and open the template in the editor.
     -fx-text-fill: white;
 }
 
+.jfx-list-view .list-cell:empty{
+    -fx-background-color: transparent;
+    
+}
+  
 
 .jfx-list-view{
 
     -fx-focus-traversable: false;
     -fx-border-width: 2px; 
     -fx-border-color: -fx-grumsen;
+    -fx-background-repeat: no-repeat;
     
 
 }

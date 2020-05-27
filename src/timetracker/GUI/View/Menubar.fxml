@@ -11,7 +11,7 @@
     <children>
         <AnchorPane fx:id="viewpane" layoutX="162.0" prefHeight="500.0" prefWidth="600.0" />
         <JFXDrawer fx:id="drawer" prefHeight="500.0" prefWidth="155.0" stylesheets="@StyleforMenu.css">
-            <children>
+         <children>
                 <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@StyleforMenu.css">
                     <children>
                         <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="138.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Mine Projekter " />
@@ -35,7 +35,7 @@
                   <Label fx:id="loggedInUser" alignment="CENTER" layoutY="39.0" prefHeight="25.0" prefWidth="157.0" styleClass="userlabel" text="User" textAlignment="CENTER" />
                     </children>
                 </AnchorPane>
-            </children>
+         </children>
         </JFXDrawer>
     </children>
 </AnchorPane>

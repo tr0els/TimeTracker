@@ -82,7 +82,7 @@ public class KlientManagerAdminController implements Initializable {
     private Client selectedClient;
     private Client newclient = new Client();
     private static ClientModel model;
-    private static TaskModel taskmodel;
+    private static ProjektModel pModel;
    
     private JFXButton btbGåtilprojekter;
     @FXML
@@ -92,7 +92,7 @@ public class KlientManagerAdminController implements Initializable {
 
     public KlientManagerAdminController() throws DALException, SQLException {
         model = ClientModel.getInstance();
-        taskmodel = TaskModel.getInstance();
+        pModel = ProjektModel.getInstance();
    
     }
 
@@ -222,19 +222,27 @@ public class KlientManagerAdminController implements Initializable {
      * @throws SQLException
      */
     private void addprojektstolistview(Client client) throws DALException, SQLException {
-            listviewprojekts.setCellFactory((ListView<Project> para) -> {
-                ListCell<Project> cell = new ListCell<Project>() {
-                    @Override
-                    protected void updateItem(Project item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            setText(item.getProjectName() + " - " + item.getProjectRate() + " DKK");
-                        }}};
-                
-                return cell;
-            });
-        listviewprojekts.setItems(FXCollections.observableArrayList(model.getClientprojcts(client)));
-        
+    
+            
+            
+        listviewprojekts.setCellFactory(param -> new ListCell<Project>() {
+            @Override
+            protected void updateItem(Project item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null && empty) {
+                    setText(null);
+                    setGraphic(null);
+         
+           
+                } else {
+                    setText(item.getProjectName() + " - " + item.getProjectRate() + " DKK");
+                }
+            }
+
+        });
+            
+        listviewprojekts.setItems(model.getClientprojcts(client));
+        System.out.println(model.getClientprojcts(client));
     }
 
     /**

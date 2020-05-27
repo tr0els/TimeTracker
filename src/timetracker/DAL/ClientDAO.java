@@ -56,7 +56,7 @@ public class ClientDAO {
             }
 
         } catch (SQLException e) {
-            throw new DALException("Kunne ikke oprette Klient");
+            //throw new DALException("Kunne ikke oprette Klient");
         }
         return null;
     }
@@ -79,7 +79,7 @@ public class ClientDAO {
             st.executeQuery();
 
         } catch (SQLException e) {
-            throw new DALException("Kunne ikke rette Klienten");
+            //throw new DALException("Kunne ikke rette Klienten" + e);
         }
     }
 
@@ -101,7 +101,7 @@ public class ClientDAO {
 
         } catch (SQLException e) {
 
-            throw new DALException("Kunne ikke Slette Klienten");
+            //throw new DALException("Kunne ikke Slette Klienten");
         }
     }
 
@@ -129,9 +129,10 @@ public class ClientDAO {
             }
             return allClients;
         } catch (SQLException ex) {
-            throw new DALException("Kunne ikke hente Klienter");
+            //throw new DALException("Kunne ikke hente Klienter");
         }
-        //return null;
+        
+        return null;
     }
 
 }
