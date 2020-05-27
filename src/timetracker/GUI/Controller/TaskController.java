@@ -157,7 +157,7 @@ public class TaskController implements Initializable {
     public void startTask() throws DALException {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
-        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
+        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
 
         model.startTask(task_name, billable, project_id, person_id);
         textTaskname.clear();

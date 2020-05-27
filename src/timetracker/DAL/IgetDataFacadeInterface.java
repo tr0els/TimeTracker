@@ -5,15 +5,12 @@
  */
 package timetracker.DAL;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 

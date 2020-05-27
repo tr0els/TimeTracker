@@ -12,24 +12,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.TaskBase;
 import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
-import timetracker.BE.TaskResult;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
 import timetracker.BLL.Sorttaskbydatedesc;
-import timetracker.DAL.DALException;
 
 /**
  *
@@ -173,13 +166,13 @@ public class TaskDAO {
                         sBillable = "Nej";
                     }
 
-                    log.setTask_id(rs.getInt("task_id"));
+                    log.setTaskId(rs.getInt("task_id"));
                     log.setBillable(rs.getBoolean("billable"));
-                    log.setTotal_tid(rs.getString("total_time"));
-                    log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                    log.setEnd_time(end_time);
+                    log.setTotalTime(rs.getString("total_time"));
+                    log.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
+                    log.setEndTime(end_time);
                     log.setStringBillable(sBillable);
-                    log.setTask_name(rs.getString("task_name"));
+                    log.setTaskName(rs.getString("task_name"));
 
                     logs.add(log);
 
@@ -190,11 +183,11 @@ public class TaskDAO {
                     Task task = new Task();
                     int task_id = rs.getInt("task_id");
 
-                    task.setTask_id(task_id);
-                    task.setTask_name(rs.getString("task_name"));
-                    task.setProject_id(rs.getInt("project_id"));
-                    task.setTotal_tid(rs.getString("total_time"));
-                    task.setLast_worked_on(rs.getTimestamp("task_end").toLocalDateTime());
+                    task.setTaskId(task_id);
+                    task.setTaskName(rs.getString("task_name"));
+                    task.setProjectId(rs.getInt("project_id"));
+                    task.setTotalTime(rs.getString("total_time"));
+                    task.setLastWorkedOn(rs.getTimestamp("task_end").toLocalDateTime());
 
                     map.put(task, logs);
 
@@ -234,12 +227,12 @@ public class TaskDAO {
                     end_time = null;
                 }
 
-                task.setTask_id(rs.getInt("task_id"));
-                task.setTask_name(rs.getString("task_name"));
-                task.setProject_id(rs.getInt("project_id"));
-                task.setPerson_id(rs.getInt("person_id"));
-                task.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                task.setEnd_time(end_time);
+                task.setTaskId(rs.getInt("task_id"));
+                task.setTaskName(rs.getString("task_name"));
+                task.setProjectId(rs.getInt("project_id"));
+                task.setPersonId(rs.getInt("person_id"));
+                task.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
+                task.setEndTime(end_time);
                 task.setBillable(rs.getBoolean("billable"));
 
             }
@@ -260,18 +253,18 @@ public class TaskDAO {
 
         try (Connection con = dbCon.getConnection()) {
 
-            int task_id = task.getTask_id();
+            int task_id = task.getTaskId();
 
             String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, person_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(1, task.getTask_name());
+            ps.setString(1, task.getTaskName());
             ps.setBoolean(2, task.isBillable());
-            ps.setInt(3, task.getProject_id());
-            ps.setInt(4, task.getPerson_id());
-            ps.setTimestamp(5, java.sql.Timestamp.valueOf(task.getStart_time()));
-            ps.setTimestamp(6, java.sql.Timestamp.valueOf(task.getEnd_time()));
+            ps.setInt(3, task.getProjectId());
+            ps.setInt(4, task.getPersonId());
+            ps.setTimestamp(5, java.sql.Timestamp.valueOf(task.getStartTime()));
+            ps.setTimestamp(6, java.sql.Timestamp.valueOf(task.getEndTime()));
             ps.setInt(7, task_id);
 
             ps.execute();
@@ -311,7 +304,7 @@ public class TaskDAO {
            }
 
            if (project != null) {
-               project_id += "and p.project_id =" + project.getProject_id() + "\n";
+               project_id += "and p.project_id =" + project.getProjectId()+ "\n";
            }
 
            if (user != null) {
@@ -346,7 +339,6 @@ public class TaskDAO {
             } else {
                end_time = LocalDateTime.now();
             }
-    
             String Billable; 
             TaskForDataView task = new TaskForDataView();
             task.setName(rs.getString("task_name"));
@@ -357,13 +349,8 @@ public class TaskDAO {
             task.setMedarbejder(rs.getString("fullname"));
             
             taskForOverviewData.add(task);
-                
-                
-             
             }
-         
-       
-      
+
        } catch (SQLException ex) {
           throw new DALException("kunne ikke hente din liste af task" + ex);
         }

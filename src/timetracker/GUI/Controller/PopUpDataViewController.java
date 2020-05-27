@@ -173,7 +173,7 @@ public class PopUpDataViewController implements Initializable
                   
                 }
                 bw.newLine();
-                bw.write("Projekt navn : "+choosenProject.getProject_name() +";"+"timepris : " +choosenProject.getProject_rate()+" DKK");
+                bw.write("Projekt navn : "+choosenProject.getProjectName() +";"+"timepris : " +choosenProject.getProjectRate()+" DKK");
                 bw.close();
                 fw.close();
             } catch (IOException ex)

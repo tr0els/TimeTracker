@@ -68,13 +68,13 @@ public class ClientDAO {
      */
     public void editClient(Client client) throws DALException {
         try ( Connection con = dbCon.getConnection()) {
-            int cl_id = client.getClient_id();
+            int cl_id = client.getClientId();
             String sql = "UPDATE Client SET client_name = ?, default_rate = ? WHERE client_id = " + cl_id + ";";
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, client.getClient_name());
-            st.setInt(2, client.getDefault_rate());
+            st.setString(1, client.getClientName());
+            st.setInt(2, client.getDefaultRate());
 
             st.executeQuery();
 
@@ -95,7 +95,7 @@ public class ClientDAO {
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setInt(1, client.getClient_id());
+            st.setInt(1, client.getClientId());
 
             st.executeQuery();
 
@@ -121,9 +121,9 @@ public class ClientDAO {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Client clients = new Client();
-                clients.setClient_id(rs.getInt("client_id"));
-                clients.setClient_name(rs.getString("client_name"));
-                clients.setDefault_rate(rs.getInt("default_rate"));
+                clients.setClientId(rs.getInt("client_id"));
+                clients.setClientName(rs.getString("client_name"));
+                clients.setDefaultRate(rs.getInt("default_rate"));
 
                 allClients.add(clients);
             }

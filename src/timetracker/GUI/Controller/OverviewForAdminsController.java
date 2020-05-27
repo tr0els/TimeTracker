@@ -175,8 +175,8 @@ public class OverviewForAdminsController implements Initializable {
           
         
         }
-        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
-        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
+        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProjectName()));
+        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime()));
         colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
         colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
         tableview.setItems(listeAfProjekter);
@@ -204,7 +204,7 @@ public class OverviewForAdminsController implements Initializable {
             String mmBil = timesplitupBil[1];
             String secBil = timesplitupBil[2];
             
-            String time = project.getTotal_tid();
+            String time = project.getTotalTime();
             String[] timesplitup = time.split(":");
             
             String hhTotal = timesplitup[0];
@@ -503,13 +503,13 @@ public class OverviewForAdminsController implements Initializable {
                 popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
                 popupStage.setScene(scene);
                 popupStage.setResizable(false);
-                popupStage.setTitle(selectedProject.getProject_name() + " - " + selectedProject.getProject_rate() + " DKK");
+                popupStage.setTitle(selectedProject.getProjectName() + " - " + selectedProject.getProjectRate() + " DKK");
 
                 popupStage.show();
             }
             popupStage.show();
             popupStage.toFront();
-            popupStage.setTitle(selectedProject.getProject_name().toUpperCase() + " - " + selectedProject.getProject_rate() + " DKK");
+            popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
 
         }
 

@@ -9,39 +9,82 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 /**
  *
- * @author René Jørgensen
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
-public class Profession extends RecursiveTreeObject<User> {
+public class Profession extends RecursiveTreeObject<User>
+{
 
-    private int profession_id;
-    private String profession_name;
+    private int professionId;
+    private String professionName;
 
-    public Profession(int profession_id, String profession_name) {
-        this.profession_id = profession_id;
-        this.profession_name = profession_name;
+    /**
+     * Constructor for Profession som tager imod parametre
+     *
+     * @param professionId
+     * @param professionName
+     */
+    public Profession(int professionId, String professionName)
+    {
+        this.professionId = professionId;
+        this.professionName = professionName;
     }
 
-    public Profession() {
+    /**
+     * Constructor for Profession
+     */
+    public Profession()
+    {
     }
 
-    public int getProfession_id() {
-        return profession_id;
+    /**
+     * Returnerer professionId
+     *
+     * @return
+     */
+    public int getProfessionId()
+    {
+        return professionId;
     }
 
-    public void setProfession_id(int profession_id) {
-        this.profession_id = profession_id;
+    /**
+     * Sætter professionId
+     *
+     * @param professionId
+     */
+    public void setProfessionId(int professionId)
+    {
+        this.professionId = professionId;
     }
 
-    public String getProfession_name() {
-        return profession_name;
+    /**
+     * Returnerer professionName
+     *
+     * @return
+     */
+    public String getProfessionName()
+    {
+        return professionName;
     }
 
-    public void setProfession_name(String profession_name) {
-        this.profession_name = profession_name;
+    /**
+     * Sætter professionName
+     *
+     * @param professionName
+     */
+    public void setProfessionName(String professionName)
+    {
+        this.professionName = professionName;
     }
 
+    /**
+     * ToString metode så klassen viser det rigtige
+     *
+     * @return
+     */
     @Override
-    public String toString() {
-        return profession_name;
+    public String toString()
+    {
+        return professionName;
     }
 }

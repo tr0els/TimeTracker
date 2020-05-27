@@ -44,7 +44,7 @@ public class ChangelogDAO
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, person_id);
-            st.setInt(2, task.getTask_id());
+            st.setInt(2, task.getTaskId());
 
             st.executeQuery();
 

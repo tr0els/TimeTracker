@@ -162,8 +162,8 @@ public class KlientManagerAdminController implements Initializable {
 
         selectedClient = listviewfx.getSelectionModel().getSelectedItem();
 
-        klientNavnlbl.setText(selectedClient.getClient_name());
-        timeprislbl.setText(selectedClient.getDefault_rate() + " DKK");
+        klientNavnlbl.setText(selectedClient.getClientName());
+        timeprislbl.setText(selectedClient.getDefaultRate()+ " DKK");
 
         //gør ret klient btb og retvalgteklient btb synlige
         retklientbtb.setVisible(true);
@@ -228,7 +228,7 @@ public class KlientManagerAdminController implements Initializable {
                     protected void updateItem(Project item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item != null) {
-                            setText(item.getProject_name() + " - " + item.getProject_rate() + " DKK");
+                            setText(item.getProjectName() + " - " + item.getProjectRate() + " DKK");
                         }}};
                 
                 return cell;
@@ -301,8 +301,8 @@ public class KlientManagerAdminController implements Initializable {
         String retnavn = txtretnavn.getText().trim();
         int rettimepris = Integer.parseInt(txtrettimepris.getText().trim().replace(" DKK", " ").trim());
 
-        selectedClient.setClient_name(retnavn);
-        selectedClient.setDefault_rate(rettimepris);
+        selectedClient.setClientName(retnavn);
+        selectedClient.setDefaultRate(rettimepris);
         model.editClient(selectedClient);
         timeprislbl.setText(rettimepris + " DKK");
         klientNavnlbl.setText(retnavn);
@@ -320,8 +320,8 @@ public class KlientManagerAdminController implements Initializable {
     private void openskuffemenretklient(ActionEvent event) {
         skuffe.setSidePane(retklientpane);
         skuffe.open();
-        txtretnavn.setText(selectedClient.getClient_name());
-        txtrettimepris.setText(selectedClient.getDefault_rate() + " DKK");
+        txtretnavn.setText(selectedClient.getClientName());
+        txtrettimepris.setText(selectedClient.getDefaultRate() + " DKK");
 
     }
 

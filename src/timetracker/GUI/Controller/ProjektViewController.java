@@ -43,7 +43,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
-import timetracker.BE.User;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.BrugerModel;
 import timetracker.GUI.Model.ChangelogModel;
@@ -55,19 +54,28 @@ import timetracker.GUI.Model.TaskModel;
  *
  * @author Charlotte
  */
-public class ProjektViewController implements Initializable {
-
-    @FXML
-    private AnchorPane root;
+public class ProjektViewController implements Initializable
+{
 
     private TaskModel model;
     private ProjektModel Pmodel;
     private BrugerModel Bmodel;
     private ChangelogModel Cmodel;
+    private int person_id;
+    private ObservableList<Project> allProjects;
+    private ObservableList<Project> personalProjects;
+    private Task edit_task;
+    private ObservableList<Task> observablelogs;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
+    private Image icon_billable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
+    private Image icon_notbillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
+    private ImageView billable;
+
+    @FXML
+    private AnchorPane root;
     @FXML
     private JFXComboBox<Project> projectMenubox;
-
-    private int person_id;
     @FXML
     private Label lblProjectnavn;
     @FXML
@@ -84,22 +92,12 @@ public class ProjektViewController implements Initializable {
     private AnchorPane paneEdit;
     @FXML
     private JFXComboBox<Project> menuEditProjects;
-
-    private ObservableList<Project> allProjects;
-
-    private ObservableList<Project> personalProjects;
-
-    private Task edit_task;
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     @FXML
     private JFXButton btnCancel;
     @FXML
     private VBox vboxTasks;
     @FXML
     private HBox hboxHeader;
-
-    private ObservableList<Task> observablelogs;
     @FXML
     private JFXDatePicker dateFrom;
     @FXML
@@ -110,11 +108,6 @@ public class ProjektViewController implements Initializable {
     private JFXTimePicker timeTo;
     @FXML
     private Pane paneProjectDetails;
-    
-    private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
-    private Image icon_billable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
-    private Image icon_notbillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
-    private ImageView billable;
     @FXML
     private ScrollPane scrollPaneTask;
     @FXML
@@ -122,8 +115,9 @@ public class ProjektViewController implements Initializable {
     @FXML
     private Label lblClientname;
 
-    public ProjektViewController() throws DALException, SQLException {
-
+    
+    public ProjektViewController() throws DALException, SQLException
+    {
         model = TaskModel.getInstance();
         Pmodel = ProjektModel.getInstance();
         Bmodel = BrugerModel.getInstance();
@@ -134,12 +128,14 @@ public class ProjektViewController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        try {
+    public void initialize(URL url, ResourceBundle rb)
+    {
+        try
+        {
             skuffen.setSidePane(paneEdit);
             skuffen.toBack();
             skuffen.close();
-            
+
 //            person_id = Bmodel.getUser().getPerson_id();
             person_id = 1; // midlertidigt
             loadProjects();
@@ -148,18 +144,19 @@ public class ProjektViewController implements Initializable {
             setHBox();
 
             projectMenubox.getSelectionModel().select(0);
-            
-        } catch (DALException ex) {
+
+        } catch (DALException ex)
+        {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    
 
-    public void setHBox() {
+    public void setHBox()
+    {
 
         Label arrow = new Label(" ");
         arrow.setPrefWidth(25);
@@ -168,7 +165,6 @@ public class ProjektViewController implements Initializable {
 
         Label taskname = new Label("Opgave navn");
         taskname.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5));
-        
 
         Label totaltime = new Label("Total tid");
         totaltime.setPrefWidth(60);
@@ -185,107 +181,113 @@ public class ProjektViewController implements Initializable {
      * @param project_id
      * @throws DALException
      */
-    public void createTree(int project_id) throws DALException {
+    public void createTree(int project_id) throws DALException
+    {
         vboxTasks.getChildren().clear(); //nulstiller vores task view inden vi opbygger den igen.
 
-        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
+        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet())
+        {
             Task hashTask = entry.getKey();
 
             HBox headerBox = new HBox();
-            Label tasknameHead = new Label(hashTask.getTask_name());
+            Label tasknameHead = new Label(hashTask.getTaskName());
             tasknameHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.5));
 
-            Label totaltimeHead = new Label(hashTask.getTotal_tid());
+            Label totaltimeHead = new Label(hashTask.getTotalTime());
             totaltimeHead.setPrefWidth(60);
             totaltimeHead.setAlignment(Pos.CENTER_RIGHT);
 
-            Label lastworkedonHead = new Label(formatter.format(hashTask.getLast_worked_on()));
+            Label lastworkedonHead = new Label(formatter.format(hashTask.getLastWorkedOn()));
             lastworkedonHead.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23).subtract(17));
 
             Region endspace = new Region();
-            
+
             headerBox.setHgrow(endspace, Priority.ALWAYS);
             headerBox.getChildren().addAll(tasknameHead, lastworkedonHead, totaltimeHead, endspace);
 
-            
             VBox logVbox = new VBox();
             logVbox.setId("logVBox");
-            
-            for (int i = 0; i < entry.getValue().size(); i++) {
-                
+
+            for (int i = 0; i < entry.getValue().size(); i++)
+            {
+
                 Task t = entry.getValue().get(i);
-                
+
                 HBox logHbox = new HBox();
                 logHbox.setId("logHBox");
                 logHbox.setAlignment(Pos.CENTER_LEFT);
-                
-                
-                Label log = new Label(t.getStart_time().format(formatter).toString() + " - " + t.getEnd_time().format(formatter).toString());
-               
+
+                Label log = new Label(t.getStartTime().format(formatter).toString() + " - " + t.getEndTime().format(formatter).toString());
+
                 Region spacer = new Region();
-                
-                Label log_total = new Label(t.getTotal_tid());
+
+                Label log_total = new Label(t.getTotalTime());
                 log_total.setPrefWidth(60);
                 log_total.setStyle("-fx-font-weight: bold;");
                 log_total.setAlignment(Pos.CENTER_RIGHT);
-                
-                if (t.isBillable() == true){
+
+                if (t.isBillable() == true)
+                {
                     billable = new ImageView(icon_billable);
-                }else{
+                } else
+                {
                     billable = new ImageView(icon_notbillable);
                 }
-                
-                
-                JFXButton editbtn = new JFXButton(""); 
+
+                JFXButton editbtn = new JFXButton("");
                 editbtn.setGraphic(new ImageView(icon_edit));
-                editbtn.setOnAction(event -> editTask(t.getTask_id()));
-   
+                editbtn.setOnAction(event -> editTask(t.getTaskId()));
+
                 logHbox.setHgrow(spacer, Priority.ALWAYS);
-                
-                logHbox.setMargin(editbtn, new Insets(0,5,0,0));
-                logHbox.setMargin(billable, new Insets(0,2,0,0));
-                logHbox.setMargin(log_total, new Insets(0,19,0,0));
-                logHbox.setMargin(log, new Insets(0,0,0,30));
-                
+
+                logHbox.setMargin(editbtn, new Insets(0, 5, 0, 0));
+                logHbox.setMargin(billable, new Insets(0, 2, 0, 0));
+                logHbox.setMargin(log_total, new Insets(0, 19, 0, 0));
+                logHbox.setMargin(log, new Insets(0, 0, 0, 30));
+
                 logHbox.getChildren().addAll(log, spacer, billable, log_total, editbtn);
-                
+
                 logVbox.getChildren().add(logHbox);
             }
-            
+
             TitledPane titledPane = new TitledPane();
             titledPane.setGraphic(headerBox);
             titledPane.setContent(logVbox);
             titledPane.setExpanded(false);
-            
+
             vboxTasks.getChildren().add(titledPane);
 
         }
 
     }
 
-    public void editTask(int task_id) {
-        try {
+    public void editTask(int task_id)
+    {
+        try
+        {
             edit_task = model.getTaskbyID(task_id);
 
-            txtTask_name.setText(edit_task.getTask_name());
+            txtTask_name.setText(edit_task.getTaskName());
             chkboxBillable.setSelected(edit_task.isBillable());
 
-            dateFrom.setValue(edit_task.getStart_time().toLocalDate());
-            timeFrom.setValue(edit_task.getStart_time().toLocalTime());
-            
-            dateTo.setValue(edit_task.getEnd_time().toLocalDate());
-            timeTo.setValue(edit_task.getEnd_time().toLocalTime());
-            
-            
-            for (int i = 0; i < allProjects.size(); i++) {
+            dateFrom.setValue(edit_task.getStartTime().toLocalDate());
+            timeFrom.setValue(edit_task.getStartTime().toLocalTime());
 
-                if (edit_task.getProject_id() == allProjects.get(i).getProject_id()) {
+            dateTo.setValue(edit_task.getEndTime().toLocalDate());
+            timeTo.setValue(edit_task.getEndTime().toLocalTime());
+
+            for (int i = 0; i < allProjects.size(); i++)
+            {
+
+                if (edit_task.getProjectId() == allProjects.get(i).getProjectId())
+                {
                     menuEditProjects.getSelectionModel().select(allProjects.get(i));
                 }
 
             }
 
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -294,7 +296,8 @@ public class ProjektViewController implements Initializable {
 
     }
 
-    public void loadProjects() throws DALException {
+    public void loadProjects() throws DALException
+    {
 
         personalProjects = Pmodel.getProjectsbyID(person_id);
         projectMenubox.setItems(personalProjects);
@@ -303,7 +306,8 @@ public class ProjektViewController implements Initializable {
     /**
      * henter lister over projekter og putter dem i vores edit combobox
      */
-    public void showProjects() throws DALException, SQLException {
+    public void showProjects() throws DALException, SQLException
+    {
 
         allProjects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(allProjects);
@@ -314,22 +318,26 @@ public class ProjektViewController implements Initializable {
      * en listener på vores combobox med projekter, den smider en liste af task
      * ind i et listview baseret på hvilket projekt der er valgt
      */
-    public void projectListener() {
-        projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
-            if (newValue != null) {
-                try {
-                    lblProjectnavn.setText(newValue.getProject_name());
-                    lblProjectTid.setText(newValue.getTotal_tid());
+    public void projectListener()
+    {
+        projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) ->
+        {
+            if (newValue != null)
+            {
+                try
+                {
+                    lblProjectnavn.setText(newValue.getProjectName());
+                    lblProjectTid.setText(newValue.getTotalTime());
                     lblClientname.setText(newValue.getClientName());
-                    createTree(newValue.getProject_id());
-                } catch (DALException ex) {
+                    createTree(newValue.getProjectId());
+                } catch (DALException ex)
+                {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
         });
     }
-
 
     /**
      * opdatere vores task der skal redigeres med de relevante data og sender
@@ -338,46 +346,50 @@ public class ProjektViewController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleEdit(ActionEvent event) {
-        try {
+    private void handleEdit(ActionEvent event)
+    {
+        try
+        {
 
             LocalDate datefrom = dateFrom.getValue();
             LocalTime timefrom = timeFrom.getValue();
             LocalDateTime ldt_from = LocalDateTime.of(datefrom, timefrom);
-            
+
             LocalDate dateto = dateTo.getValue();
             LocalTime timeto = timeTo.getValue();
             LocalDateTime ldt_to = LocalDateTime.of(dateto, timeto);
-            
-                        
-            edit_task.setStart_time(ldt_from);
-            edit_task.setEnd_time(ldt_to);
-            
-            edit_task.setTask_name(txtTask_name.getText());
+
+            edit_task.setStartTime(ldt_from);
+            edit_task.setEndTime(ldt_to);
+
+            edit_task.setTaskName(txtTask_name.getText());
             edit_task.setBillable(chkboxBillable.isSelected());
-            edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
+            edit_task.setProjectId(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId());
 
             Cmodel.changelogTask(edit_task, person_id);
-            
+
             model.updateTaskbyID(edit_task);
 
             loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
-            
-            for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
 
-                if (menuEditProjects.getSelectionModel().getSelectedItem().getProject_id() == personalProjects.get(i).getProject_id()) {
+            for (int i = 0; i < personalProjects.size(); i++)
+            { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
+
+                if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId())
+                {
                     projectMenubox.getSelectionModel().select(personalProjects.get(i));
                 }
 
             }
 
-            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id()); //opdatere taskview med det view som hvor den opdatere task ligger i.
-            
+            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere taskview med det view som hvor den opdatere task ligger i.
+
             showProjects(); //indlæser ny liste til vores editvindue
 
             skuffen.close();
             skuffen.toBack();
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -388,7 +400,8 @@ public class ProjektViewController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleCancel(ActionEvent event) {
+    private void handleCancel(ActionEvent event)
+    {
         skuffen.close();
         skuffen.toBack();
 

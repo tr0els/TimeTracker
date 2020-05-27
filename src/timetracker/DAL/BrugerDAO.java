@@ -156,8 +156,8 @@ public class BrugerDAO {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Profession profession = new Profession();
-                profession.setProfession_id(rs.getInt("profession_id"));
-                profession.setProfession_name(rs.getString("Profession_name"));
+                profession.setProfessionId(rs.getInt("profession_id"));
+                profession.setProfessionName(rs.getString("Profession_name"));
 
                 allProfessions.add(profession);
             }

@@ -195,16 +195,16 @@ public class ProjektManagerAdminController implements Initializable {
         drawer.setSidePane(editProjectPane);
 
         project = treeView.getSelectionModel().getSelectedItem();
-        int clientID = project.getValue().getClient_id();
+        int clientID = project.getValue().getClientId();
 
         for (int i = 0; i < clients.size(); i++) {
-            int cli = clients.get(i).getClient_id();
+            int cli = clients.get(i).getClientId();
             if (clientID == cli) {
                 comboboxEdit.getSelectionModel().select(clients.get(i));
             }
         }
-        projektnavnEdit.setText(project.getValue().getProject_name());
-        timeprisEdit.setText(project.getValue().getProject_rate() + "");
+        projektnavnEdit.setText(project.getValue().getProjectName());
+        timeprisEdit.setText(project.getValue().getProjectRate() + "");
 
         drawer.open();
         drawer.toFront();
@@ -217,7 +217,7 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void createProject() throws DALException {
-        int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClient_id();
+        int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClientId();
         String projectName = projektnavn.getText();
         int hourlyPay = Integer.parseInt(timepris.getText());
 
@@ -238,7 +238,7 @@ public class ProjektManagerAdminController implements Initializable {
         project = treeView.getSelectionModel().getSelectedItem();
         project.getParent().getChildren().remove(project);
 
-        model.deleteProject(project.getValue().getProject_id());
+        model.deleteProject(project.getValue().getProjectId());
     }
 
     /**
@@ -249,14 +249,14 @@ public class ProjektManagerAdminController implements Initializable {
      * @throws DALException
      */
     public void editProject() throws DALException {
-        int clientID = comboboxEdit.getSelectionModel().getSelectedItem().getClient_id();
+        int clientID = comboboxEdit.getSelectionModel().getSelectedItem().getClientId();
         String projectName = projektnavnEdit.getText();
         int hourlyPay = Integer.parseInt(timeprisEdit.getText());
-        int projectID = project.getValue().getProject_id();
+        int projectID = project.getValue().getProjectId();
 
         model.editProject(clientID, projectName, hourlyPay, projectID);
 
-        treeView.getSelectionModel().getSelectedItem().getValue().setProject_name(projectName);
+        treeView.getSelectionModel().getSelectedItem().getValue().setProjectName(projectName);
 
         populateTreeTable();
     }
@@ -279,7 +279,7 @@ public class ProjektManagerAdminController implements Initializable {
         projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
-                return new SimpleStringProperty(param.getValue().getValue().getProject_name());
+                return new SimpleStringProperty(param.getValue().getValue().getProjectName());
             }
         });
 
@@ -293,7 +293,7 @@ public class ProjektManagerAdminController implements Initializable {
         projectRate.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
-                return new SimpleStringProperty(Integer.toString(param.getValue().getValue().getProject_rate()));
+                return new SimpleStringProperty(Integer.toString(param.getValue().getValue().getProjectRate()));
             }
         });
 
