@@ -5,15 +5,12 @@
  */
 package timetracker.DAL;
 
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import javafx.collections.ObservableList;
+import java.util.TreeMap;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
@@ -55,13 +52,13 @@ public interface IgetDataFacadeInterface {
     
     void stopTask(int person_id)throws DALException;
           
-    HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
+    TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
        
     public Task getTaskbyID(int task_id) throws DALException;
     
     public void updateTaskbyID(Task task) throws DALException;
     
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException;
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException;
             
 
     //Klient
@@ -97,6 +94,7 @@ public interface IgetDataFacadeInterface {
 
     public void disableUser(User disableUser);
 
-
+    //Changelog
+    public void changelogTask(Task task, int person_id);
 
 }

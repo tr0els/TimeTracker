@@ -7,23 +7,18 @@ package timetracker.BLL;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import timetracker.BE.Task;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import javafx.collections.ObservableList;
+import java.util.TreeMap;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
-import timetracker.DAL.DALManager;
 import timetracker.DAL.GetDataFacadeimpl;
 import timetracker.DAL.IgetDataFacadeInterface;
 
@@ -101,7 +96,7 @@ public class BLLManager {
      * @param project_id
      * @return
      */
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException  {
         return iGetData.getTaskbyIDs(project_id, person_id);
     }
 
@@ -310,8 +305,12 @@ public class BLLManager {
         iGetData.disableUser(disableUser);
     }
 
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
-       return iGetData.getListOfTaskForDataView(project, user);
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+       return iGetData.getListOfTaskForDataView(project, user, fradato,tildato,monthStart,monthEnd);
+    }
+    
+    public void changelogTask(Task task, int person_id){
+        iGetData.changelogTask(task, person_id);
     }
 
 

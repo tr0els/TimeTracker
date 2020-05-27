@@ -105,6 +105,7 @@ public class OverviewForAdminsController implements Initializable {
     private double totalhouersForPiechart;
     private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
+    private final  String europeanDatePattern = "dd-MM-yyyy";
  
     private User UserLoggedInForMinTid= null;
     private Stage popupStage;
@@ -134,6 +135,8 @@ public class OverviewForAdminsController implements Initializable {
             filterskuffe.toFront();
             filterskuffe.close();
             btbPopupData.setVisible(false);
+         
+           
             //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
             //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
             if (UserLoggedInForMinTid == null){
@@ -173,8 +176,8 @@ public class OverviewForAdminsController implements Initializable {
           
         
         }
-        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProject_name()));
-        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotal_tid()));
+        colprojekts.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProjectName()));
+        coltotaltid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime()));
         colKlient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClientName()));
         colBillable.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBillableTime()));
         tableview.setItems(listeAfProjekter);
@@ -202,7 +205,7 @@ public class OverviewForAdminsController implements Initializable {
             String mmBil = timesplitupBil[1];
             String secBil = timesplitupBil[2];
             
-            String time = project.getTotal_tid();
+            String time = project.getTotalTime();
             String[] timesplitup = time.split(":");
             
             String hhTotal = timesplitup[0];
@@ -251,7 +254,7 @@ public class OverviewForAdminsController implements Initializable {
      */
     public void getProjectsForfilter() throws DALException, SQLException {
 
-        String europeanDatePattern = "dd-MM-yyyy";
+       
       
         User comboUser = null;
         Client comboKlient = null;
@@ -259,7 +262,7 @@ public class OverviewForAdminsController implements Initializable {
         String tildatoSelected = null;
         String MonthStart = null;
         String MonthEnd = null;
-        
+        first:{
         if(UserLoggedInForMinTid != null)
               comboUser = UserLoggedInForMinTid;
         
@@ -287,11 +290,13 @@ public class OverviewForAdminsController implements Initializable {
           
         }
         
-        checkFilter();
+        if(checkFilter()== true ){
+        break first;
+        }
          
         listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
         handlePieChart();
-       
+        }
     }
 /**
  * Håndtere søgningen, og lukker draweren 
@@ -350,21 +355,22 @@ public class OverviewForAdminsController implements Initializable {
      * @throws timetracker.DAL.DALException
      * @throws java.sql.SQLException
      */
-    public void checkFilter() throws DALException, SQLException{
+    public boolean  checkFilter() throws DALException, SQLException{
         
          if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue())) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i datoer");
             alert.setTitle("Fejl i valg af til- og fradato");
             alert.setContentText("fradato må ikke ligge efter tildato \n og tildato må ikke ligge før fradatoen");
-            alert.showAndWait();
             tildato.setValue(null);
             fradato.setValue(null);
             tildato.getEditor().clear();
             fradato.getEditor().clear();
             populatetable();
             handlePieChart();
-        }
+            alert.showAndWait();
+        return true;
+         }
 
         
        if (fradato.getValue() != null && comboPerioder.getValue() !=null) {
@@ -380,6 +386,7 @@ public class OverviewForAdminsController implements Initializable {
             comboPerioder.getSelectionModel().clearSelection();
             populatetable();
             handlePieChart();
+            return true;
         }
        
            
@@ -396,9 +403,10 @@ public class OverviewForAdminsController implements Initializable {
             comboPerioder.getSelectionModel().clearSelection();
             populatetable();
             handlePieChart();
+            return true;
        }
        
-       
+       return false;
     }
     /**
      * metoden bruges i menubarcontroller, når vi klikker ind på min tid, på den måde får vi sat den nuværende bruger som er logget ind. 
@@ -438,73 +446,107 @@ public class OverviewForAdminsController implements Initializable {
    * @throws DALException 
    */
     private void handelPopupDataView() throws IOException, DALException, SQLException {
-        
-        User transferUser = null;     
-        Project selectedProject= null;
-       
-       
+
+        User transferUser = null;
+        Project selectedProject = null;
+        String fradatoSelected = null;
+        String tildatoSelected = null;
+        String MonthStart = null;
+        String MonthEnd = null;
+
         //vi tjekker om vores tableview er tomt
         first:
-       if( !listeAfProjekter.isEmpty())
-       {    //hvis den ikke er tom tjekker vi om der er valgt et projekt i tabellen, hvis der er det ligger vi projekt objektet 
-           //over i vores selectedProjekt
-           second: 
-          if(tableview.getSelectionModel().getSelectedItem() != null )
-               selectedProject = tableview.getSelectionModel().getSelectedItem();
-           //hvis der ikke er valgt et projekt i tabellen, åbner vi en alert, og stopper 'if kørslen', så vi ikke  åbner et tomt dataview
-           third:
-          if(tableview.getSelectionModel().getSelectedItem() == null ){
-               Alert alert = new Alert(AlertType.ERROR);
-               alert.setHeaderText("Fejl i Åbning af Data Overblik");
-               alert.setTitle("Fejl");
-               alert.setContentText("Du skal vælge et projekt for at få \n"
-                       + "vist Data");
-               alert.showAndWait();
-               break first;
-           }
-            
-           //hvis der er valgt et projekt, tjekker vi om det er brugeren som er logget ind eller om det et en bruger fra comboboxen vi skal bruge i dataoverblikker 
-           //hvis ikke det er nogen af dem er det en admin som er logget ind og har ikke brugt comboboxen til at filtere på.
-           //hvis det er tilfældet sætter vi tranferuser til null, på den mådet kommer alle bruger med ud
-           if(UserLoggedInForMinTid != null)
-           {transferUser = UserLoggedInForMinTid;}
-           else if(ComboMedarbejder.getValue() != null  )
-           {transferUser = ComboMedarbejder.getValue();}
-           else transferUser = null;
-            
-           
-          
-           FXMLLoader loader = new FXMLLoader(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
-           Parent popup = loader.load();                    
-           PopUpDataViewController controller = loader.<PopUpDataViewController>getController();
-           controller.TransferProjektID(selectedProject, transferUser );
-         
-          if(popupStage ==  null){
-           Scene scene = new Scene(popup);
-           
-           popupStage = new Stage();
-           popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
-           popupStage.setScene(scene);
-           popupStage.setResizable(false);
-           popupStage.setTitle(selectedProject.getProject_name() +"  "+ selectedProject.getProject_rate()+ " DKK");
-          
-           
-           popupStage.show();}
-           popupStage.show();
-           popupStage.toFront();
-           popupStage.setTitle(selectedProject.getProject_name().toUpperCase() + "  "+ selectedProject.getProject_rate()+ " DKK");
-          
-        
-       }
-    
+        if (!listeAfProjekter.isEmpty()) {    //hvis den ikke er tom tjekker vi om der er valgt et projekt i tabellen, hvis der er det ligger vi projekt objektet 
+            //over i vores selectedProjekt
+            second:
+            if (tableview.getSelectionModel().getSelectedItem() != null) {
+                selectedProject = tableview.getSelectionModel().getSelectedItem();
+            }
+
+            //hvis der er valgt et projekt, tjekker vi om det er brugeren som er logget ind eller om det et en bruger fra comboboxen vi skal bruge i dataoverblikker 
+            //hvis ikke det er nogen af dem er det en admin som er logget ind og har ikke brugt comboboxen til at filtere på.
+            //hvis det er tilfældet sætter vi tranferuser til null, på den mådet kommer alle bruger med ud
+            if (UserLoggedInForMinTid != null) {
+                transferUser = UserLoggedInForMinTid;
+            } else if (ComboMedarbejder.getValue() != null) {
+                transferUser = ComboMedarbejder.getValue();
+            } else {
+                transferUser = null;
+            }
+
+            if (fradato.getValue() != null) {
+                fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            }
+
+            if (tildato.getValue() != null) {
+                tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+            }
+
+            if (comboPerioder.getValue() != null) {
+                YearMonth getmonth = comboPerioder.getValue();
+                MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
+                int lengthOfMonth = getmonth.lengthOfMonth();
+                MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth - 1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
+
+            }
+            if(checkFilter() == true) {
+            break first;
+            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
+            Parent popup = loader.load();
+            PopUpDataViewController controller = loader.<PopUpDataViewController>getController();
+            controller.TransferInfoForPopup(selectedProject, transferUser, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
+
+            if (popupStage == null) {
+                Scene scene = new Scene(popup);
+
+                popupStage = new Stage();
+                popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
+                popupStage.setScene(scene);
+                popupStage.setResizable(false);
+                popupStage.setTitle(selectedProject.getProjectName() + " - " + selectedProject.getProjectRate() + " DKK");
+
+                popupStage.show();
+            }
+            popupStage.show();
+            popupStage.toFront();
+            popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
+
+        }
+
     }
     
     
 
     @FXML
     private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException {
+          if (event.getClickCount() >1)
         handelPopupDataView();
     }
+
+    @FXML
+    private void handelTooltipForTableView(MouseEvent event) {
+     
+        tableview.setTooltip(getToolTipForTableView());
+        
+        
+    }
           
-          
-}
+ 
+    public Tooltip getToolTipForTableView(){
+    
+          Tooltip tip = new Tooltip();
+
+        if (listeAfProjekter.isEmpty()) {
+            tip.setText("Det er ikke nogle Projekter at vise");
+            return tip;
+        } else  {
+            tip.setText("Dobbel klik på et Projekt, for at få vist dens tilhørende opgaver");
+            return tip;
+        }
+       
+    }
+    
+    }
+    
+

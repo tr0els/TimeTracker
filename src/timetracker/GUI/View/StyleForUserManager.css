@@ -4,10 +4,9 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 25. maj 2020, 14.41.48
+    Created on : 27. maj 2020, 09.52.48
     Author     : Charlotte
 */
-
 
 *{
 
@@ -16,29 +15,16 @@ and open the template in the editor.
     -fx-grumsen-baggrund: #afbbdd;
 
 }
-
 .root{
     
     -fx-background-color: white;
     
 }
 
-
-.label{
-
-    -fx-font-size: 12;
-    -fx-text-fill: black;
-    
-
-}
-
-
-
-
 .button{
 
     -fx-border-width: 2px;
-    -fx-background-color: -fx-grumsen;
+    -fx-background-color:   -fx-grumsen-lysere;
 
     -fx-text-fill: white;
     -fx-font-size: 12;
@@ -64,49 +50,37 @@ and open the template in the editor.
 
 }
 
-.table-view{
-    -fx-focus-traversable: false;
-    -fx-border-width: 2px; 
-
+.jfx-check-box .jfx-rippler{
     
-    
-}
-.table-view .column-header-background{
-    
-    -fx-border-color:  -fx-grumsen-baggrund;
-    -fx-background-color:  -fx-grumsen-baggrund;
-    
-}
-
-.table-view .column-header {
-    
-     -fx-background-color:  -fx-grumsen-baggrund;
-     
-    
+      -fx-border-color: -fx-grumsen;
     
 }
 
 
-
-.table-view .column-header-background .label{
+.jfx-tree-table-view  .column-header-background  .label{
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: left;
     -fx-text-fill: black;
     -fx-font-size: 14;
     -fx-font-weight: normal;
-    
+  
 }
 
-.table-view .show-hide-columns-button{
-    
+.jfx-tree-table-view > .column-header-background, 
+.jfx-tree-table-view > .column-header-background > .filler { 
     -fx-background-color: -fx-grumsen-baggrund;
+    -fx-size: 15 ;    
+
+  
 }
 
 
 
-.table-view .filler{
+
+.jfx-tree-table-view:row-selection{
+    -fx-background-color: -fx-grumsen-lysere;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
     
-    -fx-background-color: -fx-grumsen-baggrund ;
+    
 }
-
-

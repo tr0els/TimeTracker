@@ -15,28 +15,28 @@ import java.time.format.DateTimeFormatter;
  */
 public class Task {
 
-    private int task_id;
-    private String task_name;
-    private int project_id;
-    private int person_id;
-    private String total_tid;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
+    private int taskId;
+    private String taskName;
+    private int projectId;
+    private int personId;
+    private String totalTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private boolean billable;
     private String stringBillable;
-    private LocalDateTime last_worked_on;
+    private LocalDateTime lastWorkedOn;
     
     
-    public Task(int task_id, String task_name, int project_id, int person_id, String total_tid, String task_tid, LocalDateTime start_time, LocalDateTime end_time, boolean billable, LocalDateTime last_worked_on) {
-        this.task_id = task_id;
-        this.task_name = task_name;
-        this.project_id = project_id;
-        this.person_id = person_id;
-        this.total_tid = total_tid;
-        this.start_time = start_time;
-        this.end_time = end_time;
+    public Task(int taskId, String taskName, int projectId, int personId, String totalTime, String task_tid, LocalDateTime startTime, LocalDateTime endTime, boolean billable, LocalDateTime lastWorkedOn) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.projectId = projectId;
+        this.personId = personId;
+        this.totalTime = totalTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.billable = billable;
-        this.last_worked_on = last_worked_on;
+        this.lastWorkedOn = lastWorkedOn;
     }
 
     public Task() {
@@ -51,20 +51,20 @@ public class Task {
         this.stringBillable = stringBillable;
     }
 
-    public LocalDateTime getStart_time() {
-        return start_time;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setStart_time(LocalDateTime start_time) {
-        this.start_time = start_time;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public LocalDateTime getEnd_time() {
-        return end_time;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(LocalDateTime end_time) {
-        this.end_time = end_time;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public boolean isBillable() {
@@ -75,163 +75,64 @@ public class Task {
         this.billable = billable;
     }
 
-    public LocalDateTime getLast_worked_on() {
-        return last_worked_on;
+    public LocalDateTime getLastWorkedOn() {
+        return lastWorkedOn;
     }
 
-    public void setLast_worked_on(LocalDateTime last_worked_on) {
-        this.last_worked_on = last_worked_on;
+    public void setLastWorkedOn(LocalDateTime lastWorkedOn) {
+        this.lastWorkedOn = lastWorkedOn;
     }
 
-    public String getTotal_tid() {
-        return total_tid;
+    public String getTotalTime() {
+        return totalTime;
     }
 
-    public void setTotal_tid(String total_tid) {
-        this.total_tid = total_tid;
+    public void setTotalTime(String totalTime) {
+        this.totalTime = totalTime;
     }
 
-    public int getTask_id() {
-        return task_id;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setTask_id(int task_id) {
-        this.task_id = task_id;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
-    public String getTask_name() {
-        return task_name;
+    public String getTaskName() {
+        return taskName;
     }
 
-    public void setTask_name(String task_name) {
-        this.task_name = task_name;
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
-    public int getProject_id() {
-        return project_id;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setProject_id(int project_id) {
-        this.project_id = project_id;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
-    public int getPerson_id() {
-        return person_id;
+    public int getPersonId() {
+        return personId;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setPersonId(int personId) {
+        this.personId = personId;
     }
 
     @Override
     public String toString() {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String last;
-        if (last_worked_on == null)
+        if (lastWorkedOn == null)
         {
             last = "Ikke afsluttet!";
         }else{
-        last = last_worked_on.format(format);
+        last = lastWorkedOn.format(format);
         }
-        return task_id + ": " + task_name + " | Total tid brugt: " + total_tid + " | Sidst arbejdet på: " + last;
-    }
-
-    /**
-     * nested class med Log data
-     */
-    public static class Log {
-
-        private LocalDateTime start_time;
-        private LocalDateTime end_time;
-        private String total_tid;
-        private int task_id;
-        private int log_id;
-        private boolean billable;
-
-        public Log(LocalDateTime start_time, LocalDateTime end_time, int task_id, boolean billable, String total_tid, int log_id) {
-            this.start_time = start_time;
-            this.end_time = end_time;
-            this.task_id = task_id;
-            this.total_tid = total_tid;
-            this.task_id = task_id;
-            this.billable = billable;
-            this.log_id = log_id;
-        }
-
-        public Log() {
-
-        }
-
-        public int getLog_id() {
-            return log_id;
-        }
-
-        public void setLog_id(int log_id) {
-            this.log_id = log_id;
-        }
-
-        public boolean isBillable() {
-            return billable;
-        }
-
-        public void setBillable(boolean billable) {
-            this.billable = billable;
-        }
-
-        public String getTotal_tid() {
-            return total_tid;
-        }
-
-        public void setTotal_tid(String total_tid) {
-            this.total_tid = total_tid;
-        }
-
-        public int getTask_id() {
-            return task_id;
-        }
-
-        public void setTask_id(int task_id) {
-            this.task_id = task_id;
-        }
-
-        public LocalDateTime getStart_time() {
-            return start_time;
-        }
-
-        public void setStart_time(LocalDateTime start_time) {
-            this.start_time = start_time;
-        }
-
-        public LocalDateTime getEnd_time() {
-            return end_time;
-        }
-
-        public void setEnd_time(LocalDateTime end_time) {
-            this.end_time = end_time;
-        }
-
-        @Override
-        public String toString() {
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            String start = start_time.format(format);
-
-            String slut = "ikke afsluttet";
-            if (end_time != null) {
-                slut = end_time.format(format);
-            }
-            String total = "-";
-            if (total_tid != null) {
-                total = total_tid + "";
-            }
-            String faktureres;
-            if (billable == true) {
-                faktureres = "Ja";
-            } else {
-                faktureres = "Nej";
-            }
-
-            return "" + total + " | [" + start + " - " + slut + "] | " + "Faktureres: " + faktureres;
-        }
-
+        return taskId + ": " + taskName + " | Total tid brugt: " + totalTime + " | Sidst arbejdet på: " + last;
     }
 }

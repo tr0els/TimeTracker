@@ -30,7 +30,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import timetracker.BE.Project;
 import timetracker.BE.TaskGroup;
-
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
@@ -142,7 +141,7 @@ public class TaskController implements Initializable {
     public void startTask() throws DALException {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
-        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProject_id();
+        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
 
         model.startTask(task_name, billable, project_id, person_id);
         textTaskname.clear();
@@ -173,6 +172,9 @@ public class TaskController implements Initializable {
 
         if (timerState == false) {
             timerState = true;
+            timerSecondsv = 0;
+            timerMinutesv = 0;
+            timerHoursv = 0;
             timerButton.setText("Stop Task");
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -192,9 +194,22 @@ public class TaskController implements Initializable {
                                         timerHoursv++;
                                     }
 
-                                    timerSeconds.setText(" : " + timerSecondsv);
-                                    timerMinutes.setText(" : " + timerMinutesv);
-                                    timerHours.setText(timerHoursv + "");
+                                    if (timerSecondsv < 10){
+                                    timerSeconds.setText("0"+timerSecondsv + "");
+                                    }else{
+                                    timerSeconds.setText(timerSecondsv + "");
+                                    }
+                                    if (timerMinutesv < 10){
+                                    timerMinutes.setText("0"+timerMinutesv + ":");
+                                    }else{
+                                    timerMinutes.setText(timerMinutesv + ":");
+                                    }
+                                    if (timerHoursv < 10){
+                                    timerHours.setText("0"+timerHoursv + ":");
+                                    }else{
+                                    timerHours.setText(timerHoursv + ":");
+                                    }
+
                                     timerSecondsv++;
 
                                 } catch (Exception e) {
@@ -215,6 +230,7 @@ public class TaskController implements Initializable {
             t.start();
         } else {
             timerState = false;
+
             timerButton.setText("Start Task");
         }
 

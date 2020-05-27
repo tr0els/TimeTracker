@@ -8,20 +8,17 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.UserManagerAdminController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleForUserManager.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.UserManagerAdminController">
     <children>
-        <JFXTreeTableView fx:id="listUsers" layoutX="14.0" layoutY="145.0" onMouseClicked="#handleSelectionTreeTable" prefHeight="341.0" prefWidth="573.0" />
-        <Label layoutX="27.0" layoutY="27.0" text="Fornavn:" />
-        <Label layoutX="27.0" layoutY="55.0" text="Efternavn:" />
-        <Label layoutX="27.0" layoutY="84.0" text="Email:" />
-        <Label layoutX="27.0" layoutY="113.0" text="Stilling:" />
-        <JFXTextField fx:id="textfieldName" layoutX="92.0" layoutY="23.0" onMouseClicked="#handleNameClicked" prefHeight="25.0" prefWidth="222.0" />
-        <JFXTextField fx:id="textfieldSurname" layoutX="92.0" layoutY="51.0" onMouseClicked="#handleSurnameClicked" prefHeight="25.0" prefWidth="222.0" />
-        <JFXTextField fx:id="textfieldEmail" layoutX="92.0" layoutY="80.0" onMouseClicked="#handleEmailClick" prefHeight="25.0" prefWidth="222.0" />
-        <JFXComboBox fx:id="listProfessions" layoutX="92.0" layoutY="109.0" prefHeight="25.0" prefWidth="222.0" />
-        <JFXCheckBox fx:id="checkboxAdminRole" layoutX="347.0" layoutY="113.0" text="Admin" />
-        <JFXButton layoutX="414.0" layoutY="32.0" onAction="#handleCreateUser" prefHeight="25.0" prefWidth="115.0" text="Opret Bruger" />
-        <JFXButton layoutX="414.0" layoutY="72.0" onAction="#handleUpdateUser" prefHeight="25.0" prefWidth="115.0" text="Opdater Bruger" />
-      <JFXButton layoutX="414.0" layoutY="109.0" onAction="#handleDisableUser" prefHeight="25.0" prefWidth="115.0" text="Fjern Bruger" />
+        <JFXTreeTableView fx:id="listUsers" layoutX="14.0" layoutY="161.0" onMouseClicked="#handleSelectionTreeTable" prefHeight="325.0" prefWidth="573.0" />
+        <Label layoutX="40.0" layoutY="134.0" text="Stilling:" />
+        <JFXTextField fx:id="textfieldName" labelFloat="true" layoutX="92.0" layoutY="14.0" onMouseClicked="#handleNameClicked" prefHeight="18.0" prefWidth="222.0" promptText="Fornavn" />
+        <JFXTextField fx:id="textfieldSurname" labelFloat="true" layoutX="92.0" layoutY="54.0" onMouseClicked="#handleSurnameClicked" prefHeight="25.0" prefWidth="222.0" promptText="Efternavn" />
+        <JFXTextField fx:id="textfieldEmail" labelFloat="true" layoutX="92.0" layoutY="94.0" onMouseClicked="#handleEmailClick" prefHeight="25.0" prefWidth="222.0" promptText="Email" />
+        <JFXComboBox fx:id="listProfessions" layoutX="92.0" layoutY="130.0" prefHeight="25.0" prefWidth="222.0" promptText="Vælg en stilliing" />
+        <JFXCheckBox fx:id="checkboxAdminRole" checkedColor="#768bc6" layoutX="346.0" layoutY="114.0" text="Admin" />
+        <JFXButton layoutX="430.0" layoutY="33.0" onAction="#handleCreateUser" prefHeight="25.0" prefWidth="115.0" text="Opret Bruger" />
+        <JFXButton layoutX="430.0" layoutY="73.0" onAction="#handleUpdateUser" prefHeight="25.0" prefWidth="115.0" text="Opdater Bruger" />
+      <JFXButton layoutX="430.0" layoutY="110.0" onAction="#handleDisableUser" prefHeight="25.0" prefWidth="115.0" text="Fjern Bruger" />
     </children>
 </AnchorPane>

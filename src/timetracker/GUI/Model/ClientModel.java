@@ -49,7 +49,7 @@ public class ClientModel {
      * @throws SQLException
      */
     public ObservableList<Client> getClients() throws DALException {
-        Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClient_name().compareTo(cl2.getClient_name());
+        Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClientName().compareTo(cl2.getClientName());
         allClients.sort(byName);
         return allClients;
     }

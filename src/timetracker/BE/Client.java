@@ -10,48 +10,103 @@ package timetracker.BE;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class Client {
+public class Client
+{
 
-    private int client_id;
-    private String client_name;
-    private int default_rate;
+    private int clientId;
+    private String clientName;
+    private int defaultRate;
 
-    public Client(int client_id, String client_name, int default_rate) {
-        this.client_id = client_id;
-        this.client_name = client_name;
-        this.default_rate = default_rate;
+    /**
+     * Constructor for Client som tager imod parametre
+     *
+     * @param clientId
+     * @param clientName
+     * @param defaultRate
+     */
+    public Client(int clientId, String clientName, int defaultRate)
+    {
+        this.clientId = clientId;
+        this.clientName = clientName;
+        this.defaultRate = defaultRate;
     }
 
-    public Client() {
+    /**
+     * Constructor for Client
+     */
+    public Client()
+    {
     }
 
-    public int getClient_id() {
-        return client_id;
+    /**
+     * Returnerer clientId
+     *
+     * @return
+     */
+    public int getClientId()
+    {
+        return clientId;
     }
 
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
+    /**
+     * Sætter clientId
+     *
+     * @param clientId
+     */
+    public void setClientId(int clientId)
+    {
+        this.clientId = clientId;
     }
 
-    public String getClient_name() {
-        return client_name;
+    /**
+     * Returnerer clientName
+     *
+     * @return
+     */
+    public String getClientName()
+    {
+        return clientName;
     }
 
-    public void setClient_name(String client_name) {
-        this.client_name = client_name;
+    /**
+     * Sætter clientName
+     *
+     * @param clientName
+     */
+    public void setClientName(String clientName)
+    {
+        this.clientName = clientName;
     }
 
-    public int getDefault_rate() {
-        return default_rate;
+    /**
+     * Returnerer defaultRate
+     *
+     * @return
+     */
+    public int getDefaultRate()
+    {
+        return defaultRate;
     }
 
-    public void setDefault_rate(int default_rate) {
-        this.default_rate = default_rate;
+    /**
+     * Sætter defaultRate
+     *
+     * @param defaultRate
+     */
+    public void setDefaultRate(int defaultRate)
+    {
+        this.defaultRate = defaultRate;
     }
 
+    /**
+     * ToString metode så klassen viser det rigtige
+     *
+     * @return
+     */
     @Override
-    public String toString() {
-        return client_name;
+    public String toString()
+    {
+        return clientName;
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -19,7 +20,6 @@ import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
@@ -142,7 +142,7 @@ public class TaskModel implements Runnable {
      * @return
      * @throws timetracker.DAL.DALException
      */
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 //        taskById.clear();
 //        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
 //        return taskById;
@@ -304,9 +304,9 @@ public class TaskModel implements Runnable {
 //        return allProfessions;
 //    }
  
-     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException{
+     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException{
      taskForDataview.clear();
-     taskForDataview.addAll(bll.getListOfTaskForDataView(project, user));
+     taskForDataview.addAll(bll.getListOfTaskForDataView(project, user, fradato,tildato,monthStart,monthEnd));
      return taskForDataview;
      
      

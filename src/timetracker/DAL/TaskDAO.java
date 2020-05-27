@@ -12,22 +12,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
+import java.util.TreeMap;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.BE.TaskBase;
 import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
-import timetracker.BE.TaskResult;
-import timetracker.BE.Task.Log;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.User;
-import timetracker.DAL.DALException;
+import timetracker.BLL.Sorttaskbydatedesc;
 
 /**
  *
@@ -99,9 +94,9 @@ public class TaskDAO {
      * @param person_id
      * @return
      */
-    public HashMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 
-        HashMap<Task, List<Task>> map = new HashMap<>();
+        TreeMap<Task, List<Task>> map = new TreeMap<>(new Sorttaskbydatedesc());
 
         String typeTask = "TASK";
         String typeLog = "LOG";
@@ -171,12 +166,13 @@ public class TaskDAO {
                         sBillable = "Nej";
                     }
 
-                    log.setTask_id(rs.getInt("task_id"));
+                    log.setTaskId(rs.getInt("task_id"));
                     log.setBillable(rs.getBoolean("billable"));
-                    log.setTotal_tid(rs.getString("total_time"));
-                    log.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                    log.setEnd_time(end_time);
+                    log.setTotalTime(rs.getString("total_time"));
+                    log.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
+                    log.setEndTime(end_time);
                     log.setStringBillable(sBillable);
+                    log.setTaskName(rs.getString("task_name"));
 
                     logs.add(log);
 
@@ -187,11 +183,11 @@ public class TaskDAO {
                     Task task = new Task();
                     int task_id = rs.getInt("task_id");
 
-                    task.setTask_id(task_id);
-                    task.setTask_name(rs.getString("task_name"));
-                    task.setProject_id(rs.getInt("project_id"));
-                    task.setTotal_tid(rs.getString("total_time"));
-                    task.setLast_worked_on(rs.getTimestamp("task_end").toLocalDateTime());
+                    task.setTaskId(task_id);
+                    task.setTaskName(rs.getString("task_name"));
+                    task.setProjectId(rs.getInt("project_id"));
+                    task.setTotalTime(rs.getString("total_time"));
+                    task.setLastWorkedOn(rs.getTimestamp("task_end").toLocalDateTime());
 
                     map.put(task, logs);
 
@@ -231,12 +227,12 @@ public class TaskDAO {
                     end_time = null;
                 }
 
-                task.setTask_id(rs.getInt("task_id"));
-                task.setTask_name(rs.getString("task_name"));
-                task.setProject_id(rs.getInt("project_id"));
-                task.setPerson_id(rs.getInt("person_id"));
-                task.setStart_time(rs.getTimestamp("task_start").toLocalDateTime());
-                task.setEnd_time(end_time);
+                task.setTaskId(rs.getInt("task_id"));
+                task.setTaskName(rs.getString("task_name"));
+                task.setProjectId(rs.getInt("project_id"));
+                task.setPersonId(rs.getInt("person_id"));
+                task.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
+                task.setEndTime(end_time);
                 task.setBillable(rs.getBoolean("billable"));
 
             }
@@ -257,18 +253,18 @@ public class TaskDAO {
 
         try (Connection con = dbCon.getConnection()) {
 
-            int task_id = task.getTask_id();
+            int task_id = task.getTaskId();
 
             String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, person_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setString(1, task.getTask_name());
+            ps.setString(1, task.getTaskName());
             ps.setBoolean(2, task.isBillable());
-            ps.setInt(3, task.getProject_id());
-            ps.setInt(4, task.getPerson_id());
-            ps.setTimestamp(5, java.sql.Timestamp.valueOf(task.getStart_time()));
-            ps.setTimestamp(6, java.sql.Timestamp.valueOf(task.getEnd_time()));
+            ps.setInt(3, task.getProjectId());
+            ps.setInt(4, task.getPersonId());
+            ps.setTimestamp(5, java.sql.Timestamp.valueOf(task.getStartTime()));
+            ps.setTimestamp(6, java.sql.Timestamp.valueOf(task.getEndTime()));
             ps.setInt(7, task_id);
 
             ps.execute();
@@ -281,7 +277,7 @@ public class TaskDAO {
 
 
 
-   public  List<TaskForDataView> getListOfTaskForDataView(Project project, User user) throws DALException {
+   public  List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
        List<TaskForDataView> taskForOverviewData = new ArrayList<>();
        
   
@@ -290,29 +286,49 @@ public class TaskDAO {
        
        String project_id = "";
        String user_id =  "";
-       
-       
-       if(project != null )
-       {
-           project_id += "and p.project_id =" + project.getProject_id()+ "\n";
-       }
-       
-       if(user != null)
-       {
-       user_id += "and pr.person_id = " +user.getPerson_id() +"\n";
-       }
-       
+       String fradato_caluse = "";
+       String tildato_clause = "";
+       String periode_clause = "";
+          
+            
+           if (fradato != null) {
+               fradato_caluse += "AND  cast(tl.task_start as date)  >= '" + fradato + "'\n";
+           }
+
+           if (tildato != null) {
+               tildato_clause += "AND cast(tl.task_end as date) <= '" + tildato + "' \n";
+           }
+
+           if (monthStart != null && monthEnd != null) {
+               periode_clause += "AND cast(tl.task_start as date) Between convert(date, '" + monthStart + "', 103) and convert(date, '" + monthEnd + "', 103)";
+           }
+
+           if (project != null) {
+               project_id += "and p.project_id =" + project.getProjectId()+ "\n";
+           }
+
+           if (user != null) {
+               user_id += "and per.person_id = " + user.getPerson_id() + "\n";
+           }
+
            
        String sql = 
-            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(pr.name, + ' ' + pr.surname) as name \n"
-          + "from tasklog tl , Project p, Person pr \n"  
+            "select tl.task_name, tl.task_start, tl.task_end, tl.billable, concat(per.name, + ' ' + per.surname) as fullname, \n"
+               +"CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n" 
+          + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n" 
+          + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2) as time \n"
+          + "from tasklog tl , Project p, Person per \n"  
           + "where tl.project_id = p.project_id  \n"
-          + "and pr.person_id = tl.person_id \n"
+          + "and per.person_id = tl.person_id \n"
+          + "and tl.task_end is not null \n"     
           + project_id 
           + user_id
+          + fradato_caluse
+          + tildato_clause
+          + periode_clause     
+          + "group by tl.task_name, tl.task_start, tl.task_end, tl.billable, per.name, per.surname\n" 
           + "order by tl.task_start asc;";
-         // + "and p.project_id = 9 \n"
-          //+ "and pr.person_id = 1 " ;
+      
 
         Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -323,24 +339,18 @@ public class TaskDAO {
             } else {
                end_time = LocalDateTime.now();
             }
-    
             String Billable; 
             TaskForDataView task = new TaskForDataView();
             task.setName(rs.getString("task_name"));
             task.setStart(rs.getTimestamp("task_start").toLocalDateTime());
             task.setEnd(end_time);
-          
+            task.setTime(rs.getString("time"));
             task.setBillable(rs.getBoolean("billable"));
-            task.setMedarbejder(rs.getString("name"));
+            task.setMedarbejder(rs.getString("fullname"));
             
             taskForOverviewData.add(task);
-                
-                
-             
             }
-         
-       
-      
+
        } catch (SQLException ex) {
           throw new DALException("kunne ikke hente din liste af task" + ex);
         }
