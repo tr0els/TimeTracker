@@ -311,7 +311,7 @@ public class TaskDAO {
            }
 
            if (project != null) {
-               project_id += "and p.project_id =" + project.getProject_id() + "\n";
+               project_id += "and p.project_id =" + project.getProjectId()+ "\n";
            }
 
            if (user != null) {
