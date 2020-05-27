@@ -124,10 +124,10 @@ public class ProjectDAO {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
                 projects.setClientName(rs.getString("client_name"));
 
                 allProjects.add(projects);
@@ -161,10 +161,10 @@ public class ProjectDAO {
 
             while (rs.next()) {
                 Project project = new Project();
-                project.setProject_id(rs.getInt("project_id"));
-                project.setProject_name(rs.getString("project_name"));
-                project.setProject_rate(rs.getInt("project_rate"));
-                project.setClient_id(rs.getInt("client_id"));
+                project.setProjectId(rs.getInt("project_id"));
+                project.setProjectName(rs.getString("project_name"));
+                project.setProjectRate(rs.getInt("project_rate"));
+                project.setClientId(rs.getInt("client_id"));
                 return project;
             }
 
@@ -204,11 +204,11 @@ public class ProjectDAO {
             while (rs.next()) {
                 Project projects = new Project();
 
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
-                projects.setTotal_tid(rs.getString("total_time"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
+                projects.setTotalTime(rs.getString("total_time"));
                 projects.setClientName(rs.getString("client_name"));
 
                 projectsbyID.add(projects);
@@ -229,17 +229,17 @@ public class ProjectDAO {
      */
     public List<Project> getProjectsbyClientID(Client client) throws DALException {
         ArrayList<Project> allProjectswithClientID = new ArrayList<>();
-        int client_ID = client.getClient_id();
+        int client_ID = client.getClientId();
         try (Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Project WHERE client_id =  " + client_ID + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
 
                 allProjectswithClientID.add(projects);
             }
@@ -272,12 +272,12 @@ public class ProjectDAO {
             while (rs.next()) {
                 String billabletime;
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
                 projects.setClientName(rs.getString("client_name"));
-                projects.setTotal_tid(rs.getString("total_time"));
+                projects.setTotalTime(rs.getString("total_time"));
                 billabletime = rs.getString("billabletime");
 
                 if (billabletime != null) {
@@ -312,7 +312,7 @@ public class ProjectDAO {
             }
 
             if (comboClient != null) {
-                client_clause += comboClient.getClient_name();
+                client_clause += comboClient.getClientName();
             }
 
             if (fradato != null) {
@@ -353,12 +353,12 @@ public class ProjectDAO {
             while (rs.next()) {
                 String billabletime;
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
                 projects.setClientName(rs.getString("client_name"));
-                projects.setTotal_tid(rs.getString("total_time"));
+                projects.setTotalTime(rs.getString("total_time"));
                 billabletime = rs.getString("billabletime");
 
                 if (billabletime != null) {

@@ -152,7 +152,7 @@ public class UserManagerAdminController implements Initializable {
                 user.setName(textfieldName.getText());
                 user.setSurname(textfieldSurname.getText());
                 user.setEmail(textfieldEmail.getText());
-                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
                 if (!checkboxAdminRole.isSelected()) {
                     user.setRole_id(2);
                 } else {
@@ -217,7 +217,7 @@ public class UserManagerAdminController implements Initializable {
 
         if (user.getName() != null && user.getSurname() != null && user.getEmail() != null) {
             if (model.valExistingEmail(textfieldEmail.getText())) {
-                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfession_id());
+                user.setProfession_id(listProfessions.getSelectionModel().getSelectedItem().getProfessionId());
                 if (!checkboxAdminRole.isSelected()) {
                     user.setRole_id(2);
                 } else {
@@ -255,7 +255,7 @@ public class UserManagerAdminController implements Initializable {
         int profession_id = listUsers.getSelectionModel().getSelectedItem().getValue().getProfession_id();
 
         for (int i = 0; i < allProf.size(); i++) {
-            int prof = allProf.get(i).getProfession_id();
+            int prof = allProf.get(i).getProfessionId();
             if (profession_id == prof) {
                 listProfessions.getSelectionModel().select(allProf.get(i));
             }

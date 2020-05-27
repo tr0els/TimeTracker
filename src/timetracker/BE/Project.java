@@ -13,88 +13,193 @@ import javafx.beans.property.StringProperty;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class Project extends RecursiveTreeObject<Project> {
+public class Project extends RecursiveTreeObject<Project>
+{
 
-    private int project_id;
-    public String project_name;
-    private int project_rate;
-    private int client_id;
+    private int projectId;
+    public String projectName;
+    private int projectRate;
+    private int clientId;
     private String clientName;
-    private String total_tid;
+    private String totalTime;
     private String billableTime;
 
-    public Project(int project_id, String project_name, int project_rate, int client_id, String total_tid) {
-        this.project_id = project_id;
-        this.project_name = project_name;
-        this.project_rate = project_rate;
-        this.client_id = client_id;
+    /**
+     * Constructor for Project som tager imod parametre
+     *
+     * @param projectId
+     * @param projectName
+     * @param projectRate
+     * @param clientId
+     * @param total_tid
+     */
+    public Project(int projectId, String projectName, int projectRate, int clientId, String totalTime)
+    {
+        this.projectId = projectId;
+        this.projectName = projectName;
+        this.projectRate = projectRate;
+        this.clientId = clientId;
         this.clientName = clientName;
-        this.total_tid = total_tid;
+        this.totalTime = totalTime;
 
     }
 
-    public Project() {
+    /**
+     * Constructor for Project
+     */
+    public Project()
+    {
     }
 
-    public String getBillableTime() {
+    /**
+     * Returnerer billableTime
+     *
+     * @return
+     */
+    public String getBillableTime()
+    {
         return billableTime;
     }
 
-    public void setBillableTime(String billableTime) {
+    /**
+     * Sætter billableTime
+     *
+     * @param billableTime
+     */
+    public void setBillableTime(String billableTime)
+    {
         this.billableTime = billableTime;
     }
 
-    public int getProject_id() {
-        return project_id;
+    /**
+     * Returnerer projectId
+     *
+     * @return
+     */
+    public int getProjectId()
+    {
+        return projectId;
     }
 
-    public void setProject_id(int project_id) {
-        this.project_id = project_id;
+    /**
+     * Sætter projectId
+     *
+     * @param projectId
+     */
+    public void setProjectId(int projectId)
+    {
+        this.projectId = projectId;
     }
 
-    public String getProject_name() {
-        return project_name;
+    /**
+     * Returnerer projectName
+     *
+     * @return
+     */
+    public String getProjectName()
+    {
+        return projectName;
     }
 
-    public void setProject_name(String project_name) {
-        this.project_name = project_name;
+    /**
+     * Sætter projectName
+     *
+     * @param projectName
+     */
+    public void setProjectName(String projectName)
+    {
+        this.projectName = projectName;
     }
 
-    public int getProject_rate() {
-        return project_rate;
+    /**
+     * Returnerer projectRate
+     *
+     * @return
+     */
+    public int getProjectRate()
+    {
+        return projectRate;
     }
 
-    public void setProject_rate(int project_rate) {
-        this.project_rate = project_rate;
+    /**
+     * Sætter projectRate
+     *
+     * @param projectRate
+     */
+    public void setProjectRate(int projectRate)
+    {
+        this.projectRate = projectRate;
     }
 
-    public int getClient_id() {
-        return client_id;
+    /**
+     * Returnerer clientId
+     *
+     * @return
+     */
+    public int getClientId()
+    {
+        return clientId;
     }
 
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
+    /**
+     * Sætter clientId
+     *
+     * @param clientId
+     */
+    public void setClientId(int clientId)
+    {
+        this.clientId = clientId;
     }
 
-    public String getClientName() {
+    /**
+     * Returnerer client_name
+     *
+     * @return
+     */
+    public String getClientName()
+    {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
+    /**
+     * Sætter client_name
+     *
+     * @param clientName
+     */
+    public void setClientName(String clientName)
+    {
         this.clientName = clientName;
     }
 
-    public String getTotal_tid() {
-        return total_tid;
+    /**
+     * Returnerer totalTime
+     *
+     * @return
+     */
+    public String getTotalTime()
+    {
+        return totalTime;
     }
 
-    public void setTotal_tid(String total_tid) {
-        this.total_tid = total_tid;
+    /**
+     * Sætter totalTime
+     *
+     * @param totalTime
+     */
+    public void setTotalTime(String totalTime)
+    {
+        this.totalTime = totalTime;
     }
 
+    /**
+     * ToString metode så klassen viser det rigtige
+     *
+     * @return
+     */
     @Override
-    public String toString() {
-        return project_name;
+    public String toString()
+    {
+        return projectName;
     }
 
 }

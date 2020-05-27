@@ -297,7 +297,7 @@ public class TaskDAO {
        
        if(project != null )
        {
-           project_id += "and p.project_id =" + project.getProject_id()+ "\n";
+           project_id += "and p.project_id =" + project.getProjectId()+ "\n";
        }
        
        if(user != null)
@@ -326,7 +326,6 @@ public class TaskDAO {
             } else {
                end_time = LocalDateTime.now();
             }
-    
             String Billable; 
             TaskForDataView task = new TaskForDataView();
             task.setName(rs.getString("task_name"));
@@ -337,13 +336,8 @@ public class TaskDAO {
             task.setMedarbejder(rs.getString("name"));
             
             taskForOverviewData.add(task);
-                
-                
-             
             }
-         
-       
-      
+
        } catch (SQLException ex) {
           throw new DALException("kunne ikke hente din liste af task" + ex);
         }

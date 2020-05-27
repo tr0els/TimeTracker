@@ -141,10 +141,10 @@ public class _backup_DALManager {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
 
                 allProjects.add(projects);
             }
@@ -170,10 +170,10 @@ public class _backup_DALManager {
 
             while (rs.next()) {
                 Project project = new Project();
-                project.setProject_id(rs.getInt("project_id"));
-                project.setProject_name(rs.getString("project_name"));
-                project.setProject_rate(rs.getInt("project_rate"));
-                project.setClient_id(rs.getInt("client_id"));
+                project.setProjectId(rs.getInt("project_id"));
+                project.setProjectName(rs.getString("project_name"));
+                project.setProjectRate(rs.getInt("project_rate"));
+                project.setClientId(rs.getInt("client_id"));
                 return project;
             }
 
@@ -479,13 +479,13 @@ public class _backup_DALManager {
      */
     public void editClient(Client client) {
         try ( Connection con = dbCon.getConnection()) {
-            int cl_id = client.getClient_id();
+            int cl_id = client.getClientId();
             String sql = "UPDATE Client SET client_name = ?, default_rate = ? WHERE client_id = " + cl_id + ";";
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, client.getClient_name());
-            st.setInt(2, client.getDefault_rate());
+            st.setString(1, client.getClientName());
+            st.setInt(2, client.getDefaultRate());
 
             st.executeQuery();
 
@@ -505,7 +505,7 @@ public class _backup_DALManager {
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setInt(1, client.getClient_id());
+            st.setInt(1, client.getClientId());
 
             st.executeQuery();
 
@@ -529,9 +529,9 @@ public class _backup_DALManager {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Client clients = new Client();
-                clients.setClient_id(rs.getInt("client_id"));
-                clients.setClient_name(rs.getString("client_name"));
-                clients.setDefault_rate(rs.getInt("default_rate"));
+                clients.setClientId(rs.getInt("client_id"));
+                clients.setClientName(rs.getString("client_name"));
+                clients.setDefaultRate(rs.getInt("default_rate"));
 
                 allClients.add(clients);
             }
@@ -647,17 +647,17 @@ public class _backup_DALManager {
 
     public List<Project> getProjectsbyClientID(Client client) {
         ArrayList<Project> allProjectswithClientID = new ArrayList<>();
-        int client_ID = client.getClient_id();
+        int client_ID = client.getClientId();
         try ( Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Project WHERE client_id =  " + client_ID + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Project projects = new Project();
-                projects.setProject_id(rs.getInt("project_id"));
-                projects.setProject_name(rs.getString("project_name"));
-                projects.setProject_rate(rs.getInt("project_rate"));
-                projects.setClient_id(rs.getInt("client_id"));
+                projects.setProjectId(rs.getInt("project_id"));
+                projects.setProjectName(rs.getString("project_name"));
+                projects.setProjectRate(rs.getInt("project_rate"));
+                projects.setClientId(rs.getInt("client_id"));
 
                 allProjectswithClientID.add(projects);
             }
@@ -684,8 +684,8 @@ public class _backup_DALManager {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Profession profession = new Profession();
-                profession.setProfession_id(rs.getInt("profession_id"));
-                profession.setProfession_name(rs.getString("Profession_name"));
+                profession.setProfessionId(rs.getInt("profession_id"));
+                profession.setProfessionName(rs.getString("Profession_name"));
 
                 allProfessions.add(profession);
             }

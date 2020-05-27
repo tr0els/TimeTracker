@@ -279,7 +279,7 @@ public class ProjektViewController implements Initializable {
             
             for (int i = 0; i < allProjects.size(); i++) {
 
-                if (edit_task.getProject_id() == allProjects.get(i).getProject_id()) {
+                if (edit_task.getProject_id() == allProjects.get(i).getProjectId()) {
                     menuEditProjects.getSelectionModel().select(allProjects.get(i));
                 }
 
@@ -318,10 +318,10 @@ public class ProjektViewController implements Initializable {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue) -> {
             if (newValue != null) {
                 try {
-                    lblProjectnavn.setText(newValue.getProject_name());
-                    lblProjectTid.setText(newValue.getTotal_tid());
+                    lblProjectnavn.setText(newValue.getProjectName());
+                    lblProjectTid.setText(newValue.getTotalTime());
                     lblClientname.setText(newValue.getClientName());
-                    createTree(newValue.getProject_id());
+                    createTree(newValue.getProjectId());
                 } catch (DALException ex) {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -355,7 +355,7 @@ public class ProjektViewController implements Initializable {
             
             edit_task.setTask_name(txtTask_name.getText());
             edit_task.setBillable(chkboxBillable.isSelected());
-            edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id());
+            edit_task.setProject_id(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId());
 
             Cmodel.changelogTask(edit_task, person_id);
             
@@ -365,13 +365,13 @@ public class ProjektViewController implements Initializable {
             
             for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
 
-                if (menuEditProjects.getSelectionModel().getSelectedItem().getProject_id() == personalProjects.get(i).getProject_id()) {
+                if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId()) {
                     projectMenubox.getSelectionModel().select(personalProjects.get(i));
                 }
 
             }
 
-            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProject_id()); //opdatere taskview med det view som hvor den opdatere task ligger i.
+            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere taskview med det view som hvor den opdatere task ligger i.
             
             showProjects(); //indlæser ny liste til vores editvindue
 
