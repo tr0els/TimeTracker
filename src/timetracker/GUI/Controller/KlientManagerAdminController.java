@@ -248,7 +248,7 @@ public class KlientManagerAdminController implements Initializable
 
         });
             
-        listviewprojekts.setItems(model.getClientprojcts(client));
+        listviewprojekts.setItems(model.getClientProjcts(client));
     
     }
 
