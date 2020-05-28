@@ -32,7 +32,8 @@ import timetracker.GUI.Model.ProjektModel;
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class MinTidController implements Initializable {
 

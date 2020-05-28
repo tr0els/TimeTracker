@@ -33,7 +33,8 @@ import timetracker.GUI.Model.TaskModel;
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class PopUpDataViewController implements Initializable
 {

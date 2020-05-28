@@ -6,7 +6,6 @@
 package timetracker.GUI.Controller;
 
 import java.io.IOException;
-import java.lang.ModuleLayer.Controller;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,10 +15,17 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class FxmlLoader {
 
+    /**
+     * 
+     * @param loc
+     * @param pane
+     * @return 
+     */
     public static Object loadWindow(URL loc, AnchorPane pane) {
         Object controller = null;
         try {
@@ -28,31 +34,9 @@ public class FxmlLoader {
             controller = loader.getController();
             pane.getChildren().clear();
             pane.getChildren().add(parent);
-
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return controller;
     }
-
-    
-
-    
 }
-
-//
-//  public Pane getPage(String filename){
-//    
-//        try{
-//          URL fileUrl = App.class.getResource("/timetracker/GUI/View/" + filename + ".fxml");
-//          if(fileUrl == null)
-//          { throw new java.io.FileNotFoundException("FXML filen kan ikke findes");
-//          }
-//            view = new FXMLLoader().load(fileUrl);
-//            
-//        } catch (IOException ex) {
-//            System.out.println("no page found");
-//     }
-//    
-//    return view;
-//}

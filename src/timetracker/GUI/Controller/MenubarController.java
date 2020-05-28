@@ -20,17 +20,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Controller.FxmlLoader;
 import timetracker.GUI.Model.BrugerModel;
 
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class MenubarController implements Initializable {
 

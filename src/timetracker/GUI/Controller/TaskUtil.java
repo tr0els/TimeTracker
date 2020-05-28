@@ -22,6 +22,11 @@ import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
 
+/**
+ * 
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
+ */
 public class TaskUtil {
     
     /**

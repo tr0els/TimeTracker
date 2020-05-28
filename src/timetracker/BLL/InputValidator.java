@@ -17,7 +17,8 @@ import timetracker.DAL.IgetDataFacadeInterface;
 
 /**
  *
- * @author Draik
+ * @author @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class InputValidator {
 

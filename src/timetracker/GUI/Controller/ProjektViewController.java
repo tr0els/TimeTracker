@@ -52,7 +52,8 @@ import timetracker.GUI.Model.TaskModel;
 /**
  * FXML Controller class
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class ProjektViewController implements Initializable
 {
@@ -115,7 +116,6 @@ public class ProjektViewController implements Initializable
     @FXML
     private Label lblClientname;
 
-    
     public ProjektViewController() throws DALException, SQLException
     {
         model = TaskModel.getInstance();
@@ -308,10 +308,8 @@ public class ProjektViewController implements Initializable
      */
     public void showProjects() throws DALException, SQLException
     {
-
         allProjects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(allProjects);
-
     }
 
     /**

@@ -25,7 +25,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import timetracker.BE.Project;

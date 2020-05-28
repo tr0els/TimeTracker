@@ -10,7 +10,6 @@ package timetracker.DAL;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-import timetracker.DAL.DALException;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.FileReader;
@@ -18,7 +17,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
 
-public class DatabaseConnector {
+public class DatabaseConnector
+{
 
     private SQLServerDataSource dataSource;
 
@@ -27,8 +27,10 @@ public class DatabaseConnector {
      *
      * @throws DALException
      */
-    public DatabaseConnector() throws DALException {
-        try {
+    public DatabaseConnector() throws DALException
+    {
+        try
+        {
             Properties props = new Properties();
             props.load(new FileReader("DBSettings.txt"));
             dataSource = new SQLServerDataSource();
@@ -36,7 +38,8 @@ public class DatabaseConnector {
             dataSource.setUser(props.getProperty("user"));
             dataSource.setPassword(props.getProperty("password"));
             dataSource.setServerName(props.getProperty("server"));
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             throw new DALException("forkert input, check username or password in file");
         }
     }
@@ -48,12 +51,14 @@ public class DatabaseConnector {
      * @return
      * @throws DALException
      */
-    public Connection getConnection() throws DALException {
-        try {
+    public Connection getConnection() throws DALException
+    {
+        try
+        {
             return dataSource.getConnection();
-        } catch (SQLServerException ex) {
+        } catch (SQLServerException ex)
+        {
             throw new DALException("Kunne ikke oprette forbindelse til serveren");
         }
     }
-
 }
