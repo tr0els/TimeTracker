@@ -114,6 +114,8 @@ public class ProjektViewController implements Initializable {
     private HBox hbox_head;
     @FXML
     private Label lblClientname;
+    @FXML
+    private Label lblWarning;
 
     public ProjektViewController() throws DALException, SQLException
     {
@@ -350,6 +352,8 @@ public class ProjektViewController implements Initializable {
             LocalTime timeto = timeTo.getValue();
             LocalDateTime ldt_to = LocalDateTime.of(dateto, timeto);
 
+            System.out.println(ldt_from.compareTo(ldt_to));
+            
             edit_task.setStartTime(ldt_from);
             edit_task.setEndTime(ldt_to);
 
@@ -357,10 +361,14 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProjectId(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId());
 
+            if (ldt_from.compareTo(ldt_to) == 1)
+            {
+                lblWarning.setText("fra-tid kan ikke være før til-tid!");
+            }else{
+
             Cmodel.changelogTask(edit_task, person_id);
-
-            model.updateTaskbyID(edit_task);
-
+            model.updateTaskbyID(edit_task);    
+            
             loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
 
             for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
@@ -377,6 +385,7 @@ public class ProjektViewController implements Initializable {
 
             skuffen.close();
             skuffen.toBack();
+            }
         } catch (DALException | SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
