@@ -149,7 +149,10 @@ public class BrugerModel {
     public boolean valExistingEmail(String email){
         return validator.valExistingEmail(email);
     }
-    
+    /**
+     * har fået vi en liste ud af de sidte 
+     * @return 
+     */
     public ObservableList<YearMonth> getListOfPeriods(){
                    
         for (int i = 0; i < 12; i++) {

@@ -166,7 +166,7 @@ public class OverviewForAdminsController implements Initializable {
      */
     public void populatetable() throws DALException, SQLException {
         if (UserLoggedInForMinTid == null) {
-            listeAfProjekter = pModel.getProjectsWithExtraData();
+            listeAfProjekter = pModel.getProjectsToFilter(null, null, null, null, null, null);
         } else {
             listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null, null, null, null, null);
 

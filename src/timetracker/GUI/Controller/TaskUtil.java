@@ -150,9 +150,10 @@ public class TaskUtil {
         
         // edit project
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal != null){
             taskParent.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
         });
         
         // billable
@@ -267,9 +268,10 @@ public class TaskUtil {
         
         // edit project
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal != null){
             taskChild.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
         });
         
         // billable
