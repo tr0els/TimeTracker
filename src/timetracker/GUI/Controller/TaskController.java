@@ -338,7 +338,7 @@ public class TaskController implements Initializable {
         // Build task view
 	Pane taskPane = TaskUtil.getView(tasks, allProjects);
 
-        // put pane in scrollpane
+        // Put task view in scrollpane
         taskScrollPane.setContent(taskPane);      
     }
 }
