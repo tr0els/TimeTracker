@@ -347,7 +347,7 @@ public class ProjectDAO
                     + "and c.client_id = p.client_id\n"
                     + "and t.task_id = t1.task_id\n"
                     + "and c.client_name LIKE '%" + client_clause + "%'\n"
-                    + "and t.task_end != null\n"
+                    + "and t.task_end is not null\n"
                     + user_clause
                     + fradato_caluse
                     + tildato_clause
