@@ -224,16 +224,19 @@ public class ProjectDAO
 
                 allProjectswithClientID.add(projects);
             }
-            System.out.println(allProjectswithClientID);
+           
             return allProjectswithClientID;
         } catch (SQLException ex)
         {
             throw new DALException("kunne ikke finde projekter for klienten");
         }
     }
-
-    public List<Project> getProjectsWithExtraData() throws DALException
-    {
+/**
+ * 
+ * @return
+ * @throws DALException 
+ */
+    public List<Project> getProjectsWithExtraData() throws DALException {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
@@ -272,21 +275,18 @@ public class ProjectDAO
                 {
                     projects.setBillableTime("00:00:00");
                 }
-                System.out.println(allProjectsWithExtraData);
+              
                 allProjectsWithExtraData.add(projects);
             }
-            System.out.println(allProjectsWithExtraData);
+                      
             return allProjectsWithExtraData;
         } catch (SQLException ex)
         {
             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
         }
     }
-
     /**
-     * Returnerer en liste med Projects på baggrund af søgekriterier fra
-     * databasen
-     *
+     * denne metode bruges til at lave vores sql, til filteringen på overbliksbilledet og min tid. 
      * @param comboUser
      * @param comboClient
      * @param fradato
@@ -354,8 +354,8 @@ public class ProjectDAO
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
 
             Statement statement = con.createStatement();
-
-            System.out.println(sql);
+            
+         
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next())
             {
@@ -378,9 +378,8 @@ public class ProjectDAO
                 }
 
                 allProjectsWithExtraData.add(projects);
-
-            }
-            System.out.println(allProjectsWithExtraData);
+                  
+            } 
             return allProjectsWithExtraData;
 
         } catch (SQLException ex)

@@ -162,7 +162,7 @@ public class OverviewForAdminsController implements Initializable {
      */
     public void populatetable() throws DALException, SQLException {
         if (UserLoggedInForMinTid == null) {
-            listeAfProjekter = pModel.getProjectsWithExtraData();
+            listeAfProjekter = pModel.getProjectsToFilter(null, null, null, null, null, null);
         } else {
             listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null, null, null, null, null);
 
@@ -506,14 +506,16 @@ public class OverviewForAdminsController implements Initializable {
                 popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
                 popupStage.setScene(scene);
                 popupStage.setResizable(false);
-                popupStage.setTitle(selectedProject.getProjectName() + " - " + selectedProject.getProjectRate() + " DKK");
-
+                if(transferUser == null)
+                popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
+                else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
                 popupStage.show();
             }
             popupStage.show();
             popupStage.toFront();
+            if(transferUser == null)
             popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
-
+            else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
         }
 
     }

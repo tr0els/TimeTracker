@@ -90,21 +90,8 @@ public class PopUpDataViewController implements Initializable
         colOpgave.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         colStart.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))));
         colEnd.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern))));
-        colhhmm.setCellValueFactory(cellData ->    
-        {   String hhMM = cellData.getValue().getTime();
-            String[] timesplitup = hhMM.split(":");
-            
-            int hhTotal = Integer.parseInt(timesplitup[0]);
-            int mmTotal = Integer.parseInt(timesplitup[1]);
-            int secTotal = Integer.parseInt(timesplitup[2]);
-            String totaltimeString;
-            if ( secTotal >= 30)
-            {
-                mmTotal +=1;
-            } 
-            totaltimeString = hhTotal + ":" + String.format( "%02d", mmTotal);
-            return new SimpleStringProperty(totaltimeString);
-        });
+        colhhmm.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTime()));
+   
             
         colBillable.setCellValueFactory(cellData ->
         {
@@ -164,17 +151,21 @@ public class PopUpDataViewController implements Initializable
             {
                 FileWriter fw = new FileWriter(fileToSave);
                 BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(colOpgave.getText() + ";" + colStart.getText() + ";" + colEnd.getText() + ";" + colBillable.getText() + ";" + colMedarebjder.getText());
+                bw.write(colOpgave.getText() + ";" + colStart.getText() + ";" + colEnd.getText() + ";" + "HH/MM/SS"+ ";" +colBillable.getText() + ";" + colMedarebjder.getText());
                 bw.newLine();
                 for (TaskForDataView tfdv : listeAfTask) {
                     {   
-                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern)) +";"+ tfdv.isBillable() + ";" + tfdv.getUser());
+                        bw.write(tfdv.getName() + ";" + tfdv.getStart().format(DateTimeFormatter.ofPattern(europeanDatePattern))+ ";" + tfdv.getEnd().format(DateTimeFormatter.ofPattern(europeanDatePattern)) +";"+tfdv.getTime()+";" +tfdv.isBillable() + ";" + tfdv.getUser());
                     }
                     bw.newLine();
                   
                 }
                 bw.newLine();
-                bw.write("Projekt navn : "+choosenProject.getProjectName() +";"+"timepris : " +choosenProject.getProjectRate()+" DKK");
+                if(userFromOVerview == null){
+                bw.write("Projekt navn : "+choosenProject.getProjectName() +";"+"timepris : " +choosenProject.getProjectRate()+" DKK");}
+                else{
+                bw.write("Projekt navn : "+choosenProject.getProjectName());
+                }
                 bw.close();
                 fw.close();
             } catch (IOException ex)
