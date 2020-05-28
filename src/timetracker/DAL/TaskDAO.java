@@ -29,13 +29,11 @@ import timetracker.BLL.Sorttaskbydatedesc;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskDAO
-{
+public class TaskDAO {
 
     private DatabaseConnector dbCon;
 
-    public TaskDAO() throws DALException
-    {
+    public TaskDAO() throws DALException {
         dbCon = new DatabaseConnector();
     }
 
@@ -48,10 +46,8 @@ public class TaskDAO
      * @param person_id
      * @throws timetracker.DAL.DALException
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
+        try (Connection con = dbCon.getConnection()) {
             String sql = "INSERT INTO Tasklog (task_name, billable, project_id, person_id, task_start) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
 
             PreparedStatement ps = con.prepareStatement(sql);
@@ -62,8 +58,7 @@ public class TaskDAO
             ps.setInt(4, person_id);
 
             ps.execute();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke starte Tasken");
         }
     }
@@ -74,10 +69,8 @@ public class TaskDAO
      * @param person_id
      * @throws timetracker.DAL.DALException
      */
-    public void stopTask(int person_id) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void stopTask(int person_id) throws DALException {
+        try (Connection con = dbCon.getConnection()) {
             String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
                     + "WHERE person_id = ? AND task_end IS NULL";
 
@@ -86,8 +79,7 @@ public class TaskDAO
             ps.setInt(1, person_id);
 
             ps.execute();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke stoppe tasken");
         }
     }
@@ -100,14 +92,12 @@ public class TaskDAO
      * @param person_id
      * @return
      */
-    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException
-    {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
         TreeMap<Task, List<Task>> map = new TreeMap<>(new Sorttaskbydatedesc());
 
         String typeTask = "TASK";
         String typeLog = "LOG";
-        try ( Connection con = dbCon.getConnection())
-        {
+        try (Connection con = dbCon.getConnection()) {
             String sql = "SELECT 'TASK' AS type, \n"
                     + "	MIN(t.task_id) as task_id,\n"
                     + "	t.project_id, t.task_name,\n"
@@ -151,26 +141,20 @@ public class TaskDAO
 
             ArrayList<Task> logs = new ArrayList<>();
 
-            while (rs.next())
-            {
-                if (rs.getString("type").equalsIgnoreCase(typeLog))
-                {
+            while (rs.next()) {
+                if (rs.getString("type").equalsIgnoreCase(typeLog)) {
                     Task log = new Task();
 
                     LocalDateTime end_time;
-                    if (rs.getTimestamp("task_end") != null)
-                    {
+                    if (rs.getTimestamp("task_end") != null) {
                         end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                    } else
-                    {
+                    } else {
                         end_time = null;
                     }
                     String sBillable;
-                    if (rs.getBoolean("billable") == true)
-                    {
+                    if (rs.getBoolean("billable") == true) {
                         sBillable = "Ja";
-                    } else
-                    {
+                    } else {
                         sBillable = "Nej";
                     }
                     log.setTaskId(rs.getInt("task_id"));
@@ -184,8 +168,7 @@ public class TaskDAO
                     logs.add(log);
                 }
 
-                if (rs.getString("type").equalsIgnoreCase(typeTask))
-                {
+                if (rs.getString("type").equalsIgnoreCase(typeTask)) {
                     Task task = new Task();
                     int task_id = rs.getInt("task_id");
 
@@ -200,8 +183,101 @@ public class TaskDAO
                     logs = new ArrayList<>();
                 }
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
+            throw new DALException("Kunne ikke finde Task på bruger og projekt");
+        }
+        return map;
+    }
+
+    /**
+     * Returnerer en liste af et projekts tilhørende Tasks udfra person_id og
+     * project_id
+     *
+     * @param project_id
+     * @param person_id
+     * @return
+     */
+    public TreeMap<String, List<Task>> getTaskbyDays(int days, int person_id) throws DALException {
+        TreeMap<String, List<Task>> map = new TreeMap<>();
+
+        String typeDate = "the_date";
+        String typeLog = "LOG";
+        try (Connection con = dbCon.getConnection()) {
+            String sql = "SELECT 'LOG' AS TYPE,\n"
+                    + "tl.*, \n"
+                    + "CONVERT(DATE, task_start) as the_date,\n"
+                    + "CONVERT(VARCHAR(5),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60/60) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60%60), 2) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)%60),2)\n"
+                    + "AS total_time\n"
+                    + "FROM Tasklog tl\n"
+                    + "WHERE person_id = ? AND CONVERT(DATE, task_start) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE())\n"
+                    + "\n"
+                    + "UNION\n"
+                    + "\n"
+                    + "SELECT 'the_date' as TYPE,\n"
+                    + "MIN(tl.task_id) as task_id,\n"
+                    + "NULL,\n"
+                    + "NULL,\n"
+                    + "NULL,\n"
+                    + "NULL,\n"
+                    + "NULL,\n"
+                    + "NULL,\n"
+                    + "CONVERT(DATE, MIN(task_start)) as the_date,\n"
+                    + "CONVERT(VARCHAR(5),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60/60) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))/60%60), 2) + ':' +\n"
+                    + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
+                    + "AS total_time\n"
+                    + "FROM Tasklog tl\n"
+                    + "WHERE person_id = ? AND CONVERT(DATE, task_end) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE())\n"
+                    + "GROUP BY CONVERT(DATE, task_start)\n"
+                    + "ORDER BY the_date DESC, task_start DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, person_id);
+            ps.setInt(2, days);
+            ps.setInt(3, person_id);
+            ps.setInt(4, days);
+
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<Task> logs = new ArrayList<>();
+
+            while (rs.next()) {
+                if (rs.getString("type").equalsIgnoreCase(typeLog)) {
+                    Task log = new Task();
+
+                    LocalDateTime end_time;
+                    if (rs.getTimestamp("task_end") != null) {
+                        end_time = rs.getTimestamp("task_end").toLocalDateTime();
+                    } else {
+                        end_time = null;
+                    }
+
+                    log.setTaskId(rs.getInt("task_id"));
+                    log.setBillable(rs.getBoolean("billable"));
+                    log.setTotalTime(rs.getString("total_time"));
+                    log.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
+                    log.setEndTime(end_time);
+                    log.setTaskName(rs.getString("task_name"));
+
+                    System.out.println(log);
+//                    logs.add(log);
+                }
+
+                if (rs.getString("type").equalsIgnoreCase(typeDate)) {
+                    String datetime;
+
+                    datetime = rs.getString("the_date") + "|" + rs.getString("total_time");
+
+                    System.out.println(datetime);
+//                    map.put(datetime, logs);
+//
+//                    logs = new ArrayList<>();
+                }
+            }
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke finde Task på bruger og projekt");
         }
         return map;
@@ -214,23 +290,18 @@ public class TaskDAO
      * @return
      * @throws DALException
      */
-    public Task getTaskbyID(int task_id) throws DALException
-    {
+    public Task getTaskbyID(int task_id) throws DALException {
         Task task = new Task();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try (Connection con = dbCon.getConnection()) {
             String sql = "SELECT * FROM Tasklog WHERE task_id = " + task_id + ";";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 LocalDateTime end_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                } else
-                {
+                } else {
                     end_time = null;
                 }
                 task.setTaskId(rs.getInt("task_id"));
@@ -241,8 +312,7 @@ public class TaskDAO
                 task.setEndTime(end_time);
                 task.setBillable(rs.getBoolean("billable"));
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke finde tasken");
         }
         return task;
@@ -254,10 +324,8 @@ public class TaskDAO
      * @param task
      * @throws DALException
      */
-    public void updateTaskbyID(Task task) throws DALException
-    {
-        try ( Connection con = dbCon.getConnection())
-        {
+    public void updateTaskbyID(Task task) throws DALException {
+        try (Connection con = dbCon.getConnection()) {
             int task_id = task.getTaskId();
 
             String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, person_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
@@ -273,46 +341,38 @@ public class TaskDAO
             ps.setInt(7, task_id);
 
             ps.execute();
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Kunne ikke opdatere tasken");
         }
     }
 
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
-    {
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
         List<TaskForDataView> taskForOverviewData = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try (Connection con = dbCon.getConnection()) {
             String project_id = "";
             String user_id = "";
             String fradato_caluse = "";
             String tildato_clause = "";
             String periode_clause = "";
 
-            if (fradato != null)
-            {
+            if (fradato != null) {
                 fradato_caluse += "AND  cast(tl.task_start as date)  >= '" + fradato + "'\n";
             }
 
-            if (tildato != null)
-            {
+            if (tildato != null) {
                 tildato_clause += "AND cast(tl.task_end as date) <= '" + tildato + "' \n";
             }
 
-            if (monthStart != null && monthEnd != null)
-            {
+            if (monthStart != null && monthEnd != null) {
                 periode_clause += "AND cast(tl.task_start as date) Between convert(date, '" + monthStart + "', 103) and convert(date, '" + monthEnd + "', 103)";
             }
 
-            if (project != null)
-            {
+            if (project != null) {
                 project_id += "and p.project_id =" + project.getProjectId() + "\n";
             }
 
-            if (user != null)
-            {
+            if (user != null) {
                 user_id += "and per.person_id = " + user.getPersonId() + "\n";
             }
             String sql
@@ -334,14 +394,11 @@ public class TaskDAO
 
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next())
-            {
+            while (rs.next()) {
                 LocalDateTime end_time;
-                if (rs.getTimestamp("task_end") != null)
-                {
+                if (rs.getTimestamp("task_end") != null) {
                     end_time = rs.getTimestamp("task_end").toLocalDateTime();
-                } else
-                {
+                } else {
                     end_time = LocalDateTime.now();
                 }
                 String Billable;
@@ -355,8 +412,7 @@ public class TaskDAO
 
                 taskForOverviewData.add(task);
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             throw new DALException("kunne ikke hente din liste af task" + ex);
         }
         return taskForOverviewData;
@@ -370,11 +426,9 @@ public class TaskDAO
      * @throws DALException
      * @throws SQLException
      */
-    private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
-    {
+    private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         // Fetch task data 
-        try ( Connection con = dbCon.getConnection())
-        {
+        try (Connection con = dbCon.getConnection()) {
             String sql
                     = "-- LOCAL VARIABLES\n"
                     //+ "DECLARE @person_id int = 0\n"
@@ -484,14 +538,12 @@ public class TaskDAO
             TaskGroup tg = null;
             TaskParent tp = null;
 
-            while (rs.next())
-            {
+            while (rs.next()) {
                 // Instantiate task entities and add them to their respective
                 // relations to build a hierarchy (stacking). It is relying on
                 // the task type and the specific order of tasks returned by 
                 // the sql query.                
-                if (rs.getString("type").equals("TaskGroup"))
-                {
+                if (rs.getString("type").equals("TaskGroup")) {
 
                     tg = new TaskGroup(); // <-- den fucker tror jeg
 
@@ -502,8 +554,7 @@ public class TaskDAO
                     allTaskGroups.add(tg);
                 }
 
-                if (rs.getString("type").equals("TaskParent"))
-                {
+                if (rs.getString("type").equals("TaskParent")) {
                     tp = new TaskParent();
 
                     tp.setName(rs.getString("task_name"));
@@ -515,17 +566,14 @@ public class TaskDAO
                     tp.setTime(rs.getString("total_time"));
 
                     // Add parent to current group or list of all parents
-                    if (tg != null)
-                    {
+                    if (tg != null) {
                         tg.addParent(tp);
-                    } else
-                    {
+                    } else {
                         allTaskParents.add(tp);
                     }
                 }
 
-                if (rs.getString("type").equals("TaskChild"))
-                {
+                if (rs.getString("type").equals("TaskChild")) {
                     TaskChild tc = new TaskChild();
 
                     tc.setId(rs.getInt("task_id"));
@@ -539,35 +587,28 @@ public class TaskDAO
                     // setparent?
 
                     // Add child to current parent or list of all children
-                    if (tp != null)
-                    {
+                    if (tp != null) {
                         tp.addChild(tc);
-                    } else
-                    {
+                    } else {
                         allTaskChildren.add(tc);
                     }
                 }
             }
 
             // Return list of tasks
-            if (allTaskGroups != null)
-            {
+            if (allTaskGroups != null) {
                 return allTaskGroups;
-            } else if (allTaskParents != null)
-            {
+            } else if (allTaskParents != null) {
                 return allTaskParents;
-            } else
-            {
+            } else {
                 return allTaskChildren;
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new DALException("Could not connect to database");
         }
     }
 
-    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
-    {
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         return (List<TaskGroup>) getTasks(personId, "DATE", true, true);
     }
 

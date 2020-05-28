@@ -50,12 +50,6 @@ public class TaskController implements Initializable {
     private JFXCheckBox checkBillable;
     @FXML
     private JFXComboBox<Project> comboListprojects;
-    @FXML
-    private JFXButton btnCreateTask;
-    @FXML
-    private AnchorPane paneToday;
-    @FXML
-    private AnchorPane paneYesterday;
 
     private Image imgPlay;
     private Image imgPause;
@@ -63,8 +57,6 @@ public class TaskController implements Initializable {
     private Image imgNotBillable;
     private Image imgEdit;
 
-    private int idag = 0;
-    private int igår = 1;
     private int person_id;
     @FXML
     private Label timerHours;
@@ -80,8 +72,6 @@ public class TaskController implements Initializable {
     boolean timerState = false;
     @FXML
     private JFXButton timerButton;
-    @FXML
-    private ScrollPane taskScrollPane;
 
     private ObservableList<Project> allProjects = FXCollections.observableArrayList();
 
@@ -97,16 +87,15 @@ public class TaskController implements Initializable {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
             allProjects.addAll(pModel.getProjects());
-            setTasksGroupedByDate();
             
+            model.getTaskbyDays(30, person_id);
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
         loadImages();
         showProjects();
-//        taskLogsbyDay(paneToday, idag);
-//        taskLogsbyDay(paneYesterday, igår);
+
     }
 
     /**
@@ -139,7 +128,6 @@ public class TaskController implements Initializable {
         textTaskname.clear();
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
-//        taskLogsbyDay(paneToday, 0);
 
     }
 
@@ -231,107 +219,16 @@ public class TaskController implements Initializable {
         }
     }
 
-//    /**
-//     * opbygger view med task for den valgte dag idag = 0, igår = 1
-//     *
-//     */
-//    public void taskLogsbyDay(AnchorPane currentPane, int dag) {
 //
-//        AnchorPane pane = currentPane;
+//    public void setTasksGroupedByDate() throws DALException, SQLException {
 //
-//        List<Log> logList = new ArrayList<>();
+//        // Get users tasks grouped by date
+//        List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
 //
-//        logList = model.getTaskLogListByDay(person_id, dag);
+//        // Build task view
+//        Pane taskPane = TaskUtil.getView(tasks, allProjects);
 //
-//        pane.getChildren().clear();
-//
-//        int Y = 10; //padding
-//        int taskLineHeight = 22;
-//        int scrollpaneHeight = logList.size() * taskLineHeight + (2 * Y);
-//
-//        pane.setPrefHeight(scrollpaneHeight);
-//        for (Log log : logList) {
-//
-//            Label lblTaskname = new Label(log.getTask_name());
-//            lblTaskname.setTranslateY(Y);
-//            lblTaskname.setTranslateX(10);
-//
-//            Label lblProject = new Label(log.getProject_name());
-//            lblProject.setTranslateY(Y);
-//            lblProject.setTranslateX(140);
-//
-//            Label btnBillable = new Label();
-//            if (log.isBillable() == true) {
-//                btnBillable.setGraphic(new ImageView(imgBillable));
-//            } else {
-//                btnBillable.setGraphic(new ImageView(imgNotBillable));
-//            }
-//            btnBillable.setTranslateY(Y);
-//            btnBillable.setTranslateX(250);
-//
-//            String tid = "0:00";
-//            if (log.getTotal_tid() != null) {
-//                DateFormat total_tid = new SimpleDateFormat("H:mm");
-//                tid = total_tid.format(log.getTotal_tid());
-//            }
-//            Label lblTotaltid = new Label(tid);
-//            lblTotaltid.setTranslateY(Y);
-//            lblTotaltid.setTranslateX(290);
-//            lblTotaltid.setStyle("-fx-font-weight: bold");
-//
-//            String startTid = log.getStart_time().format(DateTimeFormatter.ofPattern("HH:mm"));
-//            Label lblstarttid = new Label(startTid);
-//            lblstarttid.setTranslateY(Y);
-//            lblstarttid.setTranslateX(340);
-//
-//            JFXButton btnStart = new JFXButton();
-//            btnStart.setGraphic(new ImageView(imgPause));
-//            btnStart.setOnAction(event -> {
-//                stopTask();
-//                taskLogsbyDay(paneToday, 0);
-//            });
-//            btnStart.setTranslateY(Y - 4);
-//            btnStart.setTranslateX(490);
-//
-//            String slutTid = "";
-//            if (log.getEnd_time() != null) {
-//                slutTid = log.getEnd_time().format(DateTimeFormatter.ofPattern("HH:mm"));
-//                btnStart.setGraphic(new ImageView(imgPlay));
-//                btnStart.setOnAction(event -> {
-//                    startTask(); // Troels broke it! SORRY :) --> startTask(log.getTask_id());
-//                    taskLogsbyDay(paneToday, 0);
-//                });
-//            }
-//            Label lblSluttid = new Label(slutTid);
-//            lblSluttid.setTranslateY(Y);
-//            lblSluttid.setTranslateX(390);
-//
-//            JFXButton btnEdit = new JFXButton();
-//            btnEdit.setGraphic(new ImageView(imgEdit));
-//            btnEdit.setTranslateY(Y - 4);
-//            btnEdit.setTranslateX(525);
-//
-//            Y = Y + taskLineHeight; //Sørger for at tasks flyttes ned til næste linje
-//
-//            pane.getChildren().add(lblProject);
-//            pane.getChildren().add(btnBillable);
-//            pane.getChildren().add(lblTotaltid);
-//            pane.getChildren().add(lblstarttid);
-//            pane.getChildren().add(lblSluttid);
-//            pane.getChildren().add(btnStart);
-//            pane.getChildren().add(btnEdit);
-//            pane.getChildren().add(lblTaskname);
-//        }
+//        // Put task view in scrollpane
+//        taskScrollPane.setContent(taskPane);
 //    }
-    public void setTasksGroupedByDate() throws DALException, SQLException {
-
-        // Get users tasks grouped by date
-        List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
-
-        // Build task view
-        Pane taskPane = TaskUtil.getView(tasks, allProjects);
-
-        // Put task view in scrollpane
-        taskScrollPane.setContent(taskPane);
-    }
 }

@@ -46,6 +46,8 @@ public interface IgetDataFacadeInterface
     void stopTask(int person_id) throws DALException;
 
     TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException;
+    
+    TreeMap<String, List<Task>> getTaskbyDays(int days, int person_id) throws DALException;
 
     public Task getTaskbyID(int task_id) throws DALException;
 

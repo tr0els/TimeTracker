@@ -39,11 +39,15 @@
                   <Label layoutX="5.0" layoutY="6.0" text="Fra:" />
                </children>
             </AnchorPane>
+            <Label fx:id="lblWarning" alignment="TOP_LEFT" layoutX="319.0" layoutY="129.0" prefHeight="16.0" prefWidth="257.0" textFill="RED" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="11.0" />
+               </font></Label>
          </children>
       </AnchorPane>
       <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" prefHeight="150.0" prefWidth="600.0" />
       <Label layoutX="14.0" layoutY="18.0" text="Vælg Projekt:" />
-      <Pane fx:id="paneProjectDetails" layoutX="9.0" layoutY="51.0" prefHeight="435.0" prefWidth="582.0" style="-fx-background-color: transparent;">
+      <Pane fx:id="paneProjectDetails" layoutX="9.0" layoutY="52.0" prefHeight="435.0" prefWidth="582.0" style="-fx-background-color: transparent;">
          <children>
             <HBox fx:id="hbox_head" alignment="CENTER" layoutX="1.0" prefHeight="59.0" prefWidth="566.0">
                <children>
