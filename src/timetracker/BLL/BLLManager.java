@@ -102,6 +102,7 @@ public class BLLManager
 
     }
 
+    
     public List<Project> getProjectsbyID(int person_id) throws DALException
     {
         return iGetData.getProjectsbyID(person_id);
@@ -192,11 +193,12 @@ public class BLLManager
         return iGetData.getProjects();
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id) throws DALException
-    {
-        return iGetData.getProject(projectName, project_rate, client_id);
-    }
-
+    /**
+     * Returnerer en liste med projects som tilhører Client objektet.
+     * @param client
+     * @return
+     * @throws DALException 
+     */
     public List<Project> getProjekctsbyClientID(Client client) throws DALException
     {
         return iGetData.getProjectsbyClientID(client);
@@ -334,6 +336,10 @@ public class BLLManager
         return iGetData.getProfessions();
     }
 
+    /**
+     * Fjerner en User 
+     * @param disableUser 
+     */
     public void disableUser(User disableUser)
     {
         iGetData.disableUser(disableUser);
@@ -344,7 +350,7 @@ public class BLLManager
         return iGetData.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd);
     }
 
-    public void changelogTask(Task task, int person_id)
+    public void changelogTask(Task task, int person_id) throws DALException
     {
         iGetData.changelogTask(task, person_id);
     }

@@ -7,13 +7,13 @@ package timetracker.GUI.Model;
 
 import java.sql.SQLException;
 import timetracker.BE.Task;
-import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
 /**
  *
- * @author René Jørgensen
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class ChangelogModel
 {
@@ -32,7 +32,7 @@ public class ChangelogModel
         return model;
     }
     
-    public void changelogTask(Task task, int person_id){
+    public void changelogTask(Task task, int person_id) throws DALException{
         bll.changelogTask(task, person_id);
     }
     

@@ -9,11 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import timetracker.BE.Task;
-import timetracker.BE.User;
 
 /**
  *
- * @author René Jørgensen
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class ChangelogDAO
 {
@@ -27,7 +27,8 @@ public class ChangelogDAO
 
     /**
      * Opretter en Changelog_Task i vores database så man kan se hvornår der er
-     * sket ændringer.
+     * sket ændringer, ved at kopiere den allerede oprettet Task og give det et
+     * personId og tidspunktet ændringen er sket.
      *
      * @param task
      * @param user

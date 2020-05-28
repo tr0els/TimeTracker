@@ -14,8 +14,8 @@
         <columns>
           <TableColumn fx:id="colOpgave" editable="false" prefWidth="131.0" text="Opgave" />
             <TableColumn fx:id="colStart" editable="false" prefWidth="119.0" text="Start" />
-            <TableColumn fx:id="colEnd" editable="false" prefWidth="118.0" text="Slut" />
-            <TableColumn fx:id="colhhmm" prefWidth="78.0" text="HH:MM" />
+            <TableColumn fx:id="colEnd" editable="false" prefWidth="111.0" text="Slut" />
+            <TableColumn fx:id="colhhmm" editable="false" prefWidth="85.0" text="HH:MM:SS" />
             <TableColumn fx:id="colBillable" editable="false" prefWidth="60.0" text="Billable" />
             <TableColumn fx:id="colMedarebjder" editable="false" prefWidth="147.0" text="Medarbejder" />
         </columns>

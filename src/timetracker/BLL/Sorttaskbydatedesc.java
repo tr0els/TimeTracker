@@ -10,7 +10,8 @@ import timetracker.BE.Task;
 
 /**
  *
- * @author BBran
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class Sorttaskbydatedesc implements Comparator<Task>{
     

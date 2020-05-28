@@ -5,20 +5,14 @@
  */
 package timetracker.GUI.Model;
 
-import java.security.NoSuchAlgorithmException;
 import timetracker.BE.Task;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import timetracker.BE.Client;
-import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;

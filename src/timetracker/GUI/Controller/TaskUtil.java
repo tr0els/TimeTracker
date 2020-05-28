@@ -22,6 +22,11 @@ import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
 
+/**
+ * 
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
+ */
 public class TaskUtil {
     
     /**
@@ -150,9 +155,10 @@ public class TaskUtil {
         
         // edit project
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal != null){
             taskParent.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
         });
         
         // billable
@@ -266,10 +272,12 @@ public class TaskUtil {
         hbox.getChildren().add(project);
         
         // edit project
+        
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal != null){
             taskChild.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");
+            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
         });
         
         // billable
