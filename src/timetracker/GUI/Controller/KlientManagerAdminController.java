@@ -76,8 +76,7 @@ public class KlientManagerAdminController implements Initializable {
     private JFXButton retvalgteklientnbtb;
     @FXML
     private JFXTextField txtrettimepris;
-    private Label lblprojektnavn;
-    private Label lblprojekttimepris;
+
 
     private Client selectedClient;
     private Client newclient = new Client();
