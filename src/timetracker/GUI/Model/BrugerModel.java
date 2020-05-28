@@ -22,7 +22,8 @@ import timetracker.DAL.DALException;
 
 /**
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class BrugerModel {
 

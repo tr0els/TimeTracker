@@ -18,13 +18,16 @@ import timetracker.BE.User;
 
 /**
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
-public class BrugerDAO {
+public class UserDAO
+{
 
     private DatabaseConnector dbCon;
 
-    public BrugerDAO() throws DALException {
+    public UserDAO() throws DALException
+    {
         dbCon = new DatabaseConnector();
     }
 
@@ -36,8 +39,10 @@ public class BrugerDAO {
      * @param salt
      * @throws timetracker.DAL.DALException
      */
-    public void createUser(User user, byte[] HashedPassword, byte[] salt) throws DALException {
-        try ( Connection con = dbCon.getConnection()) {
+    public void createUser(User user, byte[] HashedPassword, byte[] salt) throws DALException
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "INSERT INTO Person (name, surname, email, password, active, role_id, profession_id, salt) VALUES (?,?,?,?,?,?,?,?);";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -53,7 +58,8 @@ public class BrugerDAO {
 
             st.executeQuery();
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DALException("Kunne ikke oprette bruger");
         }
     }
@@ -64,8 +70,10 @@ public class BrugerDAO {
      * @param user
      * @throws timetracker.DAL.DALException
      */
-    public void editUser(User user) throws DALException {
-        try ( Connection con = dbCon.getConnection()) {
+    public void editUser(User user) throws DALException
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "UPDATE Person SET name = ?, surname = ?, email = ?, role_id = ?, profession_id = ? WHERE person_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -78,8 +86,8 @@ public class BrugerDAO {
             st.setInt(6, user.getPersonId());
 
             st.executeQuery();
-
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
 //            throw new DALException("Kunne ikke rette brugeren"); <- dette ødelægger et eller andet
         }
     }
@@ -89,8 +97,10 @@ public class BrugerDAO {
      *
      * @param user
      */
-    public void deleteUser(User user) throws DALException {
-        try ( Connection con = dbCon.getConnection()) {
+    public void deleteUser(User user) throws DALException
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "DELETE FROM Person WHERE person_id = ?";
 
             PreparedStatement st = con.prepareStatement(sql);
@@ -99,7 +109,8 @@ public class BrugerDAO {
 
             st.executeQuery();
 
-        } catch (SQLException e) {
+        } catch (SQLException e)
+        {
             throw new DALException("Kunne ikke slette brugeren");
         }
     }
@@ -111,17 +122,20 @@ public class BrugerDAO {
      * @throws DALException
      * @throws SQLException
      */
-    public List<User> getUsers() throws DALException {
+    public List<User> getUsers() throws DALException
+    {
         ArrayList<User> allUsers = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT Person.person_id, name, surname, email, Person.role_id, role_name, Person.profession_id ,profession_name, active\n"
                     + "FROM Person, Profession, Role\n"
                     + "WHERE Person.role_id = Role.role_id\n"
                     + "AND Person.profession_id = Profession.profession_id AND active = 1";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
+            while (rs.next())
+            {
                 User user = new User();
                 user.setPersonId(rs.getInt("person_id"));
                 user.setName(rs.getString("name"));
@@ -135,10 +149,10 @@ public class BrugerDAO {
                 allUsers.add(user);
             }
             return allUsers;
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new DALException("Kunne ikke hente brugerne fra Datbasen");
         }
-        // return null;
     }
 
     /**
@@ -147,14 +161,17 @@ public class BrugerDAO {
      * @return
      * @throws DALException
      */
-    public List<Profession> getProfessions() throws DALException {
+    public List<Profession> getProfessions() throws DALException
+    {
         ArrayList<Profession> allProfessions = new ArrayList<>();
 
-        try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT * FROM Profession;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            while (rs.next()) {
+            while (rs.next())
+            {
                 Profession profession = new Profession();
                 profession.setProfessionId(rs.getInt("profession_id"));
                 profession.setProfessionName(rs.getString("Profession_name"));
@@ -162,10 +179,10 @@ public class BrugerDAO {
                 allProfessions.add(profession);
             }
             return allProfessions;
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new DALException("Kunne ikke hente proffisionliste ud");
         }
-        //return null;
     }
 
     /**
@@ -176,29 +193,35 @@ public class BrugerDAO {
      * @param hashedPassword
      * @return
      */
-    public User login(String email, byte[] hashedPassword) {
-
-        try ( Connection con = dbCon.getConnection()) {
+    public User login(String email, byte[] hashedPassword)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT * FROM PERSON WHERE email = ? AND password = ? AND active = 1";
             PreparedStatement st = con.prepareStatement(sql);
             st.setNString(1, email);
             st.setBytes(2, hashedPassword);
             ResultSet rs = st.executeQuery();
 
-            if (rs.next() == false) {
+            if (rs.next() == false)
+            {
                 return null;
-            } else {
-                do {
+            } else
+            {
+                do
+                {
                     User user = new User(rs.getInt("person_id"), rs.getString("name"), rs.getString("surname"), rs.getString("email"), rs.getInt("role_id"), rs.getInt("profession_id"));
                     String emailDAO = user.getEmail();
                     byte[] passwordDAO = rs.getBytes("password");
 
-                    if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword)) {
+                    if (emailDAO.equals(email) && Arrays.equals(passwordDAO, hashedPassword))
+                    {
                         return user;
                     }
                 } while (rs.next());
             }
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
         }
         return null;
     }
@@ -210,90 +233,112 @@ public class BrugerDAO {
      * @param email
      * @return
      */
-    public byte[] getSalt(String email) {
+    public byte[] getSalt(String email)
+    {
         byte[] salt = null;
 
-        try ( Connection con = dbCon.getConnection()) {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT email, salt FROM PERSON WHERE email = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setNString(1, email);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) {
+            while (rs.next())
+            {
                 salt = rs.getBytes("salt");
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
         return salt;
     }
-    
-    public boolean validateExistingEmail(String email){
+
+    /**
+     * Tjekker om den email der er indtastet allerede eksisterer i databasen.
+     *
+     * @param email
+     * @return
+     */
+    public boolean validateExistingEmail(String email)
+    {
         boolean validation = true;
-        
-        try (Connection con = dbCon.getConnection()){
+
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT email FROM PERSON WHERE email = ?";
-            PreparedStatement st  = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
-            
-            while (rs.next()) {
-                if (!rs.next()) {
+
+            while (rs.next())
+            {
+                if (!rs.next())
+                {
                     validation = false;
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
-        
         return validation;
     }
 
-    
     /**
-     * bugged
+     * Tjekker om den email der er indtastet allerede eksisterer i databasen et
+     * User objekt
+     *
      * @param person_id
      * @param email
-     * @return 
+     * @return
      */
-    boolean valExistingEmailEdit(int person_id, String email) {
+    boolean valExistingEmailEdit(int person_id, String email)
+    {
         boolean validationEdit = false;
         String dbEmail;
-        
-        try (Connection con = dbCon.getConnection()){
+
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "SELECT email FROM PERSON WHERE person_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, person_id);
             ResultSet rs = st.executeQuery();
-            while (rs.next()) {
+            while (rs.next())
+            {
                 dbEmail = rs.getString("email");
-                
-                if (!validateExistingEmail(email)){
+
+                if (!validateExistingEmail(email))
+                {
                     validationEdit = false;
                 }
-                if (email.equals(dbEmail)){
+                if (email.equals(dbEmail))
+                {
                     validationEdit = true;
                 }
-
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
         }
-        
         return validationEdit;
     }
 
     /**
-     * sætter den User som er valgt fra GUI'en til at være deaktiveret.
-     * @param disableUser 
+     * Sætter den User som er valgt fra GUI'en til at være deaktiveret.
+     *
+     * @param disableUser
      */
-    void disableUser(User disableUser) {
-        try (Connection con = dbCon.getConnection()){
+    void disableUser(User disableUser)
+    {
+        try ( Connection con = dbCon.getConnection())
+        {
             String sql = "UPDATE Person SET active = ? WHERE person_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, 0);
             st.setInt(2, disableUser.getPersonId());
             st.executeQuery();
-            
-        } catch (Exception e) {
+
+        } catch (Exception e)
+        {
         }
     }
-
 
 }

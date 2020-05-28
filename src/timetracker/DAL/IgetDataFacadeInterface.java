@@ -17,11 +17,13 @@ import timetracker.BE.User;
 
 /**
  *
- * @author Charlotte
+ * @author @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
-public interface IgetDataFacadeInterface {
+public interface IgetDataFacadeInterface
+{
 
-    //Projekter 
+    //Project 
     void createProject(int clientId, String projectName, int hourlyPay);
 
     void deleteProject(int projectId) throws DALException;
@@ -32,36 +34,26 @@ public interface IgetDataFacadeInterface {
 
     List<Project> getProjectsbyID(int personId) throws DALException;
 
-    Project getProject(String projectName, int ProjectRate, int ClientId) throws DALException;
-
     List<Project> getProjectWithExtraData() throws DALException;
 
-    
-    List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato,  String monthStart, String monthEnd) throws DALException;
-        
-    
-
-
- //   List<Project> getProjectsForEmploy(int medarbejder_id) throws DALException;
-
+    List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException;
 
     //Task
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException;
-    
-    void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException;
-    
-    void stopTask(int person_id)throws DALException;
-          
-    TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id)throws DALException;
-       
-    public Task getTaskbyID(int task_id) throws DALException;
-    
-    public void updateTaskbyID(Task task) throws DALException;
-    
-    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException;
-            
 
-    //Klient
+    void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException;
+
+    void stopTask(int person_id) throws DALException;
+
+    TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException;
+
+    public Task getTaskbyID(int task_id) throws DALException;
+
+    public void updateTaskbyID(Task task) throws DALException;
+
+    public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException;
+
+    //Client
     Client createClient(String name, int timepris) throws DALException;
 
     void editClient(Client client) throws DALException;
@@ -70,7 +62,7 @@ public interface IgetDataFacadeInterface {
 
     List<Client> getClients() throws DALException;
 
-    //Bruger
+    //User
     void createUser(User user, byte[] HashedPassword, byte[] salt) throws DALException;
 
     void editUser(User user) throws DALException;
@@ -85,9 +77,9 @@ public interface IgetDataFacadeInterface {
 
     byte[] getSalt(String email) throws DALException;
 
-    //Bruger --> profession
+    //User --> Profession
     List<Profession> getProfessions() throws DALException;
-    
+
     boolean validateExistingEmail(String email);
 
     public boolean valExistingEmailEdit(int person_id, String email);
@@ -95,6 +87,6 @@ public interface IgetDataFacadeInterface {
     public void disableUser(User disableUser);
 
     //Changelog
-    public void changelogTask(Task task, int person_id);
+    public void changelogTask(Task task, int person_id) throws DALException;
 
 }

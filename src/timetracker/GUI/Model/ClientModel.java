@@ -8,7 +8,6 @@ package timetracker.GUI.Model;
 import java.sql.SQLException;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
 import timetracker.BE.Project;
@@ -17,16 +16,19 @@ import timetracker.DAL.DALException;
 
 /**
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
-public class ClientModel {
+public class ClientModel
+{
 
     private ObservableList<Client> allClients;
     private static ClientModel model = null;
     private static BLLManager bll;
     private ObservableList<Project> allProjectsbyClientID;
 
-    private ClientModel() throws DALException {
+    private ClientModel() throws DALException
+    {
         bll = BLLManager.getInstance();
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
@@ -34,8 +36,10 @@ public class ClientModel {
 
     }
 
-    public static ClientModel getInstance() throws DALException {
-        if (model == null) {
+    public static ClientModel getInstance() throws DALException
+    {
+        if (model == null)
+        {
             model = new ClientModel();
         }
         return model;
@@ -48,7 +52,8 @@ public class ClientModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Client> getClients() throws DALException {
+    public ObservableList<Client> getClients() throws DALException
+    {
         Comparator<Client> byName = (Client cl1, Client cl2) -> cl1.getClientName().compareTo(cl2.getClientName());
         allClients.sort(byName);
         return allClients;
@@ -62,7 +67,8 @@ public class ClientModel {
      * @return
      * @throws timetracker.DAL.DALException
      */
-    public Client createClient(String navn, int timepris) throws DALException {
+    public Client createClient(String navn, int timepris) throws DALException
+    {
         return bll.createClient(navn, timepris);
     }
 
@@ -72,7 +78,8 @@ public class ClientModel {
      * @param client
      * @throws timetracker.DAL.DALException
      */
-    public void editClient(Client client) throws DALException {
+    public void editClient(Client client) throws DALException
+    {
         bll.editClient(client);
 
     }
@@ -84,18 +91,15 @@ public class ClientModel {
      * @param client
      * @throws timetracker.DAL.DALException
      */
-    public void deleteClient(Client client) throws DALException {
+    public void deleteClient(Client client) throws DALException
+    {
         bll.deleteClient(client);
     }
 
-    public ObservableList<Project> getClientprojcts(Client client) throws DALException {
-     
-            allProjectsbyClientID.clear();
-            allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
-            
-        
+    public ObservableList<Project> getClientProjcts(Client client) throws DALException
+    {
+        allProjectsbyClientID.clear();
+        allProjectsbyClientID.addAll(bll.getProjekctsbyClientID(client));
         return allProjectsbyClientID;
-
     }
-
 }

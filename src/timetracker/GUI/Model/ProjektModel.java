@@ -7,7 +7,6 @@ package timetracker.GUI.Model;
 
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Client;
@@ -18,7 +17,8 @@ import timetracker.DAL.DALException;
 
 /**
  *
- * @author Charlotte
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * Charlotte Christensen
  */
 public class ProjektModel {
 
@@ -103,12 +103,8 @@ public class ProjektModel {
         return allProjects;
     }
 
-    public Project getProject(String projectName, int project_rate, int client_id) throws DALException {
-        return bll.getProject(projectName, project_rate, client_id);
-    }
-
     /**
-     * returnere en liste af projects hvor person_id har lavet tasks på
+     * Returnere en liste af projects hvor person_id har lavet tasks på
      * @param person_id
      * @return
      * @throws DALException 
@@ -133,4 +129,6 @@ public class ProjektModel {
         return allProjectsWitExtraData;
     }
 
+    
+    
 }
