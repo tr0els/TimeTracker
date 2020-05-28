@@ -77,9 +77,6 @@ public class KlientManagerAdminController implements Initializable
     private JFXButton retvalgteklientnbtb;
     @FXML
     private JFXTextField txtrettimepris;
-
-
-    private JFXButton btbGåtilprojekter;
     @FXML
     private JFXButton btbcancelnyklient;
     @FXML
@@ -133,12 +130,9 @@ public class KlientManagerAdminController implements Initializable
             listviewprojekts.setFocusTraversable(false);
             listviewprojekts.setTooltip(tooltipforprojektlist());
 
-        } catch (DALException ex)
+        } catch (DALException | SQLException ex)
         {
-            Logger.getLogger(KlientManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(KlientManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
+           
         }
     }
 
@@ -344,14 +338,20 @@ public class KlientManagerAdminController implements Initializable
         txtrettimepris.setText(selectedClient.getDefaultRate() + " DKK");
 
     }
-
+    /**
+     * 
+     * @param event 
+     */
     @FXML
     private void handleCancelRetklient(ActionEvent event)
     {
 
         skuffe.close();
     }
-
+    /**
+     * 
+     * @param event 
+     */
     @FXML
     private void handleCancelnyklient(ActionEvent event)
     {
