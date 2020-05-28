@@ -352,7 +352,6 @@ public class ProjektViewController implements Initializable {
             LocalTime timeto = timeTo.getValue();
             LocalDateTime ldt_to = LocalDateTime.of(dateto, timeto);
 
-            System.out.println(ldt_from.compareTo(ldt_to));
             
             edit_task.setStartTime(ldt_from);
             edit_task.setEndTime(ldt_to);
@@ -365,7 +364,7 @@ public class ProjektViewController implements Initializable {
             {
                 lblWarning.setText("til-tid kan ikke være før fra-tid!");
             }else{
-
+                lblWarning.setText("");
             Cmodel.changelogTask(edit_task, person_id);
             model.updateTaskbyID(edit_task);    
             
