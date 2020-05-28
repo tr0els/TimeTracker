@@ -97,8 +97,9 @@ public class TaskController implements Initializable {
         try {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
-            setTasksGroupedByDate();
             allProjects.addAll(pModel.getProjects());
+            setTasksGroupedByDate();
+            
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,7 +135,7 @@ public class TaskController implements Initializable {
      * henter en liste over projekter og smider dem i vores combobox
      */
     public void showProjects() {
-        comboListprojects.setItems(pModel.getProjectsCache());
+        comboListprojects.setItems(allProjects);
     }
 
     /**

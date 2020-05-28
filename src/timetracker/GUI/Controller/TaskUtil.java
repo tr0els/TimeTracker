@@ -149,11 +149,11 @@ public class TaskUtil {
         hbox.getChildren().add(project);
         
         // edit project
-        project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal != null){
-            taskParent.setProjectId(newVal.getProjectId());
+        project.setOnAction(e -> {
+            int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
+            taskParent.setProjectId(projectId);
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
+            System.out.println("Project: id=" + projectId);
         });
         
         // billable
@@ -267,12 +267,11 @@ public class TaskUtil {
         hbox.getChildren().add(project);
         
         // edit project
-        
-        project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal != null){
-            taskChild.setProjectId(newVal.getProjectId());
-            //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + newVal.getProjectId() + " - "+newVal.getProjectName() + " (" + newVal.getClientName() + ")");}
+        project.setOnAction(e -> {
+            int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
+            taskChild.setProjectId(projectId);
+            //updateTaskChild(taskParent);
+            System.out.println("Project: id=" + projectId);
         });
         
         // billable

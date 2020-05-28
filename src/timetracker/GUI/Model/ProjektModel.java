@@ -90,7 +90,7 @@ public class ProjektModel {
      * @throws SQLException
      */
     public ObservableList<Project> getProjects() throws DALException, SQLException {
-       // allProjects.clear();
+        allProjects.clear();
         allProjects.addAll(bll.getProjects());
         Comparator<Project> byName = (Project cl1, Project cl2) -> cl1.getProjectName().compareTo(cl2.getProjectName());
         allProjects.sort(byName);
