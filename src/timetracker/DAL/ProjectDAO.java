@@ -243,7 +243,7 @@ public class ProjectDAO {
 
                 allProjectswithClientID.add(projects);
             }
-            System.out.println(allProjectswithClientID);
+           
             return allProjectswithClientID;
         } catch (SQLException ex) {
             throw new DALException("kunne ikke finde projekter for klienten");
@@ -286,10 +286,10 @@ public class ProjectDAO {
                 } else {
                     projects.setBillableTime("00:00:00");
                 }
-                System.out.println(allProjectsWithExtraData);
+              
                 allProjectsWithExtraData.add(projects);
             }
-                        System.out.println(allProjectsWithExtraData);
+                      
             return allProjectsWithExtraData;
         } catch (SQLException ex) {
             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
@@ -350,7 +350,7 @@ public class ProjectDAO {
 
             Statement statement = con.createStatement();
             
-            System.out.println(sql);
+         
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 String billabletime;
@@ -371,7 +371,7 @@ public class ProjectDAO {
 
                 allProjectsWithExtraData.add(projects);
                   
-            } System.out.println(allProjectsWithExtraData);
+            } 
             return allProjectsWithExtraData;
              
         } catch (SQLException ex) {

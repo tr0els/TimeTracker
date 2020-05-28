@@ -510,14 +510,16 @@ public class OverviewForAdminsController implements Initializable {
                 popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
                 popupStage.setScene(scene);
                 popupStage.setResizable(false);
-                popupStage.setTitle(selectedProject.getProjectName() + " - " + selectedProject.getProjectRate() + " DKK");
-
+                if(transferUser == null)
+                popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
+                else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
                 popupStage.show();
             }
             popupStage.show();
             popupStage.toFront();
+            if(transferUser == null)
             popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
-
+            else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
         }
 
     }
