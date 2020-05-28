@@ -159,7 +159,8 @@ public class TaskController implements Initializable {
     }
 
     @FXML
-    private void handleStartStopTask(ActionEvent event) {
+    private void handleStartStopTask(ActionEvent event) throws DALException {
+        startTask();
         stopWatch();
     }
 
