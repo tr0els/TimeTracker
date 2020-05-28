@@ -84,7 +84,7 @@ public class TaskController implements Initializable {
     @FXML
     private ScrollPane taskScrollPane;
     
-    private ObservableList<Project> allProjects = FXCollections.observableArrayList();;
+    private ObservableList<Project> allProjects = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -98,7 +98,7 @@ public class TaskController implements Initializable {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
             setTasksGroupedByDate();
-            allProjects = pModel.getProjectsCache();
+            allProjects.addAll(pModel.getProjects());
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
