@@ -169,7 +169,7 @@ public class ProjectDAO
                     + "AS total_time FROM Project p\n"
                     + "JOIN Client c on p.client_id = c.client_id\n"
                     + "JOIN Tasklog tl on p.project_id = tl.project_id\n"
-                    + "WHERE tl.person_id = ?\n"
+                    + "WHERE tl.person_id = ? AND tl.task_end IS NOT NULL\n"
                     + "GROUP BY p.project_id, p.project_name, p.client_id, p.project_rate, c.client_name\n"
                     + "ORDER BY p.project_name;";
 
