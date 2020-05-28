@@ -22,33 +22,80 @@ and open the template in the editor.
 }
 
 .titled-pane .title {
-    -fx-background-color: transparent ;
+    -fx-background-color: #cbd6f5;
+    -fx-background-radius: 0px;
     -fx-font-weight: bold;
-    -fx-border-color: -fx-grumsen; 
-    -fx-border-width: 1 0 0 0; 
+    -fx-border-color: -fx-grumsen-lysere;
+    -fx-border-width: 0 0 1 0;
 }
 
 .titled-pane .content {
     -fx-background-color: transparent;
+    -fx-border-color: -fx-grumsen-lysere;
+    -fx-border-width: 0 0 1 0;
 }
-
+/*
 .titled-pane > .content > * {
     -fx-padding: 2px;
-}
+}*/
 
 .titled-pane {
     -fx-background-color: transparent;
     -fx-box-border: transparent;
 }
 
+.titled-pane > .content .billable {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.titled-pane > .content .billable.true {
+    -fx-text-fill: -fx-grumsen;
+}
+
+.titled-pane > .content .billable.false {
+    -fx-text-fill: #e1e4eb;
+}
+
 .scroll-pane {
     -fx-background-color: transparent;
+    -fx-padding: 0px;
 }
 
 .scroll-pane .viewport {
     -fx-background-color: transparent;
+    -fx-padding: 0px;
 }
 
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: white;
+    -fx-border-color: -fx-grumsen-lysere;
+}
+
+.scroll-bar:vertical .increment-button ,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color :transparent;
+    -fx-background-radius : 0px;
+    -fx-padding : 0 10 0 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+ .scroll-bar:vertical .decrement-arrow{
+    -fx-shape : " ";    
+    -fx-padding : 0;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #cbd6f5;
+    -fx-background-insets : 1, 0, 0;
+    -fx-background-radius : 0px;
+}
+
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color : -fx-grumsen-lysere;
+    -fx-background-insets : 1, 0, 0;
+    -fx-background-radius : 0px;
+}
 
 .time-picker-popup {
     -fx-background-color: -fx-grumsen-lysere;
@@ -59,13 +106,12 @@ and open the template in the editor.
 }
 
 .date-picker-popup > * > .spinner > .label {
-     -fx-font-size: 23;
+    -fx-font-size: 23;
 }
-
 
 #btnEdit, #btnCancel{
     -fx-border-width: 2px;
-    -fx-background-color:   -fx-grumsen-lysere;
+    -fx-background-color: -fx-grumsen-lysere;
     -fx-text-fill: white;
     -fx-font-size: 12;
     -fx-alignment: center;
@@ -96,26 +142,33 @@ and open the template in the editor.
 }
 
 #hboxHeader {
-    -fx-background-color: transparent; 
+    -fx-background-color: -fx-grumsen-lysere; 
     -fx-font-weight: bold;
     -fx-font-style: italic;
     -fx-alignment: CENTER_LEFT;
-    
+    -fx-background-radius: 4 4 0 0;
+    -fx-border-color: -fx-grumsen;
+    -fx-border-width: 0 0 1 0;
+
 }
 
 #logHBox {
-    -fx-background-color: white;
-    -fx-border-color: -fx-grumsen;
-    -fx-background-radius: 3px; 
-    -fx-border-radius: 3px;
+    -fx-background-color: #f7f9ff;
+
 }
 
+
 #logVBox {
-    -fx-spacing: 2px;
+    -fx-spacing: 1px;
+    -fx-padding: 0px;
+    -fx-background-color: -fx-grumsen-lysere;
+
 }
 
 #vboxTasks {
-    -fx-spacing: 2px;
+    -fx-spacing: 1px;
+    -fx-padding: 0px;
+
 }
 
 #lblClientname {
