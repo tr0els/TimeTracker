@@ -262,19 +262,17 @@ public class TaskDAO {
                     log.setEndTime(end_time);
                     log.setTaskName(rs.getString("task_name"));
 
-                    System.out.println(log);
-//                    logs.add(log);
+                    logs.add(log);
                 }
 
                 if (rs.getString("type").equalsIgnoreCase(typeDate)) {
                     String datetime;
 
-                    datetime = rs.getString("the_date") + "|" + rs.getString("total_time");
+                    datetime = rs.getString("the_date") + "@" + rs.getString("total_time");
 
-                    System.out.println(datetime);
-//                    map.put(datetime, logs);
-//
-//                    logs = new ArrayList<>();
+                    map.put(datetime, logs);
+
+                    logs = new ArrayList<>();
                 }
             }
         } catch (SQLException e) {

@@ -11,7 +11,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,12 +25,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
+import timetracker.BE.Task;
 import timetracker.BE.TaskGroup;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ProjektModel;
@@ -42,6 +50,7 @@ import timetracker.GUI.Model.TaskModel;
  */
 public class TaskController implements Initializable {
 
+    private final DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("HH:mm");
     private TaskModel model;
     private ProjektModel pModel;
     @FXML
@@ -74,6 +83,18 @@ public class TaskController implements Initializable {
     private JFXButton timerButton;
 
     private ObservableList<Project> allProjects = FXCollections.observableArrayList();
+    @FXML
+    private HBox hboxToday;
+    @FXML
+    private ScrollPane scrollpaneToday;
+    @FXML
+    private VBox vboxToday;
+    @FXML
+    private HBox hboxDays;
+    @FXML
+    private ScrollPane scrollpaneDays;
+    @FXML
+    private VBox vboxDays;
 
     /**
      * Initializes the controller class.
@@ -87,8 +108,9 @@ public class TaskController implements Initializable {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
             allProjects.addAll(pModel.getProjects());
-            
-            model.getTaskbyDays(30, person_id);
+
+            createToday();
+            createDays();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -217,6 +239,149 @@ public class TaskController implements Initializable {
 
             timerButton.setText("Start");
         }
+    }
+
+    public void createToday() throws DALException {
+      
+        if (model.getTaskbyDays(0, person_id).size() < 1) {
+            Label notaskstoday = new Label("Ingen opgaver idag");
+            hboxToday.getChildren().add(notaskstoday);
+            Label gettowork = new Label("kom i sving!");
+            vboxToday.getChildren().add(gettowork);
+        } else {
+
+            for (Map.Entry<String, List<Task>> entry : model.getTaskbyDays(0, person_id).entrySet()) {
+
+                String key = entry.getKey();
+
+                String[] arrOfStr = key.split("@", 2);
+
+                Label date = new Label(arrOfStr[0]);
+
+                Region dividerToday = new Region();
+
+                Label total = new Label("total tid: " + arrOfStr[1]);
+
+                hboxToday.setHgrow(dividerToday, Priority.ALWAYS);
+                hboxToday.getChildren().addAll(date, dividerToday, total);
+
+                for (int i = 0; i < entry.getValue().size(); i++) {
+
+                    Task t = entry.getValue().get(i);
+
+                    HBox logHbox = new HBox();
+
+                    Label task_name = new Label(t.getTaskName());
+                    task_name.setPrefWidth(100);
+
+                    Label task_start = new Label(t.getStartTime().toLocalTime().format(timeformatter));
+                    task_start.setPrefWidth(100);
+
+                    String endtime;
+
+                    if (t.getEndTime() == null) {
+                        endtime = "";
+                    } else {
+                        endtime = t.getEndTime().toLocalTime().format(timeformatter);
+                    }
+
+                    Label task_end = new Label(endtime);
+                    task_end.setPrefWidth(100);
+
+                    Label total_time = new Label(t.getTotalTime());
+
+                    Label billable = new Label("$");
+                    billable.getStyleClass().add("billable");
+
+                    if (t.isBillable()) {
+                        billable.getStyleClass().add("true");
+                    } else {
+                        billable.getStyleClass().add("false");
+                    }
+
+                    logHbox.getChildren().addAll(task_name, task_start, task_end, total_time, billable);
+
+                    vboxToday.getChildren().addAll(logHbox);
+                }
+
+            }
+        }
+    }
+
+    public void createDays() throws DALException {
+
+        int days = 30;
+        
+        Label info = new Label("opgaver for de sidste "+ days +" dage");
+        hboxDays.getChildren().add(info);
+        
+        for (Map.Entry<String, List<Task>> entry : model.getTaskbyDays(days, person_id).entrySet()) {
+
+            HBox hboxDaysHeader = new HBox();
+
+            String key = entry.getKey();
+
+            String[] arrOfStr = key.split("@", 2);
+
+            Label date = new Label(arrOfStr[0]);
+
+            Region dividerToday = new Region();
+
+            Label total = new Label("total tid: " + arrOfStr[1]);
+
+            hboxDaysHeader.setHgrow(dividerToday, Priority.ALWAYS);
+            hboxDaysHeader.getChildren().addAll(date, dividerToday, total);
+
+            VBox logVbox = new VBox();
+            logVbox.setId("logVBox");
+
+            for (int i = 0; i < entry.getValue().size(); i++) {
+
+                Task t = entry.getValue().get(i);
+
+                HBox logHbox = new HBox();
+
+                Label task_name = new Label(t.getTaskName());
+                task_name.setPrefWidth(100);
+
+                Label task_start = new Label(t.getStartTime().toLocalTime().format(timeformatter));
+                task_start.setPrefWidth(100);
+
+                String endtime;
+
+                if (t.getEndTime() == null) {
+                    endtime = "";
+                } else {
+                    endtime = t.getEndTime().toLocalTime().format(timeformatter);
+                }
+
+                Label task_end = new Label(endtime);
+                task_end.setPrefWidth(100);
+
+                Label total_time = new Label(t.getTotalTime());
+
+                Label billable = new Label("$");
+                billable.getStyleClass().add("billable");
+
+                if (t.isBillable()) {
+                    billable.getStyleClass().add("true");
+                } else {
+                    billable.getStyleClass().add("false");
+                }
+
+                logHbox.getChildren().addAll(task_name, task_start, task_end, total_time, billable);
+
+                logVbox.getChildren().addAll(logHbox);
+            }
+
+            TitledPane titledPane = new TitledPane();
+            titledPane.setGraphic(hboxDaysHeader);
+            titledPane.setContent(logVbox);
+            titledPane.setExpanded(false);
+
+            vboxDays.getChildren().add(titledPane);
+        }
+
     }
 
 }
