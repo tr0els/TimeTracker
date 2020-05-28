@@ -82,7 +82,7 @@ public class TaskController implements Initializable {
     private JFXButton timerButton;
     @FXML
     private ScrollPane taskScrollPane;
-    
+
     private ObservableList<Project> allProjects = FXCollections.observableArrayList();
 
     /**
@@ -106,16 +106,6 @@ public class TaskController implements Initializable {
         showProjects();
 //        taskLogsbyDay(paneToday, idag);
 //        taskLogsbyDay(paneYesterday, igår);
-    }
-
-    /**
-     * Håndtere start og oprette task knappen action
-     *
-     * @param event
-     */
-    @FXML
-    private void handleCreateTask(ActionEvent event) throws DALException {
-        startTask();
     }
 
     /**
@@ -170,13 +160,16 @@ public class TaskController implements Initializable {
 
     @FXML
     private void handleStartStopTask(ActionEvent event) {
+        stopWatch();
+    }
 
+    private void stopWatch() {
         if (timerState == false) {
             timerState = true;
             timerSecondsv = 0;
             timerMinutesv = 0;
             timerHoursv = 0;
-            timerButton.setText("Stop Task");
+            timerButton.setText("Stop");
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -195,20 +188,20 @@ public class TaskController implements Initializable {
                                         timerHoursv++;
                                     }
 
-                                    if (timerSecondsv < 10){
-                                    timerSeconds.setText("0"+timerSecondsv + "");
-                                    }else{
-                                    timerSeconds.setText(timerSecondsv + "");
+                                    if (timerSecondsv < 10) {
+                                        timerSeconds.setText("0" + timerSecondsv + "");
+                                    } else {
+                                        timerSeconds.setText(timerSecondsv + "");
                                     }
-                                    if (timerMinutesv < 10){
-                                    timerMinutes.setText("0"+timerMinutesv + ":");
-                                    }else{
-                                    timerMinutes.setText(timerMinutesv + ":");
+                                    if (timerMinutesv < 10) {
+                                        timerMinutes.setText("0" + timerMinutesv + ":");
+                                    } else {
+                                        timerMinutes.setText(timerMinutesv + ":");
                                     }
-                                    if (timerHoursv < 10){
-                                    timerHours.setText("0"+timerHoursv + ":");
-                                    }else{
-                                    timerHours.setText(timerHoursv + ":");
+                                    if (timerHoursv < 10) {
+                                        timerHours.setText("0" + timerHoursv + ":");
+                                    } else {
+                                        timerHours.setText(timerHoursv + ":");
                                     }
 
                                     timerSecondsv++;
@@ -232,9 +225,8 @@ public class TaskController implements Initializable {
         } else {
             timerState = false;
 
-            timerButton.setText("Start Task");
+            timerButton.setText("Start");
         }
-
     }
 
 //    /**
@@ -329,16 +321,15 @@ public class TaskController implements Initializable {
 //            pane.getChildren().add(lblTaskname);
 //        }
 //    }
-    
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
         // Get users tasks grouped by date
         List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
-        
+
         // Build task view
-	Pane taskPane = TaskUtil.getView(tasks, allProjects);
+        Pane taskPane = TaskUtil.getView(tasks, allProjects);
 
         // Put task view in scrollpane
-        taskScrollPane.setContent(taskPane);      
+        taskScrollPane.setContent(taskPane);
     }
 }
