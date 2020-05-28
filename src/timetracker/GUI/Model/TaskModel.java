@@ -62,7 +62,6 @@ public class TaskModel implements Runnable {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Done");
     }
 
     public static TaskModel getInstance() throws DALException, SQLException {
