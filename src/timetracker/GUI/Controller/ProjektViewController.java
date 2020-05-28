@@ -363,7 +363,7 @@ public class ProjektViewController implements Initializable {
 
             if (ldt_from.compareTo(ldt_to) == 1)
             {
-                lblWarning.setText("fra-tid kan ikke være før til-tid!");
+                lblWarning.setText("til-tid kan ikke være før fra-tid!");
             }else{
 
             Cmodel.changelogTask(edit_task, person_id);
