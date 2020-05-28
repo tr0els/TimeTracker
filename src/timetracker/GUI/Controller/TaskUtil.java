@@ -266,6 +266,7 @@ public class TaskUtil {
         hbox.getChildren().add(project);
         
         // edit project
+        
         project.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             taskChild.setProjectId(newVal.getProjectId());
             //updateTaskProject(taskParent);

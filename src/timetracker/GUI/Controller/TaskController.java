@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -83,7 +84,7 @@ public class TaskController implements Initializable {
     @FXML
     private ScrollPane taskScrollPane;
     
-    private ObservableList<Project> allProjects;
+    private ObservableList<Project> allProjects = FXCollections.observableArrayList();;
 
     /**
      * Initializes the controller class.
@@ -97,6 +98,7 @@ public class TaskController implements Initializable {
             model = TaskModel.getInstance();
             pModel = ProjektModel.getInstance();
             setTasksGroupedByDate();
+            allProjects = pModel.getProjectsCache();
 
         } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -329,18 +331,14 @@ public class TaskController implements Initializable {
 //        }
 //    }
     
-    public void setTasksGroupedByDate() throws DALException {
+    public void setTasksGroupedByDate() throws DALException, SQLException {
 
         // Get users tasks grouped by date
         List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
         
         // Build task view
-	Pane taskPane = TaskUtil.getView(tasks, pModel.getProjectsCache());
-        /*
-        for (TaskGroup task : tasks) {
-            System.out.println("TaskGroup - Name: " + task.getName() + " totoa: " + task.getTime());
-        }
-        */
+	Pane taskPane = TaskUtil.getView(tasks, allProjects);
+
         // put pane in scrollpane
         taskScrollPane.setContent(taskPane);      
     }
