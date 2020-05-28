@@ -101,7 +101,7 @@ public class TaskUtil {
         
         // titledpane
         TitledPane parentNode = new TitledPane();
-        parentNode.setExpanded(false);
+        //parentNode.setExpanded(false);
         
         // hbox wrapper
         HBox hbox = new HBox();
@@ -125,20 +125,22 @@ public class TaskUtil {
 
         // edit name on enter pressed
         name.setOnAction(e -> {
-            taskParent.setName(name.getText());
-            //updateTaskName(taskParent);
-            System.out.println("name test 2");
+            if(!taskParent.getName().equals(name.getText())) {
+                taskParent.setName(name.getText());
+                //updateTaskName(taskParent);
+                System.out.println("name changed to: " + name.getText());
+            }
         });
         
         // edit name on unfocus
         name.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal == false) {
+            if(newVal == false && !taskParent.getName().equals(name.getText())) {
                 taskParent.setName(name.getText());
                 //updateTaskName(taskParent);
-                System.out.println("name test");
+                System.out.println("name changed to: " + name.getText());
             }
         });
- 
+
         // project
         JFXComboBox<Project> project = new JFXComboBox();
         project.setItems(projects);
@@ -149,7 +151,7 @@ public class TaskUtil {
                 project.getSelectionModel().select(p);
             }
         }
-                    
+                  
         project.getStyleClass().add("project");
         hbox.getChildren().add(project);
         
@@ -158,7 +160,7 @@ public class TaskUtil {
             int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
             taskParent.setProjectId(projectId);
             //updateTaskProject(taskParent);
-            System.out.println("Project: id=" + projectId);
+            System.out.println("project changed to: " + projectId);
         });
         
         // billable
@@ -176,6 +178,14 @@ public class TaskUtil {
             taskParent.setBillable(!taskParent.isBillable()); // funny
             //updateTaskBillable(taskParent);
             System.out.println("Task billable is: " + taskParent.isBillable());
+            
+            billable.getStyleClass().clear();
+            billable.getStyleClass().add("billable");
+            if(taskParent.isBillable()) {
+                billable.getStyleClass().add("true");
+            } else {
+                billable.getStyleClass().add("false");
+            }
         });        
         
         hbox.getChildren().add(billable);
@@ -194,8 +204,8 @@ public class TaskUtil {
         hbox.getChildren().add(end);
         
         // datepicker
-        hbox.getChildren().add(new JFXDatePicker());
-        
+        //hbox.getChildren().add(new JFXDatePicker());
+     
         // time
         Label time = new Label(taskParent.getTime());
         time.getStyleClass().add("time");
@@ -208,13 +218,13 @@ public class TaskUtil {
               
         // stack each child under the parents content
         VBox childrenWrapper = new VBox();
-        
+  
         if(taskParent.getChildren().size() > 1) {
             for (TaskChild taskChild : taskParent.getChildren()) {
                 childrenWrapper.getChildren().add(buildTask(taskChild, projects));
             }
         }
-        
+       
         parentNode.setContent(childrenWrapper);
         
         // add hbox to titledpane
@@ -243,20 +253,22 @@ public class TaskUtil {
 
         // edit name on enter pressed
         name.setOnAction(e -> {
-            taskChild.setName(name.getText());
-            //updateTaskName(taskChild);
-            System.out.println("name test 2");
+            if(!taskChild.getName().equals(name.getText())) {
+                taskChild.setName(name.getText());
+                //updateTaskName(taskParent);
+                System.out.println("name changed to: " + name.getText());
+            }
         });
         
         // edit name on unfocus
         name.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if(newVal == false) {
+            if(newVal == false && !taskChild.getName().equals(name.getText())) {
                 taskChild.setName(name.getText());
-                //updateTaskName(taskChild);
-                System.out.println("name test");
+                //updateTaskName(taskParent);
+                System.out.println("name changed to: " + name.getText());
             }
         });
- 
+
         // project
         JFXComboBox<Project> project = new JFXComboBox();
         project.setItems(projects);
@@ -267,7 +279,7 @@ public class TaskUtil {
                 project.getSelectionModel().select(p);
             }
         }
-                    
+                  
         project.getStyleClass().add("project");
         hbox.getChildren().add(project);
         
@@ -275,8 +287,8 @@ public class TaskUtil {
         project.setOnAction(e -> {
             int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
             taskChild.setProjectId(projectId);
-            //updateTaskChild(taskParent);
-            System.out.println("Project: id=" + projectId);
+            //updateTaskProject(taskParent);
+            System.out.println("project changed to: " + projectId);
         });
         
         // billable
@@ -294,6 +306,14 @@ public class TaskUtil {
             taskChild.setBillable(!taskChild.isBillable()); // funny
             //updateTaskBillable(taskParent);
             System.out.println("Task billable is: " + taskChild.isBillable());
+            
+            billable.getStyleClass().clear();
+            billable.getStyleClass().add("billable");
+            if(taskChild.isBillable()) {
+                billable.getStyleClass().add("true");
+            } else {
+                billable.getStyleClass().add("false");
+            }
         });        
         
         hbox.getChildren().add(billable);
@@ -312,7 +332,7 @@ public class TaskUtil {
         hbox.getChildren().add(end);
         
         // datepicker
-        hbox.getChildren().add(new JFXDatePicker());
+        //hbox.getChildren().add(new JFXDatePicker());
         
         // time
         Label time = new Label(taskChild.getTime());

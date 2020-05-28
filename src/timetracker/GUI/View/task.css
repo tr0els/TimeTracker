@@ -18,9 +18,7 @@
 }
 
 .tasks .titled-pane {
-    -fx-Expanded: false;
-    -fx-Animated: true;
-    -fx-Collapsible: true;
+    /*-fx-Expanded: false;
     -fx-spacing: 0;
     -fx-padding: 0;
 }
