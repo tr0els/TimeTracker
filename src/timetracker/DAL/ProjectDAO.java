@@ -18,7 +18,7 @@ import timetracker.BE.User;
 
 /**
  *
- * @author @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
 public class ProjectDAO
