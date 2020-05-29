@@ -41,7 +41,7 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
 
     //Projekter 
     @Override
-    public void createProject(int clientId, String projectName, int hourlyPay)
+    public void createProject(int clientId, String projectName, int hourlyPay) throws DALException
     {
         projectdao.createProject(clientId, projectName, hourlyPay);
     }
