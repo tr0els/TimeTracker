@@ -93,6 +93,14 @@ and open the template in the editor.
 }
 
 
+#hbox_head {
+    -fx-background-color: transparent; 
+    -fx-border-color: -fx-grumsen; 
+    -fx-padding: 2px; 
+    -fx-border-radius: 5px; 
+    -fx-background-radius: 5px;
+}
+
 
 #hboxToday, #hboxDays {
     -fx-background-color: -fx-grumsen-lysere; 

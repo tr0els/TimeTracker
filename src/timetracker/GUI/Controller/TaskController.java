@@ -70,6 +70,8 @@ public class TaskController implements Initializable {
     long timerSecondsv = 0;
     long timerMinutesv = 0;
     long timerHoursv = 0;
+
+
     boolean timerState = false;
     private TaskModel model;
     private ProjektModel Pmodel;
@@ -169,6 +171,7 @@ public class TaskController implements Initializable {
     public void showProjects() throws DALException, SQLException {
         allProjects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(allProjects);
+        comboListprojects.setItems(allProjects);
     }
 
     /**
@@ -179,10 +182,12 @@ public class TaskController implements Initializable {
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
 
+        stopTask();
         model.startTask(task_name, billable, project_id, person_id);
         textTaskname.clear();
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
+        updateView();
 
     }
 
@@ -194,12 +199,9 @@ public class TaskController implements Initializable {
         model.stopTask(person_id);
     }
 
-    private void stopWatch(long hour, long minute, long second) {
+    private void stopWatch() {
         if (timerState == false) {
             timerState = true;
-            timerSecondsv = second;
-            timerMinutesv = minute;
-            timerHoursv = hour;
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -218,15 +220,6 @@ public class TaskController implements Initializable {
                                         timerHoursv++;
                                     }
 
-//                                    if (timerSecondsv < 10) {
-//                                        timerSecondsv = '0' + timerSecondsv;
-//                                    }
-//                                    if (timerMinutesv < 10) {
-//                                        timerMinutesv = '0' + timerMinutesv;
-//                                    } 
-//                                    if (timerHoursv < 10) {
-//                                        timerHoursv = '0' + timerHoursv;
-//                                    } 
                                     String timerMinutesStr = String.format("%02d", timerMinutesv);
                                     String timerSecondsvStr = String.format("%02d", timerSecondsv);
 
@@ -310,11 +303,11 @@ public class TaskController implements Initializable {
                         total_time.setStyle("-fx-font-weight: bold;");
 
                         Duration diff = Duration.between(t.getStartTime(), LocalDateTime.now());
-                        long hour = diff.toHours();
-                        long minute = diff.toMinutesPart();
-                        long second = diff.toSecondsPart();
+                        timerHoursv = diff.toHours();
+                        timerMinutesv = diff.toMinutesPart();
+                        timerSecondsv = diff.toSecondsPart();
 
-                        stopWatch(hour, minute, second);
+                        stopWatch();
 
                     } else {
                         endtime = t.getEndTime().toLocalTime().format(timeformatter);
@@ -518,7 +511,7 @@ public class TaskController implements Initializable {
     private void HandleTooltipForBillable(MouseEvent event) {
         Tooltip tip = new Tooltip();
 
-        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
+        tip.setText("Vælg om en Opgave skal faktureres eller ej");
         checkBillable.setTooltip(tip);
     }
 

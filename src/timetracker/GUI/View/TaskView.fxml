@@ -45,24 +45,20 @@
             </Label>
          </children>
       </AnchorPane>
-      <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" layoutX="5.0" prefHeight="150.0" prefWidth="600.0" />
-        <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="14.0" layoutY="34.0" prefHeight="26.0" prefWidth="285.0" promptText="Navnet på  den nye opgave" />
-        <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="439.0" layoutY="36.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="69.0" selected="true" text="Billable" />
-        <JFXComboBox fx:id="comboListprojects" labelFloat="true" layoutX="311.0" layoutY="31.0" prefHeight="28.0" prefWidth="112.0" promptText="Vælg Projekt" />
-        <JFXButton fx:id="timerButton" layoutX="524.0" layoutY="34.0" onAction="#handleStartStopTask" text="Start" />
-      <Pane fx:id="paneTaskview" layoutX="10.0" layoutY="136.0" prefHeight="350.0" prefWidth="582.0" style="-fx-background-color: white;">
+      <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" layoutX="-646.0" prefHeight="150.0" prefWidth="600.0" />
+      <Pane fx:id="paneTaskview" layoutX="10.0" layoutY="73.0" prefHeight="413.0" prefWidth="582.0" style="-fx-background-color: white;">
          <children>
-            <VBox fx:id="vboxContainer" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="582.0">
+            <VBox fx:id="vboxContainer" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="582.0">
                <children>
                   <HBox fx:id="hboxToday" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
-                  <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="150.0" maxWidth="-Infinity" minHeight="112.0" prefHeight="112.0" prefWidth="580.0">
+                  <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="156.0" prefWidth="580.0">
                      <content>
                         <VBox fx:id="vboxToday" prefWidth="568.0" />
                      </content>
                   </ScrollPane>
                   <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="10.0" prefWidth="582.0" />
                   <HBox fx:id="hboxDays" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
-                  <ScrollPane fx:id="scrollpaneDays" fitToWidth="true" hbarPolicy="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="178.0" prefWidth="580.0">
+                  <ScrollPane fx:id="scrollpaneDays" fitToWidth="true" hbarPolicy="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="580.0">
                      <content>
                         <VBox fx:id="vboxDays" maxWidth="-Infinity" prefWidth="568.0" />
                      </content>
@@ -72,6 +68,14 @@
          </children>
       </Pane>
       <Label fx:id="lblTime" layoutX="-86.0" layoutY="5.0" prefHeight="18.0" prefWidth="79.0" text="00:00:00" />
+      <HBox fx:id="hbox_head" alignment="CENTER" layoutX="11.0" layoutY="10.0" prefHeight="59.0" prefWidth="568.0" spacing="10.0">
+         <children>
+              <JFXTextField fx:id="textTaskname" labelFloat="true" prefHeight="26.0" prefWidth="245.0" promptText="Navnet på  den nye opgave" />
+              <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" onMouseEntered="#HandleTooltipForBillable" prefHeight="24.0" prefWidth="90.0" selected="true" text="Faktureres" />
+              <JFXComboBox fx:id="comboListprojects" labelFloat="true" prefHeight="29.0" prefWidth="130.0" promptText="Vælg Projekt" />
+              <JFXButton fx:id="timerButton" onAction="#handleStartStopTask" text="Start" />
+         </children>
+      </HBox>
 
     </children>
 </AnchorPane>
