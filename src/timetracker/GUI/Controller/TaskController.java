@@ -64,13 +64,14 @@ public class TaskController implements Initializable {
 
     private final DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("HH:mm");
     private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
+    private Image icon_play = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/play.png"));
+    private Image icon_pause = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/pause.png"));
     private Task edit_task;
     private ObservableList<Project> allProjects;
     private int person_id;
     long timerSecondsv = 0;
     long timerMinutesv = 0;
     long timerHoursv = 0;
-
 
     boolean timerState = false;
     private TaskModel model;
@@ -83,12 +84,6 @@ public class TaskController implements Initializable {
     private JFXCheckBox checkBillable;
     @FXML
     private JFXComboBox<Project> comboListprojects;
-    @FXML
-    private Label timerHours;
-    @FXML
-    private Label timerMinutes;
-    @FXML
-    private Label timerSeconds;
 
     @FXML
     private JFXButton timerButton;
@@ -135,6 +130,10 @@ public class TaskController implements Initializable {
     private VBox vboxContainer;
     @FXML
     private Label lblTime;
+    @FXML
+    private HBox hbox_head;
+    @FXML
+    private Label lblnewWarning;
 
     /**
      * Initializes the controller class.
@@ -178,17 +177,35 @@ public class TaskController implements Initializable {
      * Tager de relevante informationer fra GUI og sender videre.
      */
     public void startTask() throws DALException {
-        String task_name = textTaskname.getText(); //valideres og trimmes!
-        boolean billable = checkBillable.isSelected();
-        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
+
+        if (textTaskname.getText().equals("") || comboListprojects.getSelectionModel().isEmpty()) {
+            lblnewWarning.setText("alle felter skal udfyldes!");
+            lblnewWarning.setAlignment(Pos.CENTER_RIGHT);
+        
+        } else {
+            lblnewWarning.setText("");
+            String task_name = textTaskname.getText().trim();
+            int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
+            boolean billable = checkBillable.isSelected();
+            stopTask();
+            model.startTask(task_name, billable, project_id, person_id);
+            textTaskname.clear();
+            checkBillable.setSelected(true);
+            comboListprojects.getSelectionModel().clearSelection();
+            updateView();
+
+        }
+
+    }
+
+    public void startActiveTask(Task t) throws DALException {
+        String task_name = t.getTaskName();
+        boolean billable = t.isBillable();
+        int project_id = t.getProjectId();
 
         stopTask();
         model.startTask(task_name, billable, project_id, person_id);
-        textTaskname.clear();
-        checkBillable.setSelected(true);
-        comboListprojects.getSelectionModel().clearSelection();
         updateView();
-
     }
 
     /**
@@ -296,6 +313,7 @@ public class TaskController implements Initializable {
 
                     String endtime;
                     Label total_time;
+                    JFXButton btn = new JFXButton("");
 
                     if (t.getEndTime() == null) {
                         endtime = "";
@@ -309,9 +327,28 @@ public class TaskController implements Initializable {
 
                         stopWatch();
 
+                        btn.setGraphic(new ImageView(icon_pause));
+                        btn.setOnAction(event -> {
+                            try {
+                                stopTask();
+                                updateView();
+                            } catch (DALException ex) {
+                                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+
                     } else {
                         endtime = t.getEndTime().toLocalTime().format(timeformatter);
                         total_time = new Label(t.getTotalTime());
+
+                        btn.setGraphic(new ImageView(icon_play));
+                        btn.setOnAction(event -> {
+                            try {
+                                startActiveTask(t);
+                            } catch (DALException ex) {
+                                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
                     }
 
                     total_time.setPrefWidth(100);
@@ -332,7 +369,7 @@ public class TaskController implements Initializable {
                     editbtn.setGraphic(new ImageView(icon_edit));
                     editbtn.setOnAction(event -> editTask(t.getTaskId()));
 
-                    logHbox.getChildren().addAll(task_name, project_name, task_period, total_time, billable, editbtn);
+                    logHbox.getChildren().addAll(task_name, project_name, task_period, total_time, billable, editbtn, btn);
 
                     vboxToday.getChildren().addAll(logHbox);
                 }
@@ -389,18 +426,49 @@ public class TaskController implements Initializable {
                 project_name.setPrefWidth(100);
 
                 String endtime;
+                Label total_time;
+                JFXButton btn = new JFXButton("");
 
                 if (t.getEndTime() == null) {
                     endtime = "";
+                    total_time = lblTime;
+                    total_time.setStyle("-fx-font-weight: bold;");
+
+                    Duration diff = Duration.between(t.getStartTime(), LocalDateTime.now());
+                    timerHoursv = diff.toHours();
+                    timerMinutesv = diff.toMinutesPart();
+                    timerSecondsv = diff.toSecondsPart();
+
+                    stopWatch();
+
+                    btn.setGraphic(new ImageView(icon_pause));
+                    btn.setOnAction(event -> {
+                        try {
+                            stopTask();
+                            updateView();
+                        } catch (DALException ex) {
+                            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+
                 } else {
                     endtime = t.getEndTime().toLocalTime().format(timeformatter);
+                    total_time = new Label(t.getTotalTime());
+
+                    btn.setGraphic(new ImageView(icon_play));
+                    btn.setOnAction(event -> {
+                        try {
+                            startActiveTask(t);
+                        } catch (DALException ex) {
+                            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
                 }
+
+                total_time.setPrefWidth(100);
 
                 Label task_period = new Label(t.getStartTime().toLocalTime().format(timeformatter) + " - " + endtime);
                 task_period.setPrefWidth(180);
-
-                Label total_time = new Label(t.getTotalTime());
-                total_time.setPrefWidth(100);
 
                 Label billable = new Label("$");
                 billable.getStyleClass().add("billable");
@@ -415,7 +483,7 @@ public class TaskController implements Initializable {
                 editbtn.setGraphic(new ImageView(icon_edit));
                 editbtn.setOnAction(event -> editTask(t.getTaskId()));
 
-                logHbox.getChildren().addAll(task_name, project_name, task_period, total_time, billable, editbtn);
+                logHbox.getChildren().addAll(task_name, project_name, task_period, total_time, billable, editbtn, btn);
 
                 logVbox.getChildren().addAll(logHbox);
             }

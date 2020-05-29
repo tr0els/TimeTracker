@@ -272,6 +272,7 @@ public class TaskDAO {
                     log.setEndTime(end_time);
                     log.setTaskName(rs.getString("task_name"));
                     log.setProjectName(rs.getString("project_name"));
+                    log.setProjectId(rs.getInt("project_id"));
 
                     logs.add(log);
                 }
