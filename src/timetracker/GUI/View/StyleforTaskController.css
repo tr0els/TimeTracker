@@ -40,16 +40,15 @@ and open the template in the editor.
     -fx-box-border: transparent;
 }
 
-.titled-pane > .content .billable {
+.billable {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
-.titled-pane > .content .billable.true {
+.billable.true {
     -fx-text-fill: -fx-grumsen;
 }
-
-.titled-pane > .content .billable.false {
+.billable.false {
     -fx-text-fill: #dadde3;
 }
 
@@ -106,12 +105,17 @@ and open the template in the editor.
     -fx-padding: 0 5 0 5;
 }
 
-#logHBox {
+#logHBox, #logHBoxToday {
     -fx-background-color: #f7f9ff;
-
+    -fx-pref-width: 568px;
+    -fx-max-width: 568px;
 }
 
-#logVBox {
+#logHBoxToday {
+    -fx-padding: 0px;
+}
+
+#logVBox, #vboxToday {
     -fx-spacing: 1px;
     -fx-padding: 0px;
     -fx-background-color: -fx-grumsen-lysere;
@@ -119,7 +123,9 @@ and open the template in the editor.
 
 #vboxToday {
     -fx-spacing: 1px;
-    -fx-padding: 1 0 0 0;
+    -fx-padding: 0 0 1 0;
+    -fx-pref-width: 568px;
+    -fx-max-width: 568px;
 }
 
 #vboxDays {

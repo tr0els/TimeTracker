@@ -201,23 +201,30 @@ public class TaskDAO {
     public TreeMap<String, List<Task>> getTaskbyDays(int days, int person_id) throws DALException {
         TreeMap<String, List<Task>> map = new TreeMap<>(Collections.reverseOrder());
 
+        int notToday = 0;
+        if (days != 0) {
+            notToday = 1;
+        }
+
         String typeDate = "the_date";
         String typeLog = "LOG";
         try (Connection con = dbCon.getConnection()) {
             String sql = "SELECT 'LOG' AS TYPE,\n"
-                    + "tl.*, \n"
+                    + "tl.*, p.project_name,\n"
                     + "CONVERT(DATE, task_start) as the_date,\n"
                     + "CONVERT(VARCHAR(5),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60/60) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)/60%60), 2) + ':' +\n"
                     + "RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,tl.task_start,tl.task_end)%60),2)\n"
-                    + "AS total_time\n"
+                    + "AS total_time \n"
                     + "FROM Tasklog tl\n"
-                    + "WHERE person_id = ? AND CONVERT(DATE, task_start) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE())\n"
+                    + "JOIN Project p ON tl.project_id = p.project_id\n"
+                    + "WHERE person_id = ? AND CONVERT(DATE, task_start) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE()-?)\n"
                     + "\n"
                     + "UNION\n"
                     + "\n"
                     + "SELECT 'the_date' as TYPE,\n"
                     + "MIN(tl.task_id) as task_id,\n"
+                    + "NULL,\n"
                     + "NULL,\n"
                     + "NULL,\n"
                     + "NULL,\n"
@@ -230,16 +237,18 @@ public class TaskDAO {
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
                     + "AS total_time\n"
                     + "FROM Tasklog tl\n"
-                    + "WHERE person_id = ? AND CONVERT(DATE, task_end) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE())\n"
+                    + "WHERE person_id = ? AND CONVERT(DATE, task_end) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE()-?)\n"
                     + "GROUP BY CONVERT(DATE, task_start)\n"
-                    + "ORDER BY the_date DESC, task_start DESC";
+                    + "ORDER BY the_date DESC, task_start DESC;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setInt(1, person_id);
             ps.setInt(2, days);
-            ps.setInt(3, person_id);
-            ps.setInt(4, days);
+            ps.setInt(3, notToday);
+            ps.setInt(4, person_id);
+            ps.setInt(5, days);
+            ps.setInt(6, notToday);
 
             ResultSet rs = ps.executeQuery();
 
@@ -262,6 +271,7 @@ public class TaskDAO {
                     log.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
                     log.setEndTime(end_time);
                     log.setTaskName(rs.getString("task_name"));
+                    log.setProjectName(rs.getString("project_name"));
 
                     logs.add(log);
                 }

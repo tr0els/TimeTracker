@@ -26,6 +26,7 @@ public class Task
     private boolean billable;
     private String stringBillable;
     private LocalDateTime lastWorkedOn;
+    private String projectName;
 
     /**
      * Constructor for Task som tager imod parametre
@@ -79,6 +80,14 @@ public class Task
     public void setStringBillable(String stringBillable)
     {
         this.stringBillable = stringBillable;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     /**

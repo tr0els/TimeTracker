@@ -3,7 +3,10 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,35 +17,52 @@
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforTaskController.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
     <children>
+      <AnchorPane fx:id="paneEdit" layoutX="5.0" layoutY="-140.0" prefHeight="150.0" prefWidth="600.0">
+         <children>
+            <JFXTextField fx:id="txtTask_name" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="390.0" />
+            <JFXCheckBox fx:id="chkboxBillable" checkedColor="#435a9a" layoutX="323.0" layoutY="48.0" text="Faktureres" />
+            <JFXComboBox fx:id="menuEditProjects" layoutX="426.0" layoutY="10.0" prefHeight="25.0" prefWidth="160.0" />
+            <JFXButton fx:id="btnEdit" layoutX="513.0" layoutY="100.0" onAction="#handleEdit" text="Opdater" />
+            <JFXButton fx:id="btnCancel" layoutX="440.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
+            <AnchorPane id="paneTime" layoutX="168.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
+               <children>
+                  <JFXDatePicker fx:id="dateTo" defaultColor="#768bc6" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeTo" defaultColor="#768bc6" layoutX="8.0" layoutY="50.0" prefHeight="28.0" prefWidth="116.0" />
+                  <Label layoutX="7.0" layoutY="6.0" text="Til:" />
+               </children>
+            </AnchorPane>
+            <AnchorPane id="paneTime" layoutX="14.0" layoutY="48.0" prefHeight="90.0" prefWidth="122.0">
+               <children>
+                  <JFXDatePicker fx:id="dateFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="116.0" />
+                  <JFXTimePicker fx:id="timeFrom" defaultColor="#768bc6" layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="116.0" />
+                  <Label layoutX="5.0" layoutY="6.0" text="Fra:" />
+               </children>
+            </AnchorPane>
+            <Label fx:id="lblWarning" alignment="TOP_LEFT" layoutX="319.0" layoutY="129.0" prefHeight="16.0" prefWidth="257.0" textFill="RED" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="11.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" layoutX="5.0" prefHeight="150.0" prefWidth="600.0" />
         <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="14.0" layoutY="34.0" prefHeight="26.0" prefWidth="285.0" promptText="Navnet på  den nye opgave" />
         <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="439.0" layoutY="36.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="69.0" selected="true" text="Billable" />
         <JFXComboBox fx:id="comboListprojects" labelFloat="true" layoutX="311.0" layoutY="31.0" prefHeight="28.0" prefWidth="112.0" promptText="Vælg Projekt" />
         <JFXButton fx:id="timerButton" layoutX="524.0" layoutY="34.0" onAction="#handleStartStopTask" text="Start" />
-      <Label fx:id="timerHours" layoutX="486.0" layoutY="79.0" text="00:">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label fx:id="timerMinutes" layoutX="513.0" layoutY="79.0" text="00:">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label fx:id="timerSeconds" layoutX="540.0" layoutY="79.0" text="00">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
       <Pane fx:id="paneTaskview" layoutX="10.0" layoutY="136.0" prefHeight="350.0" prefWidth="582.0" style="-fx-background-color: white;">
          <children>
-            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="582.0">
+            <VBox fx:id="vboxContainer" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="582.0">
                <children>
-                  <HBox fx:id="hboxToday" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
-                  <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="150.0" maxWidth="-Infinity" minHeight="50.0" prefWidth="580.0">
+                  <HBox fx:id="hboxToday" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
+                  <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="150.0" maxWidth="-Infinity" minHeight="112.0" prefHeight="112.0" prefWidth="580.0">
                      <content>
                         <VBox fx:id="vboxToday" prefWidth="568.0" />
                      </content>
                   </ScrollPane>
                   <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="10.0" prefWidth="582.0" />
-                  <HBox fx:id="hboxDays" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
-                  <ScrollPane fx:id="scrollpaneDays" fitToWidth="true" hbarPolicy="NEVER" maxHeight="240.0" maxWidth="-Infinity" minHeight="50.0" prefWidth="580.0">
+                  <HBox fx:id="hboxDays" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
+                  <ScrollPane fx:id="scrollpaneDays" fitToWidth="true" hbarPolicy="NEVER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="178.0" prefWidth="580.0">
                      <content>
                         <VBox fx:id="vboxDays" maxWidth="-Infinity" prefWidth="568.0" />
                      </content>
@@ -51,6 +71,7 @@
             </VBox>
          </children>
       </Pane>
+      <Label fx:id="lblTime" layoutX="-86.0" layoutY="5.0" prefHeight="18.0" prefWidth="79.0" text="00:00:00" />
 
     </children>
 </AnchorPane>
