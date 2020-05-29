@@ -4,10 +4,9 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 19. maj 2020, 08.37.26
-    Author     : BBran
+    Created on : 29. maj 2020, 07.56.00
+    Author     : Brian Brandt
 */
-
 
 *{
     -fx-grumsen : #435a9a; 
@@ -94,51 +93,9 @@ and open the template in the editor.
     -fx-background-radius : 0px;
 }
 
-.time-picker-popup {
-    -fx-background-color: -fx-grumsen-lysere;
-}
-
-.date-picker-popup > .month-year-pane {
-    -fx-background-color: -fx-grumsen-lysere;
-}
-
-.date-picker-popup > * > .spinner > .label {
-    -fx-font-size: 23;
-}
-
-#btnEdit, #btnCancel{
-    -fx-border-width: 2px;
-    -fx-background-color: -fx-grumsen-lysere;
-    -fx-text-fill: white;
-    -fx-font-size: 12;
-    -fx-alignment: center;
-    -fx-transition-duration: 0.4s;
-}
-
-#btnCancel:hover, #btnEdit:hover{
-    -fx-border-color: -fx-grumsen;
-    -fx-background-color: transparent;
-    -fx-text-fill: -fx-grumsen;
-}
-
-#btnCancel:pressed, #btnEdit:pressed{
-    -fx-background-color: -fx-grumsen-lysere;
-}
 
 
-#paneEdit {
-    -fx-background-color: -fx-grumsen-baggrund;
-}
-
-#hbox_head {
-    -fx-background-color: transparent; 
-    -fx-border-color: -fx-grumsen; 
-    -fx-padding: 2px; 
-    -fx-border-radius: 5px; 
-    -fx-background-radius: 5px;
-}
-
-#hboxHeader {
+#hboxToday, #hboxDays {
     -fx-background-color: -fx-grumsen-lysere; 
     -fx-font-weight: bold;
     -fx-font-style: italic;
@@ -146,7 +103,7 @@ and open the template in the editor.
     -fx-background-radius: 4 4 0 0;
     -fx-border-color: -fx-grumsen;
     -fx-border-width: 0 0 1 0;
-
+    -fx-padding: 0 5 0 5;
 }
 
 #logHBox {
@@ -154,40 +111,18 @@ and open the template in the editor.
 
 }
 
-
 #logVBox {
     -fx-spacing: 1px;
     -fx-padding: 0px;
     -fx-background-color: -fx-grumsen-lysere;
-
 }
 
-#vboxTasks {
+#vboxToday {
     -fx-spacing: 1px;
-    -fx-padding: 0px;
-
+    -fx-padding: 1 0 0 0;
 }
 
-#lblClientname {
-    -fx-alignment: TOP_RIGHT;
-    -fx-font-size: 16px;
-    -fx-font-style: italic;
-    -fx-font-weight: bold;
-    -fx-text-fill: darkgrey;
-    -fx-padding: 5px;
-}
-
-#lblProjectnavn {
-    -fx-text-fill: -fx-grumsen;
-    -fx-font-weight: bold;
-}
-
-#paneTime {
-    -fx-border-color: -fx-grumsen; 
-    -fx-border-radius: 2px;
-    -fx-background-radius: 2px;
-}
-
-#projectMenubox {
-    
+#vboxDays {
+    -fx-spacing: 1px;
+    -fx-padding: 1 0 0 0;
 }

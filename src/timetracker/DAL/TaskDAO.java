@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 import timetracker.BE.Project;
@@ -198,7 +199,7 @@ public class TaskDAO {
      * @return
      */
     public TreeMap<String, List<Task>> getTaskbyDays(int days, int person_id) throws DALException {
-        TreeMap<String, List<Task>> map = new TreeMap<>();
+        TreeMap<String, List<Task>> map = new TreeMap<>(Collections.reverseOrder());
 
         String typeDate = "the_date";
         String typeLog = "LOG";

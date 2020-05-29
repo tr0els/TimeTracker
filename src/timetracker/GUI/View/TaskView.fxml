@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@task.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforTaskController.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
     <children>
         <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="14.0" layoutY="34.0" prefHeight="26.0" prefWidth="285.0" promptText="Navnet på  den nye opgave" />
         <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="439.0" layoutY="36.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="69.0" selected="true" text="Billable" />
@@ -30,20 +30,25 @@
          <font>
             <Font size="20.0" />
          </font></Label>
-      <Pane layoutX="10.0" layoutY="136.0" prefHeight="350.0" prefWidth="580.0">
+      <Pane fx:id="paneTaskview" layoutX="10.0" layoutY="136.0" prefHeight="350.0" prefWidth="582.0" style="-fx-background-color: white;">
          <children>
-            <HBox fx:id="hboxToday" maxHeight="-Infinity" prefHeight="25.0" prefWidth="570.0" />
-            <ScrollPane fx:id="scrollpaneToday" layoutY="25.0" prefHeight="125.0" prefWidth="580.0">
-               <content>
-                  <VBox fx:id="vboxToday" maxWidth="-Infinity" prefHeight="0.0" prefWidth="570.0" />
-               </content>
-            </ScrollPane>
-            <HBox fx:id="hboxDays" layoutY="175.0" maxHeight="-Infinity" prefHeight="25.0" prefWidth="570.0" />
-            <ScrollPane fx:id="scrollpaneDays" layoutY="200.0" prefHeight="150.0" prefWidth="580.0">
-               <content>
-                  <VBox fx:id="vboxDays" maxWidth="-Infinity" prefWidth="570.0" />
-               </content>
-            </ScrollPane>
+            <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="582.0">
+               <children>
+                  <HBox fx:id="hboxToday" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
+                  <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="150.0" maxWidth="-Infinity" minHeight="50.0" prefWidth="580.0">
+                     <content>
+                        <VBox fx:id="vboxToday" prefWidth="568.0" />
+                     </content>
+                  </ScrollPane>
+                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="10.0" prefWidth="582.0" />
+                  <HBox fx:id="hboxDays" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
+                  <ScrollPane fx:id="scrollpaneDays" fitToWidth="true" hbarPolicy="NEVER" maxHeight="240.0" maxWidth="-Infinity" minHeight="50.0" prefWidth="580.0">
+                     <content>
+                        <VBox fx:id="vboxDays" maxWidth="-Infinity" prefWidth="568.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
          </children>
       </Pane>
 
