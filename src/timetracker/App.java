@@ -27,12 +27,6 @@ public class App extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("/timetracker/GUI/View/MainView.fxml"));
 
-        //MainController main;
-        //main = MainController.getInstance();
-        //main.createProject();
-        //main.deleteProject();
-        //main.editProject();
-        //Parent root = FXMLLoader.load(getClass().getResource("GUI/View/MainView.fxml"));
         Scene scene = new Scene(root);
         stage.setTitle("Time Tracker login");
         stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));

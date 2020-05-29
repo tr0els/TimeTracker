@@ -65,18 +65,19 @@ public class BLLManager
 
     //-----TASK------
     /**
-     * 
+     *
      * @param personId
      * @param groupBy
      * @param includeTaskParents
      * @param includeTaskChildren
      * @return
-     * @throws DALException 
+     * @throws DALException
      */
-    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
+    {
         return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-    
+
     /**
      * Starter en ny task
      *
@@ -102,14 +103,20 @@ public class BLLManager
 
     }
 
-    
+    /**
+     * Returnerer en liste af projects hvor person_id har lavet tasks på
+     *
+     * @param person_id
+     * @return
+     * @throws DALException
+     */
     public List<Project> getProjectsbyID(int person_id) throws DALException
     {
         return iGetData.getProjectsbyID(person_id);
     }
 
     /**
-     * returnere en liste af Tasks udfra et project_id
+     * Returnere en liste af Tasks udfra et project_id
      *
      * @param project_id
      * @return
@@ -120,7 +127,7 @@ public class BLLManager
     }
 
     /**
-     * returnere en specifik task udfra task_id
+     * Returnere en specifik task udfra task_id
      *
      * @param task_id
      * @return
@@ -195,9 +202,10 @@ public class BLLManager
 
     /**
      * Returnerer en liste med projects som tilhører Client objektet.
+     *
      * @param client
      * @return
-     * @throws DALException 
+     * @throws DALException
      */
     public List<Project> getProjekctsbyClientID(Client client) throws DALException
     {
@@ -213,7 +221,6 @@ public class BLLManager
     {
         return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
     }
-
 
     //-----KLIENTER-----
     /**
@@ -337,8 +344,9 @@ public class BLLManager
     }
 
     /**
-     * Fjerner en User 
-     * @param disableUser 
+     * Fjerner en User
+     *
+     * @param disableUser
      */
     public void disableUser(User disableUser)
     {

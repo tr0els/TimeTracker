@@ -44,9 +44,9 @@ import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ChangelogModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -58,8 +58,8 @@ import timetracker.GUI.Model.TaskModel;
 public class ProjektViewController implements Initializable {
 
     private TaskModel model;
-    private ProjektModel Pmodel;
-    private BrugerModel Bmodel;
+    private ProjectModel Pmodel;
+    private UserModel Bmodel;
     private ChangelogModel Cmodel;
     private int person_id;
     private ObservableList<Project> allProjects;
@@ -120,8 +120,8 @@ public class ProjektViewController implements Initializable {
     public ProjektViewController() throws DALException, SQLException
     {
         model = TaskModel.getInstance();
-        Pmodel = ProjektModel.getInstance();
-        Bmodel = BrugerModel.getInstance();
+        Pmodel = ProjectModel.getInstance();
+        Bmodel = UserModel.getInstance();
         Cmodel = ChangelogModel.getInstance();
     }
 

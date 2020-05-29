@@ -34,7 +34,7 @@ import timetracker.BE.Client;
 import timetracker.BE.Project;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 
 /**
  * FXML Controller class
@@ -45,7 +45,7 @@ import timetracker.GUI.Model.ProjektModel;
 public class ProjektManagerAdminController implements Initializable
 {
 
-    private ProjektModel model;
+    private ProjectModel model;
     private ClientModel cModel;
     private static ProjektManagerAdminController projektController = null;
     ObservableList<Client> clients;
@@ -82,7 +82,7 @@ public class ProjektManagerAdminController implements Initializable
      */
     public ProjektManagerAdminController() throws DALException, SQLException
     {
-        model = ProjektModel.getInstance();
+        model = ProjectModel.getInstance();
         cModel = ClientModel.getInstance();
     }
 
