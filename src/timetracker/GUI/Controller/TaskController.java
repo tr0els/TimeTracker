@@ -63,6 +63,8 @@ import timetracker.GUI.Model.TaskModel;
 public class TaskController implements Initializable {
 
     private final DateTimeFormatter timeformatter = DateTimeFormatter.ofPattern("HH:mm");
+    private final DateTimeFormatter currentFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final DateTimeFormatter newFormat = DateTimeFormatter.ofPattern("dd/MM-yyyy");
     private Image icon_edit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
     private Image icon_play = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/play.png"));
     private Image icon_pause = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/pause.png"));
@@ -84,10 +86,6 @@ public class TaskController implements Initializable {
     private JFXCheckBox checkBillable;
     @FXML
     private JFXComboBox<Project> comboListprojects;
-
-    @FXML
-    private JFXButton timerButton;
-
     @FXML
     private HBox hboxToday;
     @FXML
@@ -134,6 +132,8 @@ public class TaskController implements Initializable {
     private HBox hbox_head;
     @FXML
     private Label lblnewWarning;
+    @FXML
+    private JFXButton btnStart;
 
     /**
      * Initializes the controller class.
@@ -141,10 +141,13 @@ public class TaskController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        person_id = 1; //midlertidigt, skal hentes fra login
+
 
         try {
 
+//            person_id = Bmodel.getUser().getPerson_id();
+            person_id = 1; // midlertidigt
+            
             skuffen.setSidePane(paneEdit);
             skuffen.toBack();
             skuffen.close();
@@ -174,14 +177,15 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * Tager de relevante informationer fra GUI og sender videre.
+     * Tager de relevante informationer fra GUI og sender videre. laver check om
+     * alle felter er udfyldt.
      */
     public void startTask() throws DALException {
 
         if (textTaskname.getText().equals("") || comboListprojects.getSelectionModel().isEmpty()) {
             lblnewWarning.setText("alle felter skal udfyldes!");
             lblnewWarning.setAlignment(Pos.CENTER_RIGHT);
-        
+
         } else {
             lblnewWarning.setText("");
             String task_name = textTaskname.getText().trim();
@@ -198,6 +202,12 @@ public class TaskController implements Initializable {
 
     }
 
+    /**
+     * bruges til at starte en opgave baseret på en allerede eksisterende opgave
+     *
+     * @param t
+     * @throws DALException
+     */
     public void startActiveTask(Task t) throws DALException {
         String task_name = t.getTaskName();
         boolean billable = t.isBillable();
@@ -214,8 +224,13 @@ public class TaskController implements Initializable {
     public void stopTask() throws DALException {
 
         model.stopTask(person_id);
+        timerState = false;
     }
 
+    /**
+     * Bliver brugt til at vise tiden der er gået siden en aktiv opgave er
+     * startet
+     */
     private void stopWatch() {
         if (timerState == false) {
             timerState = true;
@@ -263,6 +278,10 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * bruges til at opdatere vores gui når vi har lavet opdateringer til
+     * opgaver
+     */
     public void updateView() {
         try {
             createToday();
@@ -272,6 +291,11 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * Opbygger gui med dagens opgaver
+     *
+     * @throws DALException
+     */
     public void createToday() throws DALException {
         hboxToday.getChildren().clear();
         vboxToday.getChildren().clear();
@@ -288,7 +312,11 @@ public class TaskController implements Initializable {
 
                 String[] arrOfStr = key.split("@", 2);
 
-                Label date = new Label(arrOfStr[0]);
+                LocalDate startDate = LocalDate.parse(arrOfStr[0], currentFormat);
+
+                String formattedDate = startDate.format(newFormat).toString();
+
+                Label date = new Label(formattedDate);
 
                 Region dividerToday = new Region();
 
@@ -378,6 +406,11 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * Opbygger gui med opgaver for de seneste dage
+     *
+     * @throws DALException
+     */
     public void createDays() throws DALException {
         hboxDays.getChildren().clear();
         vboxDays.getChildren().clear();
@@ -395,7 +428,11 @@ public class TaskController implements Initializable {
 
             String[] arrOfStr = key.split("@", 2);
 
-            Label date = new Label(arrOfStr[0]);
+            LocalDate startDate = LocalDate.parse(arrOfStr[0], currentFormat);
+
+            String formattedDate = startDate.format(newFormat).toString();
+
+            Label date = new Label(formattedDate);
             date.setPrefWidth(250);
 
             Region dividerToday = new Region();
@@ -498,6 +535,11 @@ public class TaskController implements Initializable {
 
     }
 
+    /**
+     * Henter relevante info ang. en opgave og udfylder gui med det.
+     *
+     * @param taskId
+     */
     private void editTask(int taskId) {
         try {
             edit_task = model.getTaskbyID(taskId);
@@ -529,6 +571,12 @@ public class TaskController implements Initializable {
         skuffen.toFront();
     }
 
+    /**
+     * håndtere redigering af en opgave, tager de relevante info fra gui og
+     * sender dem til db for opdatering
+     *
+     * @param event
+     */
     @FXML
     private void handleEdit(ActionEvent event) {
         try {
@@ -568,6 +616,11 @@ public class TaskController implements Initializable {
 
     }
 
+    /**
+     * bruges til at lukke vores redigeringsvindue
+     *
+     * @param event
+     */
     @FXML
     private void handleCancel(ActionEvent event) {
         skuffen.close();
@@ -575,6 +628,11 @@ public class TaskController implements Initializable {
 
     }
 
+    /**
+     * tooltip til vores checkbox i redigerings vinduet
+     *
+     * @param event
+     */
     @FXML
     private void HandleTooltipForBillable(MouseEvent event) {
         Tooltip tip = new Tooltip();
@@ -583,6 +641,12 @@ public class TaskController implements Initializable {
         checkBillable.setTooltip(tip);
     }
 
+    /**
+     * starter en ny task
+     *
+     * @param event
+     * @throws DALException
+     */
     @FXML
     private void handleStartStopTask(ActionEvent event) throws DALException {
         startTask();

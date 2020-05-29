@@ -48,7 +48,7 @@
       <JFXDrawer fx:id="skuffen" defaultDrawerSize="150.0" direction="TOP" layoutX="5.0" layoutY="1.0" prefHeight="150.0" prefWidth="600.0" />
       <Pane fx:id="paneTaskview" layoutX="10.0" layoutY="86.0" prefHeight="400.0" prefWidth="582.0" style="-fx-background-color: white;">
          <children>
-            <VBox fx:id="vboxContainer" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="582.0">
+            <VBox fx:id="vboxContainer" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="582.0">
                <children>
                   <HBox fx:id="hboxToday" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="568.0" />
                   <ScrollPane fx:id="scrollpaneToday" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="156.0" prefWidth="580.0">
@@ -71,9 +71,9 @@
       <HBox fx:id="hbox_head" alignment="CENTER" layoutX="11.0" layoutY="10.0" prefHeight="59.0" prefWidth="568.0" spacing="10.0">
          <children>
               <JFXTextField fx:id="textTaskname" labelFloat="true" prefHeight="26.0" prefWidth="245.0" promptText="Navnet på  den nye opgave" />
-              <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" onMouseEntered="#HandleTooltipForBillable" prefHeight="24.0" prefWidth="90.0" selected="true" text="Faktureres" />
+              <JFXCheckBox fx:id="checkBillable" checkedColor="#435a9a" onMouseEntered="#HandleTooltipForBillable" prefHeight="24.0" prefWidth="90.0" selected="true" text="Faktureres" />
               <JFXComboBox fx:id="comboListprojects" labelFloat="true" prefHeight="29.0" prefWidth="130.0" promptText="Vælg Projekt" />
-              <JFXButton fx:id="timerButton" onAction="#handleStartStopTask" text="Start" />
+              <JFXButton fx:id="btnStart" minWidth="50.0" onAction="#handleStartStopTask" prefHeight="31.0" prefWidth="50.0" text="Start" />
          </children>
       </HBox>
       <Label fx:id="lblnewWarning" layoutX="366.0" layoutY="68.0" prefHeight="16.0" prefWidth="213.0" textAlignment="RIGHT" textFill="RED">
