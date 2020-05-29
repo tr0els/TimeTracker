@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@StyleforTaskController.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@/timetracker/GUI/Css/StyleforTaskController.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
     <children>
       <AnchorPane fx:id="paneEdit" layoutX="5.0" layoutY="-158.0" prefHeight="150.0" prefWidth="600.0">
          <children>
@@ -67,7 +67,7 @@
             </VBox>
          </children>
       </Pane>
-      <Label fx:id="lblTime" layoutX="-86.0" layoutY="5.0" prefHeight="18.0" prefWidth="79.0" text="00:00:00" />
+      <Label fx:id="lblTime" layoutX="256.0" layoutY="-176.0" prefHeight="18.0" prefWidth="79.0" text="00:00:00" />
       <HBox fx:id="hbox_head" alignment="CENTER" layoutX="11.0" layoutY="10.0" prefHeight="59.0" prefWidth="568.0" spacing="10.0">
          <children>
               <JFXTextField fx:id="textTaskname" labelFloat="true" prefHeight="26.0" prefWidth="245.0" promptText="Navnet på  den nye opgave" />
