@@ -1,3 +1,8 @@
+/* 
+    Author     : Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+                 Charlotte Christensen
+*/
+
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
@@ -19,8 +24,6 @@
 
 .tasks .titled-pane {
     -fx-Expanded: false;
-    -fx-Animated: true;
-    -fx-Collapsible: true;
     -fx-spacing: 0;
     -fx-padding: 0;
 }

@@ -27,7 +27,6 @@ import timetracker.BE.Client;
 import timetracker.BE.Project;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
 
 /**
  * FXML Controller class
@@ -39,51 +38,54 @@ public class KlientManagerAdminController implements Initializable
 {
 
     private Client selectedClient;
-    private Client newclient = new Client();
-    private static ClientModel model;
-    private static ProjektModel pModel;
+    private static ClientModel Cmodel;
 
     @FXML
     private AnchorPane root;
     @FXML
-    private JFXListView<Client> listviewfx;
+    private JFXListView<Client> listviewClients;
     @FXML
-    private Label klientNavnlbl;
+    private JFXListView<Project> listviewProjects;
     @FXML
-    private Label timeprislbl;
+    private Label lblClientName;
     @FXML
-    private JFXListView<Project> listviewprojekts;
+    private Label lblDefaultRate;
     @FXML
-    private JFXTextField Nyklientnavn;
+    private JFXDrawer drawer;
     @FXML
-    private JFXTextField nydefaulttimepris;
+    private JFXButton btbNewClient;
     @FXML
-    private JFXDrawer skuffe;
+    private AnchorPane paneCreateClient;
     @FXML
-    private JFXButton btbnyklient;
+    private JFXTextField newClientName;
     @FXML
-    private AnchorPane opretnyklientpane;
+    private JFXTextField newDefaultRate;
     @FXML
-    private JFXButton btbopretklient;
+    private JFXButton btbCreateClient;
     @FXML
-    private JFXTextField txtretnavn;
+    private JFXButton btbCancelNewClient;
     @FXML
-    private JFXButton retklientbtb;
+    private AnchorPane paneEditClient;
     @FXML
-    private AnchorPane retklientpane;
+    private JFXTextField txtEditName;
     @FXML
-    private JFXButton retvalgteklientnbtb;
+    private JFXTextField txtEditDefaultRate;
     @FXML
-    private JFXTextField txtrettimepris;
+    private JFXButton btbEditClient;
     @FXML
-    private JFXButton btbcancelnyklient;
+    private JFXButton btbCloseEdit;
     @FXML
-    private JFXButton btbcloseret;
+    private JFXButton btbEditChosenClient;
 
+    /**
+     * Constructor for KlientManagerAdminController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public KlientManagerAdminController() throws DALException, SQLException
     {
-        model = ClientModel.getInstance();
-        pModel = ProjektModel.getInstance();
+        Cmodel = ClientModel.getInstance();
     }
 
     /**
@@ -92,8 +94,7 @@ public class KlientManagerAdminController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-
-        nydefaulttimepris.textProperty().addListener(new ChangeListener<String>()
+        newDefaultRate.textProperty().addListener(new ChangeListener<String>()
         {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -101,12 +102,11 @@ public class KlientManagerAdminController implements Initializable
             {
                 if (!newValue.matches("\\d*"))
                 {
-                    nydefaulttimepris.setText(newValue.replaceAll("[^\\d]", ""));
+                    newDefaultRate.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
-
-        txtrettimepris.textProperty().addListener(new ChangeListener<String>()
+        txtEditDefaultRate.textProperty().addListener(new ChangeListener<String>()
         {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -114,40 +114,37 @@ public class KlientManagerAdminController implements Initializable
             {
                 if (!newValue.matches("\\d*"))
                 {
-                    txtrettimepris.setText(newValue.replaceAll("[^\\d]", ""));
+                    txtEditDefaultRate.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
         try
         {
-
             populateClientList();
-            skuffe.close();
-            retklientbtb.setVisible(false);
-            retvalgteklientnbtb.setVisible(false);
-            listviewprojekts.setFocusTraversable(false);
-            listviewprojekts.setTooltip(tooltipforprojektlist());
-
+            drawer.close();
+            btbEditClient.setVisible(false);
+            btbEditChosenClient.setVisible(false);
+            listviewProjects.setFocusTraversable(false);
+            listviewProjects.setTooltip(tooltipForProjectList());
         } catch (DALException | SQLException ex)
         {
-           
         }
     }
 
     /**
-     * sætter alle klienterne ind i klient listviewet
+     * Sætter alle klienterne ind i klient listviewet
      *
      * @throws DALException
      * @throws SQLException
      */
     private void populateClientList() throws DALException, SQLException
     {
-        listviewfx.setItems(model.getClients());
+        listviewClients.setItems(Cmodel.getClients());
     }
 
     /**
-     * håndtere den valgte klient fra klient listviwet, og tranportere dens info
-     * til relevandte lables, og arktivere "Ret klient knappen" mm.
+     * Håndterer den valgte klient fra klient listviwet, og tranportere dens
+     * info til relevandte lables, og arktivere "Ret klient knappen" mm.
      *
      * @param event
      * @throws DALException
@@ -156,16 +153,16 @@ public class KlientManagerAdminController implements Initializable
     @FXML
     private void getSelectedClient(MouseEvent event) throws DALException, SQLException
     {
-        selectedClient = listviewfx.getSelectionModel().getSelectedItem();
+        selectedClient = listviewClients.getSelectionModel().getSelectedItem();
 
-        klientNavnlbl.setText(selectedClient.getClientName());
-        timeprislbl.setText(selectedClient.getDefaultRate() + " DKK");
+        lblClientName.setText(selectedClient.getClientName());
+        lblDefaultRate.setText(selectedClient.getDefaultRate() + " DKK");
 
-        //gør ret klient btb og retvalgteklient btb synlige
-        retklientbtb.setVisible(true);
-        retvalgteklientnbtb.setVisible(true);
+        // Gør btbEditClient og btbEditChosenClient synlige
+        btbEditClient.setVisible(true);
+        btbEditChosenClient.setVisible(true);
 
-        //tilføjer projeketer til listviewet for den valgte klient
+        // Tilføjer projeketer til listviewet for den valgte klient
         addprojektstolistview(selectedClient);
     }
 
@@ -174,7 +171,7 @@ public class KlientManagerAdminController implements Initializable
      *
      * @return
      */
-    private Tooltip tooltipforprojektlist()
+    private Tooltip tooltipForProjectList()
     {
         Tooltip tip = new Tooltip();
 
@@ -191,7 +188,7 @@ public class KlientManagerAdminController implements Initializable
     }
 
     /**
-     * hjælpe metode til at finde ud af hvad der er i projekt listviewet, og
+     * Hjælpe metode til at finde ud af hvad der er i projekt listviewet, og
      * retunere en int som bruges i tooltipforprojektview() for at sætte den
      * korrekte tooltip.
      *
@@ -204,7 +201,7 @@ public class KlientManagerAdminController implements Initializable
         {
             return 1;
         }
-        if (Bindings.isEmpty(listviewprojekts.getItems()).get() && selectedClient != null)
+        if (Bindings.isEmpty(listviewProjects.getItems()).get() && selectedClient != null)
         {
             return 2;
         }
@@ -221,7 +218,7 @@ public class KlientManagerAdminController implements Initializable
      */
     private void addprojektstolistview(Client client) throws DALException, SQLException
     {
-        listviewprojekts.setCellFactory(param -> new ListCell<Project>()
+        listviewProjects.setCellFactory(param -> new ListCell<Project>()
         {
             @Override
             protected void updateItem(Project item, boolean empty)
@@ -239,9 +236,9 @@ public class KlientManagerAdminController implements Initializable
             }
 
         });
-            
-        listviewprojekts.setItems(model.getClientProjcts(client));
-    
+
+        listviewProjects.setItems(Cmodel.getClientProjcts(client));
+
     }
 
     /**
@@ -254,7 +251,7 @@ public class KlientManagerAdminController implements Initializable
     private void tooltip(MouseEvent event)
     {
 
-        listviewprojekts.setTooltip(tooltipforprojektlist());
+        listviewProjects.setTooltip(tooltipForProjectList());
     }
 
     /**
@@ -264,98 +261,89 @@ public class KlientManagerAdminController implements Initializable
      * @param event
      */
     @FXML
-    private void showpanewithnewklient(ActionEvent event)
+    private void showPaneWithNewClient(ActionEvent event)
     {
-        skuffe.setSidePane(opretnyklientpane);
-        skuffe.open();
-        skuffe.toFront();
+        drawer.setSidePane(paneCreateClient);
+        drawer.open();
+        drawer.toFront();
     }
 
     /**
-     * knap til at håndtere oprettelsen af en ny klien, knappen ligger i
+     * Knap til at håndtere oprettelsen af en ny klient, knappen ligger i
      * anchorpane, som ikke kan ses når draweren ikke er åben.
      *
      * @param event
      * @throws DALException
-     * @throws SQLException
      */
     @FXML
-    private void handleopretklient(ActionEvent event) throws DALException, SQLException
+    private void handleCreateClient(ActionEvent event) throws DALException
     {
-
-        Client newklient = new Client();
-
-        String nytnavn = Nyklientnavn.getText().trim();
-        int timepris = Integer.parseInt(nydefaulttimepris.getText().trim());
-
-        newklient = model.createClient(nytnavn, timepris);
-
-        model.getClients().add(newklient);
-
-        listviewfx.refresh();
-        skuffe.close();
-
+        Client newClient = new Client();
+        String newName = newClientName.getText().trim();
+        int defaultRate = Integer.parseInt(newDefaultRate.getText().trim());
+        newClient = Cmodel.createClient(newName, defaultRate);
+        Cmodel.getClients().add(newClient);
+        listviewClients.refresh();
+        drawer.close();
     }
 
     /**
-     * håndtere retklient, knappen ligger i anchorpane som kun kan ses når
-     * draweren med retklien er åben.
+     * Sletter input i txtfelterne og lukker drawer.
+     *
+     * @param event
+     */
+    @FXML
+    private void handleCancelNewClient(ActionEvent event)
+    {
+        newDefaultRate.clear();
+        newClientName.clear();
+        drawer.close();
+    }
+
+    /**
+     * Håndtere EditClient, knappen ligger i anchorpane som kun kan ses når
+     * draweren med EditClient er åben.
      *
      * @param event
      * @throws DALException
-     * @throws SQLException
      */
     @FXML
-    private void handleretklient(ActionEvent event) throws DALException, SQLException
+    private void handleEditClient(ActionEvent event) throws DALException
     {
+        String editName = txtEditName.getText().trim();
+        int editDefaultRate = Integer.parseInt(txtEditDefaultRate.getText().trim().replace(" DKK", " ").trim());
 
-        String retnavn = txtretnavn.getText().trim();
-        int rettimepris = Integer.parseInt(txtrettimepris.getText().trim().replace(" DKK", " ").trim());
-
-        selectedClient.setClientName(retnavn);
-        selectedClient.setDefaultRate(rettimepris);
-        model.editClient(selectedClient);
-        timeprislbl.setText(rettimepris + " DKK");
-        klientNavnlbl.setText(retnavn);
-        listviewfx.refresh();
-        skuffe.close();
-
+        selectedClient.setClientName(editName);
+        selectedClient.setDefaultRate(editDefaultRate);
+        Cmodel.editClient(selectedClient);
+        lblDefaultRate.setText(editDefaultRate + " DKK");
+        lblClientName.setText(editName);
+        listviewClients.refresh();
+        drawer.close();
     }
 
     /**
-     * åbner draweren med ret klien txtinputfelter
+     * Lukker for drawer til at edit klient.
      *
      * @param event
      */
     @FXML
-    private void openskuffemenretklient(ActionEvent event)
+    private void handleCancelEditClient(ActionEvent event)
     {
-        skuffe.setSidePane(retklientpane);
-        skuffe.open();
-        txtretnavn.setText(selectedClient.getClientName());
-        txtrettimepris.setText(selectedClient.getDefaultRate() + " DKK");
-
+        drawer.close();
     }
+
     /**
-     * 
-     * @param event 
+     * Åbner draweren med ret klien txtinputfelter
+     *
+     * @param event
      */
     @FXML
-    private void handleCancelRetklient(ActionEvent event)
+    private void drawerOpenEditClient(ActionEvent event)
     {
-
-        skuffe.close();
+        drawer.setSidePane(paneEditClient);
+        drawer.open();
+        txtEditName.setText(selectedClient.getClientName());
+        txtEditDefaultRate.setText(selectedClient.getDefaultRate() + " DKK");
     }
-    /**
-     * 
-     * @param event 
-     */
-    @FXML
-    private void handleCancelnyklient(ActionEvent event)
-    {
-        nydefaulttimepris.clear();
-        Nyklientnavn.clear();
-        skuffe.close();
-    }
-
 }

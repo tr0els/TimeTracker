@@ -25,25 +25,25 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class BrugerModel {
+public class UserModel {
 
     private ObservableList<Profession> allProfessions;
     private ObservableList<User> allUsers;
     private ObservableList<Month> listOfMonths;
     private ObservableList<YearMonth> listOfMonthswithYears;
-    private static BrugerModel model = null;
+    private static UserModel model = null;
     private static BLLManager bll;
     private static InputValidator validator;
     private User user;
 
-    public static BrugerModel getInstance() throws DALException, SQLException {
+    public static UserModel getInstance() throws DALException, SQLException {
         if (model == null) {
-            model = new BrugerModel();
+            model = new UserModel();
         }
         return model;
     }
 
-    public BrugerModel() throws DALException {
+    public UserModel() throws DALException {
         bll = BLLManager.getInstance();
         validator = InputValidator.getInstance();
         allUsers = FXCollections.observableArrayList();

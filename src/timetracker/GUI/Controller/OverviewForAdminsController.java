@@ -27,6 +27,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -44,9 +45,9 @@ import javafx.stage.Stage;
 import timetracker.BE.Client;
 import timetracker.DAL.DALException;
 import timetracker.BE.User;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 
 /**
  * FXML Controller class
@@ -93,20 +94,21 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private Label lblforPiechart;
 
-    private final ProjektModel pModel;
-    private BrugerModel bModel;
+    private final ProjectModel pModel;
+    private UserModel bModel;
     private final ClientModel cModel;
     private double totalhouersForPiechart;
     private double billaableHouersForPiechart;
     private ObservableList<Project> listeAfProjekter;
     private final String europeanDatePattern = "dd-MM-yyyy";
+    private final String europeanDatePatternYearMonth = "MM-yyyy";
 
     private User UserLoggedInForMinTid = null;
     private Stage popupStage;
 
     public OverviewForAdminsController() throws DALException, SQLException {
-        pModel = ProjektModel.getInstance();
-        bModel = BrugerModel.getInstance();
+        pModel = ProjectModel.getInstance();
+        bModel = UserModel.getInstance();
         cModel = ClientModel.getInstance();
 
     }
@@ -245,7 +247,7 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    public void getProjectsForfilter() throws DALException, SQLException {
+    public void getProjectsForfilter() throws DALException,  SQLException {
 
         User comboUser = null;
         Client comboKlient = null;
@@ -329,6 +331,11 @@ public class OverviewForAdminsController implements Initializable {
      * Håndere PieChart og fremviser det med data
      */
     public void handlePieChart() {
+        String comboMedarbejder = "";
+        String periode ="";
+        String comboKlient="";
+       
+        
         populatepieChart();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
@@ -340,7 +347,17 @@ public class OverviewForAdminsController implements Initializable {
         piechart.setStartAngle(90);
         piechart.setLegendSide(Side.RIGHT);
         piechart.setLabelsVisible(false);
-
+        
+        if (ComboMedarbejder.getSelectionModel().getSelectedItem() != null)
+                comboMedarbejder = "'"+ComboMedarbejder.getSelectionModel().getSelectedItem().toString()+"'";
+        if(comboKlienter.getSelectionModel().getSelectedItem() != null)
+                comboKlient =  "'"+comboKlienter.getSelectionModel().getSelectedItem().getClientName()+"'";
+        if(comboPerioder.getSelectionModel().getSelectedItem() != null){
+                periode = "'"+comboPerioder.getValue().format(DateTimeFormatter.ofPattern(europeanDatePatternYearMonth))+"'";}
+        if(comboPerioder.getSelectionModel().getSelectedItem() != null ||  comboKlienter.getSelectionModel().getSelectedItem() != null || ComboMedarbejder.getSelectionModel().getSelectedItem() != null)
+        piechart.setTitle("Overblik over: " + periode + "  " +  comboKlient + " " + comboMedarbejder );
+        else 
+        piechart.setTitle("Overblik over alle projekter\n som har tilknyttet opgaver");
     }
 
     /**

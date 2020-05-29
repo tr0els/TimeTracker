@@ -20,22 +20,22 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class ProjektModel {
+public class ProjectModel {
 
     private ObservableList<Project> projectsbyID;
     private ObservableList<Project> allProjects;
     private ObservableList<Project> allProjectsWitExtraData;
     private static BLLManager bll;
-    private static ProjektModel model = null;
+    private static ProjectModel model = null;
 
-    public static ProjektModel getInstance() throws DALException, SQLException {
+    public static ProjectModel getInstance() throws DALException, SQLException {
         if (model == null) {
-            model = new ProjektModel();
+            model = new ProjectModel();
         }
         return model;
     }
 
-    public ProjektModel() throws DALException, SQLException {
+    public ProjectModel() throws DALException, SQLException {
         bll = BLLManager.getInstance();
         allProjects = FXCollections.observableArrayList();
         allProjects.addAll(bll.getProjects()); // kan fjernes da den alligevel kaldes ved getProjects? - Troels
@@ -104,7 +104,7 @@ public class ProjektModel {
     }
 
     /**
-     * Returnere en liste af projects hvor person_id har lavet tasks på
+     * Returnerer en liste af projects hvor person_id har lavet tasks på
      * @param person_id
      * @return
      * @throws DALException 

@@ -18,23 +18,28 @@ import javafx.scene.layout.AnchorPane;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class FxmlLoader {
+public class FxmlLoader
+{
 
     /**
-     * 
+     * Loader vinduet og sætter den rigtige scene.
+     *
      * @param loc
      * @param pane
-     * @return 
+     * @return
      */
-    public static Object loadWindow(URL loc, AnchorPane pane) {
+    public static Object loadWindow(URL loc, AnchorPane pane)
+    {
         Object controller = null;
-        try {
+        try
+        {
             FXMLLoader loader = new FXMLLoader(loc);
             Parent parent = loader.load();
             controller = loader.getController();
             pane.getChildren().clear();
             pane.getChildren().add(parent);
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return controller;

@@ -14,8 +14,10 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Project;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
+import timetracker.BE.TaskParent;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -25,7 +27,8 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel implements Runnable {
+public class TaskModel implements Runnable
+{
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -33,29 +36,34 @@ public class TaskModel implements Runnable {
      */
     private static BLLManager bll;
     private static TaskModel model = null;
-
     private ObservableList<TaskForDataView> taskForDataview;
 
-    public TaskModel() throws DALException, SQLException {
+    public TaskModel() throws DALException, SQLException
+    {
         bll = BLLManager.getInstance();
         taskForDataview = FXCollections.observableArrayList();
-
     }
 
     @Override
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             model = new TaskModel();
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public static TaskModel getInstance() throws DALException, SQLException {
-        if (model == null) {
+    public static TaskModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
             model = new TaskModel();
         }
         return model;
@@ -70,7 +78,8 @@ public class TaskModel implements Runnable {
      * @param person_id
      * @throws timetracker.DAL.DALException
      */
-    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException {
+    public void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException
+    {
         bll.startTask(task_name, billable, project_id, person_id);
     }
 
@@ -80,15 +89,34 @@ public class TaskModel implements Runnable {
      * @param person_id
      * @throws timetracker.DAL.DALException
      */
-    public void stopTask(int person_id) throws DALException {
+    public void stopTask(int person_id) throws DALException
+    {
         bll.stopTask(person_id);
 
     }
-
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-
+   
+    /**
+     * Opdater ændringer på en task Parent ved at ændre alle stacked Children
+     * @param taskParent er den overordnede task med en liste af children
+     */
+    public void updateTask(TaskParent taskParent) {
+        for (TaskChild taskChild : taskParent.getChildren()) {
+            updateTask(taskChild);
+        }
+    }
+    
+    /**
+     * Opdater ændringer på en task Child i databasen
+     * @param taskChild er den task der skal opdateres
+     */
+    public void updateTask(TaskChild taskChild) {
+        //bll.updateTask(taskChild); todo
+    }
+    
+    
     /**
      * Bygger observable liste af task udfra et project_id som kan bruges i
      * vores view
@@ -98,6 +126,7 @@ public class TaskModel implements Runnable {
      * @return
      * @throws timetracker.DAL.DALException
      */
+    
     public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 
         return bll.getTaskbyIDs(project_id, person_id);
@@ -114,7 +143,8 @@ public class TaskModel implements Runnable {
      * @return
      * @throws DALException
      */
-    public Task getTaskbyID(int task_id) throws DALException {
+    public Task getTaskbyID(int task_id) throws DALException
+    {
         return bll.getTaskbyID(task_id);
     }
 
@@ -124,11 +154,13 @@ public class TaskModel implements Runnable {
      * @param task
      * @throws DALException
      */
-    public void updateTaskbyID(Task task) throws DALException {
+    public void updateTaskbyID(Task task) throws DALException
+    {
         bll.updateTaskbyID(task);
     }
 
-    public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException {
+    public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
+    {
         taskForDataview.clear();
         taskForDataview.addAll(bll.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd));
         return taskForDataview;

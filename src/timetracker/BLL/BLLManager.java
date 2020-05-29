@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
@@ -69,10 +70,16 @@ public class BLLManager {
      * @return
      * @throws DALException
      */
-    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
+    {
         return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-
+    
+    public void updateTask(TaskChild taskChild) throws DALException
+    {
+        iGetData.updateTask(taskChild);
+    }
+    
     /**
      * Starter en ny task
      *
@@ -96,12 +103,20 @@ public class BLLManager {
 
     }
 
-    public List<Project> getProjectsbyID(int person_id) throws DALException {
+    /**
+     * Returnerer en liste af projects hvor person_id har lavet tasks på
+     *
+     * @param person_id
+     * @return
+     * @throws DALException
+     */
+    public List<Project> getProjectsbyID(int person_id) throws DALException
+    {
         return iGetData.getProjectsbyID(person_id);
     }
 
     /**
-     * returnere en liste af Tasks udfra et project_id
+     * Returnere en liste af Tasks udfra et project_id
      *
      * @param project_id
      * @return
@@ -115,7 +130,7 @@ public class BLLManager {
     }
 
     /**
-     * returnere en specifik task udfra task_id
+     * Returnere en specifik task udfra task_id
      *
      * @param task_id
      * @return

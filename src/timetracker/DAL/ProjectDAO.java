@@ -18,7 +18,7 @@ import timetracker.BE.User;
 
 /**
  *
- * @author @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
+ * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
 public class ProjectDAO
@@ -39,7 +39,7 @@ public class ProjectDAO
      * @param projectName
      * @param hourlyPay
      */
-    public void createProject(int clientID, String projectName, int hourlyPay)
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -53,8 +53,9 @@ public class ProjectDAO
 
             st.executeQuery();
 
-        } catch (Exception e)
+        } catch (SQLException e)
         {
+            throw new DALException("kunne ikke oprette: " + projectName + e);
         }
     }
 
@@ -79,7 +80,7 @@ public class ProjectDAO
 
         } catch (SQLException e)
         {
-            throw new DALException("Kunne ikke slette projektet");
+            throw new DALException("Kunne ikke slette projektet " + e);
         }
     }
 
@@ -106,11 +107,11 @@ public class ProjectDAO
             st.setInt(3, clientID);
             st.setInt(4, projectID);
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e)
         {
-            //throw new DALException("Kunne ikke rette projektet" +e);
+            throw new DALException("Kunne ikke rette projektet" +e);
         }
     }
 
@@ -146,7 +147,7 @@ public class ProjectDAO
             return allProjects;
         } catch (SQLException ex)
         {
-            throw new DALException("Kunne ikke hente projekter fra databasen");
+            throw new DALException("Kunne ikke hente projekter fra databasen " + ex);
         }
     }
 
@@ -347,7 +348,7 @@ public class ProjectDAO
                     + "and c.client_id = p.client_id\n"
                     + "and t.task_id = t1.task_id\n"
                     + "and c.client_name LIKE '%" + client_clause + "%'\n"
-                    + "and t.task_end != null\n"
+                    + "and t.task_end is not null\n"
                     + user_clause
                     + fradato_caluse
                     + tildato_clause

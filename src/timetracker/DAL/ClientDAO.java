@@ -35,8 +35,8 @@ public class ClientDAO
      *
      * @param name
      * @param timepris
-     * @param client
      * @return
+     * @throws timetracker.DAL.DALException
      */
     public Client createClient(String name, int timepris) throws DALException
     {
@@ -61,7 +61,7 @@ public class ClientDAO
             }
         } catch (SQLException e)
         {
-            //throw new DALException("Kunne ikke oprette Klient");
+            throw new DALException("Kunne ikke oprette Klient " + e);
         }
         return null;
     }
@@ -83,10 +83,10 @@ public class ClientDAO
             st.setString(1, client.getClientName());
             st.setInt(2, client.getDefaultRate());
 
-            st.executeQuery();
+            st.executeUpdate();
         } catch (SQLException e)
         {
-//            throw new DALException("Kunne ikke rette Klienten" + e);
+            throw new DALException("Kunne ikke rette Klienten" + e);
         }
     }
 
@@ -106,10 +106,10 @@ public class ClientDAO
 
             st.setInt(1, client.getClientId());
 
-            st.executeQuery();
+            st.executeUpdate();
         } catch (SQLException e)
         {
-//            throw new DALException("Kunne ikke Slette Klienten");
+            throw new DALException("Kunne ikke Slette Klienten");
         }
     }
 
@@ -141,8 +141,8 @@ public class ClientDAO
             return allClients;
         } catch (SQLException ex)
         {
-            //throw new DALException("Kunne ikke hente Klienter");
+           throw new DALException("Kunne ikke hente Klienter");
         }
-        return null;
+        
     }
 }
