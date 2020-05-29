@@ -85,10 +85,10 @@ public class UserDAO
             st.setInt(5, user.getProfessionId());
             st.setInt(6, user.getPersonId());
 
-            st.executeQuery();
+            st.executeUpdate();
         } catch (SQLException e)
         {
-//            throw new DALException("Kunne ikke rette brugeren"); <- dette ødelægger et eller andet
+            throw new DALException("Kunne ikke rette brugeren");
         }
     }
 

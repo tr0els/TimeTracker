@@ -247,7 +247,7 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    public void getProjectsForfilter() throws DALException, SQLException {
+    public void getProjectsForfilter() throws DALException,  SQLException {
 
         User comboUser = null;
         Client comboKlient = null;
