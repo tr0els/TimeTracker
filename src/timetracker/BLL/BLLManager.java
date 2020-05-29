@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
@@ -77,7 +78,12 @@ public class BLLManager
     {
         return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-
+    
+    public void updateTask(TaskChild taskChild) throws DALException
+    {
+        iGetData.updateTask(taskChild);
+    }
+    
     /**
      * Starter en ny task
      *

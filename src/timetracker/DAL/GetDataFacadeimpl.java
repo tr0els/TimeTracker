@@ -11,6 +11,7 @@ import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.User;
@@ -92,6 +93,12 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
     {
         return taskdao.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
+    }
+    
+    @Override
+    public void updateTask(TaskChild taskChild) throws DALException
+    {
+        taskdao.updateTask(taskChild);
     }
 
     @Override

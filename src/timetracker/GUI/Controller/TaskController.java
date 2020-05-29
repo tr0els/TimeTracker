@@ -21,17 +21,26 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
+import timetracker.BE.TaskParent;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.ProjectModel;
+import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.ChangelogModel;
+import timetracker.GUI.Model.ProjektModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -43,22 +52,24 @@ import timetracker.GUI.Model.TaskModel;
 public class TaskController implements Initializable
 {
 
-    private TaskModel model;
-    private ProjectModel pModel;
+    private TaskModel tModel;
+    private ProjektModel pModel;
+    private BrugerModel bModel;
+    private ChangelogModel cModel;
+    
+    private int personId;
+    private ObservableList<Project> projects = FXCollections.observableArrayList();
+    private List<TaskGroup> tasks;    
     private Image imgPlay;
     private Image imgPause;
     private Image imgBillable;
     private Image imgNotBillable;
     private Image imgEdit;
-    private int idag = 0;
-    private int igår = 1;
-    private int person_id;
-    int timerSecondsv = 0;
-    int timerMinutesv = 0;
-    int timerHoursv = 0;
-    boolean timerState = false;
-    private ObservableList<Project> allProjects = FXCollections.observableArrayList();
-
+    private int timerSecondsv = 0;
+    private int timerMinutesv = 0;
+    private int timerHoursv = 0;
+    private boolean timerState = false;    
+    
     @FXML
     private JFXTextField textTaskname;
     @FXML
@@ -82,46 +93,33 @@ public class TaskController implements Initializable
     @FXML
     private ScrollPane taskScrollPane;
 
+    public TaskController() throws DALException, SQLException {
+        tModel = TaskModel.getInstance();
+        pModel = ProjektModel.getInstance();
+        bModel = BrugerModel.getInstance();
+        cModel = ChangelogModel.getInstance();
+    }
+    
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        person_id = 1; //midlertidigt, skal hentes fra login
-        try
-        {
-            model = TaskModel.getInstance();
-            pModel = ProjectModel.getInstance();
-            allProjects.addAll(pModel.getProjects());
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            personId = bModel.getUser().getPersonId();
+            projects.addAll(pModel.getProjects());
             setTasksGroupedByDate();
-
-        } catch (DALException | SQLException ex)
-        {
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        loadImages();
         showProjects();
-    }
-
-    /**
-     * Sætter image variabler op
-     */
-    public void loadImages()
-    {
-        imgPlay = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/play.png"));
-        imgPause = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/pause.png"));
-        imgBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_active.png"));
-        imgNotBillable = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/billable_inactive.png"));
-        imgEdit = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/edit.png"));
     }
 
     /**
      * Henter en liste over projekter og smider dem i vores combobox
      */
-    public void showProjects()
-    {
-        comboListprojects.setItems(allProjects);
+    public void showProjects() {
+        comboListprojects.setItems(projects);
     }
 
     /**
@@ -133,7 +131,7 @@ public class TaskController implements Initializable
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
 
-        model.startTask(task_name, billable, project_id, person_id);
+        tModel.startTask(task_name, billable, project_id, personId);
         textTaskname.clear();
         checkBillable.setSelected(true);
         comboListprojects.getSelectionModel().clearSelection();
@@ -145,7 +143,7 @@ public class TaskController implements Initializable
     public void stopTask() throws DALException
     {
 
-        model.stopTask(person_id);
+        tModel.stopTask(personId);
     }
 
     /**
@@ -257,20 +255,346 @@ public class TaskController implements Initializable
             timerButton.setText("Start");
         }
     }
+    
+   /**
+    * 
+    * @throws DALException
+    * @throws SQLException 
+    */
+    public void setTasksGroupedByDate() throws DALException, SQLException {
 
-    /**
-     * Sætter listen af brugers tasks i vores Scrollpane
-     *
-     * @throws DALException
-     * @throws SQLException
-     */
-    public void setTasksGroupedByDate() throws DALException, SQLException
-    {
-        // Popullerer listen med brugers tasks sorteret efter dato
-        List<TaskGroup> tasks = model.getTasksGroupedByDate(1, "DATE", true, true);
-        // Bygger task view
-        Pane taskPane = TaskUtil.getView(tasks, allProjects);
-        // Putter task view i scrollpane       
+        // Get users tasks grouped by date
+        tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
+
+        // Build task view
+        Pane taskPane = getTaskView();
+
+        // Put task view in scrollpane
         taskScrollPane.setContent(taskPane);
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public Pane getTaskView() {
+        // pane to wrap the final result in
+        Pane taskPane = new Pane();
+        
+        // vbox to keep nodes below each other
+        VBox wrapper = new VBox();
+        wrapper.getStyleClass().add("wrapper");
+        taskPane.getChildren().add(wrapper);
+
+        for (TaskGroup taskGroup : tasks) {
+            
+            // build nodes for each task group
+            HBox groupNode = buildTaskGroup(taskGroup);
+            wrapper.getChildren().add(groupNode);
+            
+            // build nodes for each parent (including any children)
+            for (TaskParent taskParent : taskGroup.getParents()) {
+                TitledPane taskNode = buildTask(taskParent);
+                wrapper.getChildren().add(taskNode);
+            }
+            
+            // add spacing between groups here
+            Pane spacer = new Pane();
+            spacer.getStyleClass().add("spacer");
+            wrapper.getChildren().add(spacer);
+        }
+        
+        return taskPane;
+    }
+    
+    private HBox buildTaskGroup(TaskGroup taskGroup) {
+        
+        // hbox
+        HBox groupNode = new HBox();
+        groupNode.getStyleClass().add("group");
+        
+        // name
+        Label name = new Label(taskGroup.getName());
+        name.getStyleClass().add("name");
+        groupNode.getChildren().add(name);
+        
+        // empty filler
+        Pane filler = new Pane();
+        groupNode.setHgrow(filler, Priority.ALWAYS);
+        name.getStyleClass().add("name");
+        groupNode.getChildren().add(filler);
+        
+        // total
+        Label total = new Label("Total:  ");
+        total.getStyleClass().add("total");
+        groupNode.getChildren().add(total);
+        
+        // time
+        Label time = new Label(taskGroup.getTime());
+        time.getStyleClass().add("time");
+        groupNode.getChildren().add(time);
+
+        return groupNode;
+    }
+    
+    private TitledPane buildTask(TaskParent taskParent) {
+        
+        // titledpane
+        TitledPane parentNode = new TitledPane();
+        parentNode.setExpanded(false);
+        
+        // hbox wrapper
+        HBox hbox = new HBox();
+        
+        // name + num children wrapper
+        HBox hboxName = new HBox();
+        hboxName.getStyleClass().add("name");
+
+        // show number of children
+        if(taskParent.getChildren().size() > 1) {
+            Label numChildren = new Label(taskParent.getChildren().size() + "");
+            numChildren.getStyleClass().add("numChildren");
+            hboxName.getChildren().add(numChildren);
+        }
+        
+        // name
+        JFXTextField name = new JFXTextField(taskParent.getName());
+        name.getStyleClass().add("name");
+        hboxName.getChildren().add(name);
+        hbox.getChildren().add(hboxName);
+
+        // edit name on enter pressed
+        name.setOnAction(e -> {
+            if(!taskParent.getName().equals(name.getText())) {
+                taskParent.setName(name.getText());
+                UpdateTask(taskParent);
+                System.out.println("name changed to: " + name.getText());
+            }
+        });
+        
+        // edit name on unfocus
+        name.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal == false && !taskParent.getName().equals(name.getText())) {
+                taskParent.setName(name.getText());
+                UpdateTask(taskParent);                
+                System.out.println("name changed to: " + name.getText());
+            }
+        });
+
+        // project
+        JFXComboBox<Project> project = new JFXComboBox();
+        project.setItems(projects);
+        
+        // select the project in combobox that matches the tasks project id
+        for (Project p : projects) {
+            if(p.getProjectId() == taskParent.getProjectId()) {
+                project.getSelectionModel().select(p);
+            }
+        }
+                  
+        project.getStyleClass().add("project");
+        hbox.getChildren().add(project);
+        
+        // edit project
+        project.setOnAction(e -> {
+            int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
+            taskParent.setProjectId(projectId);
+            UpdateTask(taskParent);
+            System.out.println("project changed to: " + projectId);
+        });
+        
+        // billable
+        Label billable = new Label("$");
+        billable.getStyleClass().add("billable");
+        
+        if(taskParent.isBillable()) {
+            billable.getStyleClass().add("true");
+        } else {
+            billable.getStyleClass().add("false");
+        }
+        
+        // edit billable
+        billable.setOnMouseClicked(e -> {
+            taskParent.setBillable(!taskParent.isBillable());
+            //updateTaskBillable(taskParent);
+            System.out.println("Task billable is: " + taskParent.isBillable());
+            
+            billable.getStyleClass().clear();
+            billable.getStyleClass().add("billable");
+            if(taskParent.isBillable()) {
+                billable.getStyleClass().add("true");
+            } else {
+                billable.getStyleClass().add("false");
+            }
+        });        
+        
+        hbox.getChildren().add(billable);
+        
+        // start
+        JFXTextField start = new JFXTextField(taskParent.getStart().toLocalTime().toString());
+        start.getStyleClass().add("start");
+        hbox.getChildren().add(start);
+        
+        // dash
+        hbox.getChildren().add(new Label("-"));
+        
+        // end
+        JFXTextField end = new JFXTextField(taskParent.getEnd().toLocalTime().toString());
+        end.getStyleClass().add("end");
+        hbox.getChildren().add(end);
+        
+        // datepicker
+        //hbox.getChildren().add(new JFXDatePicker());
+     
+        // time
+        Label time = new Label(taskParent.getTime());
+        time.getStyleClass().add("time");
+        hbox.getChildren().add(time);
+        
+        // continue timer button
+        Button continueTimer = new Button();
+        continueTimer.getStyleClass().add("continueTimer");
+        hbox.getChildren().add(continueTimer);
+              
+        // stack each child under the parents content
+        VBox childrenWrapper = new VBox();
+  
+        if(taskParent.getChildren().size() > 1) {
+            for (TaskChild taskChild : taskParent.getChildren()) {
+                childrenWrapper.getChildren().add(buildTask(taskChild));
+            }
+        }
+       
+        parentNode.setContent(childrenWrapper);
+        
+        // add hbox to titledpane
+        parentNode.setGraphic(hbox);
+
+        return parentNode;
+    }
+
+     private TitledPane buildTask(TaskChild taskChild) {
+
+        // titledpane
+        TitledPane childNode = new TitledPane();
+        
+        // hbox wrapper
+        HBox hbox = new HBox();
+        
+        // name + num children wrapper
+        HBox hboxName = new HBox();
+        hboxName.getStyleClass().add("name");
+
+        // name
+        JFXTextField name = new JFXTextField(taskChild.getName());
+        name.getStyleClass().add("name");
+        hboxName.getChildren().add(name);
+        hbox.getChildren().add(hboxName);
+
+        // edit name on enter pressed
+        name.setOnAction(e -> {
+            if(!taskChild.getName().equals(name.getText())) {
+                taskChild.setName(name.getText());
+                //updateTaskName(taskParent);
+                System.out.println("name changed to: " + name.getText());
+            }
+        });
+        
+        // edit name on unfocus
+        name.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if(newVal == false && !taskChild.getName().equals(name.getText())) {
+                taskChild.setName(name.getText());
+                //updateTaskName(taskParent);
+                System.out.println("name changed to: " + name.getText());
+            }
+        });
+
+        // project
+        JFXComboBox<Project> project = new JFXComboBox();
+        project.setItems(projects);
+        
+        // select the project in combobox that matches the tasks project id
+        for (Project p : projects) {
+            if(p.getProjectId() == taskChild.getProjectId()) {
+                project.getSelectionModel().select(p);
+            }
+        }
+                  
+        project.getStyleClass().add("project");
+        hbox.getChildren().add(project);
+        
+        // edit project
+        project.setOnAction(e -> {
+            int projectId = project.getSelectionModel().getSelectedItem().getProjectId();
+            taskChild.setProjectId(projectId);
+            //updateTaskProject(taskParent);
+            System.out.println("project changed to: " + projectId);
+        });
+        
+        // billable
+        Label billable = new Label("$");
+        billable.getStyleClass().add("billable");
+        
+        if(taskChild.isBillable()) {
+            billable.getStyleClass().add("true");
+        } else {
+            billable.getStyleClass().add("false");
+        }
+        
+        // edit billable
+        billable.setOnMouseClicked(e -> {
+            taskChild.setBillable(!taskChild.isBillable());
+            //updateTaskBillable(taskParent);
+            System.out.println("Task billable is: " + taskChild.isBillable());
+            
+            billable.getStyleClass().clear();
+            billable.getStyleClass().add("billable");
+            if(taskChild.isBillable()) {
+                billable.getStyleClass().add("true");
+            } else {
+                billable.getStyleClass().add("false");
+            }
+        });        
+        
+        hbox.getChildren().add(billable);
+        
+        // start
+        JFXTextField start = new JFXTextField(taskChild.getStart().toLocalTime().toString());
+        start.getStyleClass().add("start");
+        hbox.getChildren().add(start);
+        
+        // dash
+        hbox.getChildren().add(new Label("-"));
+        
+        // end
+        JFXTextField end = new JFXTextField(taskChild.getEnd().toLocalTime().toString());
+        end.getStyleClass().add("end");
+        hbox.getChildren().add(end);
+        
+        // datepicker
+        //hbox.getChildren().add(new JFXDatePicker());
+        
+        // time
+        Label time = new Label(taskChild.getTime());
+        time.getStyleClass().add("time");
+        hbox.getChildren().add(time);
+        
+        // continue timer button
+        Button continueTimer = new Button();
+        continueTimer.getStyleClass().add("continueTimer");
+        hbox.getChildren().add(continueTimer);
+        
+        // add hbox to titledpane
+        childNode.setGraphic(hbox);
+        
+        return childNode;
+    }
+     
+    private void UpdateTask(TaskParent taskParent) {
+        
+    }
+    
+    private void UpdateTask(TaskChild taskChild) {
+        
     }
 }
