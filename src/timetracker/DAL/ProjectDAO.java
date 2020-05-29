@@ -39,7 +39,7 @@ public class ProjectDAO
      * @param projectName
      * @param hourlyPay
      */
-    public void createProject(int clientID, String projectName, int hourlyPay)
+    public void createProject(int clientID, String projectName, int hourlyPay) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -53,8 +53,9 @@ public class ProjectDAO
 
             st.executeQuery();
 
-        } catch (Exception e)
+        } catch (SQLException e)
         {
+            throw new DALException("kunne ikke oprette: " + projectName + e);
         }
     }
 
@@ -79,7 +80,7 @@ public class ProjectDAO
 
         } catch (SQLException e)
         {
-            throw new DALException("Kunne ikke slette projektet");
+            throw new DALException("Kunne ikke slette projektet " + e);
         }
     }
 
@@ -106,11 +107,11 @@ public class ProjectDAO
             st.setInt(3, clientID);
             st.setInt(4, projectID);
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e)
         {
-            //throw new DALException("Kunne ikke rette projektet" +e);
+            throw new DALException("Kunne ikke rette projektet" +e);
         }
     }
 
@@ -146,7 +147,7 @@ public class ProjectDAO
             return allProjects;
         } catch (SQLException ex)
         {
-            throw new DALException("Kunne ikke hente projekter fra databasen");
+            throw new DALException("Kunne ikke hente projekter fra databasen " + ex);
         }
     }
 
