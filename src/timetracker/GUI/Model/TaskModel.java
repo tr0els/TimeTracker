@@ -14,8 +14,10 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Project;
+import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
+import timetracker.BE.TaskParent;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -122,6 +124,15 @@ public class TaskModel implements Runnable {
 
     }
     
+    /**
+     * Henter en liste af brugerens tasks grupperet efter dato og stacked
+     * @param personId
+     * @param groupBy
+     * @param includeTaskParents
+     * @param includeTaskChildren
+     * @return
+     * @throws DALException 
+     */
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
@@ -135,6 +146,27 @@ public class TaskModel implements Runnable {
      * @return
      * @throws timetracker.DAL.DALException
      */
+    
+    /**
+     * Opdater ændringer på en task Parent ved at ændre alle stacked Children
+     * @param taskParent er den overordnede task med en liste af children
+     */
+    public void updateTask(TaskParent taskParent) {
+        for (TaskChild taskChild : taskParent.getChildren()) {
+            updateTask(taskChild);
+        }
+    }
+    
+    /**
+     * Opdater ændringer på en task Child i databasen
+     * @param taskChild er den task der skal opdateres
+     */
+    public void updateTask(TaskChild taskChild) {
+        //bll.updateTask(taskChild); todo
+    }
+    
+    
+    
     public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
 //        taskById.clear();
 //        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));

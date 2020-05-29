@@ -570,5 +570,33 @@ public class TaskDAO
     {
         return (List<TaskGroup>) getTasks(personId, "DATE", true, true);
     }
+    
+    /**
+     * Opdaterer ændringer i en task
+     *
+     * @param task
+     * @throws DALException
+     */
+    public void updateTask(TaskChild taskChild) throws DALException
+    {
+        try (Connection con = dbCon.getConnection())
+        {
+            String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, person_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
 
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, taskChild.getName());
+            ps.setBoolean(2, taskChild.isBillable());
+            ps.setInt(3, taskChild.getProjectId());
+            ps.setInt(4, taskChild.getPersonId());
+            ps.setTimestamp(5, java.sql.Timestamp.valueOf(taskChild.getStart()));
+            ps.setTimestamp(6, java.sql.Timestamp.valueOf(taskChild.getEnd()));
+            ps.setInt(7, taskChild.getId());
+
+            ps.execute();
+        } catch (SQLException e)
+        {
+            throw new DALException("Kunne ikke opdatere tasken");
+        }
+    }
 }
