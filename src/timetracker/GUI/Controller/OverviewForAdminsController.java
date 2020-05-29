@@ -334,7 +334,7 @@ public class OverviewForAdminsController implements Initializable {
         String comboMedarbejder = "";
         String periode ="";
         String comboKlient="";
-        Tooltip tip = new Tooltip();
+       
         
         populatepieChart();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
