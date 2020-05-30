@@ -356,9 +356,9 @@ public class BLLManager
         return iGetData.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd);
     }
 
-    public void changelogTask(Task task, int person_id) throws DALException
+    public void changelogTask(int taskId, int person_id) throws DALException
     {
-        iGetData.changelogTask(task, person_id);
+        iGetData.changelogTask(taskId, person_id);
     }
 
 }

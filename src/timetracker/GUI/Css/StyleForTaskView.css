@@ -32,13 +32,13 @@
     -fx-background-color: #f5f7f7;
     -fx-border-width: 1px 0 0 0;
     -fx-border-color: #DDD;
-    -fx-padding: 7px 0px 7px 12px;
+    -fx-padding: 7px 0px 7px 10px;
     -fx-background-insets: 0 0 0 0, 0 0 0 4px;
 }
 
 .tasks .titled-pane > .title:hover,
 .tasks .titled-pane > .content .title:hover {
-    -fx-background-color: skyblue, #e4eff1;
+    -fx-background-color: #435a9a, #e4eff1;
 }
 
 .tasks .titled-pane > .title .numChildren {
@@ -47,7 +47,7 @@
     -fx-text-fill: white;
     -fx-min-width: 20px;
     -fx-alignment: center;
-    -fx-translatexk: -2px;
+    -fx-translatex: -2px;
 }
 
 .tasks .titled-pane > .title .numChildren:hover {
@@ -60,7 +60,7 @@
 
 .tasks .titled-pane > .title .project {
     -fx-prompt-text-fill: #8D8D8D;
-    -fx-pref-width: 135px;
+    -fx-pref-width: 125px;
 }
 
 .tasks .titled-pane > .title .billable {
@@ -69,29 +69,12 @@
     -fx-pref-width: 15px;
 }
 
-.tasks .titled-pane > .title .billable.true:hover {
-    -fx-text-fill: #CCC;
-}
-
-.tasks .titled-pane > .title .billable.false:hover {
-    -fx-text-fill: #4b7cad;
-}
-
 .tasks .titled-pane > .title .billable.true {
     -fx-text-fill: #4b7cad;
 }
 
 .tasks .titled-pane > .title .billable.false {
     -fx-text-fill: #CCC;
-}
-
-.tasks .jfx-date-picker {
-    -jfx-default-color: #CCC;
-    -fx-pref-width: 28px;
-}
-
-.tasks .jfx-date-picker:hover {
-    -jfx-default-color: skyblue;
 }
 
 .tasks .titled-pane > .content > * {
@@ -106,50 +89,34 @@
     -fx-background-color: #FEFEFE;
 }
 
-.tasks .jfx-text-field .input-line,
-.tasks .jfx-combo-box .input-line { 
-    -fx-pref-height: 0px; /*removes underline from jfoenix textfield*/
-}
-
-.tasks .jfx-text-field,
-.tasks .jfx-combo-box { 
-    -jfx-focus-color: skyblue;
-}
-
 .tasks .spacer {
-	-fx-pref-height: 20px;
+    -fx-pref-height: 20px;
     -fx-border-color: #DDD;
     -fx-border-width: 3px 0px 0px 0px;
 }
 
-.tasks .wrapper { /* try with white bg */
-
-}
-
-.tasks .taskPane {
-
-}
+.tasks .wrapper {}
+.tasks .taskPane {}
 
 .tasks .group {
     -fx-padding: 5px 10px 5px 10px;
     -fx-alignment: center;
-    -fx-background-color: #bacfd6;
-    -fx-background-radius: 8px 8px 0px 0px;
-    -fx-border-radius: 8px 8px 0px 0px;
+    -fx-background-color: #afbbdd;
+    -fx-background-radius: 0px;
+    -fx-border-radius: 0px;
+    -fx-text-fill: #333;    
 }
 
 .tasks .group .name {
     -fx-font-size: 14px;
-    -fx-text-fill: #666;
 }
 
 .tasks .group .total {
     -fx-font-size: 11px;
-    -fx-text-fill: #666;
 }
 
 .tasks .titled-pane > .title .name {
-    -fx-pref-width: 175px;
+    -fx-pref-width: 185px;
     -fx-spacing: 3px;
 }
 
@@ -159,42 +126,43 @@
     -fx-text-fill: #666;
 }
 
-.tasks .titled-pane .time {
-	-fx-min-width: 60px;
-}
-
-.tasks .titled-pane > .title .start, 
-.tasks .titled-pane > .title .end {
+.tasks .titled-pane > .title .start {
     -fx-font-size: 12px;
     -fx-pref-width: 30px;
+    -fx-alignment: center_right;
 }
 
-.tasks .titled-pane > .title .start {
-    -fx-alignment: center_right;
+.tasks .titled-pane > .title .end {
+    -fx-font-size: 12px;
+    -fx-pref-width: 50px;
+}
+
+.tasks .titled-pane .time {
+    -fx-min-width: 65px;
+}
+
+.tasks .titled-pane > .title .edit {
+    -fx-graphic: url('../Icons/edit.png');
+    -fx-pref-width: 15px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.tasks .titled-pane > .title .edit:hover {
+    -fx-opacity: 0.33;
+    -fx-cursor: hand;
 }
 
 .tasks .titled-pane > .title .continueTimer {
     -fx-graphic: url('../Icons/play.png');
-    -fx-pref-width: 24px;
-    -fx-pref-height: 24px;
+    -fx-pref-width: 30px;
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
-    -fx-opacity: 0.20;
 }
 
-.tasks .titled-pane > .title .test {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-border-width: 0 0 2px 0;
-    -fx-border-color: transparent;
-    -fx-padding: 2px 0 0 0;
+.tasks .titled-pane > .title .continueTimer:hover {
+    -fx-opacity: 0.33;
+    -fx-cursor: hand;
 }
-
-.tasks .titled-pane > .title .test:hover {
-    -fx-background-color: default;
-    -fx-border-width: 0 0 2px 0;
-    -fx-border-color: lightblue;
-}
-
-

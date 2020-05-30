@@ -388,6 +388,7 @@ public class TaskDAO
                     + "	task_name, \n"
                     + "	billable, \n"
                     + "	project_id, \n"
+                    + "	NULL AS person_id, \n"
                     + "	MIN(task_start) AS task_start, \n"
                     + "	MAX(task_end) AS task_end, \n"
                     + "	CAST(task_start AS DATE) as task_date,\n"
@@ -405,6 +406,7 @@ public class TaskDAO
                     + "	task_name, \n"
                     + "	billable, \n"
                     + "	project_id, \n"
+                    + "	person_id, \n"
                     + "	CAST(task_start AS DATE)\n"
                     + "\n"
                     + "UNION\n"
@@ -417,6 +419,7 @@ public class TaskDAO
                     + "	task_name, \n"
                     + "	billable, \n"
                     + "	project_id, \n"
+                    + "	person_id, \n"
                     + "	task_start, \n"
                     + "	task_end, \n"
                     + "	CAST(task_start AS DATE) AS task_date,\n"
@@ -438,6 +441,7 @@ public class TaskDAO
                     + "	'TaskGroup' AS type,\n"
                     + "	COUNT(*) AS num_children, \n"
                     + "	NULL,\n"
+                    + "	NULL, \n"
                     + "	NULL, \n"
                     + "	NULL, \n"
                     + "	NULL, \n"
@@ -509,7 +513,6 @@ public class TaskDAO
                     tp.setName(rs.getString("task_name"));
                     tp.setBillable(rs.getBoolean("billable"));
                     tp.setProjectId(rs.getInt("project_id"));
-                    //tp.setPersonId(rs.getInt("person_id"));
                     tp.setStart(rs.getTimestamp("task_start").toLocalDateTime());
                     tp.setEnd(rs.getTimestamp("task_end").toLocalDateTime());
                     tp.setTime(rs.getString("total_time"));
@@ -532,7 +535,7 @@ public class TaskDAO
                     tc.setName(rs.getString("task_name"));
                     tc.setBillable(rs.getBoolean("billable"));
                     tc.setProjectId(rs.getInt("project_id"));
-                    //tc.setPersonId(rs.getInt("person_id"));
+                    tc.setPersonId(rs.getInt("person_id"));
                     tc.setStart(rs.getTimestamp("task_start").toLocalDateTime());
                     tc.setEnd(rs.getTimestamp("task_end").toLocalDateTime());
                     tc.setTime(rs.getString("total_time"));
@@ -581,19 +584,19 @@ public class TaskDAO
     {
         try (Connection con = dbCon.getConnection())
         {
-            String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, person_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
+            String sql = "UPDATE Tasklog SET task_name = ?, billable = ?, project_id = ?, task_start = ?, task_end = ? WHERE task_id = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ps.setString(1, taskChild.getName());
             ps.setBoolean(2, taskChild.isBillable());
             ps.setInt(3, taskChild.getProjectId());
-            ps.setInt(4, taskChild.getPersonId());
-            ps.setTimestamp(5, java.sql.Timestamp.valueOf(taskChild.getStart()));
-            ps.setTimestamp(6, java.sql.Timestamp.valueOf(taskChild.getEnd()));
-            ps.setInt(7, taskChild.getId());
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(taskChild.getStart()));
+            ps.setTimestamp(5, java.sql.Timestamp.valueOf(taskChild.getEnd()));
+            ps.setInt(6, taskChild.getId());
 
             ps.execute();
+            System.out.println("database update: " + taskChild.getName());
         } catch (SQLException e)
         {
             throw new DALException("Kunne ikke opdatere tasken");

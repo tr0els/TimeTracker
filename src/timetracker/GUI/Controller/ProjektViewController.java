@@ -365,7 +365,7 @@ public class ProjektViewController implements Initializable {
                 lblWarning.setText("til-tid kan ikke være før fra-tid!");
             }else{
                 lblWarning.setText("");
-            Cmodel.changelogTask(edit_task, person_id);
+            Cmodel.changelogTask(edit_task.getTaskId(), person_id);
             model.updateTaskbyID(edit_task);    
             
             loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)

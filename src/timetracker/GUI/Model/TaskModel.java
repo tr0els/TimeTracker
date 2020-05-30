@@ -107,23 +107,13 @@ public class TaskModel implements Runnable
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-   
+      
     /**
-     * Opdater ændringer på en task Parent ved at ændre alle stacked Children
-     * @param taskParent er den overordnede task med en liste af children
-     */
-    public void updateTask(TaskParent taskParent) {
-        for (TaskChild taskChild : taskParent.getChildren()) {
-            updateTask(taskChild);
-        }
-    }
-    
-    /**
-     * Opdater ændringer på en task Child i databasen
+     * Opdater ændringer på en task i databasen
      * @param taskChild er den task der skal opdateres
      */
-    public void updateTask(TaskChild taskChild) {
-        //bll.updateTask(taskChild); todo
+    public void updateTask(TaskChild taskChild) throws DALException {
+        bll.updateTask(taskChild);
     }
     
     

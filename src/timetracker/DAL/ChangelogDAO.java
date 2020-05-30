@@ -34,7 +34,7 @@ public class ChangelogDAO
      * @param user
      * @throws DALException
      */
-    public void changelogTask(Task task, int person_id) throws DALException
+    public void changelogTask(int taskId, int person_id) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -45,7 +45,7 @@ public class ChangelogDAO
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, person_id);
-            st.setInt(2, task.getTaskId());
+            st.setInt(2, taskId);
 
             st.executeQuery();
 

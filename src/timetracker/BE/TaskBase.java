@@ -22,7 +22,7 @@ abstract public class TaskBase
     private int personId;
     private LocalDateTime start;
     private LocalDateTime end;
-    private String time; // maybe SimpleDateFormat("HH:mm:ss");
+    private String time;
 
     /**
      * Constructor for Client som tager imod parametre
@@ -40,7 +40,7 @@ abstract public class TaskBase
         this.name = name;
         this.billable = billable;
         this.projectId = projectId;
-        //this.personId = personId;
+        this.personId = personId;
         this.start = start;
         this.end = end;
         this.time = time;

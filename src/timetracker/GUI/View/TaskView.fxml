@@ -28,7 +28,7 @@
             <Font size="20.0" />
          </font></Label>
 
-      <ScrollPane fx:id="taskScrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutX="13.0" layoutY="133.0" prefHeight="342.0" prefWidth="575.0" styleClass="tasks" vbarPolicy="ALWAYS" />
+      <ScrollPane fx:id="taskScrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutX="13.0" layoutY="133.0" prefHeight="342.0" prefWidth="575.0" styleClass="tasks" />
 
     </children>
 </AnchorPane>

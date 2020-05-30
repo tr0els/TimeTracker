@@ -32,8 +32,8 @@ public class ChangelogModel
         return model;
     }
     
-    public void changelogTask(Task task, int person_id) throws DALException{
-        bll.changelogTask(task, person_id);
+    public void changelogTask(int taskId, int person_id) throws DALException{
+        bll.changelogTask(taskId, person_id);
     }
     
 }

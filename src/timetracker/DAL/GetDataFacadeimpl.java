@@ -7,6 +7,8 @@ package timetracker.DAL;
 
 import java.util.List;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import timetracker.BE.Client;
 import timetracker.BE.Profession;
 import timetracker.BE.Project;
@@ -43,7 +45,11 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     @Override
     public void createProject(int clientId, String projectName, int hourlyPay)
     {
-        projectdao.createProject(clientId, projectName, hourlyPay);
+        try {
+            projectdao.createProject(clientId, projectName, hourlyPay);
+        } catch (DALException ex) {
+            Logger.getLogger(GetDataFacadeimpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -224,9 +230,9 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     }
 
     @Override
-    public void changelogTask(Task task, int person_id) throws DALException
+    public void changelogTask(int taskId, int person_id) throws DALException
     {
-        changelogdao.changelogTask(task, person_id);
+        changelogdao.changelogTask(taskId, person_id);
     }
 
 }
