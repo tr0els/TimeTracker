@@ -10,9 +10,9 @@
 <AnchorPane prefHeight="500.0" prefWidth="746.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.MenubarController">
     <children>
         <AnchorPane fx:id="viewpane" layoutX="162.0" prefHeight="500.0" prefWidth="600.0" />
-        <JFXDrawer fx:id="drawer" prefHeight="500.0" prefWidth="155.0" stylesheets="@StyleforMenu.css">
+        <JFXDrawer fx:id="drawer" prefHeight="500.0" prefWidth="155.0" stylesheets="@/timetracker/GUI/Css/StyleforMenu.css">
          <children>
-                <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@StyleforMenu.css">
+                <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@/timetracker/GUI/Css/StyleforMenu.css">
                     <children>
                         <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="138.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Mine Projekter " />
                         <JFXButton fx:id="opgaverbtb" layoutX="-3.0" layoutY="181.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Mine Opgaver" />

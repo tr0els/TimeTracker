@@ -25,9 +25,9 @@ import javafx.scene.layout.AnchorPane;
 import timetracker.BE.Project;
 import timetracker.BE.User;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 
 /**
  * FXML Controller class
@@ -74,15 +74,15 @@ public class MinTidController implements Initializable {
     
     
     private User loggedInUser;
-    private final ProjektModel pModel;
-    private final BrugerModel bModel;
+    private final ProjectModel pModel;
+    private final UserModel bModel;
     private final ClientModel cModel;
     private ObservableList<Project> listeAfProjekter;
     
     
     public MinTidController() throws DALException, SQLException{
-      pModel = ProjektModel.getInstance();
-      bModel = BrugerModel.getInstance();
+      pModel = ProjectModel.getInstance();
+      bModel = UserModel.getInstance();
       cModel = ClientModel.getInstance();
     
     }

@@ -41,9 +41,9 @@ import timetracker.BE.TaskChild;
 import timetracker.BE.TaskGroup;
 import timetracker.BE.TaskParent;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ChangelogModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 import timetracker.GUI.Model.TaskModel;
 
 /**
@@ -52,13 +52,13 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskController implements Initializable {
+public class TaskController implements Initializable
+{
 
     private TaskModel tModel;
-    private ProjektModel pModel;
-    private BrugerModel bModel;
+    private ProjectModel pModel;
+    private UserModel uModel;
     private ChangelogModel cModel;
-
     private int personId;
     private ObservableList<Project> projects = FXCollections.observableArrayList();
     private List<TaskGroup> tasks;
@@ -95,10 +95,11 @@ public class TaskController implements Initializable {
     @FXML
     private ScrollPane taskScrollPane;
 
-    public TaskController() throws DALException, SQLException {
+    public TaskController() throws DALException, SQLException
+    {
         tModel = TaskModel.getInstance();
-        pModel = ProjektModel.getInstance();
-        bModel = BrugerModel.getInstance();
+        pModel = ProjectModel.getInstance();
+        uModel = UserModel.getInstance();
         cModel = ChangelogModel.getInstance();
     }
 
@@ -106,28 +107,33 @@ public class TaskController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        try {
-            personId = bModel.getUser().getPersonId();
+    public void initialize(URL url, ResourceBundle rb)
+    {
+        try
+        {
+            personId = uModel.getUser().getPersonId();
             projects.addAll(pModel.getProjects());
             setTasksGroupedByDate();
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
         }
         showProjects();
     }
 
     /**
-     * henter en liste over projekter og smider dem i vores combobox
+     * Henter en liste over projekter og smider dem i vores combobox
      */
-    public void showProjects() {
+    public void showProjects()
+    {
         comboListprojects.setItems(projects);
     }
 
     /**
      * Tager de relevante informationer fra GUI og sender videre.
      */
-    public void startTask() throws DALException {
+    public void startTask() throws DALException
+    {
         String task_name = textTaskname.getText(); //valideres og trimmes!
         boolean billable = checkBillable.isSelected();
         int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
@@ -141,87 +147,118 @@ public class TaskController implements Initializable {
     /**
      * stop task via task_id
      */
-    public void stopTask() throws DALException {
+    public void stopTask() throws DALException
+    {
 
         tModel.stopTask(personId);
     }
 
+    /**
+     * Sætter tooltip event ved mouseover som giver info omkring Billable
+     *
+     * @param event
+     */
     @FXML
-    private void HandleTooltipForBillable(MouseEvent event) {
+    private void HandleTooltipForBillable(MouseEvent event)
+    {
         Tooltip tip = new Tooltip();
 
         tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
         checkBillable.setTooltip(tip);
     }
 
+    /**
+     * Starter eller stopper task og det tilhørende stopur
+     *
+     * @param event
+     * @throws DALException
+     */
     @FXML
-    private void handleStartStopTask(ActionEvent event) throws DALException {
+    private void handleStartStopTask(ActionEvent event) throws DALException
+    {
         startTask();
         stopWatch();
     }
 
-    private void stopWatch() {
-        if (timerState == false) {
+    /**
+     * Stopur til at se hvor lang tid der er brugt på en task
+     */
+    private void stopWatch()
+    {
+        if (timerState == false)
+        {
             timerState = true;
             timerSecondsv = 0;
             timerMinutesv = 0;
             timerHoursv = 0;
             timerButton.setText("Stop");
-            Thread t = new Thread(new Runnable() {
+            Thread t = new Thread(new Runnable()
+            {
                 @Override
-                public void run() {
-                    while (timerState) {
-                        Platform.runLater(new Runnable() {
+                public void run()
+                {
+                    while (timerState)
+                    {
+                        Platform.runLater(new Runnable()
+                        {
                             @Override
-                            public void run() {
-                                try {
-                                    if (timerSecondsv >= 60) {
+                            public void run()
+                            {
+                                try
+                                {
+                                    if (timerSecondsv >= 60)
+                                    {
                                         timerSecondsv = 0;
                                         timerMinutesv++;
                                     }
-                                    if (timerMinutesv >= 60) {
+                                    if (timerMinutesv >= 60)
+                                    {
                                         timerSecondsv = 0;
                                         timerMinutesv = 0;
                                         timerHoursv++;
                                     }
-
-                                    if (timerSecondsv < 10) {
+                                    if (timerSecondsv < 10)
+                                    {
                                         timerSeconds.setText("0" + timerSecondsv + "");
-                                    } else {
+                                    } else
+                                    {
                                         timerSeconds.setText(timerSecondsv + "");
                                     }
-                                    if (timerMinutesv < 10) {
+                                    if (timerMinutesv < 10)
+                                    {
                                         timerMinutes.setText("0" + timerMinutesv + ":");
-                                    } else {
+                                    } else
+                                    {
                                         timerMinutes.setText(timerMinutesv + ":");
                                     }
-                                    if (timerHoursv < 10) {
+                                    if (timerHoursv < 10)
+                                    {
                                         timerHours.setText("0" + timerHoursv + ":");
-                                    } else {
+                                    } else
+                                    {
                                         timerHours.setText(timerHoursv + ":");
                                     }
-
                                     timerSecondsv++;
-
-                                } catch (Exception e) {
-
+                                } catch (Exception e)
+                                {
                                 }
                             }
                         });
-                        try {
+                        try
+                        {
                             Thread.sleep(1000);
-                        } catch (Exception e) {
+                        } catch (Exception e)
+                        {
                             break;
                         }
-
                     }
                 }
             });
             t.setDaemon(true);
             t.start();
-        } else {
+        } else
+        {
             timerState = false;
-
             timerButton.setText("Start");
         }
     }
@@ -259,7 +296,8 @@ public class TaskController implements Initializable {
      *
      * @return
      */
-    public Pane getTaskView() {
+    public Pane getTaskView()
+    {
         // pane to wrap the final result in
         Pane taskPane = new Pane();
 
@@ -275,7 +313,8 @@ public class TaskController implements Initializable {
             wrapper.getChildren().add(groupNode);
 
             // build nodes for each parent (including any children)
-            for (TaskParent taskParent : taskGroup.getParents()) {
+            for (TaskParent taskParent : taskGroup.getParents())
+            {
                 TitledPane taskNode = buildTask(taskParent);
                 wrapper.getChildren().add(taskNode);
             }
@@ -335,6 +374,7 @@ public class TaskController implements Initializable {
         // show the parents number of children
         if (taskBase instanceof TaskParent && ((TaskParent)taskBase).getChildren().size() > 1) {
             Label numChildren = new Label(((TaskParent)taskBase).getChildren().size() + "");
+
             numChildren.getStyleClass().add("numChildren");
             hboxName.getChildren().add(numChildren);
             parentNode.setExpanded(false);
@@ -372,7 +412,6 @@ public class TaskController implements Initializable {
         } else {
             billable.getStyleClass().add("false");
         }
-
         hbox.getChildren().add(billable);
 
         // start
@@ -420,40 +459,9 @@ public class TaskController implements Initializable {
         return parentNode;
     }
 
-    /**
-     * Opdater ændringer på en task Parent ved at ændre alle stacked Children
-     *
-     * @param taskParent er den overordnede task med en liste af children
-     */
-    private void updateTask(TaskParent taskParent) {
-        for (TaskChild taskChild : taskParent.getChildren()) {
-            updateTask(taskChild);
-        }
-    }
 
-    private void updateTask(TaskChild taskChild) {
-        try {
-            tModel.updateTask(taskChild);
-            cModel.changelogTask(taskChild.getId(), personId);
-            System.out.println("Updated");
-            // update view
-        } catch (DALException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private Pane getLoadingMessage() throws FileNotFoundException {
-        Pane loadingPane = new Pane();
-        loadingPane.getStyleClass().add("loading");
-        
-        Label loadingText = new Label("Henter data...");
+    private void UpdateTask(TaskParent taskParent)
+    {
 
-        //Image image = new Image(new FileInputStream("../Icons/loading.gif"));
-        ///ImageView imageView = new ImageView(image);
-        
-        loadingPane.getChildren().add(loadingText);
-        //loadingPane.getChildren().add(imageView);
-        
-        return loadingPane;
     }
 }

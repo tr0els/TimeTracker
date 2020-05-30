@@ -45,9 +45,9 @@ import javafx.stage.Stage;
 import timetracker.BE.Client;
 import timetracker.DAL.DALException;
 import timetracker.BE.User;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ClientModel;
-import timetracker.GUI.Model.ProjektModel;
+import timetracker.GUI.Model.ProjectModel;
 
 /**
  * FXML Controller class
@@ -94,8 +94,8 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private Label lblforPiechart;
 
-    private final ProjektModel pModel;
-    private BrugerModel bModel;
+    private final ProjectModel pModel;
+    private UserModel bModel;
     private final ClientModel cModel;
     private double totalhouersForPiechart;
     private double billaableHouersForPiechart;
@@ -107,8 +107,8 @@ public class OverviewForAdminsController implements Initializable {
     private Stage popupStage;
 
     public OverviewForAdminsController() throws DALException, SQLException {
-        pModel = ProjektModel.getInstance();
-        bModel = BrugerModel.getInstance();
+        pModel = ProjectModel.getInstance();
+        bModel = UserModel.getInstance();
         cModel = ClientModel.getInstance();
 
     }

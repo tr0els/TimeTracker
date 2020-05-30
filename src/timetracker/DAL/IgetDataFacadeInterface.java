@@ -25,7 +25,7 @@ public interface IgetDataFacadeInterface
 {
 
     //Project 
-    void createProject(int clientId, String projectName, int hourlyPay);
+    void createProject(int clientId, String projectName, int hourlyPay) throws DALException;
 
     void deleteProject(int projectId) throws DALException;
 

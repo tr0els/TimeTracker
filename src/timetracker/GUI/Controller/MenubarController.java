@@ -23,7 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.BrugerModel;
+import timetracker.GUI.Model.UserModel;
 
 /**
  * FXML Controller class
@@ -58,9 +58,9 @@ public class MenubarController implements Initializable {
     @FXML
     private Label loggedInUser;
     
-    private static BrugerModel model;
+    private static UserModel model;
         public MenubarController() throws DALException, SQLException {
-        model = BrugerModel.getInstance();
+        model = UserModel.getInstance();
     }
 
     /**

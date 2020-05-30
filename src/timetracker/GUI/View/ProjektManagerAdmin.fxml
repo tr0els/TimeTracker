@@ -7,7 +7,7 @@
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="777.0" prefWidth="600.0" stylesheets="@StyleForUserManager.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerAdminController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="777.0" prefWidth="600.0" stylesheets="@/timetracker/GUI/Css/StyleForUserManager.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.ProjektManagerAdminController">
     <children>
         <JFXButton layoutX="513.0" layoutY="10.0" onAction="#handleGetCreateAction" prefHeight="71.0" prefWidth="73.0" text=" Opret&#10;Projekt">
         </JFXButton>

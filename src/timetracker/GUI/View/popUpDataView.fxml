@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="495.0" prefWidth="649.0" stylesheets="@StylingForPopupview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
+<AnchorPane prefHeight="495.0" prefWidth="649.0" stylesheets="@/timetracker/GUI/Css/StylingForPopupview.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.PopUpDataViewController">
    <children>
       <JFXButton fx:id="btbExport" layoutX="510.0" layoutY="407.0" onAction="#handleExportCSV" prefHeight="42.0" prefWidth="102.0" text="Export til CSV" />
       <Label fx:id="lblProjektnavn" layoutX="48.0" layoutY="398.0" />
