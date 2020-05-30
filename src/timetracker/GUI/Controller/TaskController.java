@@ -19,14 +19,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import static java.time.temporal.ChronoUnit.SECONDS;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,8 +45,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import timetracker.BE.Project;
 import timetracker.BE.Task;
-import timetracker.BE.TaskGroup;
-import timetracker.BE.TaskParent;
 import timetracker.DAL.DALException;
 import timetracker.GUI.Model.UserModel;
 import timetracker.GUI.Model.ChangelogModel;
@@ -312,7 +308,7 @@ public class TaskController implements Initializable
         if (model.getTaskbyDays(0, person_id).size() < 1) {
             Label notaskstoday = new Label("Ingen opgaver idag");
             hboxToday.getChildren().add(notaskstoday);
-            Label gettowork = new Label("kom i sving!");
+            Label gettowork = new Label("kom i sving! :D");
             vboxToday.getChildren().add(gettowork);
         } else {
 
