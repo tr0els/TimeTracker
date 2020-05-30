@@ -237,7 +237,7 @@ public class TaskDAO {
                     + "RIGHT('0' + CONVERT(VARCHAR(2),SUM(DATEDIFF(SECOND,tl.task_start,tl.task_end))%60),2)\n"
                     + "AS total_time\n"
                     + "FROM Tasklog tl\n"
-                    + "WHERE person_id = ? AND CONVERT(DATE, task_end) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE()-?)\n"
+                    + "WHERE person_id = ? AND CONVERT(DATE, task_start) BETWEEN CONVERT(DATE, GETDATE()-?) AND CONVERT(DATE, GETDATE()-?)\n"
                     + "GROUP BY CONVERT(DATE, task_start)\n"
                     + "ORDER BY the_date DESC, task_start DESC;";
 

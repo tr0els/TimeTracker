@@ -155,8 +155,7 @@ public class TaskController implements Initializable
             Bmodel = UserModel.getInstance();
             Cmodel = ChangelogModel.getInstance();
 
-            createToday();
-            createDays();
+            updateView();
             showProjects();
 
         } catch (DALException | SQLException ex) {
@@ -223,7 +222,9 @@ public class TaskController implements Initializable
     {
 
         model.stopTask(person_id);
-        timerState = false;
+        if (timerState = true){
+            timerState = false;
+        };
     }
 
     /**
@@ -326,7 +327,13 @@ public class TaskController implements Initializable
 
                 Region dividerToday = new Region();
 
-                Label total = new Label("total tid: " + arrOfStr[1]);
+                String totalTid = "Opgave ikke færdig";
+                if (!arrOfStr[1].contains("null"))
+                {
+                    totalTid = arrOfStr[1];
+                }
+                
+                Label total = new Label("total tid: " + totalTid);
 
                 hboxToday.setHgrow(dividerToday, Priority.ALWAYS);
                 hboxToday.getChildren().addAll(date, dividerToday, total);
