@@ -269,12 +269,8 @@ public class TaskController implements Initializable
      * @throws SQLException
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
-        try {
-            // Show data is loading
-            taskScrollPane.setContent(getLoadingMessage());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Show data is loading
+        taskScrollPane.setContent(new Label("Loading..."));
         
         Platform.runLater(() -> {
             try {
