@@ -187,10 +187,12 @@
     -fx-cursor: hand;
     -fx-background-color: cornflowerblue;
     -fx-text-fill: white;
+    -fx-alignment: center;
 }
 
 .stopButton {
     -fx-cursor: hand;
     -fx-background-color: #cc0000;
     -fx-text-fill: white;
+    -fx-alignment: center;
 }
