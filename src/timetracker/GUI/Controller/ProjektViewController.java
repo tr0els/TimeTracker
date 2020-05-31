@@ -117,8 +117,7 @@ public class ProjektViewController implements Initializable {
     @FXML
     private Label lblWarning;
 
-    public ProjektViewController() throws DALException, SQLException
-    {
+    public ProjektViewController() throws DALException, SQLException {
         model = TaskModel.getInstance();
         Pmodel = ProjectModel.getInstance();
         Bmodel = UserModel.getInstance();
@@ -170,7 +169,7 @@ public class ProjektViewController implements Initializable {
 
         Label lastworkedon = new Label("Sidst arbejdet på");
         lastworkedon.prefWidthProperty().bind(paneProjectDetails.widthProperty().multiply(0.23));
-        
+
         hboxHeader.getChildren().addAll(arrow, taskname, lastworkedon, totaltime);
     }
 
@@ -307,8 +306,7 @@ public class ProjektViewController implements Initializable {
     /**
      * henter lister over projekter og putter dem i vores edit combobox
      */
-    public void showProjects() throws DALException, SQLException
-    {
+    public void showProjects() throws DALException, SQLException {
         allProjects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(allProjects);
     }
@@ -352,7 +350,6 @@ public class ProjektViewController implements Initializable {
             LocalTime timeto = timeTo.getValue();
             LocalDateTime ldt_to = LocalDateTime.of(dateto, timeto);
 
-            
             edit_task.setStartTime(ldt_from);
             edit_task.setEndTime(ldt_to);
 
@@ -360,30 +357,29 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProjectId(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId());
 
-            if (ldt_from.compareTo(ldt_to) == 1)
-            {
+            if (ldt_from.compareTo(ldt_to) == 1) {
                 lblWarning.setText("til-tid kan ikke være før fra-tid!");
-            }else{
+            } else {
                 lblWarning.setText("");
-            Cmodel.changelogTask(edit_task.getTaskId(), person_id);
-            model.updateTaskbyID(edit_task);    
-            
-            loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
+                Cmodel.changelogTask(edit_task.getTaskId(), person_id);
+                model.updateTaskbyID(edit_task);
 
-            for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
+                loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
 
-                if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId()) {
-                    projectMenubox.getSelectionModel().select(personalProjects.get(i));
+                for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
+
+                    if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId()) {
+                        projectMenubox.getSelectionModel().select(personalProjects.get(i));
+                    }
+
                 }
 
-            }
+                createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere gui til det project hvor den opdatere task ligger i.
 
-            createTree(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId()); //opdatere gui til det project hvor den opdatere task ligger i.
+                showProjects(); //indlæser ny liste til vores editvindue
 
-            showProjects(); //indlæser ny liste til vores editvindue
-
-            skuffen.close();
-            skuffen.toBack();
+                skuffen.close();
+                skuffen.toBack();
             }
         } catch (DALException | SQLException ex) {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -397,6 +393,7 @@ public class ProjektViewController implements Initializable {
      */
     @FXML
     private void handleCancel(ActionEvent event) {
+        lblWarning.setText("");
         skuffen.close();
         skuffen.toBack();
 
