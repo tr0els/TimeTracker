@@ -8,10 +8,13 @@ package timetracker.GUI.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTextField;
-import java.io.FileNotFoundException;
+import com.jfoenix.controls.JFXTimePicker;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -52,16 +55,17 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskController implements Initializable
-{
+public class TaskController implements Initializable {
 
     private TaskModel tModel;
     private ProjectModel pModel;
     private UserModel uModel;
     private ChangelogModel cModel;
-    private int personId;
     private ObservableList<Project> projects = FXCollections.observableArrayList();
     private List<TaskGroup> tasks;
+    private int personId;    
+    private TaskChild currentlySelectedTask;
+
     private Image imgPlay;
     private Image imgPause;
     private Image imgBillable;
@@ -77,13 +81,7 @@ public class TaskController implements Initializable
     @FXML
     private JFXCheckBox checkBillable;
     @FXML
-    private JFXComboBox<Project> comboListprojects;
-    @FXML
-    private JFXButton btnCreateTask;
-    @FXML
-    private AnchorPane paneToday;
-    @FXML
-    private AnchorPane paneYesterday;
+    private JFXComboBox<Project> taskProject;
     @FXML
     private Label timerHours;
     @FXML
@@ -93,10 +91,33 @@ public class TaskController implements Initializable
     @FXML
     private JFXButton timerButton;
     @FXML
+    private JFXDrawer drawerEditTask;
+    @FXML
+    private AnchorPane paneEditTask;
+    @FXML
     private ScrollPane taskScrollPane;
+    @FXML
+    private JFXTextField editName;
+    @FXML
+    private JFXCheckBox editBillable;
+    @FXML
+    private JFXComboBox<Project> editProject;
+    @FXML
+    private JFXButton btnEdit;
+    @FXML
+    private JFXButton btnCancel;
+    @FXML
+    private JFXDatePicker editDateTo;
+    @FXML
+    private JFXTimePicker editTimeTo;
+    @FXML
+    private JFXDatePicker editDateFrom;
+    @FXML
+    private JFXTimePicker editTimeFrom;
+    @FXML
+    private Label lblWarning;
 
-    public TaskController() throws DALException, SQLException
-    {
+    public TaskController() throws DALException, SQLException {
         tModel = TaskModel.getInstance();
         pModel = ProjectModel.getInstance();
         uModel = UserModel.getInstance();
@@ -107,49 +128,65 @@ public class TaskController implements Initializable
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        try
-        {
-            personId = uModel.getUser().getPersonId();
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            // get id of logged in user
+            personId = 1; // uModel.getUser().getPersonId();
+            
+            // get list of all projects
             projects.addAll(pModel.getProjects());
+            
+            // add projects to comboboxes
+            taskProject.setItems(projects);
+            editProject.setItems(projects);           
+            
+            // setup edit task menu
+            drawerEditTask.setSidePane(paneEditTask);
+
+            // show users tasks grouped by date
             setTasksGroupedByDate();
-        } catch (DALException | SQLException ex)
-        {
+
+        } catch (DALException | SQLException ex) {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        showProjects();
+        }        
     }
 
     /**
-     * Henter en liste over projekter og smider dem i vores combobox
+     * Starter en ny task
      */
-    public void showProjects()
-    {
-        comboListprojects.setItems(projects);
-    }
-
-    /**
-     * Tager de relevante informationer fra GUI og sender videre.
-     */
-    public void startTask() throws DALException
-    {
-        String task_name = textTaskname.getText(); //valideres og trimmes!
+    public void startTask() throws DALException {
+        String name = textTaskname.getText();
         boolean billable = checkBillable.isSelected();
-        int project_id = comboListprojects.getSelectionModel().getSelectedItem().getProjectId();
+        int projectId = taskProject.getSelectionModel().getSelectedItem().getProjectId();
 
-        tModel.startTask(task_name, billable, project_id, personId);
-        textTaskname.clear();
-        checkBillable.setSelected(true);
-        comboListprojects.getSelectionModel().clearSelection();
+        tModel.startTask(name, billable, projectId, personId);
+    }
+    
+    /**
+     * Starter en ny task baseret på en eksisterende task
+     */
+    public void continueTask(TaskChild taskChild) throws DALException, SQLException {
+        textTaskname.setText(taskChild.getName());
+        
+        if(taskChild.isBillable()) {
+            checkBillable.setSelected(true);
+        } else {
+            checkBillable.setSelected(false);
+        }
+        
+        for (Project p : projects) {
+            if (p.getProjectId() == taskChild.getProjectId()) {
+                taskProject.getSelectionModel().select(p);
+            }
+        }
+        
+        stopWatch();
     }
 
     /**
      * stop task via task_id
      */
-    public void stopTask() throws DALException
-    {
-
+    public void stopTask() throws DALException {
         tModel.stopTask(personId);
     }
 
@@ -159,8 +196,7 @@ public class TaskController implements Initializable
      * @param event
      */
     @FXML
-    private void HandleTooltipForBillable(MouseEvent event)
-    {
+    private void HandleTooltipForBillable(MouseEvent event) {
         Tooltip tip = new Tooltip();
 
         tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
@@ -169,86 +205,61 @@ public class TaskController implements Initializable
 
     /**
      * Starter eller stopper task og det tilhørende stopur
-     *
-     * @param event
-     * @throws DALException
      */
     @FXML
-    private void handleStartStopTask(ActionEvent event) throws DALException
-    {
-        startTask();
-        stopWatch();
-    }
-
-    /**
-     * Stopur til at se hvor lang tid der er brugt på en task
-     */
-    private void stopWatch()
-    {
-        if (timerState == false)
-        {
+    private void stopWatch() throws DALException, SQLException {
+        // start
+        if (timerState == false) {
+            startTask();
+            
             timerState = true;
             timerSecondsv = 0;
             timerMinutesv = 0;
             timerHoursv = 0;
             timerButton.setText("Stop");
-            Thread t = new Thread(new Runnable()
-            {
+            timerButton.getStyleClass().clear();
+            timerButton.getStyleClass().add("stopButton");
+
+            Thread t = new Thread(new Runnable() {
                 @Override
-                public void run()
-                {
-                    while (timerState)
-                    {
-                        Platform.runLater(new Runnable()
-                        {
+                public void run() {
+                    while (timerState) {
+                        Platform.runLater(new Runnable() {
                             @Override
-                            public void run()
-                            {
-                                try
-                                {
-                                    if (timerSecondsv >= 60)
-                                    {
+                            public void run() {
+                                try {
+                                    if (timerSecondsv >= 60) {
                                         timerSecondsv = 0;
                                         timerMinutesv++;
                                     }
-                                    if (timerMinutesv >= 60)
-                                    {
+                                    if (timerMinutesv >= 60) {
                                         timerSecondsv = 0;
                                         timerMinutesv = 0;
                                         timerHoursv++;
                                     }
-                                    if (timerSecondsv < 10)
-                                    {
+                                    if (timerSecondsv < 10) {
                                         timerSeconds.setText("0" + timerSecondsv + "");
-                                    } else
-                                    {
+                                    } else {
                                         timerSeconds.setText(timerSecondsv + "");
                                     }
-                                    if (timerMinutesv < 10)
-                                    {
+                                    if (timerMinutesv < 10) {
                                         timerMinutes.setText("0" + timerMinutesv + ":");
-                                    } else
-                                    {
+                                    } else {
                                         timerMinutes.setText(timerMinutesv + ":");
                                     }
-                                    if (timerHoursv < 10)
-                                    {
+                                    if (timerHoursv < 10) {
                                         timerHours.setText("0" + timerHoursv + ":");
-                                    } else
-                                    {
+                                    } else {
                                         timerHours.setText(timerHoursv + ":");
                                     }
                                     timerSecondsv++;
-                                } catch (Exception e)
-                                {
+                                } catch (Exception e) {
                                 }
                             }
                         });
-                        try
-                        {
+                        try {
                             Thread.sleep(1000);
-                        } catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             break;
                         }
                     }
@@ -256,10 +267,22 @@ public class TaskController implements Initializable
             });
             t.setDaemon(true);
             t.start();
-        } else
-        {
+        } else {
+            // stop stopur og bil
+            stopTask();
             timerState = false;
             timerButton.setText("Start");
+            timerButton.getStyleClass().clear();
+            timerButton.getStyleClass().add("startButton");
+            textTaskname.setText("Hvad arbejder du på?");
+            checkBillable.setSelected(true);
+            taskProject.getSelectionModel().clearSelection();
+            timerSeconds.setText("00");
+            timerMinutes.setText("00");
+            timerHours.setText("00");
+            
+            // reload task view
+            setTasksGroupedByDate();
         }
     }
 
@@ -269,31 +292,22 @@ public class TaskController implements Initializable
      * @throws SQLException
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
-        // Show data is loading
-        taskScrollPane.setContent(new Label("Loading..."));
-        
-        Platform.runLater(() -> {
-            try {
-                // Get users tasks grouped by date
-                tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
 
-                // Build task view
-                Pane taskPane = getTaskView();
+        // Get users tasks grouped by date
+        tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
 
-                // Put task view in scrollpane
-                taskScrollPane.setContent(taskPane);
-            } catch (DALException ex) {
-                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        // Build task view
+        Pane taskPane = getTaskView();
+
+        // Put task view in scrollpane
+        taskScrollPane.setContent(taskPane);
     }
 
     /**
      *
      * @return
      */
-    public Pane getTaskView()
-    {
+    public Pane getTaskView() {
         // pane to wrap the final result in
         Pane taskPane = new Pane();
 
@@ -309,8 +323,7 @@ public class TaskController implements Initializable
             wrapper.getChildren().add(groupNode);
 
             // build nodes for each parent (including any children)
-            for (TaskParent taskParent : taskGroup.getParents())
-            {
+            for (TaskParent taskParent : taskGroup.getParents()) {
                 TitledPane taskNode = buildTask(taskParent);
                 wrapper.getChildren().add(taskNode);
             }
@@ -359,7 +372,7 @@ public class TaskController implements Initializable
         // titledpane
         TitledPane parentNode = new TitledPane();
         parentNode.setCollapsible(false);
-        
+
         // hbox wrapper
         HBox hbox = new HBox();
 
@@ -386,10 +399,10 @@ public class TaskController implements Initializable
 
         // project
         Label project = new Label();
-                
+
         for (Project p : projects) {
             String projectText = p.getProjectName() + " (" + p.getClientName() + ")";
-            
+
             if (p.getProjectId() == taskBase.getProjectId()) {
                 project.setText(projectText);
                 project.setTooltip(new Tooltip(projectText));
@@ -422,7 +435,7 @@ public class TaskController implements Initializable
         Label end = new Label(taskBase.getEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
         end.getStyleClass().add("end");
         hbox.getChildren().add(end);
-        
+
         // time
         Label time = new Label(taskBase.getTime());
         time.getStyleClass().add("time");
@@ -430,13 +443,49 @@ public class TaskController implements Initializable
 
         // edit
         Button edit = new Button();
-        edit.getStyleClass().add("edit");
-        hbox.getChildren().add(edit);
         
+        if (taskBase instanceof TaskParent && ((TaskParent)taskBase).getChildren().size() > 1) {
+            edit.getStyleClass().add("editDisabled");
+            edit.setDisable(true);
+        } else {
+            edit.getStyleClass().add("edit");
+            edit.setOnAction(e -> {
+                // if task parent with 1 child use that child
+                if(taskBase instanceof TaskParent && ((TaskParent)taskBase).getChildren().size() == 1) {
+                    currentlySelectedTask = ((TaskParent)taskBase).getChildren().get(0);
+                // task must be child
+                } else {
+                    currentlySelectedTask = (TaskChild)taskBase;                    
+                }
+                drawerSelectTaskForEditing();
+            });
+        }        
+        
+        hbox.getChildren().add(edit);
+
         // continue timer button
         Button continueTimer = new Button();
         continueTimer.getStyleClass().add("continueTimer");
+        continueTimer.setOnAction(e -> {
+            
+                // if task parent with 1 child use that child
+                if(taskBase instanceof TaskParent && ((TaskParent)taskBase).getChildren().size() >= 1) {
+                    try {
+                        continueTask(((TaskParent)taskBase).getChildren().get(0));
+                        // task must be child
+                    } catch (DALException | SQLException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    try {                    
+                        continueTask(((TaskChild)taskBase));
+                    } catch (DALException | SQLException ex) {
+                        Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
         hbox.getChildren().add(continueTimer);
+
 
         // stack each child under the parents content
         VBox childrenWrapper = new VBox();
@@ -455,9 +504,87 @@ public class TaskController implements Initializable
         return parentNode;
     }
 
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        drawerClose();
+    }
+    
+    /**
+     * henter den valgte task og indsætter værdierne i edit view.
+     *
+     * @param task_id
+     */
+    public void drawerSelectTaskForEditing() {
+        
+        // set values for edit field
+        editName.setText(currentlySelectedTask.getName());
+        editBillable.setSelected(currentlySelectedTask.isBillable());
+        editDateFrom.setValue(currentlySelectedTask.getStart().toLocalDate());
+        editTimeFrom.setValue(currentlySelectedTask.getStart().toLocalTime());
+        editDateTo.setValue(currentlySelectedTask.getEnd().toLocalDate());
+        editTimeTo.setValue(currentlySelectedTask.getEnd().toLocalTime());
 
-    private void UpdateTask(TaskParent taskParent)
-    {
+        for (Project project : projects) {
+            if (currentlySelectedTask.getProjectId() == project.getProjectId()) {
+                editProject.getSelectionModel().select(project);
+            }            
+        }
 
+        // make sure any warnings are reset
+        lblWarning.setText("");
+
+        drawerOpen();
+    }
+    
+    /**
+     * opdatere vores task der skal redigeres med de relevante data og sender
+     * den afsted for at blive opdateret i db
+     *
+     * @param event
+     */
+    @FXML
+    private void handleUpdateTask(ActionEvent event) {
+
+        // convert task date and time
+        LocalDateTime editTaskStart = LocalDateTime.of(editDateFrom.getValue(), editTimeFrom.getValue());
+        LocalDateTime editTaskEnd = LocalDateTime.of(editDateTo.getValue(), editTimeTo.getValue());
+
+        // validate edited time
+        if (editTaskStart.compareTo(editTaskEnd) == 1) {
+            lblWarning.setText("til-tid kan ikke være før fra-tid!");
+        } else { 
+
+            // update task with edited values
+            currentlySelectedTask.setStart(LocalDateTime.of(editDateFrom.getValue(), editTimeFrom.getValue()));
+            currentlySelectedTask.setEnd(LocalDateTime.of(editDateTo.getValue(), editTimeTo.getValue()));
+            currentlySelectedTask.setName(editName.getText());
+            currentlySelectedTask.setBillable(editBillable.isSelected());
+            currentlySelectedTask.setProjectId(editProject.getSelectionModel().getSelectedItem().getProjectId());
+            
+            try {
+                // log changes to task
+                cModel.changelogTask(currentlySelectedTask.getId(), personId);
+                
+                // update task in database with edited values
+                tModel.updateTask(currentlySelectedTask);    
+
+                // reload task view to show changes
+                setTasksGroupedByDate();
+            } catch (SQLException | DALException ex) {
+                Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            drawerClose();
+        }
+    }
+    
+    public void drawerOpen() {
+        drawerEditTask.toFront();
+        drawerEditTask.open();
+    }
+    
+    public void drawerClose() {
+        drawerEditTask.close();
+        drawerEditTask.toBack();        
     }
 }

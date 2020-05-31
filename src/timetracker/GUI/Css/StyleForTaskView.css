@@ -152,6 +152,7 @@
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
+    -fx-opacity: 0.80;    
 }
 
 .tasks .titled-pane > .title .edit:hover {
@@ -159,15 +160,37 @@
     -fx-cursor: hand;
 }
 
-.tasks .titled-pane > .title .continueTimer {
-    -fx-graphic: url('../Icons/play.png');
-    -fx-pref-width: 30px;
+.tasks .titled-pane > .title .editDisabled {
+    -fx-graphic: url('../Icons/edit.png');
+    -fx-pref-width: 15px;
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
+    -fx-opacity: 0.20;    
+}
+
+.tasks .titled-pane > .title .continueTimer {
+    -fx-graphic: url('../Icons/play.png');
+    -fx-pref-width: 20px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0 10px 0 0;
+    -fx-opacity: 0.80;
 }
 
 .tasks .titled-pane > .title .continueTimer:hover {
     -fx-opacity: 0.33;
     -fx-cursor: hand;
+}
+
+.startButton {
+    -fx-cursor: hand;
+    -fx-background-color: cornflowerblue;
+    -fx-text-fill: white;
+}
+
+.stopButton {
+    -fx-cursor: hand;
+    -fx-background-color: #cc0000;
+    -fx-text-fill: white;
 }

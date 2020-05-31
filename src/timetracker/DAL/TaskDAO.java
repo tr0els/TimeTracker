@@ -596,7 +596,6 @@ public class TaskDAO
             ps.setInt(6, taskChild.getId());
 
             ps.execute();
-            System.out.println("database update: " + taskChild.getName());
         } catch (SQLException e)
         {
             throw new DALException("Kunne ikke opdatere tasken");
