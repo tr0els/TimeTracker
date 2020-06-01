@@ -80,8 +80,7 @@ public class MenubarController implements Initializable {
 
     @FXML
     private void loadMinTidView(ActionEvent event) throws IOException, DALException, SQLException {
-       // FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/MinTid.fxml"), viewpane);
-        
+     
         FXMLLoader loader = new FXMLLoader();
         
         loader.setLocation(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"));

@@ -76,37 +76,41 @@ public class TaskModel {
 
     /**
      * Henter eventuelt uafsluttet tasks der skal genoptages
-     * 
+     *
      * @param personId id of logged in person
      * @return TaskChild object
-     * @throws DALException 
+     * @throws DALException
      */
     public TaskChild getStartedTask(int personId) throws DALException
     {
         return bll.getStartedTask(personId);
     }
-    
+
     /**
      * Henter en liste af brugerens tasks grupperet efter dato og stacked
+     *
      * @param personId
      * @param groupBy
      * @param includeTaskParents
      * @param includeTaskChildren
      * @return
-     * @throws DALException 
+     * @throws DALException
      */
-    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
+    {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-     
+
     /**
      * Opdaterer en redigeret task i databasen
+     *
      * @param taskChild er det task objekt der skal opdateres
      */
-    public void editTask(TaskChild taskChild) throws DALException {
+    public void editTask(TaskChild taskChild) throws DALException
+    {
         bll.editTask(taskChild);
     }
-    
+
     /**
      * Bygger observable liste af task udfra et project_id som kan bruges i
      * vores view
@@ -116,8 +120,8 @@ public class TaskModel {
      * @return
      * @throws timetracker.DAL.DALException
      */
-    
-    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException
+    {
 //        taskById.clear();
 //        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
 //        return taskById;
@@ -147,6 +151,19 @@ public class TaskModel {
         bll.updateTaskbyID(task);
     }
 
+    /**
+     * Returnerer en liste af tasks som er tilknyttet en bruger samt eventuelle
+     * filtre.
+     *
+     * @param project
+     * @param user
+     * @param fradato
+     * @param tildato
+     * @param monthStart
+     * @param monthEnd
+     * @return
+     * @throws DALException
+     */
     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
         taskForDataview.clear();

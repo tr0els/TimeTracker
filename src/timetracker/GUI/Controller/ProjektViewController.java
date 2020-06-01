@@ -305,7 +305,7 @@ public class ProjektViewController implements Initializable {
     }
 
     /**
-     * henter lister over projekter og putter dem i vores edit combobox
+     * Henter lister over projekter og putter dem i vores edit combobox
      */
     public void showProjects() throws DALException, SQLException {
         allProjects = Pmodel.getProjectsWithExtraData();

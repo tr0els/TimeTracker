@@ -26,6 +26,11 @@ public class ProjectDAO
 
     private DatabaseConnector dbCon;
 
+    /**
+     * Constructor for DatabaseConnector
+     *
+     * @throws DALException
+     */
     public ProjectDAO() throws DALException
     {
         dbCon = new DatabaseConnector();
@@ -111,7 +116,7 @@ public class ProjectDAO
 
         } catch (SQLException e)
         {
-            throw new DALException("Kunne ikke rette projektet" +e);
+            throw new DALException("Kunne ikke rette projektet" + e);
         }
     }
 
@@ -225,19 +230,21 @@ public class ProjectDAO
 
                 allProjectswithClientID.add(projects);
             }
-           
+
             return allProjectswithClientID;
         } catch (SQLException ex)
         {
             throw new DALException("kunne ikke finde projekter for klienten");
         }
     }
-/**
- * 
- * @return
- * @throws DALException 
- */
-    public List<Project> getProjectsWithExtraData() throws DALException {
+
+    /**
+     * Henter lister over projekter og putter dem i vores edit combobox
+     *
+     * @return @throws DALException
+     */
+    public List<Project> getProjectsWithExtraData() throws DALException
+    {
         ArrayList<Project> allProjectsWithExtraData = new ArrayList<>();
 
         try ( Connection con = dbCon.getConnection())
@@ -276,18 +283,21 @@ public class ProjectDAO
                 {
                     projects.setBillableTime("00:00:00");
                 }
-              
+
                 allProjectsWithExtraData.add(projects);
             }
-                      
+
             return allProjectsWithExtraData;
         } catch (SQLException ex)
         {
             throw new DALException("Kunne ikke hente projekter fra databasen med ekstra data" + ex);
         }
     }
+
     /**
-     * denne metode bruges til at lave vores sql, til filteringen på overbliksbilledet og min tid. 
+     * Denne metode bruges til at lave vores sql, til filteringen på
+     * overbliksbilledet og min tid.
+     *
      * @param comboUser
      * @param comboClient
      * @param fradato
@@ -356,8 +366,7 @@ public class ProjectDAO
                     + "GROUP BY p.project_id, p.project_name, c.client_name, c.client_id, p.project_rate;";
 
             Statement statement = con.createStatement();
-            
-         
+
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next())
             {
@@ -380,8 +389,8 @@ public class ProjectDAO
                 }
 
                 allProjectsWithExtraData.add(projects);
-                  
-            } 
+
+            }
             return allProjectsWithExtraData;
 
         } catch (SQLException ex)
