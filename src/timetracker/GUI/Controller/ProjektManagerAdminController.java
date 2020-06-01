@@ -55,10 +55,6 @@ public class ProjektManagerAdminController implements Initializable {
     @FXML
     private JFXComboBox<Client> combobox;
     @FXML
-    private JFXTextField timepris;
-    @FXML
-    private JFXTextField projektnavn;
-    @FXML
     private JFXTreeTableView<Project> treeView;
     @FXML
     private AnchorPane editProjectPane;
@@ -69,9 +65,13 @@ public class ProjektManagerAdminController implements Initializable {
     @FXML
     private JFXComboBox<Client> comboboxEdit;
     @FXML
-    private JFXTextField timeprisEdit;
+    private JFXTextField hourlyPriceEdit;
     @FXML
-    private JFXTextField projektnavnEdit;
+    private JFXTextField projectNameEdit;
+    @FXML
+    private JFXTextField hourlyPrice;
+    @FXML
+    private JFXTextField projectName;
 
     /**
      * Constructor for ProjektManagerAdminController
@@ -89,22 +89,22 @@ public class ProjektManagerAdminController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        timepris.textProperty().addListener(new ChangeListener<String>() {
+        hourlyPrice.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                     String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    timepris.setText(newValue.replaceAll("[^\\d]", ""));
+                    hourlyPrice.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
-        timeprisEdit.textProperty().addListener(new ChangeListener<String>() {
+        hourlyPriceEdit.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                     String newValue) {
                 if (!newValue.matches("\\d*")) {
-                    timeprisEdit.setText(newValue.replaceAll("[^\\d]", ""));
+                    hourlyPriceEdit.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
@@ -192,8 +192,8 @@ public class ProjektManagerAdminController implements Initializable {
                 comboboxEdit.getSelectionModel().select(clients.get(i));
             }
         }
-        projektnavnEdit.setText(project.getValue().getProjectName());
-        timeprisEdit.setText(project.getValue().getProjectRate() + "");
+        projectNameEdit.setText(project.getValue().getProjectName());
+        hourlyPriceEdit.setText(project.getValue().getProjectRate() + "");
 
         drawer.open();
         drawer.toFront();
@@ -207,14 +207,14 @@ public class ProjektManagerAdminController implements Initializable {
      */
     public void createProject() throws DALException {
         int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClientId();
-        String projectName = projektnavn.getText();
-        int hourlyPay = Integer.parseInt(timepris.getText());
+        String projectNameString = projectName.getText();
+        int hourlyPay = Integer.parseInt(hourlyPrice.getText());
 
-        if (projectName.equals("")) {
-            projektnavn.setText("Navn kan ikke være tomt");
-            projektnavn.setStyle("-fx-text-inner-color: red");
+        if (projectNameString.equals("")) {
+            projectName.setText("Navn kan ikke være tomt");
+            projectName.setStyle("-fx-text-inner-color: red");
         } else {
-            model.createProject(clientID, projectName, hourlyPay);
+            model.createProject(clientID, projectNameString, hourlyPay);
             populateTreeTable();
             drawer.close();
         }
@@ -244,8 +244,8 @@ public class ProjektManagerAdminController implements Initializable {
      */
     public void editProject() throws DALException {
         int clientID = comboboxEdit.getSelectionModel().getSelectedItem().getClientId();
-        String projectName = projektnavnEdit.getText();
-        int hourlyPay = Integer.parseInt(timeprisEdit.getText());
+        String projectName = projectNameEdit.getText();
+        int hourlyPay = Integer.parseInt(hourlyPriceEdit.getText());
         int projectID = project.getValue().getProjectId();
 
         model.editProject(clientID, projectName, hourlyPay, projectID);
@@ -315,14 +315,14 @@ public class ProjektManagerAdminController implements Initializable {
 
     @FXML
     private void handleEditClearName(MouseEvent event) {
-        projektnavnEdit.selectAll();
-        projektnavnEdit.setStyle("-fx-text-inner-color: black");
+        projectNameEdit.selectAll();
+        projectNameEdit.setStyle("-fx-text-inner-color: black");
     }
 
     @FXML
     private void handleCreateClearName(MouseEvent event) {
-        projektnavn.selectAll();
-        projektnavn.setStyle("-fx-text-inner-color: black");
+        projectName.selectAll();
+        projectName.setStyle("-fx-text-inner-color: black");
     }
 
 }
