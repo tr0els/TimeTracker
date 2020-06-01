@@ -8,7 +8,6 @@ package timetracker.DAL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import timetracker.BE.Task;
 
 /**
  *
@@ -34,7 +33,7 @@ public class ChangelogDAO
      * @param user
      * @throws DALException
      */
-    public void changelogTask(int taskId, int person_id) throws DALException
+    public void changelogTask(int taskId, int personId) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -44,14 +43,14 @@ public class ChangelogDAO
 
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setInt(1, person_id);
+            st.setInt(1, personId);
             st.setInt(2, taskId);
 
             st.executeQuery();
 
         } catch (SQLException e)
         {
-//            throw new DALException("Kunne ikke tilføje Changelog");
+            throw new DALException("Kunne ikke tilføje Changelog");
         }
     }
 }

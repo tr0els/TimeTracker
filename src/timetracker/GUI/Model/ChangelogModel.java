@@ -6,7 +6,6 @@
 package timetracker.GUI.Model;
 
 import java.sql.SQLException;
-import timetracker.BE.Task;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
 
@@ -17,23 +16,45 @@ import timetracker.DAL.DALException;
  */
 public class ChangelogModel
 {
+
     private static BLLManager bll;
     private static ChangelogModel model = null;
 
+    /**
+     * Constructor for ChangelogModel
+     *
+     * @throws DALException
+     */
     public ChangelogModel() throws DALException
     {
-        bll = BLLManager.getInstance();        
+        bll = BLLManager.getInstance();
     }
-    
-    public static ChangelogModel getInstance() throws DALException, SQLException {
-        if (model == null) {
+
+    /**
+     * Returnerer den allerede startet instans af klassen, eller starter en ny.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public static ChangelogModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
             model = new ChangelogModel();
         }
         return model;
     }
-    
-    public void changelogTask(int taskId, int person_id) throws DALException{
+
+    /**
+     *
+     * @param taskId
+     * @param person_id
+     * @throws DALException
+     */
+    public void changelogTask(int taskId, int person_id) throws DALException
+    {
         bll.changelogTask(taskId, person_id);
     }
-    
+
 }

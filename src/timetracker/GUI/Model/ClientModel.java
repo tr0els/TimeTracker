@@ -27,15 +27,24 @@ public class ClientModel
     private static BLLManager bll;
     private ObservableList<Project> allProjectsbyClientID;
 
+    /**
+     * Constructor for ClientModel
+     * @throws DALException 
+     */
     private ClientModel() throws DALException
     {
         bll = BLLManager.getInstance();
         allClients = FXCollections.observableArrayList();
         allClients.addAll(bll.getClients());
         allProjectsbyClientID = FXCollections.observableArrayList();
-
     }
 
+    /**
+     * Returnerer den allerede startet instans af klassen, eller starter en ny.
+     *
+     * @return
+     * @throws DALException
+     */
     public static ClientModel getInstance() throws DALException
     {
         if (model == null)

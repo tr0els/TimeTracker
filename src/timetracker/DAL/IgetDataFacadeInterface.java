@@ -92,6 +92,6 @@ public interface IgetDataFacadeInterface
     public void disableUser(User disableUser);
 
     //Changelog
-    public void changelogTask(int taskId, int person_id) throws DALException;
+    public void changelogTask(int taskId, int personId) throws DALException;
 
 }
