@@ -18,7 +18,7 @@
 
 .button{
     -fx-text-fill: -fx-grumsen;
-    -fx-font-size: 16;
+    -fx-font-size: 15;
     -fx-font-weight: bold;
     -fx-background-color: white;
     -fx-pref-height: 35px;
@@ -28,8 +28,8 @@
     -fx-border-width: 3px;
     -fx-transition-duration: 0.4s;
     -fx-text-align: center;
-
-
+    -fx-background-radius: 0 0 0 0;
+    -fx-border-radius: 0 0 0 0;
 }
 
 .button:hover {

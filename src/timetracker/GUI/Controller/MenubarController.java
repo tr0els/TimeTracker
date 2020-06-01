@@ -135,7 +135,7 @@ public class MenubarController implements Initializable {
         Parent root = loader.getRoot();
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Time Tracker login");
+        stage.setTitle("TimeTracker");
         stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
         Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Currentstage.close();

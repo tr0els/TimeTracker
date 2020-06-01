@@ -197,6 +197,8 @@
     -fx-background-color: #cc0000;
     -fx-text-fill: white;
     -fx-alignment: center;
+    -fx-background-radius: 4px 4px 4px 4px;
+    -fx-border-radius: 4px 4px 4px 4px;
 }
 
 .timerPane {

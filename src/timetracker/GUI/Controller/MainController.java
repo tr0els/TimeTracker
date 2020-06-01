@@ -122,7 +122,7 @@ public class MainController implements Initializable {
         //MenubarController controller = loader.getController();
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Time Tracker Admin");
+        stage.setTitle("TimeTracker");
         stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
         Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Currentstage.close();
@@ -152,7 +152,7 @@ public class MainController implements Initializable {
         controller.getOverblikforAdmin().setVisible(false);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
-        stage.setTitle("Time Tracker alm. bruger");
+        stage.setTitle("TimeTracker");
         stage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
         Stage Currentstage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Currentstage.close();

@@ -15,15 +15,15 @@
          <children>
                 <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@/timetracker/GUI/Css/StyleforMenu.css">
                     <children>
-                        <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="124.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
-                        <JFXButton fx:id="opgaverbtb" layoutX="-3.0" layoutY="167.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter" />
-                        <JFXButton fx:id="minTidbtb" layoutX="-3.0" layoutY="210.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
-                        <JFXButton id="logout" fx:id="logudbtb" layoutX="41.0" layoutY="449.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
-                        <JFXButton fx:id="overblikbtb" layoutX="-3.0" layoutY="253.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
-                        <JFXButton fx:id="projektbtb" layoutX="-3.0" layoutY="296.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
-                        <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="382.0" onAction="#loadklientmanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
-                        <JFXButton fx:id="brugermanagerbtb" layoutX="-3.0" layoutY="339.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
-                        <Label layoutX="22.0" layoutY="77.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
+                        <JFXButton fx:id="projekterbtb" layoutX="-4.0" layoutY="124.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
+                        <JFXButton fx:id="opgaverbtb" layoutX="-4.0" layoutY="161.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter" />
+                        <JFXButton fx:id="minTidbtb" layoutX="-4.0" layoutY="198.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
+                        <JFXButton id="logout" fx:id="logudbtb" layoutX="45.0" layoutY="446.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
+                        <JFXButton fx:id="overblikbtb" layoutX="-4.0" layoutY="235.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
+                        <JFXButton fx:id="projektbtb" layoutX="-4.0" layoutY="272.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
+                        <JFXButton fx:id="klientmanagerbtb" layoutX="-4.0" layoutY="346.0" onAction="#loadklientmanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
+                        <JFXButton fx:id="brugermanagerbtb" layoutX="-4.0" layoutY="309.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
+                        <Label layoutX="10.0" layoutY="14.0" prefHeight="29.0" prefWidth="139.0" text="TimeTracker">
                             <graphic>
                                 <ImageView fitHeight="29.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -32,12 +32,12 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                  <Label layoutX="36.0" layoutY="14.0" text="Logget ind som:">
+                  <Label layoutX="49.0" layoutY="63.0" text="Velkommen">
                      <styleClass>
                         <String fx:value="userlabel" />
                         <String fx:value="loggedInAs" />
                      </styleClass></Label>
-                  <Label fx:id="loggedInUser" alignment="CENTER" layoutY="33.0" prefHeight="25.0" prefWidth="157.0" styleClass="userlabel" text="User" textAlignment="CENTER" />
+                  <Label fx:id="loggedInUser" alignment="CENTER" layoutX="1.0" layoutY="80.0" prefHeight="25.0" prefWidth="157.0" styleClass="userlabel" text="User" textAlignment="CENTER" />
                     </children>
                 </AnchorPane>
          </children>
