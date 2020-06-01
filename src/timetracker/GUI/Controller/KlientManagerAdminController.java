@@ -281,13 +281,15 @@ public class KlientManagerAdminController implements Initializable
      */
     @FXML
     private void handleCreateClient(ActionEvent event) throws DALException
-    {  
+    {
         String newName = newClientName.getText().trim();
         String newRate = newDefaultRate.getText().trim();
-      
+
         if (checkinputinTxtfields(newName, newRate) == true)
-        return;
-        
+        {
+            return;
+        }
+
         Client newClient = new Client();
         int defaultRate = Integer.parseInt(newRate);
         newClient = Cmodel.createClient(newName, defaultRate);
@@ -303,7 +305,8 @@ public class KlientManagerAdminController implements Initializable
      */
     @FXML
     private void handleCancelNewClient(ActionEvent event)
-    {   lblAlertnewClient.setText("");
+    {
+        lblAlertnewClient.setText("");
         newDefaultRate.clear();
         newClientName.clear();
         drawer.close();
@@ -321,12 +324,14 @@ public class KlientManagerAdminController implements Initializable
     {
         String editName = txtEditName.getText().trim();
         String editrate = txtEditDefaultRate.getText().trim().replace(" DKK", " ").trim();
-        
+
         if (checkinputinTxtfields(editName, editrate) == true)
+        {
             return;
-        
+        }
+
         int editDefaultRate = Integer.parseInt(editrate);
-           
+
         selectedClient.setClientName(editName);
         selectedClient.setDefaultRate(editDefaultRate);
         Cmodel.editClient(selectedClient);
@@ -334,7 +339,7 @@ public class KlientManagerAdminController implements Initializable
         lblClientName.setText(editName);
         listviewClients.refresh();
         drawer.close();
-        
+
     }
 
     /**
@@ -349,7 +354,7 @@ public class KlientManagerAdminController implements Initializable
         lblAlertEdit.setText("");
         txtEditName.clear();
         txtEditDefaultRate.clear();
-        
+
     }
 
     /**
@@ -365,28 +370,33 @@ public class KlientManagerAdminController implements Initializable
         txtEditName.setText(selectedClient.getClientName());
         txtEditDefaultRate.setText(selectedClient.getDefaultRate() + " DKK");
     }
-    
-  
+
     /**
-     * Laver tjek på txtfelterne når man retter eller opretter en klient, for at være sikker på felterne ikke er tomme. 
+     * Laver tjek på txtfelterne når man retter eller opretter en klient, for at
+     * være sikker på felterne ikke er tomme.
+     *
      * @param name
      * @param rate
-     * @return 
+     * @return
      */
-    public boolean checkinputinTxtfields(String name, String rate) {
+    public boolean checkinputinTxtfields(String name, String rate)
+    {
         //String stringtocheck = txtEditName.getText().trim();
         //String timeprischeck = txtEditDefaultRate.getText().trim();
         String alertText = "Navn og/eller pris må ikke være tom";
         String alertStyle = "-fx-text-fill: red;"
                 + "-fx-font-size: 12;";
 
-        if (name.length() < 1 || rate.length() < 1) {
+        if (name.length() < 1 || rate.length() < 1)
+        {
 
-            if (drawer.getSidePane().contains(paneEditClient) == true) {
+            if (drawer.getSidePane().contains(paneEditClient) == true)
+            {
                 lblAlertEdit.setText(alertText);
                 lblAlertEdit.setStyle(alertStyle);
                 return true;
-            } else {
+            } else
+            {
                 lblAlertnewClient.setText(alertText);
                 lblAlertnewClient.setStyle(alertStyle);
                 return true;

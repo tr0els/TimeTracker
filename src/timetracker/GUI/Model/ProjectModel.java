@@ -29,15 +29,12 @@ public class ProjectModel
     private static BLLManager bll;
     private static ProjectModel model = null;
 
-    public static ProjectModel getInstance() throws DALException, SQLException
-    {
-        if (model == null)
-        {
-            model = new ProjectModel();
-        }
-        return model;
-    }
-
+    /**
+     * Constructor for ProjectModel
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public ProjectModel() throws DALException, SQLException
     {
         bll = BLLManager.getInstance();
@@ -45,7 +42,21 @@ public class ProjectModel
         allProjects.addAll(bll.getProjects()); // kan fjernes da den alligevel kaldes ved getProjects? - Troels
         allProjectsWitExtraData = FXCollections.observableArrayList();
         projectsbyID = FXCollections.observableArrayList();
+    }
 
+    /**
+     * Returnerer den allerede startet instans af klassen, eller starter en ny.
+     *
+     * @return @throws DALException
+     * @throws SQLException
+     */
+    public static ProjectModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
+            model = new ProjectModel();
+        }
+        return model;
     }
 
     /**

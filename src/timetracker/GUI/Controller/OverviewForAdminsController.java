@@ -27,7 +27,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -106,6 +105,12 @@ public class OverviewForAdminsController implements Initializable
     @FXML
     private Label lblforPiechart;
 
+    /**
+     * Constructor for OverviewForAdminsController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public OverviewForAdminsController() throws DALException, SQLException
     {
         pModel = ProjectModel.getInstance();
@@ -124,7 +129,6 @@ public class OverviewForAdminsController implements Initializable
     {
         try
         {
-
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
             filterskuffe.close();
@@ -137,9 +141,7 @@ public class OverviewForAdminsController implements Initializable
                 populatetable();
                 handlePieChart();
                 populatecombobox();
-
             }
-
         } catch (DALException ex)
         {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
@@ -167,9 +169,13 @@ public class OverviewForAdminsController implements Initializable
         }
     }
 
-    /*
-    metoden her gøre vores tableview klar til at kunne holde vores værider fra listeAfProjekter 
-    til slut fylder vi tableViewet op med opjekter fra listeAfProjekter
+    /**
+     * metoden her gøre vores tableview klar til at kunne holde vores værider
+     * fra listeAfProjekter til slut fylder vi tableViewet op med opjekter fra
+     * listeAfProjekter
+     *
+     * @throws DALException
+     * @throws SQLException
      */
     public void populatetable() throws DALException, SQLException
     {
@@ -237,7 +243,6 @@ public class OverviewForAdminsController implements Initializable
         //når vi er færdig med loopet, dividere vi med 3600, for at få konvereteret vore sekunder til timer i decimaltal
         billaableHouersForPiechart = (getmetotalHHMMBill / 3600);
         totalhouersForPiechart = (getmetotalHHMMTotal / 3600);
-
     }
 
     /**
@@ -248,11 +253,9 @@ public class OverviewForAdminsController implements Initializable
      */
     private void populatecombobox() throws DALException, SQLException
     {
-
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
         comboPerioder.setItems(bModel.getListOfPeriods());
-
     }
 
     /**
@@ -264,7 +267,6 @@ public class OverviewForAdminsController implements Initializable
      */
     public void getProjectsForfilter() throws DALException, SQLException
     {
-
         User comboUser = null;
         Client comboKlient = null;
         String fradatoSelected = null;
@@ -302,14 +304,11 @@ public class OverviewForAdminsController implements Initializable
                 MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
                 int lengthOfMonth = getmonth.lengthOfMonth();
                 MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth - 1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
-
             }
-
             if (checkFilter() == true)
             {
                 break first;
             }
-
             listeAfProjekter = pModel.getProjectsToFilter(comboUser, comboKlient, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
             handlePieChart();
         }

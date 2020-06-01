@@ -236,9 +236,9 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     }
 
     @Override
-    public void changelogTask(int taskId, int person_id) throws DALException
+    public void changelogTask(int taskId, int personId) throws DALException
     {
-        changelogdao.changelogTask(taskId, person_id);
+        changelogdao.changelogTask(taskId, personId);
     }
 
 }
