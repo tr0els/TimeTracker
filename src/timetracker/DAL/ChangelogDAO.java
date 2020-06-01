@@ -19,6 +19,11 @@ public class ChangelogDAO
 
     private DatabaseConnector dbCon;
 
+    /**
+     * Constructor for ChangelogDAO
+     *
+     * @throws DALException
+     */
     public ChangelogDAO() throws DALException
     {
         dbCon = new DatabaseConnector();

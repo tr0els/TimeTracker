@@ -55,7 +55,8 @@ import timetracker.GUI.Model.TaskModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class ProjektViewController implements Initializable {
+public class ProjektViewController implements Initializable
+{
 
     private TaskModel model;
     private ProjectModel Pmodel;
@@ -117,7 +118,14 @@ public class ProjektViewController implements Initializable {
     @FXML
     private Label lblWarning;
 
-    public ProjektViewController() throws DALException, SQLException {
+    /**
+     * Constructor for ProjektViewController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
+    public ProjektViewController() throws DALException, SQLException
+    {
         model = TaskModel.getInstance();
         Pmodel = ProjectModel.getInstance();
         Bmodel = UserModel.getInstance();
@@ -128,14 +136,16 @@ public class ProjektViewController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        try {
+    public void initialize(URL url, ResourceBundle rb)
+    {
+        try
+        {
             skuffen.setSidePane(paneEdit);
             skuffen.toBack();
             skuffen.close();
 
             person_id = Bmodel.getUser().getPersonId();
-    
+
             loadProjects();
             showProjects();
             projectListener();
@@ -143,9 +153,11 @@ public class ProjektViewController implements Initializable {
 
             projectMenubox.getSelectionModel().select(0);
 
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -154,7 +166,8 @@ public class ProjektViewController implements Initializable {
     /**
      * opsætter overskrift på opgave oversigt.
      */
-    public void setHBox() {
+    public void setHBox()
+    {
 
         Label arrow = new Label(" ");
         arrow.setPrefWidth(25);
@@ -179,10 +192,12 @@ public class ProjektViewController implements Initializable {
      * @param project_id
      * @throws DALException
      */
-    public void createTree(int project_id) throws DALException {
+    public void createTree(int project_id) throws DALException
+    {
         vboxTasks.getChildren().clear(); //nulstiller vores task view inden vi opbygger den igen.
 
-        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet()) {
+        for (Map.Entry<Task, List<Task>> entry : model.getTaskbyIDs(project_id, person_id).entrySet())
+        {
             Task hashTask = entry.getKey();
 
             HBox headerBox = new HBox();
@@ -204,7 +219,8 @@ public class ProjektViewController implements Initializable {
             VBox logVbox = new VBox();
             logVbox.setId("logVBox");
 
-            for (int i = 0; i < entry.getValue().size(); i++) {
+            for (int i = 0; i < entry.getValue().size(); i++)
+            {
 
                 Task t = entry.getValue().get(i);
 
@@ -225,9 +241,11 @@ public class ProjektViewController implements Initializable {
                 Label billable = new Label("$");
                 billable.getStyleClass().add("billable");
 
-                if (t.isBillable()) {
+                if (t.isBillable())
+                {
                     billable.getStyleClass().add("true");
-                } else {
+                } else
+                {
                     billable.getStyleClass().add("false");
                 }
 
@@ -242,7 +260,7 @@ public class ProjektViewController implements Initializable {
                 logHbox.setMargin(log_total, new Insets(0, 4, 0, 0));
                 logHbox.setMargin(log, new Insets(0, 24, 0, 0));
 
-                logHbox.getChildren().addAll(spacer,log, log_total, billable, editbtn);
+                logHbox.getChildren().addAll(spacer, log, log_total, billable, editbtn);
 
                 logVbox.getChildren().add(logHbox);
             }
@@ -263,8 +281,10 @@ public class ProjektViewController implements Initializable {
      *
      * @param task_id
      */
-    public void editTask(int task_id) {
-        try {
+    public void editTask(int task_id)
+    {
+        try
+        {
             edit_task = model.getTaskbyID(task_id);
 
             txtTask_name.setText(edit_task.getTaskName());
@@ -276,15 +296,18 @@ public class ProjektViewController implements Initializable {
             dateTo.setValue(edit_task.getEndTime().toLocalDate());
             timeTo.setValue(edit_task.getEndTime().toLocalTime());
 
-            for (int i = 0; i < allProjects.size(); i++) {
+            for (int i = 0; i < allProjects.size(); i++)
+            {
 
-                if (edit_task.getProjectId() == allProjects.get(i).getProjectId()) {
+                if (edit_task.getProjectId() == allProjects.get(i).getProjectId())
+                {
                     menuEditProjects.getSelectionModel().select(allProjects.get(i));
                 }
 
             }
 
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -298,7 +321,8 @@ public class ProjektViewController implements Initializable {
      *
      * @throws DALException
      */
-    public void loadProjects() throws DALException {
+    public void loadProjects() throws DALException
+    {
 
         personalProjects = Pmodel.getProjectsbyID(person_id);
         projectMenubox.setItems(personalProjects);
@@ -307,7 +331,8 @@ public class ProjektViewController implements Initializable {
     /**
      * Henter lister over projekter og putter dem i vores edit combobox
      */
-    public void showProjects() throws DALException, SQLException {
+    public void showProjects() throws DALException, SQLException
+    {
         allProjects = Pmodel.getProjectsWithExtraData();
         menuEditProjects.setItems(allProjects);
     }
@@ -316,16 +341,21 @@ public class ProjektViewController implements Initializable {
      * en listener på vores combobox med projekter, den smider en liste af task
      * ind i et listview baseret på hvilket projekt der er valgt
      */
-    public void projectListener() {
+    public void projectListener()
+    {
         projectMenubox.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Project> observable, Project oldValue, Project newValue)
-                -> {
-            if (newValue != null) {
-                try {
+                ->
+        {
+            if (newValue != null)
+            {
+                try
+                {
                     lblProjectnavn.setText(newValue.getProjectName());
                     lblProjectTid.setText(newValue.getTotalTime());
                     lblClientname.setText(newValue.getClientName());
                     createTree(newValue.getProjectId());
-                } catch (DALException ex) {
+                } catch (DALException ex)
+                {
                     Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -340,8 +370,10 @@ public class ProjektViewController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleEdit(ActionEvent event) {
-        try {
+    private void handleEdit(ActionEvent event)
+    {
+        try
+        {
 
             LocalDate datefrom = dateFrom.getValue();
             LocalTime timefrom = timeFrom.getValue();
@@ -358,18 +390,22 @@ public class ProjektViewController implements Initializable {
             edit_task.setBillable(chkboxBillable.isSelected());
             edit_task.setProjectId(menuEditProjects.getSelectionModel().getSelectedItem().getProjectId());
 
-            if (ldt_from.compareTo(ldt_to) == 1) {
+            if (ldt_from.compareTo(ldt_to) == 1)
+            {
                 lblWarning.setText("til-tid kan ikke være før fra-tid!");
-            } else {
+            } else
+            {
                 lblWarning.setText("");
                 Cmodel.changelogTask(edit_task.getTaskId(), person_id);
                 model.updateTaskbyID(edit_task);
 
                 loadProjects(); //indlæser opdateret liste af projekter (nye total-tider)
 
-                for (int i = 0; i < personalProjects.size(); i++) { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
+                for (int i = 0; i < personalProjects.size(); i++)
+                { //kører igennem projektlisten for at finde den der matcher den opdatere projekt og vælger den.
 
-                    if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId()) {
+                    if (menuEditProjects.getSelectionModel().getSelectedItem().getProjectId() == personalProjects.get(i).getProjectId())
+                    {
                         projectMenubox.getSelectionModel().select(personalProjects.get(i));
                     }
 
@@ -382,7 +418,8 @@ public class ProjektViewController implements Initializable {
                 skuffen.close();
                 skuffen.toBack();
             }
-        } catch (DALException | SQLException ex) {
+        } catch (DALException | SQLException ex)
+        {
             Logger.getLogger(ProjektViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -393,7 +430,8 @@ public class ProjektViewController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleCancel(ActionEvent event) {
+    private void handleCancel(ActionEvent event)
+    {
         lblWarning.setText("");
         skuffen.close();
         skuffen.toBack();

@@ -47,6 +47,7 @@ public class ChangelogModel
     }
 
     /**
+     * Opretter en changelog på det medsendte taskId og personId
      *
      * @param taskId
      * @param person_id
