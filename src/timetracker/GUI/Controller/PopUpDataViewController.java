@@ -68,13 +68,19 @@ public class PopUpDataViewController implements Initializable
     @FXML
     private TableColumn<TaskForDataView, String> colhhmm;
 
+    /**
+     * Constructor for PopUpDataViewController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public PopUpDataViewController() throws DALException, SQLException
     {
         tModel = TaskModel.getInstance();
     }
 
     /**
-     * Initializes the controller class.
+     * Initialiserer controller klassen.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -116,7 +122,7 @@ public class PopUpDataViewController implements Initializable
 
     }
 
-    public void TransferInfoForPopup(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
+    public void transferInfoForPopup(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
 
         this.choosenProject = project;

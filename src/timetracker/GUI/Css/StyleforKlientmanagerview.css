@@ -4,60 +4,42 @@
 */
 
 *{
-
     -fx-grumsen : #435a9a; 
     -fx-grumsen-lysere: #768bc6;
-
 }
 
 .label{
-
     -fx-font-size: 16;
     -fx-text-fill: -fx-grumsen;
     -fx-font-weight: bold;
-
-
-
 }
 
 
 
 #fixedlabel{
-
     display: inline-block;
     -fx-width: 150px;
-
     -fx-text-fill: -fx-grumsen;
     -fx-text-alignment:right;
     -fx-content-display: right;
     float: right; 
-
-
 }
 
 #inputlbl{
-
     -fx-underline:true; 
     -fx-label-padding: 0 0 0 10;
-
 }
 
 .list-cell {
-
     -fx-font-size: 16;
     -fx-text-fill: -fx-grumsen;
-
-
-
 }
 
 #clientListView .list-cell:hover{  
     -fx-border-width: 3px; 
     -fx-border-color: -fx-grumsen;
-
     -fx-background: -fx-grumsen;
     -fx-text-fill: white;
-
 }
 
 #clientListView .list-cell:filled:selected{
@@ -66,68 +48,42 @@
     -fx-font-weight: bold;
     -fx-background: white ;
     -fx-text-fill: -fx-Grumsen;
-
-
-
 }
 
 .jfx-list-view .list-cell:even {
-
-
-
 }
 
 .jfx-list-view .list-cell:odd{
-
     -fx-background-color: -fx-grumsen-lysere;
     -fx-text-fill: white;
 }
 
 .jfx-list-view .list-cell:empty{
     -fx-background-color: transparent;
-    
 }
-  
 
 .jfx-list-view{
-
     -fx-focus-traversable: false;
     -fx-border-width: 2px; 
     -fx-border-color: -fx-grumsen;
     -fx-background-repeat: no-repeat;
-    
-
 }
 
-
-
-
-
 .button{
-
     -fx-border-width: 2px;
     -fx-background-color: -fx-grumsen;
-
     -fx-text-fill: white;
     -fx-font-size: 12;
     -fx-alignment: center;
     -fx-transition-duration: 0.4s;
-
-
-
 }
 
-
 .button:hover{
-
     -fx-border-color: -fx-grumsen;
     -fx-background-color: transparent;
     -fx-text-fill: -fx-grumsen;
-
 }
 
 .button:pressed{
-
     -fx-background-color: -fx-grumsen-lysere;
-
 }

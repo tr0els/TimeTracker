@@ -4,53 +4,36 @@
 */
 
 *{
-
     -fx-grumsen : #435a9a; 
     -fx-grumsen-lysere: #768bc6;
     -fx-grumsen-baggrund: #afbbdd;
-
 }
 .root{
-
     -fx-background-color: white;
-
 }
 
 .button{
-
     -fx-border-width: 2px;
     -fx-background-color:   -fx-grumsen-lysere;
-
     -fx-text-fill: white;
     -fx-font-size: 12;
     -fx-alignment: center;
     -fx-transition-duration: 0.4s;
-
-
-
 }
 
-
 .button:hover{
-
     -fx-border-color: -fx-grumsen;
     -fx-background-color: transparent;
     -fx-text-fill: -fx-grumsen;
-
 }
 
 .button:pressed{
-
     -fx-background-color: -fx-grumsen-lysere;
-
 }
 
 .jfx-check-box .jfx-rippler{
-
     -fx-border-color: -fx-grumsen;
-
 }
-
 
 .jfx-tree-table-view  .column-header-background  .label{
     -fx-alignment: CENTER_LEFT;
@@ -58,7 +41,6 @@
     -fx-text-fill: black;
     -fx-font-size: 14;
     -fx-font-weight: normal;
-
 }
 
 .jfx-tree-table-view > .column-header-background, 
@@ -67,24 +49,16 @@
     -fx-background-color: -fx-grumsen-baggrund;
     -fx-size: 15 ;    
     -fx-border-width: 2px;
-  -fx-table-cell-border-color: -fx-grumsen-baggrund;
+    -fx-table-cell-border-color: -fx-grumsen-baggrund;
 }
 
 .jfx-tree-table-view > .column-header > .filler {
- 
-     -fx-border-width: 2px;
-        -fx-background-color: -fx-grumsen-baggrund;
+    -fx-border-width: 2px;
+    -fx-background-color: -fx-grumsen-baggrund;
 }
 
-
-
-
-
 .jfx-tree-table-view:row-selection{
-
     -fx-background-color: -fx-grumsen-lysere;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
-
-
 }
