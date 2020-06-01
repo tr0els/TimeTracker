@@ -7,6 +7,7 @@
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,10 +19,16 @@
       <JFXDrawer fx:id="drawerEditTask" defaultDrawerSize="150.0" direction="TOP" prefHeight="150.0" prefWidth="600.0" />
       <Pane layoutX="13.0" layoutY="11.0" prefHeight="55.0" prefWidth="575.0" styleClass="timerPane">
          <children>
-              <JFXCheckBox fx:id="checkBillable" checkedColor="#4b7cad" layoutX="336.0" layoutY="20.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="86.0" selected="true" text="Faktureres" />
-            <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="11.0" layoutY="13.0" prefHeight="25.0" prefWidth="176.0" promptText="Hvad arbejder du på?" />
-              <JFXComboBox fx:id="taskProject" layoutX="194.0" layoutY="10.0" prefHeight="28.0" prefWidth="132.0" promptText="Vælg Projekt" />
-              <JFXButton fx:id="timerButton" contentDisplay="CENTER" layoutX="509.0" layoutY="13.0" onAction="#handleStartTimerButton" prefHeight="30.0" prefWidth="55.0" styleClass="startButton" text="Start" textAlignment="CENTER" />
+              <JFXCheckBox fx:id="checkBillable" checkedColor="#4b7cad" layoutX="336.0" layoutY="20.0" prefHeight="18.0" prefWidth="86.0" selected="true" text="Faktureres" unCheckedColor="#cccccc">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXCheckBox>
+            <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="11.0" layoutY="14.0" prefHeight="25.0" prefWidth="176.0" promptText="Hvad arbejder du på?" />
+              <JFXComboBox fx:id="taskProject" layoutX="194.0" layoutY="11.0" prefHeight="28.0" prefWidth="132.0" promptText="Vælg et projekt">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXComboBox>
+              <JFXButton fx:id="timerButton" contentDisplay="CENTER" layoutX="509.0" layoutY="13.0" onAction="#startTimerButton" prefHeight="30.0" prefWidth="55.0" styleClass="startButton" text="Start" textAlignment="CENTER" />
             <Label fx:id="timerText" layoutX="425.0" layoutY="14.0" prefHeight="30.0" prefWidth="80.0" text="00:00:00">
                <font>
                   <Font size="20.0" />
@@ -30,14 +37,14 @@
          </children>
       </Pane>
 
-      <ScrollPane fx:id="taskScrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutX="13.0" layoutY="80.0" prefHeight="408.0" prefWidth="575.0" styleClass="tasks" />
-      <AnchorPane fx:id="paneEditTask" layoutX="6.0" layoutY="-150.0" prefHeight="150.0" prefWidth="600.0">
+                  <ScrollPane fx:id="taskScrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutX="13.0" layoutY="80.0" prefHeight="408.0" prefWidth="575.0" styleClass="tasks" />
+      <AnchorPane fx:id="paneEditTask" layoutY="-150.0" prefHeight="150.0" prefWidth="600.0">
          <children>
-            <JFXTextField fx:id="editName" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="390.0" />
-            <JFXCheckBox fx:id="editBillable" checkedColor="#435a9a" layoutX="323.0" layoutY="48.0" text="Faktureres" />
-            <JFXComboBox fx:id="editProject" layoutX="426.0" layoutY="10.0" prefHeight="25.0" prefWidth="160.0" />
-            <JFXButton fx:id="btnEdit" layoutX="513.0" layoutY="100.0" onAction="#handleUpdateTask" text="Opdater" />
-            <JFXButton fx:id="btnCancel" layoutX="440.0" layoutY="100.0" onAction="#handleCancel" text="Fortryd" />
+            <JFXTextField fx:id="editName" layoutX="14.0" layoutY="10.0" prefHeight="25.0" prefWidth="208.0" />
+            <JFXCheckBox fx:id="editBillable" checkedColor="#435a9a" layoutX="473.0" layoutY="14.0" text="Faktureres" />
+            <JFXComboBox fx:id="editProject" layoutX="232.0" layoutY="10.0" prefHeight="25.0" prefWidth="222.0" />
+            <JFXButton fx:id="btnEdit" layoutX="486.0" layoutY="104.0" onAction="#handleUpdateTask" text="Opdater" />
+            <JFXButton fx:id="btnCancel" layoutX="413.0" layoutY="104.0" onAction="#handleCancel" text="Fortryd" />
             <AnchorPane id="paneTime" layoutX="168.0" layoutY="48.0" prefHeight="90.0" prefWidth="132.0">
                <children>
                   <JFXDatePicker fx:id="editDateTo" defaultColor="#768bc6" layoutX="8.0" layoutY="22.0" prefHeight="28.0" prefWidth="116.0" />

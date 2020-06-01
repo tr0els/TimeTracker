@@ -50,9 +50,8 @@
     -fx-background-color: #4b7cad;
     -fx-background-radius: 8px;
     -fx-text-fill: white;
-    -fx-min-width: 20px;
+    -fx-min-width: 21px;
     -fx-alignment: center;
-    -fx-translatex: -2px;
 }
 
 .tasks .titled-pane > .title .numChildren:hover {
