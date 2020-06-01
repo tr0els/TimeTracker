@@ -363,12 +363,12 @@ public class OverviewForAdminsController implements Initializable
 
         populatepieChart();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
-                new PieChart.Data("Billable", billaableHouersForPiechart)
+                new PieChart.Data("Ufakturerbar ", totalhouersForPiechart - billaableHouersForPiechart),
+                new PieChart.Data("Fakturerbar ", billaableHouersForPiechart)
         );
         DecimalFormat df = new DecimalFormat("#.##");
         piechart.setData(pieChartData);
-        pieChartData.forEach(data -> data.nameProperty().bind(Bindings.concat(data.getName(), " ", df.format(data.getPieValue()), " Timer")));
+        pieChartData.forEach(data -> data.nameProperty().bind(Bindings.concat(data.getName(), ": ", df.format(data.getPieValue()), " Timer")));
         piechart.setStartAngle(90);
         piechart.setLegendSide(Side.RIGHT);
         piechart.setLabelsVisible(false);
