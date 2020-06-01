@@ -24,7 +24,6 @@ public class Task
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private boolean billable;
-    private String stringBillable;
     private LocalDateTime lastWorkedOn;
 
     /**
@@ -61,25 +60,6 @@ public class Task
 
     }
 
-    /**
-     * Returnerer stringBillable
-     *
-     * @return
-     */
-    public String getStringBillable()
-    {
-        return stringBillable;
-    }
-
-    /**
-     * Sætter stringBillable
-     *
-     * @param stringBillable
-     */
-    public void setStringBillable(String stringBillable)
-    {
-        this.stringBillable = stringBillable;
-    }
 
     /**
      * Returnerer startTime

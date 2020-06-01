@@ -165,20 +165,12 @@ public class TaskDAO
                     {
                         end_time = null;
                     }
-                    String sBillable;
-                    if (rs.getBoolean("billable") == true)
-                    {
-                        sBillable = "Ja";
-                    } else
-                    {
-                        sBillable = "Nej";
-                    }
+
                     log.setTaskId(rs.getInt("task_id"));
                     log.setBillable(rs.getBoolean("billable"));
                     log.setTotalTime(rs.getString("total_time"));
                     log.setStartTime(rs.getTimestamp("task_start").toLocalDateTime());
                     log.setEndTime(end_time);
-                    log.setStringBillable(sBillable);
                     log.setTaskName(rs.getString("task_name"));
 
                     logs.add(log);
