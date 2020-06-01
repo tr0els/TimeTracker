@@ -134,8 +134,8 @@ public class ProjektViewController implements Initializable {
             skuffen.toBack();
             skuffen.close();
 
-//            person_id = Bmodel.getUser().getPerson_id();
-            person_id = 1; // midlertidigt
+            person_id = Bmodel.getUser().getPersonId();
+    
             loadProjects();
             showProjects();
             projectListener();
@@ -213,6 +213,7 @@ public class ProjektViewController implements Initializable {
                 logHbox.setAlignment(Pos.CENTER_LEFT);
 
                 Label log = new Label(t.getStartTime().format(formatter).toString() + " - " + t.getEndTime().format(formatter).toString());
+                log.setAlignment(Pos.CENTER_RIGHT);
 
                 Region spacer = new Region();
 
@@ -239,9 +240,9 @@ public class ProjektViewController implements Initializable {
                 logHbox.setMargin(editbtn, new Insets(0, 5, 0, 0));
                 logHbox.setMargin(billable, new Insets(0, 23, 0, 0));
                 logHbox.setMargin(log_total, new Insets(0, 4, 0, 0));
-                logHbox.setMargin(log, new Insets(0, 0, 0, 30));
+                logHbox.setMargin(log, new Insets(0, 24, 0, 0));
 
-                logHbox.getChildren().addAll(log, spacer, log_total, billable, editbtn);
+                logHbox.getChildren().addAll(spacer,log, log_total, billable, editbtn);
 
                 logVbox.getChildren().add(logHbox);
             }
@@ -304,7 +305,7 @@ public class ProjektViewController implements Initializable {
     }
 
     /**
-     * henter lister over projekter og putter dem i vores edit combobox
+     * Henter lister over projekter og putter dem i vores edit combobox
      */
     public void showProjects() throws DALException, SQLException {
         allProjects = Pmodel.getProjectsWithExtraData();

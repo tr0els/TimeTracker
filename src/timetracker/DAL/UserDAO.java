@@ -186,7 +186,7 @@ public class UserDAO
     }
 
     /**
-     * tjekker om det login info som kommer fra BLLManageren er det samme som
+     * Tjekker om det login info som kommer fra BLLManageren er det samme som
      * ligger på serveren. hvis ja returnere den et boolean som er true.
      *
      * @param email
@@ -227,7 +227,7 @@ public class UserDAO
     }
 
     /**
-     * henter det random "salt" som er tilsvarende den email som kommer fra
+     * Henter det random "salt" som er tilsvarende den email som kommer fra
      * BLLManageren
      *
      * @param email

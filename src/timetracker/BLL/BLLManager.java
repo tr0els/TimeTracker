@@ -66,6 +66,7 @@ public class BLLManager
 
     //-----TASK------
     /**
+     * Henter en liste af brugerens tasks grupperet efter dato og stacked
      *
      * @param personId
      * @param groupBy
@@ -78,12 +79,18 @@ public class BLLManager
     {
         return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-    
+
+    /**
+     * Opdaterer en redigeret task i databasen
+     *
+     * @param taskChild
+     * @throws DALException
+     */
     public void editTask(TaskChild taskChild) throws DALException
     {
         iGetData.editTask(taskChild);
     }
-    
+
     /**
      * Starter en ny task
      *
@@ -107,13 +114,13 @@ public class BLLManager
     {
         iGetData.stopTask(person_id);
     }
-    
+
     /**
      * Henter eventuelt uafsluttet tasks der skal genoptages
-     * 
+     *
      * @param personId id of logged in person
      * @return TaskChild object
-     * @throws DALException 
+     * @throws DALException
      */
     public TaskChild getStartedTask(int person_id) throws DALException
     {
@@ -229,11 +236,18 @@ public class BLLManager
         return iGetData.getProjectsbyClientID(client);
     }
 
+    /**
+     * Henter lister over projekter og putter dem i vores edit combobox
+     *
+     * @return
+     * @throws DALException
+     */
     public List<Project> getProjectsWithExtradata() throws DALException
     {
         return iGetData.getProjectWithExtraData();
     }
 
+    
     public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
         return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
@@ -370,6 +384,19 @@ public class BLLManager
         iGetData.disableUser(disableUser);
     }
 
+    /**
+     * Returnerer en liste af tasks som er tilknyttet en bruger samt eventuelle
+     * filtre.
+     *
+     * @param project
+     * @param user
+     * @param fradato
+     * @param tildato
+     * @param monthStart
+     * @param monthEnd
+     * @return
+     * @throws DALException
+     */
     public List<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
         return iGetData.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd);

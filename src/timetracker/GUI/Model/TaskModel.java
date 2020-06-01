@@ -9,15 +9,12 @@ import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Project;
 import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
-import timetracker.BE.TaskParent;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -27,8 +24,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel implements Runnable
-{
+public class TaskModel {
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -42,22 +38,6 @@ public class TaskModel implements Runnable
     {
         bll = BLLManager.getInstance();
         taskForDataview = FXCollections.observableArrayList();
-    }
-
-    @Override
-    public void run()
-    {
-        try
-        {
-            model = new TaskModel();
-        } catch (DALException ex)
-        {
-            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     public static TaskModel getInstance() throws DALException, SQLException
@@ -96,37 +76,41 @@ public class TaskModel implements Runnable
 
     /**
      * Henter eventuelt uafsluttet tasks der skal genoptages
-     * 
+     *
      * @param personId id of logged in person
      * @return TaskChild object
-     * @throws DALException 
+     * @throws DALException
      */
     public TaskChild getStartedTask(int personId) throws DALException
     {
         return bll.getStartedTask(personId);
     }
-    
+
     /**
      * Henter en liste af brugerens tasks grupperet efter dato og stacked
+     *
      * @param personId
      * @param groupBy
      * @param includeTaskParents
      * @param includeTaskChildren
      * @return
-     * @throws DALException 
+     * @throws DALException
      */
-    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+    public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
+    {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-     
+
     /**
      * Opdaterer en redigeret task i databasen
+     *
      * @param taskChild er det task objekt der skal opdateres
      */
-    public void editTask(TaskChild taskChild) throws DALException {
+    public void editTask(TaskChild taskChild) throws DALException
+    {
         bll.editTask(taskChild);
     }
-    
+
     /**
      * Bygger observable liste af task udfra et project_id som kan bruges i
      * vores view
@@ -136,8 +120,8 @@ public class TaskModel implements Runnable
      * @return
      * @throws timetracker.DAL.DALException
      */
-    
-    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException {
+    public TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException
+    {
 //        taskById.clear();
 //        taskById.addAll(bll.getTaskbyIDs(project_id, person_id));
 //        return taskById;
@@ -167,6 +151,19 @@ public class TaskModel implements Runnable
         bll.updateTaskbyID(task);
     }
 
+    /**
+     * Returnerer en liste af tasks som er tilknyttet en bruger samt eventuelle
+     * filtre.
+     *
+     * @param project
+     * @param user
+     * @param fradato
+     * @param tildato
+     * @param monthStart
+     * @param monthEnd
+     * @return
+     * @throws DALException
+     */
     public ObservableList<TaskForDataView> getListOfTaskForDataView(Project project, User user, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
         taskForDataview.clear();

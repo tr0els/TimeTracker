@@ -76,6 +76,10 @@ public class KlientManagerAdminController implements Initializable
     private JFXButton btbCloseEdit;
     @FXML
     private JFXButton btbEditChosenClient;
+    @FXML
+    private Label lblAlertnewClient;
+    @FXML
+    private Label lblAlertEdit;
 
     /**
      * Constructor for KlientManagerAdminController
@@ -277,10 +281,15 @@ public class KlientManagerAdminController implements Initializable
      */
     @FXML
     private void handleCreateClient(ActionEvent event) throws DALException
-    {
-        Client newClient = new Client();
+    {  
         String newName = newClientName.getText().trim();
-        int defaultRate = Integer.parseInt(newDefaultRate.getText().trim());
+        String newRate = newDefaultRate.getText().trim();
+      
+        if (checkinputinTxtfields(newName, newRate) == true)
+        return;
+        
+        Client newClient = new Client();
+        int defaultRate = Integer.parseInt(newRate);
         newClient = Cmodel.createClient(newName, defaultRate);
         Cmodel.getClients().add(newClient);
         listviewClients.refresh();
@@ -294,7 +303,7 @@ public class KlientManagerAdminController implements Initializable
      */
     @FXML
     private void handleCancelNewClient(ActionEvent event)
-    {
+    {   lblAlertnewClient.setText("");
         newDefaultRate.clear();
         newClientName.clear();
         drawer.close();
@@ -311,8 +320,13 @@ public class KlientManagerAdminController implements Initializable
     private void handleEditClient(ActionEvent event) throws DALException
     {
         String editName = txtEditName.getText().trim();
-        int editDefaultRate = Integer.parseInt(txtEditDefaultRate.getText().trim().replace(" DKK", " ").trim());
-
+        String editrate = txtEditDefaultRate.getText().trim().replace(" DKK", " ").trim();
+        
+        if (checkinputinTxtfields(editName, editrate) == true)
+            return;
+        
+        int editDefaultRate = Integer.parseInt(editrate);
+           
         selectedClient.setClientName(editName);
         selectedClient.setDefaultRate(editDefaultRate);
         Cmodel.editClient(selectedClient);
@@ -320,6 +334,7 @@ public class KlientManagerAdminController implements Initializable
         lblClientName.setText(editName);
         listviewClients.refresh();
         drawer.close();
+        
     }
 
     /**
@@ -331,6 +346,10 @@ public class KlientManagerAdminController implements Initializable
     private void handleCancelEditClient(ActionEvent event)
     {
         drawer.close();
+        lblAlertEdit.setText("");
+        txtEditName.clear();
+        txtEditDefaultRate.clear();
+        
     }
 
     /**
@@ -345,5 +364,35 @@ public class KlientManagerAdminController implements Initializable
         drawer.open();
         txtEditName.setText(selectedClient.getClientName());
         txtEditDefaultRate.setText(selectedClient.getDefaultRate() + " DKK");
+    }
+    
+  
+    /**
+     * Laver tjek på txtfelterne når man retter eller opretter en klient, for at være sikker på felterne ikke er tomme. 
+     * @param name
+     * @param rate
+     * @return 
+     */
+    public boolean checkinputinTxtfields(String name, String rate) {
+        //String stringtocheck = txtEditName.getText().trim();
+        //String timeprischeck = txtEditDefaultRate.getText().trim();
+        String alertText = "Navn og/eller pris må ikke være tom";
+        String alertStyle = "-fx-text-fill: red;"
+                + "-fx-font-size: 12;";
+
+        if (name.length() < 1 || rate.length() < 1) {
+
+            if (drawer.getSidePane().contains(paneEditClient) == true) {
+                lblAlertEdit.setText(alertText);
+                lblAlertEdit.setStyle(alertStyle);
+                return true;
+            } else {
+                lblAlertnewClient.setText(alertText);
+                lblAlertnewClient.setStyle(alertStyle);
+                return true;
+            }
+
+        }
+        return false;
     }
 }

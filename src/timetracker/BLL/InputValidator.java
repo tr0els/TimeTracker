@@ -20,11 +20,18 @@ import timetracker.DAL.IgetDataFacadeInterface;
  * @author @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class InputValidator {
+public class InputValidator
+{
 
     private final IgetDataFacadeInterface iGetData;
 
-    private InputValidator() throws DALException {
+    /**
+     * Constructor for InputValidator
+     *
+     * @throws DALException
+     */
+    private InputValidator() throws DALException
+    {
         iGetData = new GetDataFacadeimpl();
     }
 
@@ -34,20 +41,23 @@ public class InputValidator {
      */
     private static InputValidator validator = null;
 
-    public static InputValidator getInstance() throws DALException {
-        if (validator == null) {
+    public static InputValidator getInstance() throws DALException
+    {
+        if (validator == null)
+        {
             validator = new InputValidator();
         }
         return validator;
     }
 
     /**
-     * funktionen som tjekker om inputtet har en email struktur
+     * Funktionen som tjekker om inputtet har en email struktur
      *
      * @param input
      * @return
      */
-    public static boolean valEmail(String input) {
+    public static boolean valEmail(String input)
+    {
         String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = emailPat.matcher(input);
@@ -55,12 +65,13 @@ public class InputValidator {
     }
 
     /**
-     * tjekker om inputtet kun er i et ord og ikke har nogen numrer.
+     * Tjekker om inputtet kun er i et ord og ikke har nogen numrer.
      *
      * @param input
      * @return
      */
-    public static boolean valName(String input) {
+    public static boolean valName(String input)
+    {
         String emailRegex = "^[^\\d\\s]+$";
         Pattern emailPat = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = emailPat.matcher(input);
@@ -68,18 +79,28 @@ public class InputValidator {
     }
 
     /**
-     * checks if and email already exist
+     * Tjekker om den indtastet email allerede er oprettet.
      */
-    public boolean valExistingEmail(String email) {
+    public boolean valExistingEmail(String email)
+    {
         return iGetData.validateExistingEmail(email);
     }
 
-    public boolean valExistingEmailEdit(int person_id, String email) {
+    /**
+     * Tjekker om den email der er indtastet allerede eksisterer i databasen et
+     * User objekt
+     *
+     * @param person_id
+     * @param email
+     * @return
+     */
+    public boolean valExistingEmailEdit(int person_id, String email)
+    {
         return iGetData.valExistingEmailEdit(person_id, email);
     }
 
     /**
-     * tager det input som kommer fra modelen og hasher passworded, sender det
+     * Tager det input som kommer fra modelen og hasher passworded, sender det
      * videre til dal.
      *
      * @param email
@@ -87,14 +108,15 @@ public class InputValidator {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException
+    {
         byte[] salt = iGetData.getSalt(email);
 
         final MessageDigest md = MessageDigest.getInstance("SHA-512");
-        if (salt != null) {
+        if (salt != null)
+        {
             md.update(salt);
         }
-
         final byte[] HashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
 
         return iGetData.login(email, HashedPassword);

@@ -25,7 +25,8 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class UserModel {
+public class UserModel
+{
 
     private ObservableList<Profession> allProfessions;
     private ObservableList<User> allUsers;
@@ -36,14 +37,17 @@ public class UserModel {
     private static InputValidator validator;
     private User user;
 
-    public static UserModel getInstance() throws DALException, SQLException {
-        if (model == null) {
+    public static UserModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
             model = new UserModel();
         }
         return model;
     }
 
-    public UserModel() throws DALException {
+    public UserModel() throws DALException
+    {
         bll = BLLManager.getInstance();
         validator = InputValidator.getInstance();
         allUsers = FXCollections.observableArrayList();
@@ -64,12 +68,14 @@ public class UserModel {
      * @throws NoSuchAlgorithmException
      * @throws timetracker.DAL.DALException
      */
-    public User login(String email, String password) throws NoSuchAlgorithmException, DALException {
+    public User login(String email, String password) throws NoSuchAlgorithmException, DALException
+    {
         user = validator.login(email, password);
         return user;
     }
-    
-    public User getUser(){
+
+    public User getUser()
+    {
         return user;
     }
 
@@ -78,7 +84,8 @@ public class UserModel {
      *
      * @param user
      */
-    public void createUser(User user) {
+    public void createUser(User user)
+    {
         bll.createUser(user);
     }
 
@@ -88,7 +95,8 @@ public class UserModel {
      * @param user
      * @throws timetracker.DAL.DALException
      */
-    public void editUser(User user) throws DALException {
+    public void editUser(User user) throws DALException
+    {
         bll.editUser(user);
     }
 
@@ -97,7 +105,8 @@ public class UserModel {
      *
      * @param user
      */
-    public void deleteUser(User user) throws DALException {
+    public void deleteUser(User user) throws DALException
+    {
         bll.deleteUser(user);
     }
 
@@ -108,7 +117,8 @@ public class UserModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<User> getUsers() throws DALException {
+    public ObservableList<User> getUsers() throws DALException
+    {
         allUsers.clear();
         allUsers.addAll(bll.getUsers());
         Comparator<User> byName = (User cl1, User cl2) -> cl1.getName().compareTo(cl2.getName());
@@ -123,61 +133,83 @@ public class UserModel {
      * @throws DALException
      * @throws SQLException
      */
-    public ObservableList<Profession> getProfessions() throws DALException {
+    public ObservableList<Profession> getProfessions() throws DALException
+    {
         return allProfessions;
     }
 
     /**
      * sender en inputet email ned til vores validator for at tjekke om den har
      * en email struktur
+     *
      * @param email
-     * @return 
+     * @return
      */
-    public boolean valEmail(String email) {
+    public boolean valEmail(String email)
+    {
         return validator.valEmail(email);
     }
 
     /**
-     * sender det inputtet navn/efternavn ned for at tjekke at det ikke har numrer
-     * og spaces.
+     * sender det inputtet navn/efternavn ned for at tjekke at det ikke har
+     * numrer og spaces.
+     *
      * @param name
-     * @return 
+     * @return
      */
-    public boolean valName(String name) {
+    public boolean valName(String name)
+    {
         return validator.valName(name);
     }
-    
-    public boolean valExistingEmail(String email){
+
+    /**
+     * Tjekker om den indtastet email allerede er oprettet.
+     *
+     * @param email
+     * @return
+     */
+    public boolean valExistingEmail(String email)
+    {
         return validator.valExistingEmail(email);
     }
+
     /**
-     * har fået vi en liste ud af de sidte 
-     * @return 
+     * Returnerer en liste med de sidste 12 måneder.
+     *
+     * @return
      */
-    public ObservableList<YearMonth> getListOfPeriods(){
-                   
-        for (int i = 0; i < 12; i++) {
+    public ObservableList<YearMonth> getListOfPeriods()
+    {
+        for (int i = 0; i < 12; i++)
+        {
             YearMonth monthwithyear = YearMonth.now().minus(Period.ofMonths(i));
-            //System.out.println(monthwithyear);
             Month addMonth = LocalDate.now().getMonth().minus(i);
-            //System.out.println(addMonth);
-            //String monthtoString = addMonth.toString();
-           // listOfMonths.add(addMonth);      
             listOfMonthswithYears.add(monthwithyear);
-            }
-        //System.out.println(FXCollections.observableArrayList(listOfMonths));
-        //System.out.println(FXCollections.observableArrayList(listOfMonthswithYears));
-       return listOfMonthswithYears;
-        
+        }
+        return listOfMonthswithYears;
     }
 
-    public boolean valExistingEmailEdit(int person_id, String email) {
+    /**
+     * Tjekker om den email der er indtastet allerede eksisterer i databasen et
+     * User objekt
+     *
+     * @param person_id
+     * @param email
+     * @return
+     */
+    public boolean valExistingEmailEdit(int person_id, String email)
+    {
         return validator.valExistingEmailEdit(person_id, email);
     }
 
-    public void disableUser(User disableUser) {
+    /**
+     * Fjerner en User
+     *
+     * @param disableUser
+     */
+    public void disableUser(User disableUser)
+    {
         bll.disableUser(disableUser);
     }
-
 
 }

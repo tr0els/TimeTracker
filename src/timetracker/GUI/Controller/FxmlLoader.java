@@ -26,22 +26,20 @@ public class FxmlLoader
      *
      * @param loc
      * @param pane
-     * @return
      */
-    public static Object loadWindow(URL loc, AnchorPane pane)
+    public static void loadWindow(URL loc, AnchorPane pane)
     {
-        Object controller = null;
+       
         try
         {
             FXMLLoader loader = new FXMLLoader(loc);
             Parent parent = loader.load();
-            controller = loader.getController();
             pane.getChildren().clear();
             pane.getChildren().add(parent);
         } catch (IOException ex)
         {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
-        return controller;
+   
     }
 }
