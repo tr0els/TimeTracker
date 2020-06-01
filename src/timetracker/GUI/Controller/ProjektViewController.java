@@ -134,8 +134,8 @@ public class ProjektViewController implements Initializable {
             skuffen.toBack();
             skuffen.close();
 
-//            person_id = Bmodel.getUser().getPerson_id();
-            person_id = 1; // midlertidigt
+            person_id = Bmodel.getUser().getPersonId();
+    
             loadProjects();
             showProjects();
             projectListener();
@@ -213,6 +213,7 @@ public class ProjektViewController implements Initializable {
                 logHbox.setAlignment(Pos.CENTER_LEFT);
 
                 Label log = new Label(t.getStartTime().format(formatter).toString() + " - " + t.getEndTime().format(formatter).toString());
+                log.setAlignment(Pos.CENTER_RIGHT);
 
                 Region spacer = new Region();
 
