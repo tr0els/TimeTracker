@@ -33,6 +33,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -320,14 +322,21 @@ public class TaskController implements Initializable {
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
-        // Get users tasks grouped by date
+        // get users tasks grouped by date
         tasks = tModel.getTasksGroupedByDate(personId, "DATE", true, true);
 
-        // Build task view
-        Pane taskPane = getTaskView();
+        // if user has any tasks
+        if(!tasks.isEmpty()) {
 
-        // Put task view in scrollpane
-        taskScrollPane.setContent(taskPane);
+            // build task view and show
+            Pane taskPane = getTaskView();
+            taskScrollPane.setContent(taskPane);
+        } else {
+            // build no tasks yet view
+            Pane taskPane = getNoTasksYetView();
+            taskScrollPane.setContent(taskPane);
+        }
+       
     }
 
     /**
@@ -531,6 +540,17 @@ public class TaskController implements Initializable {
         parentNode.setGraphic(hbox);
 
         return parentNode;
+    }
+    
+    public Pane getNoTasksYetView() {
+
+        Pane taskPane = new Pane();
+
+        Image imgStartFirstTask = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/start-first-task.png"));
+        ImageView startFirstTask = new ImageView(imgStartFirstTask);
+        taskPane.getChildren().add(startFirstTask);
+        
+        return taskPane;
     }
 
     @FXML
