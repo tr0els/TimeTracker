@@ -321,7 +321,7 @@ public class TaskController implements Initializable {
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
         // Get users tasks grouped by date
-        tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
+        tasks = tModel.getTasksGroupedByDate(personId, "DATE", true, true);
 
         // Build task view
         Pane taskPane = getTaskView();
