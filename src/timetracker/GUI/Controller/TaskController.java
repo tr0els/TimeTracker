@@ -33,7 +33,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -63,13 +64,15 @@ public class TaskController implements Initializable {
     private ProjectModel pModel;
     private UserModel uModel;
     private ChangelogModel cModel;
+    
     private ObservableList<Project> projects = FXCollections.observableArrayList();
     private List<TaskGroup> tasks;
-    private int personId;
+    private int loggedInPersonId;
     private TaskChild currentlySelectedTask;
 
     private int timerElapsedtime;
     private boolean timerStarted = false;
+    private Thread currentTimerThread;
 
     @FXML
     private JFXTextField textTaskname;
@@ -122,7 +125,7 @@ public class TaskController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             // get id of logged in user
-            personId = 1; // uModel.getUser().getPersonId();
+            loggedInPersonId = uModel.getUser().getPersonId();
 
             // get list of all projects
             projects.addAll(pModel.getProjects());
@@ -153,7 +156,7 @@ public class TaskController implements Initializable {
         boolean billable = checkBillable.isSelected();
         int projectId = taskProject.getSelectionModel().getSelectedItem().getProjectId();
 
-        tModel.startTask(name, billable, projectId, personId);
+        tModel.startTask(name, billable, projectId, loggedInPersonId);
     }
 
     /**
@@ -179,24 +182,11 @@ public class TaskController implements Initializable {
      * Sæt sluttidspunkt for startet task
      */
     public void updateTaskEndToDatabase() throws DALException {
-        tModel.stopTask(personId);
-    }
-
-    /**
-     * Sætter tooltip event ved mouseover som giver info omkring Billable
-     *
-     * @param event
-     */
-    @FXML
-    private void HandleTooltipForBillable(MouseEvent event) {
-        Tooltip tip = new Tooltip();
-
-        tip.setText("Vælg om en Opgave skal være 'Billable' eller ej");
-        checkBillable.setTooltip(tip);
+        tModel.stopTask(loggedInPersonId);
     }
 
     @FXML
-    private void handleStartTimerButton() throws DALException, SQLException {
+    private void startTimerButton() throws DALException, SQLException {
         if (isTimerInputValid()) {
             saveTaskToDatabase();
             startTimer();
@@ -204,7 +194,7 @@ public class TaskController implements Initializable {
     }
 
     @FXML
-    private void handleStopTimerButton() throws DALException, SQLException {
+    private void stopTimerButton() throws DALException, SQLException {
         updateTaskEndToDatabase();
         stopTimer();
     }
@@ -231,14 +221,14 @@ public class TaskController implements Initializable {
         timerButton.getStyleClass().add("stopButton");
         timerButton.setOnAction(e -> {
             try {
-                handleStopTimerButton();
+                stopTimerButton();
             } catch (DALException | SQLException ex) {
                 Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
 
         // start timer in new thread
-        Thread t = new Thread(new Runnable() {
+        currentTimerThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (timerStarted) {
@@ -257,8 +247,8 @@ public class TaskController implements Initializable {
                 }
             }
         });
-        t.setDaemon(true);
-        t.start();
+        currentTimerThread.setDaemon(true);
+        currentTimerThread.start();
     }
 
     private void stopTimer() throws DALException, SQLException {
@@ -274,7 +264,7 @@ public class TaskController implements Initializable {
         timerButton.getStyleClass().add("startButton");
         timerButton.setOnAction(e -> {
             try {
-                handleStartTimerButton();
+                startTimerButton();
             } catch (DALException | SQLException ex) {
                 Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -296,7 +286,7 @@ public class TaskController implements Initializable {
     private void resumeStartedTask() throws DALException, SQLException {
 
         TaskChild taskChild = null;
-        taskChild = tModel.getStartedTask(personId);
+        taskChild = tModel.getStartedTask(loggedInPersonId);
 
         if (taskChild != null) {
             // set timer with offset based on the task start time
@@ -320,14 +310,21 @@ public class TaskController implements Initializable {
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
-        // Get users tasks grouped by date
-        tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
+        // get users tasks grouped by date
+        tasks = tModel.getTasksGroupedByDate(loggedInPersonId, "DATE", true, true);
 
-        // Build task view
-        Pane taskPane = getTaskView();
+        // if user has any tasks
+        if(!tasks.isEmpty()) {
 
-        // Put task view in scrollpane
-        taskScrollPane.setContent(taskPane);
+            // build task view and show
+            Pane taskPane = getTaskView();
+            taskScrollPane.setContent(taskPane);
+        } else {
+            // build no tasks yet view and show
+            Pane taskPane = getNoTasksYetView();
+            taskScrollPane.setContent(taskPane);
+        }
+       
     }
 
     /**
@@ -496,11 +493,21 @@ public class TaskController implements Initializable {
         continueTimer.getStyleClass().add("continueTimer");
         continueTimer.setOnAction(e -> {
 
+            // stop any tasks already started 
+            if(timerStarted) {
+                try {
+                    stopTimerButton();
+                } catch (DALException | SQLException ex) {
+                    Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                currentTimerThread.interrupt();
+            }    
+                
             // if task parent with 1 child use that child
             if (taskBase instanceof TaskParent && ((TaskParent) taskBase).getChildren().size() >= 1) {
                 try {
                     setExistingTask(((TaskParent) taskBase).getChildren().get(0));
-                    handleStartTimerButton();
+                    startTimerButton();
                     // task must be child
                 } catch (DALException | SQLException ex) {
                     Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
@@ -508,7 +515,7 @@ public class TaskController implements Initializable {
             } else {
                 try {
                     setExistingTask(((TaskChild) taskBase));
-                    handleStartTimerButton();
+                    startTimerButton();
                 } catch (DALException | SQLException ex) {
                     Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -531,6 +538,17 @@ public class TaskController implements Initializable {
         parentNode.setGraphic(hbox);
 
         return parentNode;
+    }
+    
+    public Pane getNoTasksYetView() {
+
+        Pane taskPane = new Pane();
+
+        Image imgStartFirstTask = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/start-first-task.png"));
+        ImageView startFirstTask = new ImageView(imgStartFirstTask);
+        taskPane.getChildren().add(startFirstTask);
+        
+        return taskPane;
     }
 
     @FXML
@@ -592,7 +610,7 @@ public class TaskController implements Initializable {
 
             try {
                 // log changes to task
-                cModel.changelogTask(currentlySelectedTask.getId(), personId);
+                cModel.changelogTask(currentlySelectedTask.getId(), loggedInPersonId);
 
                 // update task in database with edited values
                 tModel.editTask(currentlySelectedTask);

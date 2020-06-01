@@ -42,8 +42,7 @@ import timetracker.GUI.Model.ProjectModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class ProjektManagerAdminController implements Initializable
-{
+public class ProjektManagerAdminController implements Initializable {
 
     private ProjectModel model;
     private ClientModel cModel;
@@ -56,10 +55,6 @@ public class ProjektManagerAdminController implements Initializable
     @FXML
     private JFXComboBox<Client> combobox;
     @FXML
-    private JFXTextField timepris;
-    @FXML
-    private JFXTextField projektnavn;
-    @FXML
     private JFXTreeTableView<Project> treeView;
     @FXML
     private AnchorPane editProjectPane;
@@ -70,9 +65,13 @@ public class ProjektManagerAdminController implements Initializable
     @FXML
     private JFXComboBox<Client> comboboxEdit;
     @FXML
-    private JFXTextField timeprisEdit;
+    private JFXTextField hourlyPriceEdit;
     @FXML
-    private JFXTextField projektnavnEdit;
+    private JFXTextField projectNameEdit;
+    @FXML
+    private JFXTextField hourlyPrice;
+    @FXML
+    private JFXTextField projectName;
 
     /**
      * Constructor for ProjektManagerAdminController
@@ -80,8 +79,7 @@ public class ProjektManagerAdminController implements Initializable
      * @throws DALException
      * @throws SQLException
      */
-    public ProjektManagerAdminController() throws DALException, SQLException
-    {
+    public ProjektManagerAdminController() throws DALException, SQLException {
         model = ProjectModel.getInstance();
         cModel = ClientModel.getInstance();
     }
@@ -90,43 +88,34 @@ public class ProjektManagerAdminController implements Initializable
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        timepris.textProperty().addListener(new ChangeListener<String>()
-        {
+    public void initialize(URL url, ResourceBundle rb) {
+        hourlyPrice.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
-                    String newValue)
-            {
-                if (!newValue.matches("\\d*"))
-                {
-                    timepris.setText(newValue.replaceAll("[^\\d]", ""));
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    hourlyPrice.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
-        timeprisEdit.textProperty().addListener(new ChangeListener<String>()
-        {
+        hourlyPriceEdit.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
-                    String newValue)
-            {
-                if (!newValue.matches("\\d*"))
-                {
-                    timeprisEdit.setText(newValue.replaceAll("[^\\d]", ""));
+                    String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    hourlyPriceEdit.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });
 
-        try
-        {
+        try {
             drawer.close();
             clients = cModel.getClients();
             combobox.setItems(clients);
             comboboxEdit.setItems(clients);
 
-        } catch (DALException ex)
-        {
+        } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
         populateTreeTable();
@@ -138,8 +127,7 @@ public class ProjektManagerAdminController implements Initializable
      * @param event
      */
     @FXML
-    private void handleGetCreateAction(ActionEvent event)
-    {
+    private void handleGetCreateAction(ActionEvent event) {
         drawer.close();
         drawer.setSidePane(createProjectPane);
         drawer.open();
@@ -154,10 +142,9 @@ public class ProjektManagerAdminController implements Initializable
      * @throws DALException
      */
     @FXML
-    void handleCreateAction(ActionEvent event) throws DALException
-    {
+    void handleCreateAction(ActionEvent event) throws DALException {
         createProject();
-        drawer.close();
+
     }
 
     /**
@@ -168,8 +155,7 @@ public class ProjektManagerAdminController implements Initializable
      * @throws DALException
      */
     @FXML
-    private void handleDeleteAction(ActionEvent event) throws DALException
-    {
+    private void handleDeleteAction(ActionEvent event) throws DALException {
         deleteProject();
         drawer.close();
     }
@@ -182,8 +168,7 @@ public class ProjektManagerAdminController implements Initializable
      * @throws DALException
      */
     @FXML
-    private void handleEditAction(ActionEvent event) throws DALException
-    {
+    private void handleEditAction(ActionEvent event) throws DALException {
         editProject();
         drawer.close();
     }
@@ -195,23 +180,20 @@ public class ProjektManagerAdminController implements Initializable
      * @throws DALException
      */
     @FXML
-    private void handleEditSetup(MouseEvent event) throws DALException
-    {
+    private void handleEditSetup(MouseEvent event) throws DALException {
         drawer.setSidePane(editProjectPane);
 
         project = treeView.getSelectionModel().getSelectedItem();
         int clientID = project.getValue().getClientId();
 
-        for (int i = 0; i < clients.size(); i++)
-        {
+        for (int i = 0; i < clients.size(); i++) {
             int cli = clients.get(i).getClientId();
-            if (clientID == cli)
-            {
+            if (clientID == cli) {
                 comboboxEdit.getSelectionModel().select(clients.get(i));
             }
         }
-        projektnavnEdit.setText(project.getValue().getProjectName());
-        timeprisEdit.setText(project.getValue().getProjectRate() + "");
+        projectNameEdit.setText(project.getValue().getProjectName());
+        hourlyPriceEdit.setText(project.getValue().getProjectRate() + "");
 
         drawer.open();
         drawer.toFront();
@@ -223,15 +205,20 @@ public class ProjektManagerAdminController implements Initializable
      *
      * @throws DALException
      */
-    public void createProject() throws DALException
-    {
+    public void createProject() throws DALException {
         int clientID = combobox.getSelectionModel().selectedItemProperty().get().getClientId();
-        String projectName = projektnavn.getText();
-        int hourlyPay = Integer.parseInt(timepris.getText());
+        String projectNameString = projectName.getText();
+        int hourlyPay = Integer.parseInt(hourlyPrice.getText());
 
-        model.createProject(clientID, projectName, hourlyPay);
+        if (projectNameString.equals("")) {
+            projectName.setText("Navn kan ikke være tomt");
+            projectName.setStyle("-fx-text-inner-color: red");
+        } else {
+            model.createProject(clientID, projectNameString, hourlyPay);
+            populateTreeTable();
+            drawer.close();
+        }
 
-        populateTreeTable();
     }
 
     /**
@@ -241,8 +228,7 @@ public class ProjektManagerAdminController implements Initializable
      *
      * @throws DALException
      */
-    public void deleteProject() throws DALException
-    {
+    public void deleteProject() throws DALException {
         project = treeView.getSelectionModel().getSelectedItem();
         project.getParent().getChildren().remove(project);
 
@@ -256,11 +242,10 @@ public class ProjektManagerAdminController implements Initializable
      *
      * @throws DALException
      */
-    public void editProject() throws DALException
-    {
+    public void editProject() throws DALException {
         int clientID = comboboxEdit.getSelectionModel().getSelectedItem().getClientId();
-        String projectName = projektnavnEdit.getText();
-        int hourlyPay = Integer.parseInt(timeprisEdit.getText());
+        String projectName = projectNameEdit.getText();
+        int hourlyPay = Integer.parseInt(hourlyPriceEdit.getText());
         int projectID = project.getValue().getProjectId();
 
         model.editProject(clientID, projectName, hourlyPay, projectID);
@@ -274,8 +259,7 @@ public class ProjektManagerAdminController implements Initializable
      * oprette coloner i treetableview og sætter listen af projekter fra
      * databasen ind.
      */
-    private void populateTreeTable()
-    {
+    private void populateTreeTable() {
         //opretter kolonerne
         JFXTreeTableColumn<Project, String> projectName = new JFXTreeTableColumn<>("Projekt");
         projectName.setPrefWidth(250);
@@ -285,29 +269,23 @@ public class ProjektManagerAdminController implements Initializable
         projectRate.setPrefWidth(150);
 
         //vælger hvilket data der skal vises (i dette tilfælde projekt navnet) og hvilken colone det skal vises i
-        projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>()
-        {
+        projectName.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getProjectName());
             }
         });
 
-        projectClient.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>()
-        {
+        projectClient.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
                 return new SimpleStringProperty(param.getValue().getValue().getClientName());
             }
         });
 
-        projectRate.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>()
-        {
+        projectRate.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Project, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param)
-            {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Project, String> param) {
                 return new SimpleStringProperty(Integer.toString(param.getValue().getValue().getProjectRate()));
             }
         });
@@ -316,16 +294,13 @@ public class ProjektManagerAdminController implements Initializable
         ObservableList<Project> projects = FXCollections.observableArrayList();
 
         //henter det data der skal ind i listen fra databasen
-        try
-        {
+        try {
             projects.addAll(model.getProjects());
 
-        } catch (DALException ex)
-        {
+        } catch (DALException ex) {
             Logger.getLogger(ProjektManagerAdminController.class
                     .getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(ProjektManagerAdminController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -336,6 +311,18 @@ public class ProjektManagerAdminController implements Initializable
         treeView.getColumns().setAll(projectName, projectClient, projectRate);
         treeView.setRoot(root);
         treeView.setShowRoot(false);
+    }
+
+    @FXML
+    private void handleEditClearName(MouseEvent event) {
+        projectNameEdit.selectAll();
+        projectNameEdit.setStyle("-fx-text-inner-color: black");
+    }
+
+    @FXML
+    private void handleCreateClearName(MouseEvent event) {
+        projectName.selectAll();
+        projectName.setStyle("-fx-text-inner-color: black");
     }
 
 }

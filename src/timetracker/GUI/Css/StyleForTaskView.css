@@ -4,7 +4,7 @@
 */
 
 .scroll-pane > .viewport {
-   -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .scroll-pane {
@@ -50,9 +50,8 @@
     -fx-background-color: #4b7cad;
     -fx-background-radius: 8px;
     -fx-text-fill: white;
-    -fx-min-width: 20px;
+    -fx-min-width: 21px;
     -fx-alignment: center;
-    -fx-translatex: -2px;
 }
 
 .tasks .titled-pane > .title .numChildren:hover {
@@ -192,6 +191,10 @@
     -fx-border-radius: 4px 4px 4px 4px;
 }
 
+.startButton:hover {
+    -fx-background-color: #6dc930;
+}
+
 .stopButton {
     -fx-cursor: hand;
     -fx-background-color: #cc0000;
@@ -199,6 +202,10 @@
     -fx-alignment: center;
     -fx-background-radius: 4px 4px 4px 4px;
     -fx-border-radius: 4px 4px 4px 4px;
+}
+
+.stopButton:hover {
+    -fx-background-color: #d91818;
 }
 
 .timerPane {

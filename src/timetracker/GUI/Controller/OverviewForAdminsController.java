@@ -55,7 +55,19 @@ import timetracker.GUI.Model.ProjectModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class OverviewForAdminsController implements Initializable {
+public class OverviewForAdminsController implements Initializable
+{
+
+    private final ProjectModel pModel;
+    private UserModel bModel;
+    private final ClientModel cModel;
+    private double totalhouersForPiechart;
+    private double billaableHouersForPiechart;
+    private ObservableList<Project> listeAfProjekter;
+    private final String europeanDatePattern = "dd-MM-yyyy";
+    private final String europeanDatePatternYearMonth = "MM-yyyy";
+    private User UserLoggedInForMinTid = null;
+    private Stage popupStage;
 
     @FXML
     private JFXDrawer filterskuffe;
@@ -94,19 +106,8 @@ public class OverviewForAdminsController implements Initializable {
     @FXML
     private Label lblforPiechart;
 
-    private final ProjectModel pModel;
-    private UserModel bModel;
-    private final ClientModel cModel;
-    private double totalhouersForPiechart;
-    private double billaableHouersForPiechart;
-    private ObservableList<Project> listeAfProjekter;
-    private final String europeanDatePattern = "dd-MM-yyyy";
-    private final String europeanDatePatternYearMonth = "MM-yyyy";
-
-    private User UserLoggedInForMinTid = null;
-    private Stage popupStage;
-
-    public OverviewForAdminsController() throws DALException, SQLException {
+    public OverviewForAdminsController() throws DALException, SQLException
+    {
         pModel = ProjectModel.getInstance();
         bModel = UserModel.getInstance();
         cModel = ClientModel.getInstance();
@@ -119,8 +120,10 @@ public class OverviewForAdminsController implements Initializable {
      * @param url
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        try {
+    public void initialize(URL url, ResourceBundle rb)
+    {
+        try
+        {
 
             filterskuffe.setSidePane(searchAnchorpane);
             filterskuffe.toFront();
@@ -129,16 +132,19 @@ public class OverviewForAdminsController implements Initializable {
 
             //hvis userloggedin er null skal vi initalisere tabelleren og piechart i denne metode
             //hvis der er en userloggetin så bliver det initaliseret i metoden getCurrentUserForMinTidView
-            if (UserLoggedInForMinTid == null) {
+            if (UserLoggedInForMinTid == null)
+            {
                 populatetable();
                 handlePieChart();
                 populatecombobox();
 
             }
 
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(OverviewForAdminsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -149,11 +155,14 @@ public class OverviewForAdminsController implements Initializable {
      * @param event
      */
     @FXML
-    private void handleFilteropen(ActionEvent event) {
+    private void handleFilteropen(ActionEvent event)
+    {
 
-        if (filterskuffe.isOpened()) {
+        if (filterskuffe.isOpened())
+        {
             filterskuffe.close();
-        } else {
+        } else
+        {
             filterskuffe.open();
         }
     }
@@ -162,10 +171,13 @@ public class OverviewForAdminsController implements Initializable {
     metoden her gøre vores tableview klar til at kunne holde vores værider fra listeAfProjekter 
     til slut fylder vi tableViewet op med opjekter fra listeAfProjekter
      */
-    public void populatetable() throws DALException, SQLException {
-        if (UserLoggedInForMinTid == null) {
+    public void populatetable() throws DALException, SQLException
+    {
+        if (UserLoggedInForMinTid == null)
+        {
             listeAfProjekter = pModel.getProjectsToFilter(null, null, null, null, null, null);
-        } else {
+        } else
+        {
             listeAfProjekter = pModel.getProjectsToFilter(UserLoggedInForMinTid, null, null, null, null, null);
 
         }
@@ -183,7 +195,8 @@ public class OverviewForAdminsController implements Initializable {
      * renger dem om til sekunder, for at converetere dem til timer i double så
      * 1.5 timer er 90 minutter som er 5400 sekunder.
      */
-    public void populatepieChart() {
+    public void populatepieChart()
+    {
 
         int getmetimeHHBill;
         int getmetimeMMBill;
@@ -192,7 +205,8 @@ public class OverviewForAdminsController implements Initializable {
         int getmetimeMMTotal;
         double getmetotalHHMMTotal = 0.0;
 
-        for (Project project : listeAfProjekter) {
+        for (Project project : listeAfProjekter)
+        {
             String timeBil = project.getBillableTime();
             String[] timesplitupBil = timeBil.split(":");
 
@@ -232,7 +246,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    private void populatecombobox() throws DALException, SQLException {
+    private void populatecombobox() throws DALException, SQLException
+    {
 
         ComboMedarbejder.setItems(bModel.getUsers());
         comboKlienter.setItems(cModel.getClients());
@@ -247,7 +262,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    public void getProjectsForfilter() throws DALException,  SQLException {
+    public void getProjectsForfilter() throws DALException, SQLException
+    {
 
         User comboUser = null;
         Client comboKlient = null;
@@ -257,25 +273,31 @@ public class OverviewForAdminsController implements Initializable {
         String MonthEnd = null;
         first:
         {
-            if (UserLoggedInForMinTid != null) {
+            if (UserLoggedInForMinTid != null)
+            {
                 comboUser = UserLoggedInForMinTid;
             }
 
-            if (fradato.getValue() != null) {
+            if (fradato.getValue() != null)
+            {
                 fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
             }
 
-            if (tildato.getValue() != null) {
+            if (tildato.getValue() != null)
+            {
                 tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
             }
 
-            if (comboKlienter.getValue() != null) {
+            if (comboKlienter.getValue() != null)
+            {
                 comboKlient = (Client) comboKlienter.getValue();
             }
-            if (ComboMedarbejder.getValue() != null) {
+            if (ComboMedarbejder.getValue() != null)
+            {
                 comboUser = (User) ComboMedarbejder.getValue();
             }
-            if (comboPerioder.getValue() != null) {
+            if (comboPerioder.getValue() != null)
+            {
                 YearMonth getmonth = comboPerioder.getValue();
                 MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
                 int lengthOfMonth = getmonth.lengthOfMonth();
@@ -283,7 +305,8 @@ public class OverviewForAdminsController implements Initializable {
 
             }
 
-            if (checkFilter() == true) {
+            if (checkFilter() == true)
+            {
                 break first;
             }
 
@@ -300,7 +323,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws SQLException
      */
     @FXML
-    private void handleSeekPressed(ActionEvent event) throws DALException, SQLException {
+    private void handleSeekPressed(ActionEvent event) throws DALException, SQLException
+    {
         getProjectsForfilter();
         filterskuffe.close();
     }
@@ -313,7 +337,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws SQLException
      */
     @FXML
-    private void handleClearFilter(ActionEvent event) throws DALException, SQLException {
+    private void handleClearFilter(ActionEvent event) throws DALException, SQLException
+    {
         ComboMedarbejder.getSelectionModel().clearSelection();
         comboKlienter.getSelectionModel().clearSelection();
         comboPerioder.getSelectionModel().clearSelection();
@@ -330,12 +355,12 @@ public class OverviewForAdminsController implements Initializable {
     /**
      * Håndere PieChart og fremviser det med data
      */
-    public void handlePieChart() {
+    public void handlePieChart()
+    {
         String comboMedarbejder = "";
-        String periode ="";
-        String comboKlient="";
-       
-        
+        String periode = "";
+        String comboKlient = "";
+
         populatepieChart();
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Non Billable", totalhouersForPiechart - billaableHouersForPiechart),
@@ -347,17 +372,26 @@ public class OverviewForAdminsController implements Initializable {
         piechart.setStartAngle(90);
         piechart.setLegendSide(Side.RIGHT);
         piechart.setLabelsVisible(false);
-        
+
         if (ComboMedarbejder.getSelectionModel().getSelectedItem() != null)
-                comboMedarbejder = "'"+ComboMedarbejder.getSelectionModel().getSelectedItem().toString()+"'";
-        if(comboKlienter.getSelectionModel().getSelectedItem() != null)
-                comboKlient =  "'"+comboKlienter.getSelectionModel().getSelectedItem().getClientName()+"'";
-        if(comboPerioder.getSelectionModel().getSelectedItem() != null){
-                periode = "'"+comboPerioder.getValue().format(DateTimeFormatter.ofPattern(europeanDatePatternYearMonth))+"'";}
-        if(comboPerioder.getSelectionModel().getSelectedItem() != null ||  comboKlienter.getSelectionModel().getSelectedItem() != null || ComboMedarbejder.getSelectionModel().getSelectedItem() != null)
-        piechart.setTitle("Overblik over: " + periode + "  " +  comboKlient + " " + comboMedarbejder );
-        else 
-        piechart.setTitle("Overblik over alle projekter\n som har tilknyttet opgaver");
+        {
+            comboMedarbejder = "'" + ComboMedarbejder.getSelectionModel().getSelectedItem().toString() + "'";
+        }
+        if (comboKlienter.getSelectionModel().getSelectedItem() != null)
+        {
+            comboKlient = "'" + comboKlienter.getSelectionModel().getSelectedItem().getClientName() + "'";
+        }
+        if (comboPerioder.getSelectionModel().getSelectedItem() != null)
+        {
+            periode = "'" + comboPerioder.getValue().format(DateTimeFormatter.ofPattern(europeanDatePatternYearMonth)) + "'";
+        }
+        if (comboPerioder.getSelectionModel().getSelectedItem() != null || comboKlienter.getSelectionModel().getSelectedItem() != null || ComboMedarbejder.getSelectionModel().getSelectedItem() != null)
+        {
+            piechart.setTitle("Overblik over: " + periode + "  " + comboKlient + " " + comboMedarbejder);
+        } else
+        {
+            piechart.setTitle("Overblik over alle projekter\n som har tilknyttet opgaver");
+        }
     }
 
     /**
@@ -366,9 +400,11 @@ public class OverviewForAdminsController implements Initializable {
      * @throws timetracker.DAL.DALException
      * @throws java.sql.SQLException
      */
-    public boolean checkFilter() throws DALException, SQLException {
+    public boolean checkFilter() throws DALException, SQLException
+    {
 
-        if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue())) {
+        if (fradato.getValue() != null && tildato.getValue() != null && tildato.getValue().isBefore(fradato.getValue()) && fradato.getValue().isAfter(tildato.getValue()))
+        {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i datoer");
             alert.setTitle("Fejl i valg af til- og fradato");
@@ -383,7 +419,8 @@ public class OverviewForAdminsController implements Initializable {
             return true;
         }
 
-        if (fradato.getValue() != null && comboPerioder.getValue() != null) {
+        if (fradato.getValue() != null && comboPerioder.getValue() != null)
+        {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
@@ -399,7 +436,8 @@ public class OverviewForAdminsController implements Initializable {
             return true;
         }
 
-        if (tildato.getValue() != null && comboPerioder.getValue() != null) {
+        if (tildato.getValue() != null && comboPerioder.getValue() != null)
+        {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("Fejl i filtrering");
             alert.setTitle("Fejl i valg af filtering");
@@ -426,7 +464,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    public void getCurrentUserForMinTidView(User currentUser) throws DALException, SQLException {
+    public void getCurrentUserForMinTidView(User currentUser) throws DALException, SQLException
+    {
         UserLoggedInForMinTid = currentUser;
         initalizePopulatethings();
 
@@ -438,7 +477,8 @@ public class OverviewForAdminsController implements Initializable {
      *
      * @return
      */
-    public JFXComboBox<User> getComboMedarbejder() {
+    public JFXComboBox<User> getComboMedarbejder()
+    {
         return ComboMedarbejder;
     }
 
@@ -449,8 +489,10 @@ public class OverviewForAdminsController implements Initializable {
      * @throws DALException
      * @throws SQLException
      */
-    public void initalizePopulatethings() throws DALException, SQLException {
-        if (UserLoggedInForMinTid != null) {
+    public void initalizePopulatethings() throws DALException, SQLException
+    {
+        if (UserLoggedInForMinTid != null)
+        {
             populatetable();
             handlePieChart();
             populatecombobox();
@@ -464,7 +506,8 @@ public class OverviewForAdminsController implements Initializable {
      * @throws IOException
      * @throws DALException
      */
-    private void handelPopupDataView() throws IOException, DALException, SQLException {
+    private void handelPopupDataView() throws IOException, DALException, SQLException
+    {
 
         User transferUser = null;
         Project selectedProject = null;
@@ -475,103 +518,133 @@ public class OverviewForAdminsController implements Initializable {
 
         //vi tjekker at vores tableview ikke er tomt
         first:
-        if (!listeAfProjekter.isEmpty()) {   
-            
+        if (!listeAfProjekter.isEmpty())
+        {
+
             second:
-            if (tableview.getSelectionModel().getSelectedItem() != null) {
+            if (tableview.getSelectionModel().getSelectedItem() != null)
+            {
                 selectedProject = tableview.getSelectionModel().getSelectedItem();
             }
 
             //hvis der er valgt et projekt, tjekker vi om det er brugeren som er logget ind eller om det et en bruger fra comboboxen vi skal bruge i dataoverblikker 
             //hvis ikke det er nogen af dem er det en admin som er logget ind og har ikke brugt comboboxen til at filtere på.
             //hvis det er tilfældet sætter vi tranferuser til null, på den mådet kommer alle bruger med ud
-            if (UserLoggedInForMinTid != null) {
+            if (UserLoggedInForMinTid != null)
+            {
                 transferUser = UserLoggedInForMinTid;
-            } else if (ComboMedarbejder.getValue() != null) {
+            } else if (ComboMedarbejder.getValue() != null)
+            {
                 transferUser = ComboMedarbejder.getValue();
-            } else {
+            } else
+            {
                 transferUser = null;
             }
 
-            if (fradato.getValue() != null) {
+            if (fradato.getValue() != null)
+            {
                 fradatoSelected = fradato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
             }
 
-            if (tildato.getValue() != null) {
+            if (tildato.getValue() != null)
+            {
                 tildatoSelected = tildato.getValue().format(DateTimeFormatter.ofPattern(europeanDatePattern));
             }
 
-            if (comboPerioder.getValue() != null) {
+            if (comboPerioder.getValue() != null)
+            {
                 YearMonth getmonth = comboPerioder.getValue();
                 MonthEnd = getmonth.atEndOfMonth().format(DateTimeFormatter.ofPattern(europeanDatePattern));
                 int lengthOfMonth = getmonth.lengthOfMonth();
                 MonthStart = getmonth.atEndOfMonth().minusDays(lengthOfMonth - 1).format(DateTimeFormatter.ofPattern(europeanDatePattern));
 
             }
-            if (checkFilter() == true) {
+            if (checkFilter() == true)
+            {
                 break first;
             }
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/timetracker/GUI/View/popUpDataView.fxml"));
             Parent popup = loader.load();
             PopUpDataViewController controller = loader.<PopUpDataViewController>getController();
-            controller.TransferInfoForPopup(selectedProject, transferUser, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
+            controller.transferInfoForPopup(selectedProject, transferUser, fradatoSelected, tildatoSelected, MonthStart, MonthEnd);
 
-            if (popupStage == null) {
+            if (popupStage == null)
+            {
                 Scene scene = new Scene(popup);
 
                 popupStage = new Stage();
                 popupStage.getIcons().add(new Image("/timetracker/GUI/Icons/grumsen.png"));
                 popupStage.setScene(scene);
                 popupStage.setResizable(false);
-                if(transferUser == null)
-                popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
-                else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
+                if (transferUser == null)
+                {
+                    popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
+                } else
+                {
+                    popupStage.setTitle(selectedProject.getProjectName().toUpperCase());
+                }
                 popupStage.show();
             }
             popupStage.show();
             popupStage.toFront();
-            if(transferUser == null)
-            popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
-            else {popupStage.setTitle(selectedProject.getProjectName().toUpperCase());}
+            if (transferUser == null)
+            {
+                popupStage.setTitle(selectedProject.getProjectName().toUpperCase() + " - " + selectedProject.getProjectRate() + " DKK");
+            } else
+            {
+                popupStage.setTitle(selectedProject.getProjectName().toUpperCase());
+            }
         }
 
     }
+
     /**
-     * håndere hvis man dobbeltklikker på et projekt  
+     * håndere hvis man dobbeltklikker på et projekt
+     *
      * @param event
      * @throws IOException
      * @throws DALException
-     * @throws SQLException 
+     * @throws SQLException
      */
     @FXML
-    private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException {
-        if (event.getClickCount() > 1) {
+    private void handelSelectedProject(MouseEvent event) throws IOException, DALException, SQLException
+    {
+        if (event.getClickCount() > 1)
+        {
             handelPopupDataView();
         }
     }
+
     /**
      * eventhandler til når musen er inde for tableviewet, for at vise tooltip
-     * @param event 
+     *
+     * @param event
      */
     @FXML
-    private void handelTooltipForTableView(MouseEvent event) {
+    private void handelTooltipForTableView(MouseEvent event)
+    {
 
         tableview.setTooltip(getToolTipForTableView());
 
     }
+
     /**
-     * bruges til at sætte tooltip for tableviewet 
-     * @return 
+     * bruges til at sætte tooltip for tableviewet
+     *
+     * @return
      */
-    public Tooltip getToolTipForTableView() {
+    public Tooltip getToolTipForTableView()
+    {
 
         Tooltip tip = new Tooltip();
 
-        if (listeAfProjekter.isEmpty()) {
-            tip.setText("Det er ikke nogle Projekter at vise");
+        if (listeAfProjekter.isEmpty())
+        {
+            tip.setText("Der er ikke nogle Projekter at vise");
             return tip;
-        } else {
-            tip.setText("Dobbel klik på et Projekt, for at få vist dens tilhørende opgaver");
+        } else
+        {
+            tip.setText("Dobbelt klik på et Projekt, for at få vist dens tilhørende opgaver");
             return tip;
         }
 

@@ -15,8 +15,8 @@
         <AnchorPane fx:id="editProjectPane" layoutX="14.0" layoutY="508.0" prefHeight="71.0" prefWidth="496.0">
             <children>
                 <JFXComboBox fx:id="comboboxEdit" layoutX="14.0" layoutY="7.0" prefHeight="25.0" prefWidth="127.0" promptText="Klient" />
-                <JFXTextField fx:id="timeprisEdit" labelFloat="true" layoutX="154.0" layoutY="7.0" promptText="timepris" />
-                <JFXTextField fx:id="projektnavnEdit" labelFloat="true" layoutX="14.0" layoutY="45.0" prefHeight="25.0" prefWidth="275.0" promptText="Projekt navn" />
+                <JFXTextField fx:id="hourlyPriceEdit" labelFloat="true" layoutX="154.0" layoutY="7.0" promptText="timepris" />
+                <JFXTextField fx:id="projectNameEdit" labelFloat="true" layoutX="14.0" layoutY="45.0" onMouseClicked="#handleEditClearName" prefHeight="25.0" prefWidth="275.0" promptText="Projekt navn" />
                 <JFXButton layoutX="299.0" layoutY="20.0" onAction="#handleDeleteAction" prefHeight="25.0" prefWidth="73.0" text="Slet" />
                 <JFXButton layoutX="387.0" layoutY="20.0" onAction="#handleEditAction" prefHeight="17.0" prefWidth="80.0" text="Ret" />
             </children>
@@ -24,8 +24,8 @@
         <AnchorPane fx:id="createProjectPane" layoutX="14.0" layoutY="594.0" prefHeight="76.0" prefWidth="496.0">
             <children>
                 <JFXComboBox fx:id="combobox" layoutX="14.0" layoutY="7.0" prefHeight="25.0" prefWidth="127.0" promptText="Klient" />
-                <JFXTextField fx:id="timepris" labelFloat="true" layoutX="154.0" layoutY="7.0" promptText="timepris" />
-                <JFXTextField fx:id="projektnavn" labelFloat="true" layoutX="17.0" layoutY="50.0" prefHeight="25.0" prefWidth="275.0" promptText="Projekt navn" />
+                <JFXTextField fx:id="hourlyPrice" labelFloat="true" layoutX="154.0" layoutY="7.0" promptText="timepris" />
+                <JFXTextField fx:id="projectName" labelFloat="true" layoutX="17.0" layoutY="50.0" onMouseClicked="#handleCreateClearName" prefHeight="25.0" prefWidth="275.0" promptText="Projekt navn" />
                 <JFXButton layoutX="306.0" layoutY="22.0" onAction="#handleCreateAction" prefHeight="34.0" prefWidth="80.0" text="Opret" />
             </children>
         </AnchorPane>

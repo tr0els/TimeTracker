@@ -10,9 +10,7 @@
 }
 
 .root {
-
     -fx-background-color: white; 
-
 }
 
 .titled-pane .title {
@@ -122,7 +120,6 @@
     -fx-background-color: -fx-grumsen-lysere;
 }
 
-
 #paneEdit {
     -fx-background-color: -fx-grumsen-baggrund;
 }
@@ -143,26 +140,21 @@
     -fx-background-radius: 4 4 0 0;
     -fx-border-color: -fx-grumsen;
     -fx-border-width: 0 0 1 0;
-
 }
 
 #logHBox {
     -fx-background-color: #f7f9ff;
-
 }
-
 
 #logVBox {
     -fx-spacing: 1px;
     -fx-padding: 0px;
     -fx-background-color: -fx-grumsen-lysere;
-
 }
 
 #vboxTasks {
     -fx-spacing: 1px;
     -fx-padding: 0px;
-
 }
 
 #lblClientname {
@@ -186,5 +178,5 @@
 }
 
 #projectMenubox {
-    
+
 }

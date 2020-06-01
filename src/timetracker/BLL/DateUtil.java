@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class DateUtil {
     
     /**
-     * returns the date formatted
+     * Returns the date formatted
      * 
      * @param date is the variable the be formatted
      * @return a formatted date as string
