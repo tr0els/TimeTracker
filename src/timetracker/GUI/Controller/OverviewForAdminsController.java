@@ -568,10 +568,10 @@ public class OverviewForAdminsController implements Initializable {
         Tooltip tip = new Tooltip();
 
         if (listeAfProjekter.isEmpty()) {
-            tip.setText("Det er ikke nogle Projekter at vise");
+            tip.setText("Der er ikke nogle Projekter at vise");
             return tip;
         } else {
-            tip.setText("Dobbel klik på et Projekt, for at få vist dens tilhørende opgaver");
+            tip.setText("Dobbelt klik på et Projekt, for at få vist dens tilhørende opgaver");
             return tip;
         }
 

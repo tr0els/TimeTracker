@@ -122,7 +122,7 @@ public class TaskController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             // get id of logged in user
-            personId = 1; // uModel.getUser().getPersonId();
+            personId = uModel.getUser().getPersonId();
 
             // get list of all projects
             projects.addAll(pModel.getProjects());
@@ -321,7 +321,7 @@ public class TaskController implements Initializable {
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
         // Get users tasks grouped by date
-        tasks = tModel.getTasksGroupedByDate(1, "DATE", true, true);
+        tasks = tModel.getTasksGroupedByDate(personId, "DATE", true, true);
 
         // Build task view
         Pane taskPane = getTaskView();

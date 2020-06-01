@@ -9,15 +9,12 @@ import timetracker.BE.Task;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import timetracker.BE.Project;
 import timetracker.BE.TaskChild;
 import timetracker.BE.TaskForDataView;
 import timetracker.BE.TaskGroup;
-import timetracker.BE.TaskParent;
 import timetracker.BE.User;
 import timetracker.BLL.BLLManager;
 import timetracker.DAL.DALException;
@@ -27,8 +24,7 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel implements Runnable
-{
+public class TaskModel {
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -42,22 +38,6 @@ public class TaskModel implements Runnable
     {
         bll = BLLManager.getInstance();
         taskForDataview = FXCollections.observableArrayList();
-    }
-
-    @Override
-    public void run()
-    {
-        try
-        {
-            model = new TaskModel();
-        } catch (DALException ex)
-        {
-            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(TaskModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
     public static TaskModel getInstance() throws DALException, SQLException
