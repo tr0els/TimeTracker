@@ -19,7 +19,7 @@
       <Pane layoutX="13.0" layoutY="11.0" prefHeight="55.0" prefWidth="575.0" styleClass="timerPane">
          <children>
               <JFXCheckBox fx:id="checkBillable" checkedColor="#4b7cad" layoutX="336.0" layoutY="20.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="86.0" selected="true" text="Faktureres" />
-            <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="6.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Hvad arbejder du på?" />
+            <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="11.0" layoutY="13.0" prefHeight="25.0" prefWidth="176.0" promptText="Hvad arbejder du på?" />
               <JFXComboBox fx:id="taskProject" layoutX="194.0" layoutY="10.0" prefHeight="28.0" prefWidth="132.0" promptText="Vælg Projekt" />
               <JFXButton fx:id="timerButton" contentDisplay="CENTER" layoutX="509.0" layoutY="13.0" onAction="#handleStartTimerButton" prefHeight="30.0" prefWidth="55.0" styleClass="startButton" text="Start" textAlignment="CENTER" />
             <Label fx:id="timerText" layoutX="425.0" layoutY="14.0" prefHeight="30.0" prefWidth="80.0" text="00:00:00">
