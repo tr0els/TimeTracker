@@ -87,10 +87,12 @@ public class TaskModel {
     }
 
     /**
-     * Henter en liste af brugerens tasks grupperet efter dato og stacked
+     * Henter og en liste af brugerens opgaver grupperet efter dato,
+     * med samlet tidsforbrug for dage og opgaver. hver parent opgave har de
+     * opgaver den består af grupperet under sig (stacked).
      *
-     * @param personId
-     * @param groupBy
+     * @param personId på brugeren der er logget ind
+     * @param groupBy 
      * @param includeTaskParents
      * @param includeTaskChildren
      * @return

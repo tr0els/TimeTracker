@@ -65,9 +65,9 @@ public class TaskController implements Initializable {
     private UserModel uModel;
     private ChangelogModel cModel;
     
+    private int loggedInPersonId;
     private ObservableList<Project> projects = FXCollections.observableArrayList();
     private List<TaskGroup> tasks;
-    private int loggedInPersonId;
     private TaskChild currentlySelectedTask;
 
     private int timerElapsedtime;
@@ -75,11 +75,11 @@ public class TaskController implements Initializable {
     private Thread currentTimerThread;
 
     @FXML
-    private JFXTextField textTaskname;
+    private JFXTextField txtTaskName;
     @FXML
-    private JFXCheckBox checkBillable;
+    private JFXCheckBox chkTaskBillable;
     @FXML
-    private JFXComboBox<Project> taskProject;
+    private JFXComboBox<Project> cbTaskProject;
     @FXML
     private Label timerText;
     @FXML
@@ -131,7 +131,7 @@ public class TaskController implements Initializable {
             projects.addAll(pModel.getProjects());
 
             // add projects to comboboxes
-            taskProject.setItems(projects);
+            cbTaskProject.setItems(projects);
             editProject.setItems(projects);
 
             // setup edit task menu
@@ -149,42 +149,45 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * Gemmer startet task i databasen
+     * Gemmer den startede task i databasen
      */
     public void saveTaskToDatabase() throws DALException {
-        String name = textTaskname.getText();
-        boolean billable = checkBillable.isSelected();
-        int projectId = taskProject.getSelectionModel().getSelectedItem().getProjectId();
+        String name = txtTaskName.getText();
+        boolean billable = chkTaskBillable.isSelected();
+        int projectId = cbTaskProject.getSelectionModel().getSelectedItem().getProjectId();
 
         tModel.startTask(name, billable, projectId, loggedInPersonId);
     }
 
     /**
-     * Sætter ny task input felter baseret eksisterende task
+     * Sætter ny opgave input felter baseret eksisterende task
      */
     public void setExistingTask(TaskChild taskChild) throws DALException, SQLException {
-        textTaskname.setText(taskChild.getName());
+        txtTaskName.setText(taskChild.getName());
 
         if (taskChild.isBillable()) {
-            checkBillable.setSelected(true);
+            chkTaskBillable.setSelected(true);
         } else {
-            checkBillable.setSelected(false);
+            chkTaskBillable.setSelected(false);
         }
 
         for (Project p : projects) {
             if (p.getProjectId() == taskChild.getProjectId()) {
-                taskProject.getSelectionModel().select(p);
+                cbTaskProject.getSelectionModel().select(p);
             }
         }
     }
 
     /**
-     * Sæt sluttidspunkt for startet task
+     * Sæt sluttidspunkt i databasen for den startede opgave
      */
     public void updateTaskEndToDatabase() throws DALException {
         tModel.stopTask(loggedInPersonId);
     }
 
+    /**
+     * Starter en ny opgave med værdier fra inputfelterne
+     */
     @FXML
     private void startTimerButton() throws DALException, SQLException {
         if (isTimerInputValid()) {
@@ -193,21 +196,27 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * Stopper den ingangværende opgave
+     */
     @FXML
     private void stopTimerButton() throws DALException, SQLException {
         updateTaskEndToDatabase();
         stopTimer();
     }
 
+    /**
+     * Validering af værdier i ny opgaves inputfelter
+     */
     private boolean isTimerInputValid() {
-        if (textTaskname.getText().trim().isEmpty() || taskProject.getSelectionModel().isEmpty()) {
+        if (txtTaskName.getText().trim().isEmpty() || cbTaskProject.getSelectionModel().isEmpty()) {
             return false;
         }
         return true;
     }
 
     /**
-     * Starter eller stopper task og det tilhørende stopur
+     * Starter stopuret i en ny tråd og viser stop knap
      */
     @FXML
     private void startTimer() throws DALException, SQLException {
@@ -251,6 +260,9 @@ public class TaskController implements Initializable {
         currentTimerThread.start();
     }
 
+    /**
+     * Stopper og nulstiller ingangværende stopur og viser startknap
+     */
     private void stopTimer() throws DALException, SQLException {
 
         // stop timer
@@ -269,19 +281,16 @@ public class TaskController implements Initializable {
                 Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        textTaskname.setText("");
-        checkBillable.setSelected(true);
-        taskProject.getSelectionModel().clearSelection();
+        txtTaskName.setText("");
+        chkTaskBillable.setSelected(true);
+        cbTaskProject.getSelectionModel().clearSelection();
 
         // reload task view
         setTasksGroupedByDate();
     }
 
     /**
-     * Resume any started task that has not been stopped
-     *
-     * @throws DALException
-     * @throws SQLException
+     * Genoptager opgave hvis brugeren har en der er uafsluttet
      */
     private void resumeStartedTask() throws DALException, SQLException {
 
@@ -299,14 +308,18 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * Visuel repræsentation af tiden der er gået for en opgave
+     * @return tiden der er gået som tekststreng
+     */
     private String getTimerElapsedTimeAsString() {
         return String.format("%02d:%02d:%02d", timerElapsedtime / 3600, (timerElapsedtime % 3600) / 60, timerElapsedtime % 60);
     }
 
     /**
-     *
-     * @throws DALException
-     * @throws SQLException
+     * Henter og viser en liste af brugerens opgaver grupperet efter dato,
+     * med samlet tidsforbrug for dage og opgaver. hver parent opgave har de
+     * opgaver den består af grupperet under sig (stacked).
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
@@ -316,20 +329,19 @@ public class TaskController implements Initializable {
         // if user has any tasks
         if(!tasks.isEmpty()) {
 
-            // build task view and show
+            // build task-view and show
             Pane taskPane = getTaskView();
             taskScrollPane.setContent(taskPane);
         } else {
-            // build no tasks yet view and show
+            // build no-tasks-yet-view and show
             Pane taskPane = getNoTasksYetView();
             taskScrollPane.setContent(taskPane);
         }
-       
     }
 
     /**
-     *
-     * @return
+     * Bygger den visuelle del til visning af brugerens opgaver
+     * @return Pane indeholdende stackede opgaver
      */
     public Pane getTaskView() {
         // pane to wrap the final result in
@@ -361,6 +373,11 @@ public class TaskController implements Initializable {
         return taskPane;
     }
 
+    /**
+     * Bygger den visuelle del for dato (overskrift)
+     * @param taskGroup er opgave objektet der bruges
+     * @return javafx node til brug i gui
+     */
     private HBox buildTaskGroup(TaskGroup taskGroup) {
 
         // hbox
@@ -392,6 +409,11 @@ public class TaskController implements Initializable {
         return groupNode;
     }
 
+    /**
+     * Bygger den visuelle del for opgaver
+     * @param taskBase er parent eller child opgaven
+     * @return javafx node til brug i gui
+     */
     private TitledPane buildTask(TaskBase taskBase) {
 
         // titledpane
@@ -443,8 +465,10 @@ public class TaskController implements Initializable {
 
         if (taskBase.isBillable()) {
             billable.getStyleClass().add("true");
+            billable.setTooltip(new Tooltip("Faktureres"));
         } else {
             billable.getStyleClass().add("false");
+            billable.setTooltip(new Tooltip("Faktureres ikke"));
         }
         hbox.getChildren().add(billable);
 
@@ -468,6 +492,7 @@ public class TaskController implements Initializable {
 
         // edit
         Button edit = new Button();
+        edit.setTooltip(new Tooltip("Rediger"));
 
         if (taskBase instanceof TaskParent && ((TaskParent) taskBase).getChildren().size() > 1) {
             edit.getStyleClass().add("editDisabled");
@@ -491,6 +516,7 @@ public class TaskController implements Initializable {
         // continue timer button
         Button continueTimer = new Button();
         continueTimer.getStyleClass().add("continueTimer");
+        continueTimer.setTooltip(new Tooltip("Fortsæt opgave"));
         continueTimer.setOnAction(e -> {
 
             // stop any tasks already started 
@@ -539,7 +565,11 @@ public class TaskController implements Initializable {
 
         return parentNode;
     }
-    
+
+    /**
+     * Visuel del der hjælper brugeren med at oprette første opgave
+     * @return javafx pane med billede
+     */
     public Pane getNoTasksYetView() {
 
         Pane taskPane = new Pane();
@@ -551,13 +581,17 @@ public class TaskController implements Initializable {
         return taskPane;
     }
 
+    /** 
+     * Afbryd redigering af opgave
+     * @param event
+     */
     @FXML
     private void handleCancel(ActionEvent event) {
         drawerClose();
     }
 
     /**
-     * henter den valgte task og indsætter værdierne i edit view.
+     * Viser redigering af den valgte opgave
      *
      * @param task_id
      */
@@ -584,9 +618,7 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * opdatere vores task der skal redigeres med de relevante data og sender
-     * den afsted for at blive opdateret i db
-     *
+     * Opdaterer ændringer i redigeret opgave i databasen, loggen og gui
      * @param event
      */
     @FXML
@@ -625,11 +657,17 @@ public class TaskController implements Initializable {
         }
     }
 
+    /**
+     * Slider visning af rediger opgave frem
+     */
     public void drawerOpen() {
         drawerEditTask.toFront();
         drawerEditTask.open();
     }
 
+    /**
+     * Slider visning af rediger opgave tilbage
+     */
     public void drawerClose() {
         drawerEditTask.close();
         drawerEditTask.toBack();
