@@ -34,13 +34,4 @@ public class App extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws DALException, SQLException {
-        Thread t1 = new Thread(new TaskModel());
-        t1.start();
-        launch(args);
-    }
-
 }
