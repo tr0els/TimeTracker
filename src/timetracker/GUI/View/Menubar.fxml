@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDrawer?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,15 +15,15 @@
          <children>
                 <AnchorPane fx:id="menupane" prefHeight="500.0" prefWidth="164.0" stylesheets="@/timetracker/GUI/Css/StyleforMenu.css">
                     <children>
-                        <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="138.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Mine Projekter " />
-                        <JFXButton fx:id="opgaverbtb" layoutX="-3.0" layoutY="181.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Mine Opgaver" />
-                        <JFXButton fx:id="minTidbtb" layoutX="-3.0" layoutY="224.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
+                        <JFXButton fx:id="projekterbtb" layoutX="-3.0" layoutY="124.0" onAction="#loadOpgaverView" prefHeight="35.0" prefWidth="150.0" text="Opgaver" />
+                        <JFXButton fx:id="opgaverbtb" layoutX="-3.0" layoutY="167.0" onAction="#loadProjekterView" prefHeight="35.0" prefWidth="150.0" text="Projekter" />
+                        <JFXButton fx:id="minTidbtb" layoutX="-3.0" layoutY="210.0" onAction="#loadMinTidView" prefHeight="35.0" prefWidth="150.0" text="Min Tid" />
                         <JFXButton id="logout" fx:id="logudbtb" layoutX="41.0" layoutY="449.0" onAction="#handelLogout" prefHeight="35.0" prefWidth="150.0" text="Log ud" />
-                        <JFXButton fx:id="overblikbtb" layoutX="-3.0" layoutY="267.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
-                        <JFXButton fx:id="projektbtb" layoutX="-3.0" layoutY="310.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
-                        <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="396.0" onAction="#loadklientmanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
-                        <JFXButton fx:id="brugermanagerbtb" layoutX="-3.0" layoutY="353.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
-                        <Label layoutX="22.0" layoutY="91.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
+                        <JFXButton fx:id="overblikbtb" layoutX="-3.0" layoutY="253.0" onAction="#loadoverblik" prefHeight="35.0" prefWidth="150.0" text="Overblik" />
+                        <JFXButton fx:id="projektbtb" layoutX="-3.0" layoutY="296.0" onAction="#loadprojektview" prefHeight="43.0" prefWidth="186.0" text="Projekt Manager" />
+                        <JFXButton fx:id="klientmanagerbtb" layoutX="-3.0" layoutY="382.0" onAction="#loadklientmanager" prefHeight="35.0" prefWidth="150.0" text="Klient Manager" />
+                        <JFXButton fx:id="brugermanagerbtb" layoutX="-3.0" layoutY="339.0" onAction="#loadbrugermanager" prefHeight="35.0" prefWidth="150.0" text="Bruger Manager" />
+                        <Label layoutX="22.0" layoutY="77.0" prefHeight="29.0" prefWidth="109.0" text="Menu">
                             <graphic>
                                 <ImageView fitHeight="29.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -31,8 +32,12 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                  <Label layoutX="18.0" layoutY="14.0" styleClass="userlabel" text="Logget ind som:" />
-                  <Label fx:id="loggedInUser" alignment="CENTER" layoutY="39.0" prefHeight="25.0" prefWidth="157.0" styleClass="userlabel" text="User" textAlignment="CENTER" />
+                  <Label layoutX="36.0" layoutY="14.0" text="Logget ind som:">
+                     <styleClass>
+                        <String fx:value="userlabel" />
+                        <String fx:value="loggedInAs" />
+                     </styleClass></Label>
+                  <Label fx:id="loggedInUser" alignment="CENTER" layoutY="33.0" prefHeight="25.0" prefWidth="157.0" styleClass="userlabel" text="User" textAlignment="CENTER" />
                     </children>
                 </AnchorPane>
          </children>

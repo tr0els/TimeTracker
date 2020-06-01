@@ -6,26 +6,19 @@
 *{
     -fx-grumsen : #435a9a; 
     -fx-grumsen-lysere: #768bc6;
-
-
 }
 
-
 .root {
-
 -fx-background-color: white; 
-
 }
 
 .glyph-icon{
     -fx-fill: -fx-grumsen;
-
 }
 
 .button{
     -fx-text-fill: -fx-grumsen;
     -fx-font-size: 16;
-
     -fx-font-weight: bold;
     -fx-background-color: white;
     -fx-pref-height: 35px;
@@ -68,9 +61,9 @@
 
 #logout{
     -fx-border-width: 3px;
-    -fx-border-radius: 10px, 50px; 
+    -fx-border-radius: 10px, 10px; 
 
-    -fx-background-radius: 10px 50px; 
+    -fx-background-radius: 10px 10px; 
     -fx-background-color: -fx-grumsen;
     -fx-pref-height: 25px;
     -fx-pref-width: 65px;
@@ -82,7 +75,7 @@
 }
 
 #logout:hover{
-    -fx-border-radius: 10px 50px; 
+    -fx-border-radius: 10px 10px; 
     -fx-border-color: -fx-grumsen;
     -fx-background-color: transparent;
     -fx-text-fill: -fx-grumsen;
@@ -90,15 +83,13 @@
 
 }
 #logout:pressed{
-
     -fx-background-color: -fx-grumsen-lysere;
 }
 
-
-
-
 .userlabel{
-    
-    
-    -fx-font-weight:normal;
+    -fx-font-weight: normal;
+}
+
+.loggedInAs{
+    -fx-font-size: 12px;
 }

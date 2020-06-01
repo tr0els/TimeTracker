@@ -107,8 +107,8 @@
     -fx-padding: 5px 10px 5px 10px;
     -fx-alignment: center;
     -fx-background-color: #afbbdd;
-    -fx-background-radius: 0px;
-    -fx-border-radius: 0px;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-border-radius: 4px 4px 0 0;
     -fx-text-fill: #333;    
 }
 
@@ -185,9 +185,11 @@
 
 .startButton {
     -fx-cursor: hand;
-    -fx-background-color: cornflowerblue;
+    -fx-background-color: #4fae43;
     -fx-text-fill: white;
     -fx-alignment: center;
+    -fx-background-radius: 4px 4px 4px 4px;
+    -fx-border-radius: 4px 4px 4px 4px;
 }
 
 .stopButton {
@@ -195,4 +197,9 @@
     -fx-background-color: #cc0000;
     -fx-text-fill: white;
     -fx-alignment: center;
+}
+
+.timerPane {
+    -fx-background-color: #f5f7f7;
+    -fx-background-radius: 4px;
 }

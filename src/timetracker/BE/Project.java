@@ -198,7 +198,7 @@ public class Project extends RecursiveTreeObject<Project>
     @Override
     public String toString()
     {
-        return projectName;
+        return projectName + " (" + clientName + ")";
     }
 
 }

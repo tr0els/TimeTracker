@@ -102,9 +102,9 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     }
     
     @Override
-    public void updateTask(TaskChild taskChild) throws DALException
+    public void editTask(TaskChild taskChild) throws DALException
     {
-        taskdao.updateTask(taskChild);
+        taskdao.editTask(taskChild);
     }
 
     @Override
@@ -117,6 +117,12 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     public void stopTask(int person_id) throws DALException
     {
         taskdao.stopTask(person_id);
+    }
+    
+    @Override
+    public TaskChild getStartedTask(int personId) throws DALException
+    {
+        return taskdao.getStartedTask(personId);
     }
 
     @Override

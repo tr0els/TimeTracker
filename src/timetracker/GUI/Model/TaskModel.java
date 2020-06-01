@@ -92,7 +92,18 @@ public class TaskModel implements Runnable
     public void stopTask(int person_id) throws DALException
     {
         bll.stopTask(person_id);
+    }
 
+    /**
+     * Henter eventuelt uafsluttet tasks der skal genoptages
+     * 
+     * @param personId id of logged in person
+     * @return TaskChild object
+     * @throws DALException 
+     */
+    public TaskChild getStartedTask(int personId) throws DALException
+    {
+        return bll.getStartedTask(personId);
     }
     
     /**
@@ -107,15 +118,14 @@ public class TaskModel implements Runnable
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
         return bll.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-      
+     
     /**
-     * Opdater ændringer på en task i databasen
-     * @param taskChild er den task der skal opdateres
+     * Opdaterer en redigeret task i databasen
+     * @param taskChild er det task objekt der skal opdateres
      */
-    public void updateTask(TaskChild taskChild) throws DALException {
-        bll.updateTask(taskChild);
+    public void editTask(TaskChild taskChild) throws DALException {
+        bll.editTask(taskChild);
     }
-    
     
     /**
      * Bygger observable liste af task udfra et project_id som kan bruges i

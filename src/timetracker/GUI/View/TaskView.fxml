@@ -10,27 +10,25 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" stylesheets="@/timetracker/GUI/Css/StyleForTaskView.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="timetracker.GUI.Controller.TaskController">
     <children>
       <JFXDrawer fx:id="drawerEditTask" defaultDrawerSize="150.0" direction="TOP" prefHeight="150.0" prefWidth="600.0" />
-        <JFXCheckBox fx:id="checkBillable" checkedColor="#1c42dd" layoutX="355.0" layoutY="37.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="86.0" selected="true" text="Faktureres" />
-      <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="13.0" layoutY="33.0" prefHeight="25.0" prefWidth="194.0" promptText="Hvad arbejder du på?" />
-        <JFXComboBox fx:id="taskProject" layoutX="216.0" layoutY="30.0" prefHeight="28.0" prefWidth="123.0" promptText="Vælg Projekt" />
-        <JFXButton fx:id="timerButton" contentDisplay="CENTER" layoutX="532.0" layoutY="33.0" onAction="#stopWatch" prefHeight="30.0" prefWidth="55.0" styleClass="startButton" text="Start" textAlignment="CENTER" />
-      <Label fx:id="timerHours" layoutX="445.0" layoutY="32.0" text="00:">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label fx:id="timerMinutes" layoutX="472.0" layoutY="32.0" text="00:">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label fx:id="timerSeconds" layoutX="499.0" layoutY="32.0" text="00">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
+      <Pane layoutX="13.0" layoutY="11.0" prefHeight="55.0" prefWidth="575.0" styleClass="timerPane">
+         <children>
+              <JFXCheckBox fx:id="checkBillable" checkedColor="#4b7cad" layoutX="336.0" layoutY="20.0" onMouseEntered="#HandleTooltipForBillable" prefHeight="18.0" prefWidth="86.0" selected="true" text="Faktureres" />
+            <JFXTextField fx:id="textTaskname" labelFloat="true" layoutX="6.0" layoutY="13.0" prefHeight="25.0" prefWidth="181.0" promptText="Hvad arbejder du på?" />
+              <JFXComboBox fx:id="taskProject" layoutX="194.0" layoutY="10.0" prefHeight="28.0" prefWidth="132.0" promptText="Vælg Projekt" />
+              <JFXButton fx:id="timerButton" contentDisplay="CENTER" layoutX="509.0" layoutY="13.0" onAction="#handleStartTimerButton" prefHeight="30.0" prefWidth="55.0" styleClass="startButton" text="Start" textAlignment="CENTER" />
+            <Label fx:id="timerText" layoutX="425.0" layoutY="14.0" prefHeight="30.0" prefWidth="80.0" text="00:00:00">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
 
       <ScrollPane fx:id="taskScrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutX="13.0" layoutY="80.0" prefHeight="408.0" prefWidth="575.0" styleClass="tasks" />
       <AnchorPane fx:id="paneEditTask" layoutX="6.0" layoutY="-150.0" prefHeight="150.0" prefWidth="600.0">

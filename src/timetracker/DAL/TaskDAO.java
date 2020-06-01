@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 import timetracker.BE.Project;
@@ -76,7 +77,7 @@ public class TaskDAO
      */
     public void stopTask(int person_id) throws DALException
     {
-        try ( Connection con = dbCon.getConnection())
+        try (Connection con = dbCon.getConnection())
         {
             String sql = "UPDATE Tasklog SET task_end = CURRENT_TIMESTAMP\n"
                     + "WHERE person_id = ? AND task_end IS NULL";
@@ -365,10 +366,6 @@ public class TaskDAO
     /**
      * Gets all tasks for a person grouped by date, including time spent on
      * tasks per date, parent task, and child task.
-     *
-     * @return todo
-     * @throws DALException
-     * @throws SQLException
      */
     private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
     {
@@ -379,7 +376,7 @@ public class TaskDAO
                     = "-- LOCAL VARIABLES\n"
                     //+ "DECLARE @person_id int = 0\n"
                     + "\n"
-                    + "SELECT *, MIN(task_start) OVER (PARTITION BY task_date, task_name, project_id, billable ORDER BY task_start) AS group_start FROM \n"
+                    + "SELECT *, MIN(task_start) OVER (PARTITION BY task_date, task_name, project_id, billable) AS group_start FROM \n"
                     + "(\n"
                     + "SELECT \n"
                     + "	'TaskParent' AS type,\n"
@@ -465,12 +462,12 @@ public class TaskDAO
                     + "ORDER BY \n"
                     + "	task_date DESC,\n"
                     + "	is_group_total DESC,\n"
-                    + "	group_start ASC,\n"
+                    + "	group_start DESC,\n"
                     + "	task_name DESC,\n"
                     + "	project_id DESC,\n"
                     + "	billable ASC,\n"
-                    + "	task_start ASC,\n"
-                    + "	type DESC";
+                    + "	type DESC,\n"
+                    + "	task_start DESC";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, person_id);
@@ -497,7 +494,7 @@ public class TaskDAO
                 if (rs.getString("type").equals("TaskGroup"))
                 {
 
-                    tg = new TaskGroup(); // <-- den fucker tror jeg
+                    tg = new TaskGroup();
 
                     tg.setName(rs.getString("task_date"));
                     tg.setTime(rs.getString("total_time"));
@@ -521,8 +518,7 @@ public class TaskDAO
                     if (tg != null)
                     {
                         tg.addParent(tp);
-                    } else
-                    {
+                    } else {
                         allTaskParents.add(tp);
                     }
                 }
@@ -539,11 +535,12 @@ public class TaskDAO
                     tc.setStart(rs.getTimestamp("task_start").toLocalDateTime());
                     tc.setEnd(rs.getTimestamp("task_end").toLocalDateTime());
                     tc.setTime(rs.getString("total_time"));
-                    // setparent?
 
                     // Add child to current parent or list of all children
                     if (tp != null)
                     {
+                        // add reference of parent to child
+                        tc.setParent(tp);
                         tp.addChild(tc);
                     } else
                     {
@@ -576,11 +573,11 @@ public class TaskDAO
     
     /**
      * Opdaterer ændringer i en task
-     *
-     * @param task
-     * @throws DALException
+     * 
+     * @param taskChild er task objektet der skal opdateres
+     * @throws DALException 
      */
-    public void updateTask(TaskChild taskChild) throws DALException
+    public void editTask(TaskChild taskChild) throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -599,6 +596,61 @@ public class TaskDAO
         } catch (SQLException e)
         {
             throw new DALException("Kunne ikke opdatere tasken");
+        }
+    }
+    
+    /**
+     * Henter eventuelt uafsluttet tasks der skal genoptages
+     * 
+     * @param personId id of logged in person
+     * @return TaskChild object
+     * @throws DALException 
+     */
+    public TaskChild getStartedTask(int personId) throws DALException {
+        try (Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT task_id,\n"
+                    + "	task_name, \n"
+                    + "	billable, \n"
+                    + "	project_id, \n"
+                    + "	person_id, \n"
+                    + "	task_start, \n"
+                    + "	task_end, \n"
+                    + " RIGHT('0' + CONVERT(VARCHAR(5),DATEDIFF(SECOND,task_start,task_end)/60/60), 2) + ':' +\n"
+                    + " RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)/60%60), 2) + ':' +\n"
+                    + "	RIGHT('0' + CONVERT(VARCHAR(2),DATEDIFF(SECOND,task_start,task_end)%60),2)\n"
+                    + "	AS total_time\n"
+                    + "FROM \n"
+                    + "	Tasklog\n"
+                    + "WHERE \n"
+                    + "	task_end IS NULL AND \n"
+                    + "	person_id = ?";
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, personId);
+            
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                TaskChild tc = new TaskChild();
+
+                tc.setId(rs.getInt("task_id"));
+                tc.setName(rs.getString("task_name"));
+                tc.setBillable(rs.getBoolean("billable"));
+                tc.setProjectId(rs.getInt("project_id"));
+                tc.setPersonId(rs.getInt("person_id"));
+                tc.setStart(rs.getTimestamp("task_start").toLocalDateTime());
+                tc.setEnd(null);
+                tc.setTime(rs.getString("total_time"));
+                
+                return tc;
+            }
+            
+            // no started task was found
+            return null;
+        } catch (SQLException e)
+        {
+            throw new DALException("Could not connect to database");
         }
     }
 }

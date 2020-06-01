@@ -79,9 +79,9 @@ public class BLLManager
         return iGetData.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
     
-    public void updateTask(TaskChild taskChild) throws DALException
+    public void editTask(TaskChild taskChild) throws DALException
     {
-        iGetData.updateTask(taskChild);
+        iGetData.editTask(taskChild);
     }
     
     /**
@@ -106,7 +106,18 @@ public class BLLManager
     public void stopTask(int person_id) throws DALException
     {
         iGetData.stopTask(person_id);
-
+    }
+    
+    /**
+     * Henter eventuelt uafsluttet tasks der skal genoptages
+     * 
+     * @param personId id of logged in person
+     * @return TaskChild object
+     * @throws DALException 
+     */
+    public TaskChild getStartedTask(int person_id) throws DALException
+    {
+        return iGetData.getStartedTask(person_id);
     }
 
     /**
