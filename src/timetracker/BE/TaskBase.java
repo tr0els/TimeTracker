@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
  */
 abstract public class TaskBase
 {
-
-    private int id;
     private String name;
     private boolean billable;
     private int projectId;
