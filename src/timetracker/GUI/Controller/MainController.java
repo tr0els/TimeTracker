@@ -172,16 +172,4 @@ public class MainController implements Initializable {
         emailTextField.setStyle("-fx-text-inner-color: black");
     }
 
-    @FXML
-    private void FillAdminLogininfo(ActionEvent event) {
-        emailTextField.setText("Admin@email.com");
-        passwordTextField.setText("1234");
-    }
-
-    @FXML
-    private void fillBrugerLoginInfo(ActionEvent event) {
-        emailTextField.setText("Bruger@email.com");
-        passwordTextField.setText("1234");
-    }
-
 }
