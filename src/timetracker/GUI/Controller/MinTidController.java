@@ -35,7 +35,14 @@ import timetracker.GUI.Model.ProjectModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class MinTidController implements Initializable {
+public class MinTidController implements Initializable
+{
+
+    private User loggedInUser;
+    private final ProjectModel pModel;
+    private final UserModel bModel;
+    private final ClientModel cModel;
+    private ObservableList<Project> listeAfProjekter;
 
     @FXML
     private JFXDrawer filterskuffe;
@@ -71,47 +78,52 @@ public class MinTidController implements Initializable {
     private JFXButton clearFilterbtb;
     @FXML
     private Label lblforPiechart;
-    
-    
-    private User loggedInUser;
-    private final ProjectModel pModel;
-    private final UserModel bModel;
-    private final ClientModel cModel;
-    private ObservableList<Project> listeAfProjekter;
-    
-    
-    public MinTidController() throws DALException, SQLException{
-      pModel = ProjectModel.getInstance();
-      bModel = UserModel.getInstance();
-      cModel = ClientModel.getInstance();
-    
+
+    /**
+     * Constructor for MinTidController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
+    public MinTidController() throws DALException, SQLException
+    {
+        pModel = ProjectModel.getInstance();
+        bModel = UserModel.getInstance();
+        cModel = ClientModel.getInstance();
     }
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         filterskuffe.setSidePane(searchAnchorpane);
-            filterskuffe.toFront();
-            filterskuffe.close();
-    
+        filterskuffe.toFront();
+        filterskuffe.close();
+
     }
 
     @FXML
-    private void handleFilteropen(ActionEvent event) {
-        if (filterskuffe.isOpened()) {
+    private void handleFilteropen(ActionEvent event)
+    {
+        if (filterskuffe.isOpened())
+        {
             filterskuffe.close();
-        } else {
+        } else
+        {
             filterskuffe.open();
         }
     }
 
     @FXML
-    private void handleSeekPressed(ActionEvent event) {
+    private void handleSeekPressed(ActionEvent event)
+    {
     }
 
     @FXML
-    private void handleClearFilter(ActionEvent event) {
+    private void handleClearFilter(ActionEvent event)
+    {
     }
 
 }

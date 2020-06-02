@@ -24,7 +24,8 @@ import timetracker.DAL.DALException;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskModel {
+public class TaskModel
+{
 
     /**
      * Singleton opsætning af vores model. singleton gør at vores model ikke vil
@@ -34,12 +35,25 @@ public class TaskModel {
     private static TaskModel model = null;
     private ObservableList<TaskForDataView> taskForDataview;
 
+    /**
+     * Constructor for TaskModel
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public TaskModel() throws DALException, SQLException
     {
         bll = BLLManager.getInstance();
         taskForDataview = FXCollections.observableArrayList();
     }
 
+    /**
+     * Returnerer den allerede startet instans af klassen, eller starter en ny.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
     public static TaskModel getInstance() throws DALException, SQLException
     {
         if (model == null)

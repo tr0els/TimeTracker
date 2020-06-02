@@ -249,7 +249,6 @@ public class BLLManager
         return iGetData.getProjectWithExtraData();
     }
 
-    
     public List<Project> getProjectsToFilter(User comboUser, Client comboClient, String fradato, String tildato, String monthStart, String monthEnd) throws DALException
     {
         return iGetData.getProjectsToFilter(comboUser, comboClient, fradato, tildato, monthStart, monthEnd);
@@ -404,9 +403,16 @@ public class BLLManager
         return iGetData.getListOfTaskForDataView(project, user, fradato, tildato, monthStart, monthEnd);
     }
 
-    public void changelogTask(int taskId, int person_id) throws DALException
+    /**
+     * Opretter en changelog på det medsendte taskId og personId
+     *
+     * @param taskId
+     * @param person_id
+     * @throws DALException
+     */
+    public void changelogTask(int taskId, int personId) throws DALException
     {
-        iGetData.changelogTask(taskId, person_id);
+        iGetData.changelogTask(taskId, personId);
     }
 
 }

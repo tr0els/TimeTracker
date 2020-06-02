@@ -7,8 +7,6 @@ package timetracker.GUI.Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +27,7 @@ public class FxmlLoader
      */
     public static void loadWindow(URL loc, AnchorPane pane)
     {
-       
+
         try
         {
             FXMLLoader loader = new FXMLLoader(loc);
@@ -38,8 +36,8 @@ public class FxmlLoader
             pane.getChildren().add(parent);
         } catch (IOException ex)
         {
-            
+
         }
-   
+
     }
 }

@@ -64,7 +64,7 @@ public class TaskController implements Initializable {
     private ProjectModel pModel;
     private UserModel uModel;
     private ChangelogModel cModel;
-    
+
     private int loggedInPersonId;
     private ObservableList<Project> projects = FXCollections.observableArrayList();
     private List<TaskGroup> tasks;
@@ -111,6 +111,12 @@ public class TaskController implements Initializable {
     @FXML
     private Label lblWarning;
 
+    /**
+     * Constructor for TaskController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
     public TaskController() throws DALException, SQLException {
         tModel = TaskModel.getInstance();
         pModel = ProjectModel.getInstance();
@@ -228,7 +234,8 @@ public class TaskController implements Initializable {
         timerButton.setText("Stop");
         timerButton.getStyleClass().clear();
         timerButton.getStyleClass().add("stopButton");
-        timerButton.setOnAction(e -> {
+        timerButton.setOnAction(e
+                -> {
             try {
                 stopTimerButton();
             } catch (DALException | SQLException ex) {
@@ -265,7 +272,6 @@ public class TaskController implements Initializable {
      */
     private void stopTimer() throws DALException, SQLException {
 
-        // stop timer
         timerStarted = false;
         timerElapsedtime = 0;
         timerText.setText(getTimerElapsedTimeAsString());
@@ -310,6 +316,7 @@ public class TaskController implements Initializable {
 
     /**
      * Visuel repræsentation af tiden der er gået for en opgave
+     *
      * @return tiden der er gået som tekststreng
      */
     private String getTimerElapsedTimeAsString() {
@@ -317,9 +324,9 @@ public class TaskController implements Initializable {
     }
 
     /**
-     * Henter og viser en liste af brugerens opgaver grupperet efter dato,
-     * med samlet tidsforbrug for dage og opgaver. hver parent opgave har de
-     * opgaver den består af grupperet under sig (stacked).
+     * Henter og viser en liste af brugerens opgaver grupperet efter dato, med
+     * samlet tidsforbrug for dage og opgaver. hver parent opgave har de opgaver
+     * den består af grupperet under sig (stacked).
      */
     public void setTasksGroupedByDate() throws DALException, SQLException {
 
@@ -327,7 +334,7 @@ public class TaskController implements Initializable {
         tasks = tModel.getTasksGroupedByDate(loggedInPersonId, "DATE", true, true);
 
         // if user has any tasks
-        if(!tasks.isEmpty()) {
+        if (!tasks.isEmpty()) {
 
             // build task-view and show
             Pane taskPane = getTaskView();
@@ -341,6 +348,7 @@ public class TaskController implements Initializable {
 
     /**
      * Bygger den visuelle del til visning af brugerens opgaver
+     *
      * @return Pane indeholdende stackede opgaver
      */
     public Pane getTaskView() {
@@ -375,6 +383,7 @@ public class TaskController implements Initializable {
 
     /**
      * Bygger den visuelle del for dato (overskrift)
+     *
      * @param taskGroup er opgave objektet der bruges
      * @return javafx node til brug i gui
      */
@@ -411,6 +420,7 @@ public class TaskController implements Initializable {
 
     /**
      * Bygger den visuelle del for opgaver
+     *
      * @param taskBase er parent eller child opgaven
      * @return javafx node til brug i gui
      */
@@ -500,9 +510,11 @@ public class TaskController implements Initializable {
         } else {
             edit.getStyleClass().add("edit");
             edit.setOnAction(e -> {
+
                 // if task parent with 1 child use that child
                 if (taskBase instanceof TaskParent && ((TaskParent) taskBase).getChildren().size() == 1) {
                     currentlySelectedTask = ((TaskParent) taskBase).getChildren().get(0);
+
                     // task must be child
                 } else {
                     currentlySelectedTask = (TaskChild) taskBase;
@@ -516,28 +528,28 @@ public class TaskController implements Initializable {
         // continue timer button
         Button continueTimer = new Button();
         continueTimer.getStyleClass().add("continueTimer");
+
         continueTimer.setTooltip(new Tooltip("Fortsæt opgave"));
         continueTimer.setOnAction(e -> {
-
             // stop any tasks already started 
-            if(timerStarted) {
+            if (timerStarted) {
                 try {
                     stopTimerButton();
                 } catch (DALException | SQLException ex) {
                     Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 currentTimerThread.interrupt();
-            }    
-                
+            }
+
             // if task parent with 1 child use that child
             if (taskBase instanceof TaskParent && ((TaskParent) taskBase).getChildren().size() >= 1) {
                 try {
                     setExistingTask(((TaskParent) taskBase).getChildren().get(0));
                     startTimerButton();
-                    // task must be child
                 } catch (DALException | SQLException ex) {
                     Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                // task must be child
             } else {
                 try {
                     setExistingTask(((TaskChild) taskBase));
@@ -568,6 +580,7 @@ public class TaskController implements Initializable {
 
     /**
      * Visuel del der hjælper brugeren med at oprette første opgave
+     *
      * @return javafx pane med billede
      */
     public Pane getNoTasksYetView() {
@@ -577,12 +590,13 @@ public class TaskController implements Initializable {
         Image imgStartFirstTask = new Image(getClass().getResourceAsStream("/timetracker/GUI/Icons/start-first-task.png"));
         ImageView startFirstTask = new ImageView(imgStartFirstTask);
         taskPane.getChildren().add(startFirstTask);
-        
+
         return taskPane;
     }
 
-    /** 
+    /**
      * Afbryd redigering af opgave
+     *
      * @param event
      */
     @FXML
@@ -619,6 +633,7 @@ public class TaskController implements Initializable {
 
     /**
      * Opdaterer ændringer i redigeret opgave i databasen, loggen og gui
+     *
      * @param event
      */
     @FXML
@@ -630,7 +645,7 @@ public class TaskController implements Initializable {
 
         // validate edited time
         if (editTaskStart.compareTo(editTaskEnd) == 1) {
-            lblWarning.setText("til-tid kan ikke være før fra-tid!");
+            lblWarning.setText("fra tidspunkt er større end til!");
         } else {
 
             // update task with edited values

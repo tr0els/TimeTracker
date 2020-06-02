@@ -19,9 +19,9 @@
 }
 
 .chart .chart-title{
-    -fx-text-fill: -fx-grumsen-lysere;
-    -fx-font-size: 16;
-    -fx-alignment: center;
+    -fx-text-fill: black;
+    -fx-font-size: 14;
+    -fx-alignment: TOP_CENTER;
 }
 
 .data0.chart-pie{ -fx-pie-color: -fx-grumsen; }

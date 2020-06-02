@@ -18,7 +18,7 @@
         <columns>
           <TableColumn fx:id="colprojekts" editable="false" prefWidth="184.0" text="Projekt " />
           <TableColumn fx:id="coltotaltid" editable="false" prefWidth="123.0" text="Total tid" />
-            <TableColumn fx:id="colBillable" editable="false" prefWidth="152.0" text="Billable time" />
+            <TableColumn fx:id="colBillable" editable="false" prefWidth="152.0" text="Ufakturerbar tid" />
             <TableColumn fx:id="colKlient" editable="false" prefWidth="107.0" text="Klient" />
         </columns>
       </TableView>

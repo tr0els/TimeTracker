@@ -37,15 +37,11 @@ public class UserModel
     private static InputValidator validator;
     private User user;
 
-    public static UserModel getInstance() throws DALException, SQLException
-    {
-        if (model == null)
-        {
-            model = new UserModel();
-        }
-        return model;
-    }
-
+    /**
+     * Constructor for UserModel
+     *
+     * @throws DALException
+     */
     public UserModel() throws DALException
     {
         bll = BLLManager.getInstance();
@@ -56,7 +52,22 @@ public class UserModel
         allProfessions.addAll(bll.getProfessions());
         listOfMonths = FXCollections.observableArrayList();
         listOfMonthswithYears = FXCollections.observableArrayList();
+    }
 
+    /**
+     * Returnerer den allerede startet instans af klassen, eller starter en ny.
+     *
+     * @return
+     * @throws DALException
+     * @throws SQLException
+     */
+    public static UserModel getInstance() throws DALException, SQLException
+    {
+        if (model == null)
+        {
+            model = new UserModel();
+        }
+        return model;
     }
 
     /**
@@ -74,6 +85,11 @@ public class UserModel
         return user;
     }
 
+    /**
+     * Returnerer den User der er logget ind i programmet.
+     *
+     * @return
+     */
     public User getUser()
     {
         return user;
