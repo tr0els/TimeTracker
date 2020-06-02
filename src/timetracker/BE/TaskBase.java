@@ -52,26 +52,6 @@ abstract public class TaskBase
     }
 
     /**
-     * Returnerer id
-     *
-     * @return
-     */
-    public int getId()
-    {
-        return id;
-    }
-
-    /**
-     * Sætter id
-     *
-     * @param id
-     */
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    /**
      * Returnerer name
      *
      * @return
