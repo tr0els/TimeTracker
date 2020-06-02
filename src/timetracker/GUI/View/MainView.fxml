@@ -14,10 +14,8 @@
                 <Image url="@../Icons/grumsen-development.png" />
             </image>
         </ImageView>
-        <JFXButton fx:id="adminbtb" layoutX="180.0" layoutY="382.0" onAction="#FillAdminLogininfo" styleClass="button-grey" text="Admin " />
-        <JFXButton fx:id="user" layoutX="287.0" layoutY="382.0" onAction="#fillBrugerLoginInfo" prefWidth="120.0" styleClass="button-grey" text="Bruger" />
         <JFXTextField fx:id="emailTextField" labelFloat="true" layoutX="180.0" layoutY="232.0" onMouseClicked="#handleEmailMousecClicked" prefHeight="32.0" prefWidth="399.0" promptText="Email" />
       <JFXPasswordField fx:id="passwordTextField" labelFloat="true" layoutX="180.0" layoutY="288.0" prefHeight="32.0" prefWidth="399.0" promptText="Password" />
-        <JFXButton fx:id="adminbtb1" layoutX="479.0" layoutY="382.0" onAction="#handelogin" text="Login" />
+        <JFXButton fx:id="adminbtb1" layoutX="327.0" layoutY="380.0" onAction="#handelogin" text="Login" />
     </children>
 </AnchorPane>
