@@ -13,10 +13,12 @@ import timetracker.BE.Task;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class Sorttaskbydatedesc implements Comparator<Task>{
-    
-    public int compare(Task a, Task b){
+public class Sorttaskbydatedesc implements Comparator<Task>
+{
+
+    public int compare(Task a, Task b)
+    {
         return b.getLastWorkedOn().compareTo(a.getLastWorkedOn());
     }
-    
+
 }

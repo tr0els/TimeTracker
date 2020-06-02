@@ -13,7 +13,8 @@ import java.util.List;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class TaskGroup extends TaskBase {
+public class TaskGroup extends TaskBase
+{
 
     private String name;
     private String time;
@@ -22,61 +23,77 @@ public class TaskGroup extends TaskBase {
     /**
      * Constructor for TaskGroup
      */
-    public TaskGroup() {}
+    public TaskGroup()
+    {
+    }
 
     /**
      * Returnerer name
-     * @return 
+     *
+     * @return
      */
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
     /**
      * Sætter name
-     * @param name 
+     *
+     * @param name
      */
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     /**
      * Returnerer time
-     * @return 
+     *
+     * @return
      */
-    public String getTime() {
+    public String getTime()
+    {
         return time;
     }
 
     /**
      * Sætter time
-     * @param time 
+     *
+     * @param time
      */
-    public void setTime(String time) {
+    public void setTime(String time)
+    {
         this.time = time;
     }
 
     /**
      * Returnerer parents
-     * @return 
+     *
+     * @return
      */
-    public List<TaskParent> getParents() {
+    public List<TaskParent> getParents()
+    {
         return parents;
     }
 
     /**
      * Sætter parents
-     * @param parents 
+     *
+     * @param parents
      */
-    public void setParents(List<TaskParent> parents) {
+    public void setParents(List<TaskParent> parents)
+    {
         this.parents = parents;
     }
-    
+
     /**
      * Tilføjer parent
-     * @param parent 
+     *
+     * @param parent
      */
-    public void addParent(TaskParent parent) {
+    public void addParent(TaskParent parent)
+    {
         parents.add(parent);
     }
 }

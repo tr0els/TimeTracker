@@ -32,7 +32,8 @@ import timetracker.GUI.Model.UserModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class MainController implements Initializable {
+public class MainController implements Initializable
+{
 
     /**
      * Singleton opsætning af vores MainController. singleton gør at vores
@@ -40,6 +41,7 @@ public class MainController implements Initializable {
      */
     private static UserModel model;
     private static MainController main = null;
+
     @FXML
     private AnchorPane root;
     @FXML
@@ -53,19 +55,29 @@ public class MainController implements Initializable {
     @FXML
     private JFXPasswordField passwordTextField;
 
-    public MainController() throws DALException, SQLException {
+    /**
+     * Constructor for MainController
+     *
+     * @throws DALException
+     * @throws SQLException
+     */
+    public MainController() throws DALException, SQLException
+    {
         model = UserModel.getInstance();
     }
 
-    public static MainController getInstance() throws DALException, SQLException {
-        if (main == null) {
+    public static MainController getInstance() throws DALException, SQLException
+    {
+        if (main == null)
+        {
             main = new MainController();
         }
         return main;
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
     }
 
     /**
@@ -79,27 +91,34 @@ public class MainController implements Initializable {
      * @throws IOException
      */
     @FXML
-    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException, DALException {
+    private void handelogin(ActionEvent event) throws NoSuchAlgorithmException, IOException, DALException
+    {
         String email = emailTextField.getText();
         String password = passwordTextField.getText();
 
-        if (model.valEmail(email) == true) {
-            if (model.login(email, password) != null) {
+        if (model.valEmail(email) == true)
+        {
+            if (model.login(email, password) != null)
+            {
 
                 int role = model.login(email, password).getRoleId();
 
-                if (role == 1) {
+                if (role == 1)
+                {
                     handeladminlogin(event);
                 }
-                if (role == 2) {
+                if (role == 2)
+                {
                     handeluserlogin(event);
                 }
-            } else {
+            } else
+            {
                 emailTextField.setText("Invalid Email or Password");
                 emailTextField.setStyle("-fx-text-inner-color: red");
                 passwordTextField.clear();
             }
-        } else {
+        } else
+        {
             emailTextField.setText("Not a valid email");
             emailTextField.setStyle("-fx-text-inner-color: red");
             passwordTextField.clear();
@@ -109,10 +128,12 @@ public class MainController implements Initializable {
 
     /**
      * bliver kørt hvis brugerens login er en admin konto
+     *
      * @param event
      * @throws IOException Håndtere login af en admin
      */
-    private void handeladminlogin(ActionEvent event) throws IOException {
+    private void handeladminlogin(ActionEvent event) throws IOException
+    {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
@@ -134,11 +155,13 @@ public class MainController implements Initializable {
 
     /**
      * bliver kørt hvis brugeren er en normal bruger konto
+     *
      * @param event
      * @throws IOException Håndtere log in af en alm. user, og fjerne
      * adminknapperne.
      */
-    private void handeluserlogin(ActionEvent event) throws IOException {
+    private void handeluserlogin(ActionEvent event) throws IOException
+    {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/timetracker/GUI/View/Menubar.fxml"));
@@ -164,10 +187,12 @@ public class MainController implements Initializable {
 
     /**
      * markere alt i email feltet for bedre brugervenlighed
-     * @param event 
+     *
+     * @param event
      */
     @FXML
-    private void handleEmailMousecClicked(MouseEvent event) {
+    private void handleEmailMousecClicked(MouseEvent event)
+    {
         emailTextField.selectAll();
         emailTextField.setStyle("-fx-text-inner-color: black");
     }

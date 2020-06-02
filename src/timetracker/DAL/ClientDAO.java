@@ -141,8 +141,8 @@ public class ClientDAO
             return allClients;
         } catch (SQLException ex)
         {
-           throw new DALException("Kunne ikke hente Klienter");
+            throw new DALException("Kunne ikke hente Klienter");
         }
-        
+
     }
 }

@@ -60,7 +60,6 @@ public class Task
 
     }
 
-
     /**
      * Returnerer startTime
      *

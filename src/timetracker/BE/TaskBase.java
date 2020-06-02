@@ -55,7 +55,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer id
-     * @return 
+     *
+     * @return
      */
     public int getId()
     {
@@ -64,7 +65,8 @@ abstract public class TaskBase
 
     /**
      * Sætter id
-     * @param id 
+     *
+     * @param id
      */
     public void setId(int id)
     {
@@ -73,7 +75,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer name
-     * @return 
+     *
+     * @return
      */
     public String getName()
     {
@@ -82,7 +85,8 @@ abstract public class TaskBase
 
     /**
      * Sætter name
-     * @param name 
+     *
+     * @param name
      */
     public void setName(String name)
     {
@@ -91,7 +95,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer billable
-     * @return 
+     *
+     * @return
      */
     public boolean isBillable()
     {
@@ -100,7 +105,8 @@ abstract public class TaskBase
 
     /**
      * Sætter billable
-     * @param billable 
+     *
+     * @param billable
      */
     public void setBillable(boolean billable)
     {
@@ -109,7 +115,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer projectId
-     * @return 
+     *
+     * @return
      */
     public int getProjectId()
     {
@@ -118,7 +125,8 @@ abstract public class TaskBase
 
     /**
      * Sætter projectId
-     * @param projectId 
+     *
+     * @param projectId
      */
     public void setProjectId(int projectId)
     {
@@ -127,7 +135,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer personId
-     * @return 
+     *
+     * @return
      */
     public int getPersonId()
     {
@@ -136,7 +145,8 @@ abstract public class TaskBase
 
     /**
      * Sætter personId
-     * @param personId 
+     *
+     * @param personId
      */
     public void setPersonId(int personId)
     {
@@ -145,7 +155,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer start
-     * @return 
+     *
+     * @return
      */
     public LocalDateTime getStart()
     {
@@ -154,7 +165,8 @@ abstract public class TaskBase
 
     /**
      * Sætter start
-     * @param start 
+     *
+     * @param start
      */
     public void setStart(LocalDateTime start)
     {
@@ -163,7 +175,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer end
-     * @return 
+     *
+     * @return
      */
     public LocalDateTime getEnd()
     {
@@ -172,7 +185,8 @@ abstract public class TaskBase
 
     /**
      * Sætter end
-     * @param end 
+     *
+     * @param end
      */
     public void setEnd(LocalDateTime end)
     {
@@ -181,7 +195,8 @@ abstract public class TaskBase
 
     /**
      * Returnerer time
-     * @return 
+     *
+     * @return
      */
     public String getTime()
     {
@@ -190,8 +205,8 @@ abstract public class TaskBase
 
     /**
      * Sætter time
-     * 
-     * @param time 
+     *
+     * @param time
      */
     public void setTime(String time)
     {

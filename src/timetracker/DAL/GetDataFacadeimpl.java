@@ -45,9 +45,11 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     @Override
     public void createProject(int clientId, String projectName, int hourlyPay) throws DALException
     {
-        try {
+        try
+        {
             projectdao.createProject(clientId, projectName, hourlyPay);
-        } catch (DALException ex) {
+        } catch (DALException ex)
+        {
             Logger.getLogger(GetDataFacadeimpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -100,7 +102,7 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     {
         return taskdao.getTasksGroupedByDate(personId, groupBy, includeTaskParents, includeTaskChildren);
     }
-    
+
     @Override
     public void editTask(TaskChild taskChild) throws DALException
     {
@@ -118,7 +120,7 @@ public class GetDataFacadeimpl implements IgetDataFacadeInterface
     {
         taskdao.stopTask(person_id);
     }
-    
+
     @Override
     public TaskChild getStartedTask(int personId) throws DALException
     {

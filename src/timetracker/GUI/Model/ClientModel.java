@@ -29,7 +29,8 @@ public class ClientModel
 
     /**
      * Constructor for ClientModel
-     * @throws DALException 
+     *
+     * @throws DALException
      */
     private ClientModel() throws DALException
     {

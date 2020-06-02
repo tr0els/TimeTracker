@@ -31,7 +31,8 @@ import timetracker.GUI.Model.UserModel;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class MenubarController implements Initializable {
+public class MenubarController implements Initializable
+{
 
     @FXML
     private JFXButton opgaverbtb;
@@ -57,9 +58,11 @@ public class MenubarController implements Initializable {
     private JFXButton klientmanagerbtb;
     @FXML
     private Label loggedInUser;
-    
+
     private static UserModel model;
-        public MenubarController() throws DALException, SQLException {
+
+    public MenubarController() throws DALException, SQLException
+    {
         model = UserModel.getInstance();
     }
 
@@ -67,67 +70,69 @@ public class MenubarController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         loggedInUser.setText(model.getUser().getName() + " " + model.getUser().getSurname());
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/TaskView.fxml"), viewpane);
     }
 
     @FXML
-    private void loadOpgaverView(ActionEvent event) {
+    private void loadOpgaverView(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/TaskView.fxml"), viewpane);
-
     }
 
     @FXML
-    private void loadMinTidView(ActionEvent event) throws IOException, DALException, SQLException {
-     
+    private void loadMinTidView(ActionEvent event) throws IOException, DALException, SQLException
+    {
+
         FXMLLoader loader = new FXMLLoader();
-        
+
         loader.setLocation(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"));
         Parent parent = loader.load();
-      
-        
+
         OverviewForAdminsController controller = loader.getController();
-        
+
         controller.getComboMedarbejder().setVisible(false);
         controller.getCurrentUserForMinTidView(model.getUser());
-        
-  
+
         viewpane.getChildren().clear();
         viewpane.getChildren().add(parent);
-            
-    
     }
 
     @FXML
-    private void loadProjekterView(ActionEvent event) {
+    private void loadProjekterView(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektView.fxml"), viewpane);
     }
 
     @FXML
-    private void loadoverblik(ActionEvent event) {
+    private void loadoverblik(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/OverviewForAdmins.fxml"), viewpane);
-                       
     }
 
     @FXML
-    private void loadprojektview(ActionEvent event) {
-
+    private void loadprojektview(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/ProjektManagerAdmin.fxml"), viewpane);
     }
 
     @FXML
-    private void loadbrugermanager(ActionEvent event) {
+    private void loadbrugermanager(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/UserManagerAdmin.fxml"), viewpane);
     }
 
     @FXML
-    private void loadklientmanager(ActionEvent event) {
+    private void loadklientmanager(ActionEvent event)
+    {
         FxmlLoader.loadWindow(getClass().getResource("/timetracker/GUI/View/KlientManagerAdmin.fxml"), viewpane);
     }
 
     @FXML
-    private void handelLogout(ActionEvent event) throws IOException {
+    private void handelLogout(ActionEvent event) throws IOException
+    {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/timetracker/GUI/View/MainView.fxml"));
         loader.load();
@@ -148,7 +153,8 @@ public class MenubarController implements Initializable {
      *
      * @return
      */
-    public JFXButton getProjektbtb() {
+    public JFXButton getProjektbtb()
+    {
         return projektbtb;
     }
 
@@ -157,7 +163,8 @@ public class MenubarController implements Initializable {
      *
      * @return
      */
-    public JFXButton getKlientmanagerbtb() {
+    public JFXButton getKlientmanagerbtb()
+    {
         return klientmanagerbtb;
     }
 
@@ -166,14 +173,19 @@ public class MenubarController implements Initializable {
      *
      * @return
      */
-    public JFXButton getBrugermanagerbtb() {
+    public JFXButton getBrugermanagerbtb()
+    {
         return brugermanagerbtb;
     }
+
     /**
-     * get overbliks button for overbliks view, så vi kan bruge setVisible() i main controlleren 
-     * @return 
+     * get overbliks button for overbliks view, så vi kan bruge setVisible() i
+     * main controlleren
+     *
+     * @return
      */
-    public JFXButton getOverblikforAdmin() {
+    public JFXButton getOverblikforAdmin()
+    {
         return overblikbtb;
     }
 

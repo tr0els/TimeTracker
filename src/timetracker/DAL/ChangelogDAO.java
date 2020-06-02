@@ -51,7 +51,7 @@ public class ChangelogDAO
             st.setInt(1, personId);
             st.setInt(2, taskId);
 
-            st.executeQuery();
+            st.executeUpdate();
 
         } catch (SQLException e)
         {

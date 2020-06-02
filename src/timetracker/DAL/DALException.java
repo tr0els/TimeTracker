@@ -10,14 +10,16 @@ package timetracker.DAL;
  * @author Brian Brandt, Kim Christensen, Troels Klein, René Jørgensen &
  * Charlotte Christensen
  */
-public class DALException extends Exception {
+public class DALException extends Exception
+{
 
     /**
      * Vores egen DALException er lavet her
      *
      * @param msg
      */
-    public DALException(String msg) {
+    public DALException(String msg)
+    {
         super(msg);
     }
 

@@ -368,23 +368,25 @@ public class TaskDAO
     }
 
     /**
-     * Henter en liste af brugerens opgaver. Hvilke opgaver der hentes og 
+     * Henter en liste af brugerens opgaver. Hvilke opgaver der hentes og
      * hvordan de grupper bestemmes ud fra de angivne parametre.
-     * 
-     * Bemærk: Det er muligt at henter en liste af brugerens opgaver grupperet 
-     * efter dato, med samlet tidsforbrug for dage og opgaver. Hver parent 
+     *
+     * Bemærk: Det er muligt at henter en liste af brugerens opgaver grupperet
+     * efter dato, med samlet tidsforbrug for dage og opgaver. Hver parent
      * opgave har de opgaver den består af grupperet under sig (stacked).
-     * 
-     * Det var tiltænkt at metoden kunne udbygges til at kunne levere alle de 
-     * forskellige  nødvendige udtræk af opgaver dynamisk, men dette er kun 
+     *
+     * Det var tiltænkt at metoden kunne udbygges til at kunne levere alle de
+     * forskellige nødvendige udtræk af opgaver dynamisk, men dette er kun
      * delvist implementeret for nu.
-*/
-    private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException {
+     */
+    private List<? extends TaskBase> getTasks(int person_id, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException
+    {
 
         // Fetch task data 
-        try (Connection con = dbCon.getConnection()) {
-            String sql =
-                    "SELECT *, MIN(task_start) OVER (PARTITION BY task_date, task_name, project_id, billable) AS group_start FROM \n"
+        try ( Connection con = dbCon.getConnection())
+        {
+            String sql
+                    = "SELECT *, MIN(task_start) OVER (PARTITION BY task_date, task_name, project_id, billable) AS group_start FROM \n"
                     + "(\n"
                     + "SELECT \n"
                     + "	'TaskParent' AS type,\n"
@@ -491,14 +493,16 @@ public class TaskDAO
             TaskGroup tg = null;
             TaskParent tp = null;
 
-            while (rs.next()) {
+            while (rs.next())
+            {
                 // instantiate task entities and add them to their respective
                 // relations to build a hierarchy (stacking) og tasks. 
                 // It is relying on the task type and the specific order 
                 // of tasks returned by the sql query. 
-                
+
                 // create task group (date)
-                if (rs.getString("type").equals("TaskGroup")) {
+                if (rs.getString("type").equals("TaskGroup"))
+                {
                     tg = new TaskGroup();
 
                     tg.setName(rs.getString("task_date"));
@@ -509,7 +513,8 @@ public class TaskDAO
                 }
 
                 // create task parent
-                if (rs.getString("type").equals("TaskParent")) {
+                if (rs.getString("type").equals("TaskParent"))
+                {
                     tp = new TaskParent();
 
                     tp.setName(rs.getString("task_name"));
@@ -520,15 +525,18 @@ public class TaskDAO
                     tp.setTime(rs.getString("total_time"));
 
                     // add parent to current group or list of all parents
-                    if (tg != null) {
+                    if (tg != null)
+                    {
                         tg.addParent(tp);
-                    } else {
+                    } else
+                    {
                         allTaskParents.add(tp);
                     }
                 }
 
                 // create task child
-                if (rs.getString("type").equals("TaskChild")) {
+                if (rs.getString("type").equals("TaskChild"))
+                {
                     TaskChild tc = new TaskChild();
 
                     tc.setId(rs.getInt("task_id"));
@@ -554,22 +562,26 @@ public class TaskDAO
             }
 
             // return the right list of tasks
-            if (allTaskGroups != null) {
+            if (allTaskGroups != null)
+            {
                 return allTaskGroups;
-            } else if (allTaskParents != null) {
+            } else if (allTaskParents != null)
+            {
                 return allTaskParents;
-            } else {
+            } else
+            {
                 return allTaskChildren;
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             throw new DALException("Something went wrong getting users tasks from database" + ex);
         }
     }
 
     /**
-     * Ved hjælp af getTasks metoden hentes en liste af brugerens opgaver 
-     * grupperet efter dato, med samlet tidsforbrug for dage og opgaver. 
-     * Hver parent opgave har de opgaver den består af grupperet under sig (stacked).
+     * Ved hjælp af getTasks metoden hentes en liste af brugerens opgaver
+     * grupperet efter dato, med samlet tidsforbrug for dage og opgaver. Hver
+     * parent opgave har de opgaver den består af grupperet under sig (stacked).
      *
      * @param personId
      * @param groupBy

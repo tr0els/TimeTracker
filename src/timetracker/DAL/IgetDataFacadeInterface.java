@@ -41,14 +41,14 @@ public interface IgetDataFacadeInterface
 
     //Task
     public List<TaskGroup> getTasksGroupedByDate(int personId, String groupBy, boolean includeTaskParents, boolean includeTaskChildren) throws DALException;
-    
+
     public void editTask(TaskChild taskChild) throws DALException;
 
     void startTask(String task_name, boolean billable, int project_id, int person_id) throws DALException;
 
     void stopTask(int person_id) throws DALException;
-    
-    public TaskChild getStartedTask(int personId) throws DALException;;
+
+    public TaskChild getStartedTask(int personId) throws DALException;
 
     TreeMap<Task, List<Task>> getTaskbyIDs(int project_id, int person_id) throws DALException;
 

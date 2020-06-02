@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import timetracker.DAL.DALException;
-import timetracker.GUI.Model.TaskModel;
 
 /**
  *
